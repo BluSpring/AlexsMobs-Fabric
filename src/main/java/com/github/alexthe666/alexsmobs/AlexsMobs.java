@@ -75,7 +75,6 @@ public class AlexsMobs implements ModInitializer {
     public void onInitialize() {
         this.setup();
         this.setupClient();
-        this.setupEntityModelLayers();
 
         AMBlockRegistry.DEF_REG.register();
         AMEntityRegistry.DEF_REG.register();
@@ -125,6 +124,10 @@ public class AlexsMobs implements ModInitializer {
         ModConfigEvents.reloading(MODID).register(this::onModConfigEvent);
 
         AMWorldRegistry.init();
+
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            this.setupEntityModelLayers();
+        }
 
         AMEntityRegistry.initializeAttributes();
         NETWORK_WRAPPER.initServerListener();

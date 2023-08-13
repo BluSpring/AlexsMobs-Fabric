@@ -1,14 +1,23 @@
 package com.github.alexthe666.alexsmobs.client.model.layered;
 
 import com.github.alexthe666.alexsmobs.client.model.ModelWanderingVillagerRider;
+import com.github.alexthe666.alexsmobs.client.render.item.CustomArmorRenderer;
+import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import io.github.fabricators_of_create.porting_lib.client.armor.ArmorRendererRegistry;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+
+import java.util.List;
+import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
 public class AMModelLayers {
@@ -45,6 +54,23 @@ public class AMModelLayers {
         EntityModelLayerRegistry.registerModelLayer(FLYING_FISH_BOOTS, () -> ModelFlyingFishBoots.createArmorLayer(new CubeDeformation(0.5F)));
         EntityModelLayerRegistry.registerModelLayer(NOVELTY_HAT, () -> ModelNoveltyHat.createArmorLayer(new CubeDeformation(0.5F)));
         EntityModelLayerRegistry.registerModelLayer(UNSETTLING_KIMONO, () -> ModelUnsettlingKimono.createArmorLayer(new CubeDeformation(0.5F)));
+
+        var armorItems = List.of(
+                AMItemRegistry.TARANTULA_HAWK_ELYTRA,
+                AMItemRegistry.ROADDRUNNER_BOOTS,
+                AMItemRegistry.MOOSE_HEADGEAR,
+                AMItemRegistry.FRONTIER_CAP,
+                AMItemRegistry.SPIKED_TURTLE_SHELL,
+                AMItemRegistry.FEDORA,
+                AMItemRegistry.SOMBRERO,
+                AMItemRegistry.FROSTSTALKER_HELMET,
+                AMItemRegistry.ROCKY_CHESTPLATE,
+                AMItemRegistry.FLYING_FISH_BOOTS,
+                AMItemRegistry.NOVELTY_HAT,
+                AMItemRegistry.UNSETTLING_KIMONO
+        );
+
+        ArmorRendererRegistry.register(new CustomArmorRenderer(), armorItems.stream().map(RegistryObject::get).toList().toArray(new Item[0]));
     }
 
     private static ModelLayerLocation createLocation(String model, String layer) {
