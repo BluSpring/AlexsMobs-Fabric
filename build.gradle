@@ -1,18 +1,10 @@
-buildscript {
-    repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
-        mavenCentral()
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-
-    }
-
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-    }
+plugins {
+    id 'java'
+    id 'fabric-loom' version '1.3-SNAPSHOT'
+    id 'maven-publish'
 }
-apply plugin: 'net.minecraftforge.gradle'
+
+
 repositories{
     maven {
         name = "CurseForge"
@@ -33,100 +25,116 @@ repositories{
             includeGroup "curse.maven"
         }
     }
+
+    mavenCentral()
+    maven {
+        name = "Fuzs Mod Resources"
+        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+    }
+
+    maven {
+        name = "DevOS One"
+        url = ("https://mvn.devos.one/snapshots/")
+    }
+
+    maven {
+        name = "JitPack"
+        url = ("https://jitpack.io/")
+    }
+
+    maven {
+        name = "Cafeteria Dev"
+        url = ("https://maven.cafeteria.dev/releases/")
+        content {
+            includeGroup("dev.cafeteria")
+        }
+    }
+
+    maven {
+        name = "JamiesWhiteShirt Dev"
+        url = ("https://maven.jamieswhiteshirt.com/libs-release")
+        content {
+            includeGroup("com.jamieswhiteshirt")
+        }
+    }
+
+    maven { url "https://maven.architectury.dev/" }
+
+    maven {
+        name = 'ParchmentMC'
+        url = 'https://maven.parchmentmc.org'
+    }
+
+    maven {
+        url "https://maven.minecraftforge.net"
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
 
 version = '1.21.1'
 group = 'com.github.alexthe667' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'alexsmobs'
+//archivesBaseName = 'alexsmobs'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
-minecraft {
-    mappings channel: 'official', version: '1.19'
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
-    runs {
-        client {
-            workingDirectory project.file('run')
-            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
-            arg "-mixin.config="+"citadel.mixins.json"
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                examplemod {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-            properties 'mixin.env.remapRefMap': 'true'
-            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                examplemod {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-              properties 'mixin.env.remapRefMap': 'true'
-              property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
-              args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                examplemod {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
-}
-apply plugin: 'org.spongepowered.mixin'
-mixin {
-    add sourceSets.main, "citadel.refmap.json"
-}
 // Include resources generated by data generators.
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.0'
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    compileOnly fg.deobf("curse.maven:citadel-331936:4132623")
-    runtimeOnly fg.deobf("curse.maven:citadel-331936:4132623")
-    compileOnly(fg.deobf("mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}"))
-    compileOnly(fg.deobf("mezz.jei:jei-${jei_mc_version}-forge-api:${jei_version}"))
-    runtimeOnly(fg.deobf("mezz.jei:jei-${jei_mc_version}-forge:${jei_version}"))
+loom {
+    accessWidenerPath = file("src/main/resources/alexsmobs.accesswidener")
+}
 
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.layered() {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-1.19.2:2022.11.27@zip")
+    }
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.minecraftforge:forgeconfigapiport-fabric:4.2.11"
+
+    implementation 'com.electronwill.night-config:core:3.6.5'
+    implementation 'com.electronwill.night-config:toml:3.6.5'
+
+    // @Nullable
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+    include(modImplementation("io.github.fabricators_of_create.Porting-Lib:porting-lib:2.1.875+1.19.2"))
+    include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:2.3.0")
+    include(modImplementation('com.github.KiltMC:ForgeCapabilities:54b0bd031c'))
+    include(modImplementation('com.github.KiltMC:ForgeBiomeModifiers:834a616002'))
+    include(modImplementation("com.github.KiltMC:EnumExtension:74f3690f92"))
+
+    modRuntimeOnly("maven.modrinth:sodium:mc1.19.2-0.4.4")
+    modRuntimeOnly("maven.modrinth:lazydfu:0.1.3")
+    modRuntimeOnly("maven.modrinth:indium:1.0.9+mc1.19.2")
+
+    runtimeOnly ("org.joml:joml:1.10.4")
+
+    include(implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:0.2.0-beta.9")))
+
+    modApi "dev.architectury:architectury-fabric:6.5.85"
+
+    include(modApi("com.github.BluSpring:Citadel-Fabric:f26362a794")) {
+        exclude group: "com.github.KiltMC"
+    }
+    modImplementation("curse.maven:jei-238222:4494409")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

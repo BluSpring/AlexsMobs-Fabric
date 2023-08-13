@@ -1,16 +1,16 @@
 package com.github.alexthe666.alexsmobs.client.model.layered;
 
 import com.github.alexthe666.alexsmobs.client.model.ModelWanderingVillagerRider;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class AMModelLayers {
 
     public static final ModelLayerLocation AM_ELYTRA = createLocation("am_elytra", "main");
@@ -29,22 +29,22 @@ public class AMModelLayers {
     public static final ModelLayerLocation UNDERMINER = createLocation("underminer", "main");
     public static final ModelLayerLocation UNSETTLING_KIMONO = createLocation("unsettling_kimono", "main");
 
-    public static void register(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(SITTING_WANDERING_VILLAGER, () -> LayerDefinition.create(ModelWanderingVillagerRider.createBodyModel(), 64, 64));
-        event.registerLayerDefinition(UNDERMINER, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.05F), 64, 64) );
-        event.registerLayerDefinition(ROADRUNNER_BOOTS, () -> ModelRoadrunnerBoots.createArmorLayer(new CubeDeformation(0.5F)));
-        event.registerLayerDefinition(MOOSE_HEADGEAR, () -> ModelMooseHeadgear.createArmorLayer(new CubeDeformation(0.5F)));
-        event.registerLayerDefinition(FRONTIER_CAP, () -> ModelFrontierCap.createArmorLayer(new CubeDeformation(0.5F)));
-        event.registerLayerDefinition(SPIKED_TURTLE_SHELL, () -> ModelSpikedTurtleShell.createArmorLayer(new CubeDeformation(0.5F)));
-        event.registerLayerDefinition(FEDORA, () -> ModelFedora.createArmorLayer(new CubeDeformation(0.5F)));
-        event.registerLayerDefinition(AM_ELYTRA, () -> ModelAMElytra.createLayer(new CubeDeformation(1.0F)));
-        event.registerLayerDefinition(SOMBRERO, () -> ModelSombrero.createArmorLayer(new CubeDeformation(0.5F)));
-        event.registerLayerDefinition(SOMBRERO_GOOFY_FASHION, () -> ModelSombrero.createArmorLayerAprilFools(new CubeDeformation(0.5F)));
-        event.registerLayerDefinition(FROSTSTALKER_HELMET, () -> ModelFroststalkerHelmet.createArmorLayer(new CubeDeformation(0.5F)));
-        event.registerLayerDefinition(ROCKY_CHESTPLATE, () -> ModelRockyChestplate.createArmorLayer(new CubeDeformation(0.7F)));
-        event.registerLayerDefinition(FLYING_FISH_BOOTS, () -> ModelFlyingFishBoots.createArmorLayer(new CubeDeformation(0.5F)));
-        event.registerLayerDefinition(NOVELTY_HAT, () -> ModelNoveltyHat.createArmorLayer(new CubeDeformation(0.5F)));
-        event.registerLayerDefinition(UNSETTLING_KIMONO, () -> ModelUnsettlingKimono.createArmorLayer(new CubeDeformation(0.5F)));
+    public static void register() {
+        EntityModelLayerRegistry.registerModelLayer(SITTING_WANDERING_VILLAGER, () -> LayerDefinition.create(ModelWanderingVillagerRider.createBodyModel(), 64, 64));
+        EntityModelLayerRegistry.registerModelLayer(UNDERMINER, () -> LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.05F), 64, 64) );
+        EntityModelLayerRegistry.registerModelLayer(ROADRUNNER_BOOTS, () -> ModelRoadrunnerBoots.createArmorLayer(new CubeDeformation(0.5F)));
+        EntityModelLayerRegistry.registerModelLayer(MOOSE_HEADGEAR, () -> ModelMooseHeadgear.createArmorLayer(new CubeDeformation(0.5F)));
+        EntityModelLayerRegistry.registerModelLayer(FRONTIER_CAP, () -> ModelFrontierCap.createArmorLayer(new CubeDeformation(0.5F)));
+        EntityModelLayerRegistry.registerModelLayer(SPIKED_TURTLE_SHELL, () -> ModelSpikedTurtleShell.createArmorLayer(new CubeDeformation(0.5F)));
+        EntityModelLayerRegistry.registerModelLayer(FEDORA, () -> ModelFedora.createArmorLayer(new CubeDeformation(0.5F)));
+        EntityModelLayerRegistry.registerModelLayer(AM_ELYTRA, () -> ModelAMElytra.createLayer(new CubeDeformation(1.0F)));
+        EntityModelLayerRegistry.registerModelLayer(SOMBRERO, () -> ModelSombrero.createArmorLayer(new CubeDeformation(0.5F)));
+        EntityModelLayerRegistry.registerModelLayer(SOMBRERO_GOOFY_FASHION, () -> ModelSombrero.createArmorLayerAprilFools(new CubeDeformation(0.5F)));
+        EntityModelLayerRegistry.registerModelLayer(FROSTSTALKER_HELMET, () -> ModelFroststalkerHelmet.createArmorLayer(new CubeDeformation(0.5F)));
+        EntityModelLayerRegistry.registerModelLayer(ROCKY_CHESTPLATE, () -> ModelRockyChestplate.createArmorLayer(new CubeDeformation(0.7F)));
+        EntityModelLayerRegistry.registerModelLayer(FLYING_FISH_BOOTS, () -> ModelFlyingFishBoots.createArmorLayer(new CubeDeformation(0.5F)));
+        EntityModelLayerRegistry.registerModelLayer(NOVELTY_HAT, () -> ModelNoveltyHat.createArmorLayer(new CubeDeformation(0.5F)));
+        EntityModelLayerRegistry.registerModelLayer(UNSETTLING_KIMONO, () -> ModelUnsettlingKimono.createArmorLayer(new CubeDeformation(0.5F)));
     }
 
     private static ModelLayerLocation createLocation(String model, String layer) {

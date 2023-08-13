@@ -25,7 +25,7 @@ public class BlockBananaPeel extends BushBlock {
     public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
     }
 
-    protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos) {
+    public boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos) {
         return canSupportRigidBlock(worldIn, pos);
     }
 

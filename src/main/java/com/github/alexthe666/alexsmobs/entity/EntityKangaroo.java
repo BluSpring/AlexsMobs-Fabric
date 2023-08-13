@@ -12,6 +12,9 @@ import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -58,9 +61,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -325,7 +325,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
 
     public void openGUI(Player playerEntity) {
         if (!this.level.isClientSide && (!this.hasPassenger(playerEntity))) {
-            NetworkHooks.openScreen((ServerPlayer) playerEntity, new MenuProvider() {
+            playerEntity.openMenu(new MenuProvider() {
                 @Override
                 public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_, Player p_createMenu_3_) {
                     return new DispenserMenu(p_createMenu_1_, p_createMenu_2_, kangarooInventory);
@@ -415,11 +415,11 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         return (double) this.getBbHeight() * 0.35F;
     }
 
-    @Override
+    /*@Override
     public void onAddedToWorld() {
         super.onAddedToWorld();
         updateClientInventory();
-    }
+    }*/
 
     public void tick() {
         super.tick();
@@ -807,7 +807,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
                         swordDamage = dmg;
                         swordIndex = i;
                     }
-                    if (stack.getItem().canEquip(stack, EquipmentSlot.HEAD, this)  && !this.isBaby() && helmetIndex == -1) {
+                    if (Mob.getEquipmentSlotForItem(stack) == EquipmentSlot.HEAD && !this.isBaby() && helmetIndex == -1) {
                         helmetIndex = i;
                     }
                     if (stack.getItem() instanceof ArmorItem && !this.isBaby()) {
@@ -863,7 +863,8 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
 
             ItemStack itemstack1 = this.getItemBySlot(equipmentslottype);
             if (!ItemStack.matches(itemstack1, itemstack)) {
-                net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent(this, equipmentslottype, itemstack, itemstack1));
+                ServerEntityEvents.EQUIPMENT_CHANGE.invoker().onChange(this, equipmentslottype, itemstack, itemstack1);
+                //net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent(this, equipmentslottype, itemstack, itemstack1));
                 if (map == null) {
                     map = Maps.newEnumMap(EquipmentSlot.class);
                 }
@@ -957,7 +958,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
 
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 1) {
             this.spawnSprintParticle();

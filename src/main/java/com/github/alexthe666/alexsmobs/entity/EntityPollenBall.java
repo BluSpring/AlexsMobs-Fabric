@@ -8,7 +8,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PlayMessages;
 
 public class EntityPollenBall extends EntityMobProjectile {
 
@@ -22,9 +21,9 @@ public class EntityPollenBall extends EntityMobProjectile {
         this.setPos(vec3.x, vec3.y, vec3.z);
     }
 
-    public EntityPollenBall(PlayMessages.SpawnEntity spawnEntity, Level world) {
+    /*public EntityPollenBall(PlayMessages.SpawnEntity spawnEntity, Level world) {
         this(AMEntityRegistry.POLLEN_BALL.get(), world);
-    }
+    }*/
 
     public boolean isNoGravity() {
         return true;

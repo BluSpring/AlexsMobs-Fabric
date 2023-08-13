@@ -2,13 +2,14 @@ package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityVoidPortal;
+import com.github.alexthe666.citadel.forge.extensions.IClientItemExtensions;
+import com.github.alexthe666.citadel.forge.extensions.ItemRenderExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
-public class ItemShatteredDimensionalCarver extends ItemDimensionalCarver {
+public class ItemShatteredDimensionalCarver extends ItemDimensionalCarver implements ItemRenderExtension {
 
     public ItemShatteredDimensionalCarver(Properties props) {
         super(props);

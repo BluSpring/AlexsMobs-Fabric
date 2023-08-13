@@ -1,7 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -16,10 +19,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -46,20 +45,20 @@ public class EntityMosquitoSpit extends Entity {
         this.setPos(p_i47273_2_.getX() - (double)(p_i47273_2_.getBbWidth()) * 0.5D * (double) Mth.sin(rot * ((float)Math.PI / 180F)), p_i47273_2_.getEyeY() - (double)0.2F, p_i47273_2_.getZ() + (double)(p_i47273_2_.getBbWidth()) * 0.5D * (double)Mth.cos(rot * ((float)Math.PI / 180F)));
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public EntityMosquitoSpit(Level worldIn, double x, double y, double z, double p_i47274_8_, double p_i47274_10_, double p_i47274_12_) {
         this(AMEntityRegistry.MOSQUITO_SPIT.get(), worldIn);
         this.setPos(x, y, z);
         this.setDeltaMovement(p_i47274_8_, p_i47274_10_, p_i47274_12_);
     }
 
-    public EntityMosquitoSpit(PlayMessages.SpawnEntity spawnEntity, Level world) {
+    /*public EntityMosquitoSpit(PlayMessages.SpawnEntity spawnEntity, Level world) {
         this(AMEntityRegistry.MOSQUITO_SPIT.get(), world);
-    }
+    }*/
 
     @Override
     public Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+        return new ClientboundAddEntityPacket(this);
     }
 
     public void tick() {
@@ -202,7 +201,7 @@ public class EntityMosquitoSpit extends Entity {
 
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void lerpMotion(double x, double y, double z) {
         this.setDeltaMovement(x, y, z);
         if (this.xRotO == 0.0F && this.yRotO == 0.0F) {

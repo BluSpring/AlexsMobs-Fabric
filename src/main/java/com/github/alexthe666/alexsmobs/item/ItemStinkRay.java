@@ -3,6 +3,8 @@ package com.github.alexthe666.alexsmobs.item;
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityFart;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import com.github.alexthe666.citadel.forge.extensions.IClientItemExtensions;
+import com.github.alexthe666.citadel.forge.extensions.ItemRenderExtension;
 import com.mojang.math.Vector3f;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -17,11 +19,10 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.function.Predicate;
 
-public class ItemStinkRay extends Item {
+public class ItemStinkRay extends Item implements ItemRenderExtension {
 
     public static final Predicate<ItemStack> IS_FART_BOTTLE = (stack) -> {
         return stack.getItem() == AMItemRegistry.STINK_BOTTLE.get();

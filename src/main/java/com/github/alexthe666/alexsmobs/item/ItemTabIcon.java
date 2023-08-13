@@ -1,17 +1,18 @@
 package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import com.github.alexthe666.citadel.forge.extensions.IClientItemExtensions;
+import com.github.alexthe666.citadel.forge.extensions.ItemRenderExtension;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nullable;
 
-public class ItemTabIcon extends Item {
+public class ItemTabIcon extends Item implements ItemRenderExtension {
     public ItemTabIcon(Item.Properties properties) {
         super(properties);
     }

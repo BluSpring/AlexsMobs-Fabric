@@ -5,6 +5,7 @@ import com.github.alexthe666.alexsmobs.entity.ai.CosmicCodAIFollowLeader;
 import com.github.alexthe666.alexsmobs.entity.ai.FlightMoveController;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import io.github.fabricators_of_create.porting_lib.event.common.EntityEvents;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -312,7 +313,9 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         final boolean flag = blockstate.isAir();
         if (flag && !blockstate.getFluidState().is(FluidTags.WATER)) {
             this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
-            net.minecraftforge.event.entity.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, x, y, z);
+            var event = new EntityEvents.Teleport.EntityTeleportEvent(this, x, y, z);
+            EntityEvents.TELEPORT.invoker().onTeleport(event);
+            //net.minecraftforge.event.entity.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, x, y, z);
             if (event.isCanceled()) return false;
             level.broadcastEntityEvent(this, (byte) 46);
             this.teleportTo(event.getTargetX(), event.getTargetY(), event.getTargetZ());

@@ -282,8 +282,8 @@ public class EntityCosmaw extends TamableAnimal implements ITargetsDroppedItems,
                         this.level.broadcastEntityEvent(this, (byte) 6);
                     }
                 }
-                if (this.getMainHandItem().hasCraftingRemainingItem()) {
-                    this.spawnAtLocation(this.getMainHandItem().getCraftingRemainingItem());
+                if (this.getMainHandItem().getItem().hasCraftingRemainingItem()) {
+                    this.spawnAtLocation(this.getMainHandItem().getItem().getCraftingRemainingItem());
                 }
                 this.getMainHandItem().shrink(1);
             }

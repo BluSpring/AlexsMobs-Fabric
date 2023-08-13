@@ -1,11 +1,12 @@
 package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import com.github.alexthe666.citadel.forge.extensions.IClientItemExtensions;
+import com.github.alexthe666.citadel.forge.extensions.ItemRenderExtension;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.registries.RegistryObject;
 
-public class BlockItemAMRender extends AMBlockItem {
+public class BlockItemAMRender extends AMBlockItem implements ItemRenderExtension {
 
     public BlockItemAMRender(RegistryObject<Block> blockSupplier, Properties props) {
         super(blockSupplier, props);

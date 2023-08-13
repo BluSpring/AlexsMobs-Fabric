@@ -6,6 +6,9 @@ import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFleeLight;
 import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import io.github.fabricators_of_create.porting_lib.extensions.IShearable;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -37,15 +40,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class EntityCockroach extends Animal implements Shearable, net.minecraftforge.common.IForgeShearable, ITargetsDroppedItems {
+public class EntityCockroach extends Animal implements Shearable, IShearable, ITargetsDroppedItems {
 
     public static final ResourceLocation MARACA_LOOT = new ResourceLocation("alexsmobs", "entities/cockroach_maracas");
     public static final ResourceLocation MARACA_HEADLESS_LOOT = new ResourceLocation("alexsmobs", "entities/cockroach_maracas_headless");
@@ -334,7 +335,7 @@ public class EntityCockroach extends Animal implements Shearable, net.minecraftf
         return this.getBoundingBox().inflate(10, 10, 10);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67) {
             AlexsMobs.PROXY.onEntityStatus(this, id);
@@ -355,7 +356,7 @@ public class EntityCockroach extends Animal implements Shearable, net.minecraftf
         this.entityData.set(NEAREST_MUSICIAN, Optional.ofNullable(uniqueId));
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void setRecordPlayingNearby(BlockPos pos, boolean isPartying) {
         this.jukeboxPosition = pos;
         this.isJukeboxing = isPartying;
@@ -422,8 +423,8 @@ public class EntityCockroach extends Animal implements Shearable, net.minecraftf
         if (e.getItem().getItem() == AMItemRegistry.MARACA.get()) {
             this.setMaracas(true);
         } else {
-            if (e.getItem().hasCraftingRemainingItem()) {
-                this.spawnAtLocation(e.getItem().getCraftingRemainingItem().copy());
+            if (e.getItem().getItem().hasCraftingRemainingItem()) {
+                this.spawnAtLocation(e.getItem().getItem().getCraftingRemainingItem().getDefaultInstance());
             }
             this.heal(5);
             if (e.getItem().getItem() == Items.BREAD || e.getItem().getItem() == Items.SUGAR) {

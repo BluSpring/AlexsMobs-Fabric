@@ -1,13 +1,13 @@
 package com.github.alexthe666.alexsmobs.misc;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.entity.BannerPattern;
-import net.minecraftforge.registries.DeferredRegister;
 
 public class AMBannerRegistry {
 
-    public static final DeferredRegister<BannerPattern> DEF_REG = DeferredRegister.create(Registry.BANNER_PATTERN_REGISTRY, AlexsMobs.MODID);
+    public static final LazyRegistrar<BannerPattern> DEF_REG = LazyRegistrar.create(Registry.BANNER_PATTERN_REGISTRY, AlexsMobs.MODID);
 
     static{
         DEF_REG.register("bear", () ->  new BannerPattern("bear"));

@@ -1,7 +1,10 @@
 package com.github.alexthe666.alexsmobs.block;
 
+import com.github.alexthe666.alexsmobs.fabric.extensions.CanStickBlock;
+import com.github.alexthe666.alexsmobs.fabric.extensions.SlimeBlockType;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.google.common.collect.Lists;
+import io.github.fabricators_of_create.porting_lib.block.StickyBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
@@ -22,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Queue;
 
-public class BlockBananaSlugSlime extends HalfTransparentBlock {
+public class BlockBananaSlugSlime extends HalfTransparentBlock implements StickyBlock, SlimeBlockType, CanStickBlock {
 
     protected static final VoxelShape SHAPE = Block.box(1.0D, 1.0D, 1.0D, 15.0D, 15.0D, 15.0D);
 
@@ -58,7 +61,7 @@ public class BlockBananaSlugSlime extends HalfTransparentBlock {
     }
     @Override
     public boolean canStickTo(BlockState state, @NotNull BlockState other) {
-        return !other.isStickyBlock() || other.getBlock() == this;
+        return !((other.getBlock() instanceof StickyBlock sticky) && sticky.isStickyBlock(state)) || other.getBlock() == this;
     }
 
     public void onPlace(BlockState p_56811_, Level p_56812_, BlockPos p_56813_, BlockState p_56814_, boolean p_56815_) {

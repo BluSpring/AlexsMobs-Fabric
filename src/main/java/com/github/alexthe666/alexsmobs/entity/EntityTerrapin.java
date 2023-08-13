@@ -7,6 +7,7 @@ import com.github.alexthe666.alexsmobs.entity.ai.*;
 import com.github.alexthe666.alexsmobs.entity.util.TerrapinTypes;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import com.github.alexthe666.alexsmobs.mixin.LivingEntityAccessor;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityTerrapinEgg;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -191,7 +192,7 @@ public class EntityTerrapin extends Animal implements ISemiAquatic, Bucketable {
                 swimTimer = Math.min(0, swimTimer - 1);
                 List<Player> list = this.level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(0, 0.15F, 0));
                 for (Player player : list) {
-                    if ((player.jumping || !player.isOnGround()) && player.getY() > this.getEyeY()) {
+                    if ((((LivingEntityAccessor) player).isJumping() || !player.isOnGround()) && player.getY() > this.getEyeY()) {
                         if (!hasRetreated()) {
                             this.hideInShellTimer += 40 + random.nextInt(40);
                         } else if (!isSpinning()) {

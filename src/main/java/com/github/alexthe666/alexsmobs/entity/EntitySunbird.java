@@ -7,6 +7,7 @@ import com.github.alexthe666.alexsmobs.misc.AMPointOfInterestRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.base.Predicates;
+import io.github.fabricators_of_create.porting_lib.block.CustomFrictionBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -155,14 +156,18 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
         } else {
             BlockPos ground = new BlockPos(this.getX(), this.getY() - 1.0D, this.getZ());
             float f = 0.91F;
+
+            var groundState = this.level.getBlockState(ground);
             if (this.onGround) {
-                f = this.level.getBlockState(ground).getFriction(this.level, ground, this) * 0.91F;
+                if (groundState.getBlock() instanceof CustomFrictionBlock frictionBlock)
+                    f = frictionBlock.getFriction(groundState, this.level, ground, this) * 0.91F;
             }
 
             float f1 = 0.16277137F / (f * f * f);
             f = 0.91F;
             if (this.onGround) {
-                f = this.level.getBlockState(ground).getFriction(this.level, ground, this) * 0.91F;
+                if (groundState.getBlock() instanceof CustomFrictionBlock frictionBlock)
+                    f = frictionBlock.getFriction(groundState, this.level, ground, this) * 0.91F;
             }
             this.calculateEntityAnimation(this, true);
 

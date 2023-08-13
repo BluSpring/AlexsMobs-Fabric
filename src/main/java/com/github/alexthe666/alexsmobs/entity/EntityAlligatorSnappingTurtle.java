@@ -5,6 +5,7 @@ import com.github.alexthe666.alexsmobs.entity.ai.*;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import io.github.fabricators_of_create.porting_lib.extensions.IShearable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -46,7 +47,7 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.function.Predicate;
 
-public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquatic, Shearable, net.minecraftforge.common.IForgeShearable {
+public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquatic, Shearable, IShearable {
 
     public static final Predicate<LivingEntity> TARGET_PRED = (animal) -> {
         return !(animal instanceof EntityAlligatorSnappingTurtle) && !(animal instanceof ArmorStand) && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(animal) && animal.isAlive();

@@ -7,6 +7,8 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -53,9 +55,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidType;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -244,8 +243,8 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
                 copy.setCount(1);
                 this.setItemInHand(InteractionHand.MAIN_HAND, copy);
                 this.onEatItem();
-                if (itemstack.hasCraftingRemainingItem()) {
-                    this.spawnAtLocation(itemstack.getCraftingRemainingItem());
+                if (itemstack.getItem().hasCraftingRemainingItem()) {
+                    this.spawnAtLocation(itemstack.getItem().getCraftingRemainingItem().getDefaultInstance());
                 }
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
@@ -379,8 +378,8 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
                 lookForWaterBeforeEatingTimer--;
             } else if (!isWashing() && canTargetItem(this.getMainHandItem())) {
                 onEatItem();
-                if (this.getMainHandItem().hasCraftingRemainingItem()) {
-                    this.spawnAtLocation(this.getMainHandItem().getCraftingRemainingItem());
+                if (this.getMainHandItem().getItem().hasCraftingRemainingItem()) {
+                    this.spawnAtLocation(this.getMainHandItem().getItem().getCraftingRemainingItem());
                 }
                 this.getMainHandItem().shrink(1);
             }
@@ -439,7 +438,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 92) {
             for (int i = 0; i < 6 + random.nextInt(3); i++) {
@@ -460,9 +459,14 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         }
     }
 
-    public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
+    @Override
+    public boolean rideableUnderWater() {
         return true;
     }
+
+    /*public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
+        return true;
+    }*/
 
     public boolean isStanding() {
         return this.entityData.get(STANDING).booleanValue();

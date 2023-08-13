@@ -2,8 +2,14 @@ package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.misc.AMItemGroup;
+import com.github.alexthe666.citadel.forge.extensions.IClientItemExtensions;
+import com.github.alexthe666.citadel.forge.extensions.ItemRenderExtension;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
+import io.github.fabricators_of_create.porting_lib.attributes.PortingLibAttributes;
+import io.github.fabricators_of_create.porting_lib.item.ArmorTextureItem;
+import io.github.fabricators_of_create.porting_lib.util.client.ClientHooks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -16,14 +22,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.ForgeMod;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class ItemModArmor extends ArmorItem {
+public class ItemModArmor extends ArmorItem implements ItemRenderExtension, ArmorTextureItem {
     private static final UUID[] ARMOR_MODIFIERS = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
     private Multimap<Attribute, AttributeModifier> attributeMapCroc;
     private Multimap<Attribute, AttributeModifier> attributeMapMoose;
@@ -80,7 +84,7 @@ public class ItemModArmor extends ArmorItem {
         UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
         builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", materialIn.getDefenseForSlot(slot), AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", materialIn.getToughness(), AttributeModifier.Operation.ADDITION));
-        builder.put(ForgeMod.SWIM_SPEED.get(), new AttributeModifier(uuid, "Swim speed", 1, AttributeModifier.Operation.ADDITION));
+        builder.put(PortingLibAttributes.SWIM_SPEED, new AttributeModifier(uuid, "Swim speed", 1, AttributeModifier.Operation.ADDITION));
         if (this.knockbackResistance > 0) {
             builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", this.knockbackResistance, AttributeModifier.Operation.ADDITION));
         }
@@ -92,7 +96,7 @@ public class ItemModArmor extends ArmorItem {
         UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
         builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", materialIn.getDefenseForSlot(slot), AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", materialIn.getToughness(), AttributeModifier.Operation.ADDITION));
-        builder.put(ForgeMod.SWIM_SPEED.get(), new AttributeModifier(uuid, "Swim speed", 0.5, AttributeModifier.Operation.ADDITION));
+        builder.put(PortingLibAttributes.SWIM_SPEED, new AttributeModifier(uuid, "Swim speed", 0.5, AttributeModifier.Operation.ADDITION));
         attributeMapFlyingFish = builder.build();
     }
 
@@ -113,7 +117,7 @@ public class ItemModArmor extends ArmorItem {
         UUID uuid = ARMOR_MODIFIERS[slot.getIndex()];
         builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", materialIn.getDefenseForSlot(slot), AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", materialIn.getToughness(), AttributeModifier.Operation.ADDITION));
-        builder.put(ForgeMod.REACH_DISTANCE.get(), new AttributeModifier(uuid, "Reach distance", 2, AttributeModifier.Operation.ADDITION));
+        builder.put(ReachEntityAttributes.REACH, new AttributeModifier(uuid, "Reach distance", 2, AttributeModifier.Operation.ADDITION));
         attributeMapKimono = builder.build();
     }
 
@@ -176,6 +180,7 @@ public class ItemModArmor extends ArmorItem {
         } else if (this.material == AMItemRegistry.KIMONO_MATERIAL) {
             return "alexsmobs:textures/armor/unsettling_kimono.png";
         }
-        return super.getArmorTexture(stack, entity, slot, type);
+        return ClientHooks.getArmorTexture(entity, stack, "diamond", slot, type);
+        //return super.getArmorTexture(stack, entity, slot, type);
     }
 }

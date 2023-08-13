@@ -1,19 +1,18 @@
 package com.github.alexthe666.alexsmobs.entity;
 
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 
 public class EntityEmuEgg extends ThrowableItemProjectile {
 
@@ -29,16 +28,16 @@ public class EntityEmuEgg extends ThrowableItemProjectile {
         super(AMEntityRegistry.EMU_EGG.get(), x, y, z, worldIn);
     }
 
-    public EntityEmuEgg(PlayMessages.SpawnEntity spawnEntity, Level world) {
+    /*public EntityEmuEgg(PlayMessages.SpawnEntity spawnEntity, Level world) {
         this(AMEntityRegistry.EMU_EGG.get(), world);
-    }
+    }*/
 
     @Override
     public Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+        return new ClientboundAddEntityPacket(this);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 3) {
             double d0 = 0.08D;

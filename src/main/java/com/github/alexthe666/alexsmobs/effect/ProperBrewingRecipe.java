@@ -1,8 +1,8 @@
 package com.github.alexthe666.alexsmobs.effect;
 
+import io.github.fabricators_of_create.porting_lib.brewing.BrewingRecipe;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.brewing.BrewingRecipe;
 
 import javax.annotation.Nonnull;
 

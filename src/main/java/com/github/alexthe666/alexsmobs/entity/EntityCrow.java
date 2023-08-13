@@ -7,6 +7,13 @@ import com.github.alexthe666.alexsmobs.message.MessageCrowDismount;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.base.Predicate;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlotExposedStorage;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -54,12 +61,7 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
+import xyz.bluspring.forgecapabilities.capabilities.ForgeCapabilities;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -344,8 +346,8 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
                         this.level.broadcastEntityEvent(this, (byte) 6);
                     }
                 }
-                if (this.getMainHandItem().hasCraftingRemainingItem()) {
-                    this.spawnAtLocation(this.getMainHandItem().getCraftingRemainingItem());
+                if (this.getMainHandItem().getItem().hasCraftingRemainingItem()) {
+                    this.spawnAtLocation(this.getMainHandItem().getItem().getCraftingRemainingItem());
                 }
                 this.getMainHandItem().shrink(1);
             }
@@ -393,7 +395,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67) {
             for(int i = 0; i < 7; ++i) {
@@ -1022,7 +1024,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
                     BlockPos hangingPosition = e.getPos().relative(e.getDirection().getOpposite());
                     BlockEntity entity = e.level.getBlockEntity(hangingPosition);
                     if(entity != null){
-                        LazyOptional<IItemHandler> handler = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, e.getDirection().getOpposite());
+                        LazyOptional<SlotExposedStorage> handler = entity.getCapability(ForgeCapabilities.ITEM_HANDLER, e.getDirection().getOpposite());
                         if(handler != null && handler.isPresent()){
                             return e.getItem().sameItem(EntityCrow.this.getMainHandItem());
                         }
@@ -1095,16 +1097,18 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
                         final BlockPos hangingPosition = targetEntity.getPos().relative(targetEntity.getDirection().getOpposite());
                         final BlockEntity entity = targetEntity.level.getBlockEntity(hangingPosition);
                         final Direction deposit = targetEntity.getDirection();
-                        final LazyOptional<IItemHandler> handler = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, deposit);
+                        final LazyOptional<SlotExposedStorage> handler = entity.getCapability(ForgeCapabilities.ITEM_HANDLER, deposit);
                         if(handler.orElse(null) != null && cooldown == 0) {
+                            var storage = handler.orElse(null);
                             ItemStack duplicate = EntityCrow.this.getItemInHand(InteractionHand.MAIN_HAND).copy();
-                            ItemStack insertSimulate = ItemHandlerHelper.insertItem(handler.orElse(null), duplicate, true);
-                            if (!insertSimulate.equals(duplicate)) {
-                                ItemStack shrunkenStack = ItemHandlerHelper.insertItem(handler.orElse(null), duplicate, false);
-                                if(shrunkenStack.isEmpty()){
+                            var insertTotal = storage.simulateInsert(ItemVariant.of(duplicate), duplicate.getCount(), Transaction.openOuter());
+                            if (duplicate.getCount() != insertTotal) {
+                                var total = storage.insert(ItemVariant.of(duplicate), duplicate.getCount(), Transaction.openOuter());
+                                if(duplicate.getCount() - total == 0) {
                                     EntityCrow.this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                                 }else{
-                                    EntityCrow.this.setItemInHand(InteractionHand.MAIN_HAND, shrunkenStack);
+                                    duplicate.setCount(duplicate.getCount() - (int) total);
+                                    EntityCrow.this.setItemInHand(InteractionHand.MAIN_HAND, duplicate);
                                 }
                                 EntityCrow.this.peck();
                             }else{

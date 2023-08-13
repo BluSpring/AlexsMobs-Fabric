@@ -2,6 +2,7 @@ package com.github.alexthe666.alexsmobs.world;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
+import com.github.alexthe666.alexsmobs.mixin.NoiseBasedChunkGeneratorAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -159,11 +160,11 @@ public class AMWorldData extends SavedData {
     }
 
     public int getWaterHeight(NoiseBasedChunkGenerator generator, RandomState rand, int x, int z, LevelHeightAccessor level) {
-        NoiseSettings noisesettings = generator.settings.value().noiseSettings();
+        NoiseSettings noisesettings = ((NoiseBasedChunkGeneratorAccessor) (Object) generator).getSettings().value().noiseSettings();
         int i = Math.max(noisesettings.minY(), level.getMinBuildHeight());
         int j = Math.min(noisesettings.minY() + noisesettings.height(), level.getMaxBuildHeight());
         int k = Mth.intFloorDiv(i, noisesettings.getCellHeight());
         int l = Mth.intFloorDiv(j - i, noisesettings.getCellHeight());
-        return generator.iterateNoiseColumn(level, rand, x, z, null, IS_WATER).orElse(level.getMinBuildHeight());
+        return ((NoiseBasedChunkGeneratorAccessor) (Object) generator).callIterateNoiseColumn(level, rand, x, z, null, IS_WATER).orElse(level.getMinBuildHeight());
     }
 }

@@ -1,0 +1,33 @@
+{
+  "required": true,
+  "package": "com.github.alexthe666.alexsmobs.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "GameRendererMixin",
+    "elytra.LocalPlayerMixin",
+    "liquid.LiquidBlockRendererMixin"
+  ],
+  "mixins": [
+    "BlockAccessor",
+    "BlockRenderDispatcherAccessor",
+    "CameraAccessor",
+    "EnderDragonAccessor",
+    "FireworkRocketEntityAccessor",
+    "GameRendererAccessor",
+    "LevelChunkSectionAccessor",
+    "LevelRendererAccessor",
+    "LivingEntityAccessor",
+    "LivingEntityRendererAccessor",
+    "MinecraftAccessor",
+    "MobAccessor",
+    "NoiseBasedChunkGeneratorAccessor",
+    "PistonStructureResolverMixin",
+    "RenderBuffersAccessor",
+    "RenderChunkAccessor",
+    "TagValueAccessor",
+    "elytra.LivingEntityMixin",
+    "elytra.PlayerMixin",
+    "event.MobMixin"
+  ],
+  "minVersion": "0.8"
+}

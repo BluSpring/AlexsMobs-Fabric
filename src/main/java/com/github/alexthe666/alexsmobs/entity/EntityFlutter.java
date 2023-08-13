@@ -5,6 +5,7 @@ import com.github.alexthe666.alexsmobs.entity.ai.*;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -44,7 +45,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -384,7 +384,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         InteractionResult type = super.mobInteract(player, hand);
         if (!isTame() && canEatFlower(itemstack)) {
             this.usePlayerItem(player, hand, itemstack);
-            this.flowersEaten.add(ForgeRegistries.ITEMS.getKey(itemstack.getItem()).toString());
+            this.flowersEaten.add(Registry.ITEM.getKey(itemstack.getItem()).toString());
             this.gameEvent(GameEvent.ENTITY_INTERACT);
             this.playSound(AMSoundRegistry.FLUTTER_YES.get(), this.getSoundVolume(), this.getVoicePitch());
             if (this.flowersEaten.size() > 3 && getRandom().nextInt(3) == 0 || this.flowersEaten.size() > 6) {
@@ -607,7 +607,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
     }
 
     public boolean hasEatenFlower(ItemStack stack) {
-        return flowersEaten != null && flowersEaten.contains(ForgeRegistries.ITEMS.getKey(stack.getItem()).toString());
+        return flowersEaten != null && flowersEaten.contains(Registry.ITEM.getKey(stack.getItem()).toString());
     }
 
     public boolean canEatFlower(ItemStack stack) {

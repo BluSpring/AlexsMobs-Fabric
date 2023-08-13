@@ -1,12 +1,13 @@
 package com.github.alexthe666.alexsmobs.enchantment;
 
 import com.github.alexthe666.alexsmobs.config.AMConfig;
+import io.github.fabricators_of_create.porting_lib.enchant.CustomEnchantingTableBehaviorEnchantment;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
-public class StraddleEnchantment extends Enchantment {
+public class StraddleEnchantment extends Enchantment implements CustomEnchantingTableBehaviorEnchantment {
 
     protected StraddleEnchantment(Rarity r, EnchantmentCategory type, EquipmentSlot... types) {
         super(r, type, types);
@@ -33,11 +34,11 @@ public class StraddleEnchantment extends Enchantment {
     }
 
     public boolean isAllowedOnBooks() {
-        return super.isAllowedOnBooks() && AMConfig.straddleboardEnchants;
+        return/* super.isAllowedOnBooks() &&*/ AMConfig.straddleboardEnchants;
     }
 
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
-        return super.canApplyAtEnchantingTable(stack) && AMConfig.straddleboardEnchants;
+        return CustomEnchantingTableBehaviorEnchantment.super.canApplyAtEnchantingTable(stack) && AMConfig.straddleboardEnchants;
     }
 
 }

@@ -4,6 +4,8 @@ import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityCatfish;
 import com.github.alexthe666.alexsmobs.entity.EntityLobster;
 import com.github.alexthe666.alexsmobs.entity.util.TerrapinTypes;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -23,22 +25,21 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
 public class ItemModFishBucket extends MobBucketItem {
+    private final EntityType<?> fishType;
 
     public ItemModFishBucket(Supplier<? extends EntityType<?>> fishTypeIn, Fluid fluid, Item.Properties builder) {
-        super(fishTypeIn, () -> fluid, () -> SoundEvents.BUCKET_EMPTY_FISH, builder.stacksTo(1));
+        super(fishTypeIn.get(), fluid, SoundEvents.BUCKET_EMPTY_FISH, builder.stacksTo(1));
+        this.fishType = fishTypeIn.get();
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        EntityType fishType = getFishType();
         if (fishType == AMEntityRegistry.LOBSTER.get()) {
             CompoundTag compoundnbt = stack.getTag();
             if (compoundnbt != null && compoundnbt.contains("BucketVariantTag", 3)) {
@@ -73,7 +74,7 @@ public class ItemModFishBucket extends MobBucketItem {
     }
 
     private void spawnFish(ServerLevel serverLevel, ItemStack stack, BlockPos pos) {
-        Entity entity = getFishType().spawn(serverLevel, stack, (Player)null, pos, MobSpawnType.BUCKET, true, false);
+        Entity entity = fishType.spawn(serverLevel, stack, (Player)null, pos, MobSpawnType.BUCKET, true, false);
         if (entity instanceof Bucketable) {
             Bucketable bucketable = (Bucketable)entity;
             bucketable.loadFromBucketTag(stack.getOrCreateTag());

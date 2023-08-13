@@ -1,10 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity;
 
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -19,10 +22,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 
 public class EntityTossedItem extends ThrowableItemProjectile {
 
@@ -40,9 +39,9 @@ public class EntityTossedItem extends ThrowableItemProjectile {
         super(AMEntityRegistry.TOSSED_ITEM.get(), x, y, z, worldIn);
     }
 
-    public EntityTossedItem(PlayMessages.SpawnEntity spawnEntity, Level world) {
+    /*public EntityTossedItem(PlayMessages.SpawnEntity spawnEntity, Level world) {
         this(AMEntityRegistry.TOSSED_ITEM.get(), world);
-    }
+    }*/
 
     @Override
     protected void defineSynchedData() {
@@ -60,10 +59,10 @@ public class EntityTossedItem extends ThrowableItemProjectile {
 
     @Override
     public Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+        return new ClientboundAddEntityPacket(this);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 3) {
             double d0 = 0.08D;
@@ -76,7 +75,7 @@ public class EntityTossedItem extends ThrowableItemProjectile {
     }
 
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void lerpMotion(double x, double y, double z) {
         this.setDeltaMovement(x, y, z);
         if (this.xRotO == 0.0F && this.yRotO == 0.0F) {

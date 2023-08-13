@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "alexsmobs",
+  "version": "1.21.1+fabric",
+  "name": "Alex's Mobs",
+  "description": "Generate cities all over the world",
+  "authors": [
+    "BluSpring",
+    "Alexthe668",
+    "Carro1001"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/alexsmobs/textures/item/bear_dust.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.github.alexthe666.alexsmobs.AlexsMobs"
+    ]
+  },
+  "mixins": [
+    "alexsmobs.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric": "*",
+    "minecraft": ">=1.19.2",
+    "forgeconfigapiport": ">=4.2.11",
+    "architectury": ">=6.5.85",
+    "citadel": ">=2.1.1"
+  },
+  "accessWidener": "alexsmobs.accesswidener"
+}

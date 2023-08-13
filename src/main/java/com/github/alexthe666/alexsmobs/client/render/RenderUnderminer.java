@@ -7,6 +7,7 @@ import com.github.alexthe666.alexsmobs.entity.EntityUnderminer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import io.github.fabricators_of_create.porting_lib.event.client.LivingEntityRenderEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -26,7 +27,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.RenderNameTagEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -75,12 +75,12 @@ public class RenderUnderminer extends MobRenderer<EntityUnderminer, EntityModel<
     }
 
     public void render(EntityUnderminer entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
-        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Pre<EntityUnderminer, EntityModel<EntityUnderminer>>(entityIn, this, partialTicks, matrixStackIn, bufferIn, packedLightIn)))
+        if (LivingEntityRenderEvents.PRE.invoker().beforeRender(entityIn, this, partialTicks, matrixStackIn, bufferIn, packedLightIn))
             return;
         matrixStackIn.pushPose();
         this.model.attackTime = this.getAttackAnim(entityIn, partialTicks);
 
-        boolean shouldSit = entityIn.isPassenger() && (entityIn.getVehicle() != null && entityIn.getVehicle().shouldRiderSit());
+        boolean shouldSit = entityIn.isPassenger() && (entityIn.getVehicle() != null/* && entityIn.getVehicle().shouldRiderSit()*/);
         this.model.riding = shouldSit;
         this.model.young = entityIn.isBaby();
         float f = Mth.rotLerp(partialTicks, entityIn.yBodyRotO, entityIn.yBodyRot);
@@ -162,12 +162,12 @@ public class RenderUnderminer extends MobRenderer<EntityUnderminer, EntityModel<
         }
 
         matrixStackIn.popPose();
-        RenderNameTagEvent renderNameplateEvent = new RenderNameTagEvent(entityIn, entityIn.getDisplayName(), this, matrixStackIn, bufferIn, packedLightIn, partialTicks);
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(renderNameplateEvent);
-        if (renderNameplateEvent.getResult() != net.minecraftforge.eventbus.api.Event.Result.DENY && (renderNameplateEvent.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW || this.shouldShowName(entityIn))) {
-            this.renderNameTag(entityIn, renderNameplateEvent.getContent(), matrixStackIn, bufferIn, packedLightIn);
+        /*RenderNameTagEvent renderNameplateEvent = new RenderNameTagEvent(entityIn, entityIn.getDisplayName(), this, matrixStackIn, bufferIn, packedLightIn, partialTicks);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(renderNameplateEvent);*/
+        if (/*renderNameplateEvent.getResult() != net.minecraftforge.eventbus.api.Event.Result.DENY && (renderNameplateEvent.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW ||*/ this.shouldShowName(entityIn)) {
+            this.renderNameTag(entityIn, /*renderNameplateEvent.getContent()*/ entityIn.getDisplayName(), matrixStackIn, bufferIn, packedLightIn);
         }
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post<EntityUnderminer, EntityModel<EntityUnderminer>>(entityIn, this, partialTicks, matrixStackIn, bufferIn, packedLightIn));
+        LivingEntityRenderEvents.POST.invoker().afterRender(entityIn, this, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 
         BlockPos miningPos = entityIn.getMiningPos();
         if (miningPos != null) {
@@ -181,8 +181,8 @@ public class RenderUnderminer extends MobRenderer<EntityUnderminer, EntityModel<
             PoseStack.Pose posestack$pose = matrixStackIn.last();
             VertexConsumer vertexconsumer1 = new SheetedDecalTextureGenerator(bufferIn.getBuffer(DESTROY_TYPES.get(progress)), posestack$pose.pose(), posestack$pose.normal());
 
-            net.minecraftforge.client.model.data.ModelData modelData = entityIn.level.getModelDataManager().getAt(miningPos);
-            Minecraft.getInstance().getBlockRenderer().renderBreakingTexture(entityIn.level.getBlockState(miningPos), miningPos, entityIn.level, matrixStackIn, vertexconsumer1, modelData == null ? net.minecraftforge.client.model.data.ModelData.EMPTY : modelData);
+            //var modelData = entityIn.level.getModelDataManager().getAt(miningPos);
+            Minecraft.getInstance().getBlockRenderer().renderBreakingTexture(entityIn.level.getBlockState(miningPos), miningPos, entityIn.level, matrixStackIn, vertexconsumer1);
             matrixStackIn.popPose();
         }
     }

@@ -6,6 +6,10 @@ import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
 import com.github.alexthe666.alexsmobs.entity.ai.MimiCubeAIRangedAttack;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import io.github.fabricators_of_create.porting_lib.item.CustomArrowItem;
+import io.github.fabricators_of_create.porting_lib.util.ToolActions;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -41,9 +45,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolActions;
 
 public class EntityMimicube extends Monster implements RangedAttackMob {
 
@@ -141,7 +142,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         ItemStack itemstack = this.getProjectile(this.getMainHandItem());
         AbstractArrow abstractarrowentity = this.fireArrow(itemstack, distanceFactor);
         if (this.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
-            abstractarrowentity = ((net.minecraft.world.item.BowItem) this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+            abstractarrowentity = ((CustomArrowItem) ((net.minecraft.world.item.BowItem) this.getMainHandItem().getItem())).customArrow(abstractarrowentity);
         double d0 = target.getX() - this.getX();
         double d1 = target.getY(0.3333333333333333D) - abstractarrowentity.getY();
         double d2 = target.getZ() - this.getZ();
@@ -180,7 +181,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
 
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         super.handleEntityEvent(id);
         if (id == 45) {

@@ -10,6 +10,8 @@ import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import io.github.fabricators_of_create.porting_lib.event.common.LivingEntityEvents;
+import io.github.fabricators_of_create.porting_lib.extensions.IShearable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -54,7 +56,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-public class EntityBison extends Animal implements IAnimatedEntity, Shearable, net.minecraftforge.common.IForgeShearable {
+public class EntityBison extends Animal implements IAnimatedEntity, Shearable, IShearable {
 
     public static final Animation ANIMATION_PREPARE_CHARGE = Animation.create(40);
     public static final Animation ANIMATION_EAT = Animation.create(35);
@@ -433,11 +435,12 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
     }
 
     private void applyKnockbackFromBuffalo(float strength, double ratioX, double ratioZ) {
-        net.minecraftforge.event.entity.living.LivingKnockBackEvent event = net.minecraftforge.common.ForgeHooks.onLivingKnockBack(this, strength, ratioX, ratioZ);
-        if (event.isCanceled()) return;
+        //LivingEntityEvents.KNOCKBACK_STRENGTH.invoker().onLivingEntityTakeKnockback(strength, this);
+        //net.minecraftforge.event.entity.living.LivingKnockBackEvent event = net.minecraftforge.common.ForgeHooks.onLivingKnockBack(this, strength, ratioX, ratioZ);
+        /*if (event.isCanceled()) return;
         strength = event.getStrength();
         ratioX = event.getRatioX();
-        ratioZ = event.getRatioZ();
+        ratioZ = event.getRatioZ();*/
         if (!(strength <= 0.0F)) {
             this.hasImpulse = true;
             Vec3 vector3d = this.getDeltaMovement();

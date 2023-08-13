@@ -23,7 +23,6 @@ import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -175,10 +174,10 @@ public class EntityBoneSerpentPart extends LivingEntity implements IHurtableMult
         return null;
     }
 
-    @Override
+    /*@Override
     public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
-    }
+    }*/
 
     public void pushEntities() {
         List<net.minecraft.world.entity.Entity> entities = this.level.getEntities(this, this.getBoundingBox().expandTowards(0.2D, 0.0D, 0.2D));
@@ -250,7 +249,7 @@ public class EntityBoneSerpentPart extends LivingEntity implements IHurtableMult
         }
     }
 
-    public boolean shouldContinuePersisting() {
+    /*public boolean shouldContinuePersisting() {
         return isAddedToWorld() || this.isRemoved();
-    }
+    }*/
 }

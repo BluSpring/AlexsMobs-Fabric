@@ -7,6 +7,7 @@ import com.github.alexthe666.alexsmobs.entity.ai.FlyingAITargetDroppedItems;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -52,7 +53,6 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -99,7 +99,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
                 String[] split = str.split("\\|");
                 if (split.length >= 2) {
                     FEEDING_DATA.put(split[0], split[1]);
-                    FEEDING_STACKS.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(split[0]))));
+                    FEEDING_STACKS.add(new ItemStack(Registry.ITEM.get(new ResourceLocation(split[0]))));
                 }
             }
         }
@@ -139,10 +139,10 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
 
     @Nullable
     private BlockState getSaplingFor(ItemStack stack) {
-        ResourceLocation name = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        ResourceLocation name = Registry.ITEM.getKey(stack.getItem());
         if (!stack.isEmpty() && name != null && FEEDING_DATA.containsKey(name.toString())) {
             String str = FEEDING_DATA.get(name.toString());
-            Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(str));
+            Block block = Registry.BLOCK.get(new ResourceLocation(str));
             if (block != null) {
                 return block.defaultBlockState();
             }
@@ -265,8 +265,8 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
                 this.heal(4);
                 this.gameEvent(GameEvent.EAT);
                 this.playSound(SoundEvents.GENERIC_EAT, this.getSoundVolume(), this.getVoicePitch());
-                if (this.getMainHandItem().hasCraftingRemainingItem()) {
-                    this.spawnAtLocation(this.getMainHandItem().getCraftingRemainingItem());
+                if (this.getMainHandItem().getItem().hasCraftingRemainingItem()) {
+                    this.spawnAtLocation(this.getMainHandItem().getItem().getCraftingRemainingItem());
                 }
                 if (this.getMainHandItem().getItem() == Items.GOLDEN_APPLE) {
                     this.setGoldenTime(12000);

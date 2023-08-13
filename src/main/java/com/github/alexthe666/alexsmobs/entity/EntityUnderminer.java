@@ -8,6 +8,8 @@ import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+import me.alphamode.forgetags.Tags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -47,7 +49,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -135,7 +136,7 @@ public class EntityUnderminer extends PathfinderMob {
         compound.putInt("ResetItemTime", resetStackTime);
         compound.putInt("MineCooldown", mineCooldown);
         if(lastGivenStack != null){
-            compound.put("MineStack", lastGivenStack.serializeNBT());
+            compound.put("MineStack", NBTSerializer.serializeNBT(lastGivenStack));
         }
     }
 
@@ -545,7 +546,7 @@ public class EntityUnderminer extends PathfinderMob {
                         EntityUnderminer.this.setXRot((float) (Mth.atan2(d3, f) * (double) (180F / (float) Math.PI)) + (float) Math.sin(EntityUnderminer.this.tickCount * 0.1F));
                         EntityUnderminer.this.entityData.set(VISUALLY_MINING, true);
                         if (mineTime % 10 == 0) {
-                            SoundType soundType = minePretendStartState.getBlock().getSoundType(minePretendStartState, EntityUnderminer.this.level, minePretendPos, EntityUnderminer.this);
+                            SoundType soundType = minePretendStartState.getBlock().getSoundType(minePretendStartState);
                             EntityUnderminer.this.playSound(soundType.getHitSound());
                         }
                     }

@@ -3,10 +3,12 @@ package com.github.alexthe666.alexsmobs.client.render.layer;
 import com.github.alexthe666.alexsmobs.client.model.ModelMimicube;
 import com.github.alexthe666.alexsmobs.client.render.RenderMimicube;
 import com.github.alexthe666.alexsmobs.entity.EntityMimicube;
+import com.github.alexthe666.citadel.forge.extensions.IClientItemExtensions;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
+import io.github.fabricators_of_create.porting_lib.util.client.ClientHooks;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -48,7 +50,7 @@ public class LayerMimicubeHelmet extends RenderLayer<EntityMimicube, ModelMimicu
         }
         String s1 = String.format("%s:textures/models/armor/%s_layer_%d%s.png", domain, texture, (1), type == null ? "" : String.format("_%s", type));
 
-        s1 = net.minecraftforge.client.ForgeHooksClient.getArmorTexture(entity, stack, s1, slot, type);
+        s1 = ClientHooks.getArmorTexture(entity, stack, s1, slot, type);
         ResourceLocation resourcelocation = ARMOR_TEXTURE_RES_MAP.get(s1);
 
         if (resourcelocation == null) {
@@ -145,7 +147,7 @@ public class LayerMimicubeHelmet extends RenderLayer<EntityMimicube, ModelMimicu
 
     protected HumanoidModel<?> getArmorModelHook(LivingEntity entity, ItemStack itemStack, EquipmentSlot slot, HumanoidModel model) {
         try{
-            Model basicModel = net.minecraftforge.client.ForgeHooksClient.getArmorModel(entity, itemStack, slot, model);
+            Model basicModel = IClientItemExtensions.of(itemStack).getGenericArmorModel(entity, itemStack, slot, model);
             return basicModel instanceof HumanoidModel ? (HumanoidModel<?>) basicModel : model;
         }catch (Exception e){
             return model;

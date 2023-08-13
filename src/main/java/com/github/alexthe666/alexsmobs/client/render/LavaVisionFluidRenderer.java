@@ -2,6 +2,7 @@ package com.github.alexthe666.alexsmobs.client.render;
 
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.block.LiquidBlockRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -11,6 +12,10 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HalfTransparentBlock;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -48,8 +53,11 @@ public class LavaVisionFluidRenderer extends LiquidBlockRenderer {
         try {
             if (fluidStateIn.is(FluidTags.LAVA)) {
                 boolean flag = fluidStateIn.is(FluidTags.LAVA);
-                TextureAtlasSprite[] atextureatlassprite = net.minecraftforge.client.ForgeHooksClient.getFluidSprites(lightReaderIn, posIn, fluidStateIn);
-                int i = net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions.of(fluidStateIn).getTintColor(fluidStateIn, lightReaderIn, posIn);
+                var registryInstance = FluidRenderHandlerRegistry.INSTANCE.get(fluidStateIn.getType());
+                TextureAtlasSprite[] atextureatlassprite = registryInstance
+                        .getFluidSprites(lightReaderIn, posIn, fluidStateIn);
+
+                int i = registryInstance.getFluidColor(lightReaderIn, posIn, fluidStateIn);
                 float alpha = (float) AMConfig.lavaOpacity;
                 float f = (float)(i >> 16 & 255) / 255.0F;
                 float f1 = (float)(i >> 8 & 255) / 255.0F;
@@ -248,7 +256,7 @@ public class LavaVisionFluidRenderer extends LiquidBlockRenderer {
                             BlockPos blockpos = posIn.relative(direction);
                             TextureAtlasSprite textureatlassprite2 = atextureatlassprite[1];
                             if (atextureatlassprite[2] != null) {
-                                if (lightReaderIn.getBlockState(blockpos).shouldDisplayFluidOverlay(lightReaderIn, blockpos, fluidStateIn)) {
+                                if (shouldRenderFluidOverlay(lightReaderIn.getBlockState(blockpos).getBlock())) {
                                     textureatlassprite2 = atextureatlassprite[2];
                                 }
                             }
@@ -283,6 +291,10 @@ public class LavaVisionFluidRenderer extends LiquidBlockRenderer {
             }
         } catch (Exception e) {
         }
+    }
+
+    private static boolean shouldRenderFluidOverlay(Block block) {
+        return block instanceof LeavesBlock || block instanceof HalfTransparentBlock;
     }
 
     private void vertexVanilla(VertexConsumer vertexBuilderIn, double x, double y, double z, float red, float green, float blue, float alpha, float u, float v, int packedLight) {

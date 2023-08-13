@@ -10,6 +10,10 @@ import com.github.alexthe666.alexsmobs.entity.ai.FlightMoveController;
 import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import com.github.alexthe666.alexsmobs.mixin.EnderDragonAccessor;
+import io.github.fabricators_of_create.porting_lib.loot.LootHooks;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -49,8 +53,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -387,7 +389,7 @@ public class EntityVoidWorm extends Monster {
             DamageSource source = this.getLastDamageSource() == null ? DamageSource.GENERIC : this.getLastDamageSource();
             Entity entity = source.getEntity();
 
-            int i = net.minecraftforge.common.ForgeHooks.getLootingLevel(this, entity, source);
+            int i = LootHooks.getLootingLevel(this, entity, source);
             this.captureDrops(new java.util.ArrayList<>());
 
             boolean flag = this.lastHurtByPlayerTime > 0;
@@ -400,7 +402,7 @@ public class EntityVoidWorm extends Monster {
 
             Collection<ItemEntity> drops = captureDrops(null);
 
-            if (!net.minecraftforge.common.ForgeHooks.onLivingDrops(this, source, drops, i, lastHurtByPlayerTime > 0)){
+            if (/*!net.minecraftforge.common.ForgeHooks.onLivingDrops(this, source, drops, i, lastHurtByPlayerTime > 0)*/ true){
                 if(!drops.isEmpty()){
                     this.placeDropsSafely(drops);
                 }
@@ -746,7 +748,7 @@ public class EntityVoidWorm extends Monster {
 
     private boolean wormAttack(Entity entity, DamageSource source, float dmg) {
         dmg *= AMConfig.voidWormDamageModifier;
-        return entity instanceof EnderDragon ? ((EnderDragon) entity).reallyHurt(source, dmg * 0.5F) : entity.hurt(source, dmg);
+        return entity instanceof EnderDragon ? ((EnderDragonAccessor) ((EnderDragon) entity)).callReallyHurt(source, dmg * 0.5F) : entity.hurt(source, dmg);
     }
 
     public void playHurtSoundWorm(DamageSource source) {
@@ -950,7 +952,7 @@ public class EntityVoidWorm extends Monster {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67) {
             AlexsMobs.PROXY.onEntityStatus(this, id);

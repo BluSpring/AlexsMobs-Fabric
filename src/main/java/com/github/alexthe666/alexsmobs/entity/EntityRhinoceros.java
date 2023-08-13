@@ -11,6 +11,7 @@ import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -51,7 +52,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -246,7 +246,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
     }
 
     public MobEffect getPotionEffect() {
-        return ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(this.getAppliedPotionId()));
+        return Registry.MOB_EFFECT.get(new ResourceLocation(this.getAppliedPotionId()));
     }
 
     public int getPotionDuration() {
@@ -448,7 +448,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
         }else{
             if(potion.getEffects().size() >= 1){
                 MobEffectInstance first = potion.getEffects().get(0);
-                ResourceLocation loc = ForgeRegistries.MOB_EFFECTS.getKey(first.getEffect());
+                ResourceLocation loc = Registry.MOB_EFFECT.getKey(first.getEffect());
                 if(loc != null){
                     this.setAppliedPotionId(loc.toString());
                     this.setPotionLevel(first.getAmplifier());

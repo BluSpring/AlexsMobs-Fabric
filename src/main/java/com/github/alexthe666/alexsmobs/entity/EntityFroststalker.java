@@ -8,6 +8,7 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import io.github.fabricators_of_create.porting_lib.event.common.LivingEntityEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -429,7 +430,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
         float f = this.getYRot() * ((float) Math.PI / 180F);
         this.setDeltaMovement(this.getDeltaMovement().add(-Mth.sin(f) * 0.2F, 0, Mth.cos(f) * 0.2F));
         this.hasImpulse = true;
-        net.minecraftforge.common.ForgeHooks.onLivingJump(this);
+        LivingEntityEvents.JUMP.invoker().onLivingEntityJump(this);
     }
 
     public void frostJump() {

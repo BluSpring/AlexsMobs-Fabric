@@ -27,13 +27,13 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,17 +84,17 @@ public class AMItemstackRenderer extends BlockEntityWithoutLevelRenderer {
     private static List<ItemStack> getDimensionalCarverShards() {
         if (DIMENSIONAL_CARVER_SHARDS == null || DIMENSIONAL_CARVER_SHARDS.isEmpty()) {
             DIMENSIONAL_CARVER_SHARDS = Util.make(Lists.newArrayList(), (list) -> {
-                list.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("alexsmobs:dimensional_carver_shard_0"))));
-                list.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("alexsmobs:dimensional_carver_shard_1"))));
-                list.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("alexsmobs:dimensional_carver_shard_2"))));
-                list.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("alexsmobs:dimensional_carver_shard_3"))));
-                list.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("alexsmobs:dimensional_carver_shard_4"))));
-                list.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("alexsmobs:dimensional_carver_shard_5"))));
-                list.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("alexsmobs:dimensional_carver_shard_6"))));
-                list.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("alexsmobs:dimensional_carver_shard_7"))));
-                list.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("alexsmobs:dimensional_carver_shard_8"))));
-                list.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("alexsmobs:dimensional_carver_shard_9"))));
-                list.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("alexsmobs:dimensional_carver_shard_10"))));
+                list.add(new ItemStack(Registry.ITEM.get(new ResourceLocation("alexsmobs:dimensional_carver_shard_0"))));
+                list.add(new ItemStack(Registry.ITEM.get(new ResourceLocation("alexsmobs:dimensional_carver_shard_1"))));
+                list.add(new ItemStack(Registry.ITEM.get(new ResourceLocation("alexsmobs:dimensional_carver_shard_2"))));
+                list.add(new ItemStack(Registry.ITEM.get(new ResourceLocation("alexsmobs:dimensional_carver_shard_3"))));
+                list.add(new ItemStack(Registry.ITEM.get(new ResourceLocation("alexsmobs:dimensional_carver_shard_4"))));
+                list.add(new ItemStack(Registry.ITEM.get(new ResourceLocation("alexsmobs:dimensional_carver_shard_5"))));
+                list.add(new ItemStack(Registry.ITEM.get(new ResourceLocation("alexsmobs:dimensional_carver_shard_6"))));
+                list.add(new ItemStack(Registry.ITEM.get(new ResourceLocation("alexsmobs:dimensional_carver_shard_7"))));
+                list.add(new ItemStack(Registry.ITEM.get(new ResourceLocation("alexsmobs:dimensional_carver_shard_8"))));
+                list.add(new ItemStack(Registry.ITEM.get(new ResourceLocation("alexsmobs:dimensional_carver_shard_9"))));
+                list.add(new ItemStack(Registry.ITEM.get(new ResourceLocation("alexsmobs:dimensional_carver_shard_10"))));
             });
         }
         return DIMENSIONAL_CARVER_SHARDS;

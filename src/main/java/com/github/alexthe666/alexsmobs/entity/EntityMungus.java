@@ -10,11 +10,14 @@ import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.message.MessageMungusBiomeChange;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import com.github.alexthe666.alexsmobs.mixin.LevelChunkSectionAccessor;
+import io.github.fabricators_of_create.porting_lib.extensions.IShearable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -60,13 +63,12 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class EntityMungus extends Animal implements ITargetsDroppedItems, Shearable, net.minecraftforge.common.IForgeShearable {
+public class EntityMungus extends Animal implements ITargetsDroppedItems, Shearable, IShearable {
 
     protected static final EntityDataAccessor<Optional<BlockPos>> TARGETED_BLOCK_POS = SynchedEntityData.defineId(EntityMungus.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
     private static final EntityDataAccessor<Boolean> ALT_ORDER_MUSHROOMS = SynchedEntityData.defineId(EntityMungus.class, EntityDataSerializers.BOOLEAN);
@@ -105,7 +107,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
 
     public static BlockState getMushroomBlockstate(Item item) {
         if (item instanceof BlockItem) {
-            ResourceLocation name = ForgeRegistries.ITEMS.getKey(item);
+            ResourceLocation name = Registry.ITEM.getKey(item);
             if (name != null && MUSHROOM_TO_BIOME.containsKey(name.toString())) {
                 return ((BlockItem) item).getBlock().defaultBlockState();
             }
@@ -232,9 +234,9 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
             Holder<Biome> biome = registry.getHolder(Biomes.MUSHROOM_FIELDS).get();
             TagKey<Block> transformMatches = AMTagRegistry.MUNGUS_REPLACE_MUSHROOM;
             if (this.getMushroomState() != null) {
-                String mushroomKey = ForgeRegistries.BLOCKS.getKey(this.getMushroomState().getBlock()).toString();
+                String mushroomKey = Registry.BLOCK.getKey(this.getMushroomState().getBlock()).toString();
                 if (MUSHROOM_TO_BLOCK.containsKey(mushroomKey)) {
-                    Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(MUSHROOM_TO_BLOCK.get(mushroomKey)));
+                    Block block = Registry.BLOCK.get(new ResourceLocation(MUSHROOM_TO_BLOCK.get(mushroomKey)));
                     if (block != null) {
                         transformState = block.defaultBlockState();
                         if (block == Blocks.WARPED_NYLIUM) {
@@ -285,7 +287,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         if (state == null) {
             return null;
         }
-        ResourceLocation blockRegName = ForgeRegistries.BLOCKS.getKey(state.getBlock());
+        ResourceLocation blockRegName = Registry.BLOCK.getKey(state.getBlock());
         if (blockRegName != null && MUSHROOM_TO_BIOME.containsKey(blockRegName.toString())) {
             String str = MUSHROOM_TO_BIOME.get(blockRegName.toString());
             Biome biome = registry.getOptional(new ResourceLocation(str)).orElse(null);
@@ -311,7 +313,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         int j = chunk.getSectionIndex(QuartPos.toBlock(l));
         LevelChunkSection section = chunk.getSection(j);
         if(section != null){
-            section.biomes = container;
+            ((LevelChunkSectionAccessor) section).setBiomes(container);
         }
     }
 
@@ -333,7 +335,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
             }
             setChunkBiomes(chunk, container);
             if (!level.isClientSide) {
-                //AlexsMobs.sendMSGToAll(new MessageMungusBiomeChange(this.getId(), pos.getX(), pos.getZ(), ForgeRegistries.BIOMES.getKey(biome.value()).toString()));
+                //AlexsMobs.sendMSGToAll(new MessageMungusBiomeChange(this.getId(), pos.getX(), pos.getZ(), Registry.BIOMES.getKey(biome.value()).toString()));
             }
         } else {
             if (biome == null) {
@@ -349,7 +351,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
                 }
                 int id = this.getId();
                 setChunkBiomes(chunk, container);
-                AlexsMobs.sendMSGToAll(new MessageMungusBiomeChange(this.getId(), pos.getX(), pos.getZ(), ForgeRegistries.BIOMES.getKey(biome.value()).toString()));
+                AlexsMobs.sendMSGToAll(new MessageMungusBiomeChange(this.getId(), pos.getX(), pos.getZ(), BuiltinRegistries.BIOME.getKey(biome.value()).toString()));
             }
         }
 

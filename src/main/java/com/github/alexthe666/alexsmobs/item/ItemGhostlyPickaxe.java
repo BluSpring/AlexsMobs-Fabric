@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import com.github.alexthe666.alexsmobs.mixin.BlockAccessor;
+import io.github.fabricators_of_create.porting_lib.block.CustomExpBlock;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -55,9 +57,9 @@ public class ItemGhostlyPickaxe extends PickaxeItem {
                 state.spawnAfterBreak((ServerLevel)level, pos, stack, true);
                 int fortuneLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack);
                 int silkTouchLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack);
-                int exp = state.getExpDrop((ServerLevel)level, level.random, pos, fortuneLevel, silkTouchLevel);
+                int exp = ((CustomExpBlock) state.getBlock()).getExpDrop(state, (ServerLevel)level, level.random, pos, fortuneLevel, silkTouchLevel);
                 if(exp > 0){
-                    state.getBlock().popExperience((ServerLevel)level, pos, exp);
+                    ((BlockAccessor) state.getBlock()).callPopExperience((ServerLevel)level, pos, exp);
                 }
             }
         }
@@ -170,14 +172,14 @@ public class ItemGhostlyPickaxe extends PickaxeItem {
         dropAllContents(itemEntity.level, itemEntity.position(), itemEntity.getItem());
     }
 
-    @Override
+    /*@Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
         int i = super.damageItem(stack, amount, entity, onBroken);
         if(i + stack.getDamageValue() >= stack.getMaxDamage() && entity != null){
             dropAllContents(entity.level, entity.position(), stack);
         }
         return i;
-    }
+    }*/
 
     public int getMaxDamage(ItemStack stack) {
         return 700;

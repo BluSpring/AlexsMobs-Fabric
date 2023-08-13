@@ -1,8 +1,8 @@
 package com.github.alexthe666.alexsmobs.client.render.item;
 
 import com.github.alexthe666.alexsmobs.client.render.AMItemstackRenderer;
+import com.github.alexthe666.citadel.forge.extensions.IClientItemExtensions;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 public class AMItemRenderProperties implements IClientItemExtensions {
 

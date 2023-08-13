@@ -18,21 +18,35 @@ import com.github.alexthe666.alexsmobs.entity.EntityElephant;
 import com.github.alexthe666.alexsmobs.entity.IFalconry;
 import com.github.alexthe666.alexsmobs.entity.util.RockyChestplateUtil;
 import com.github.alexthe666.alexsmobs.entity.util.VineLassoUtil;
+import com.github.alexthe666.alexsmobs.fabric.event.ComputeCameraAnglesCallback;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.item.ItemDimensionalCarver;
 import com.github.alexthe666.alexsmobs.message.MessageUpdateEagleControls;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import com.github.alexthe666.alexsmobs.mixin.*;
 import com.github.alexthe666.citadel.client.event.EventGetFluidRenderType;
 import com.github.alexthe666.citadel.client.event.EventGetOutlineColor;
 import com.github.alexthe666.citadel.client.event.EventGetStarBrightness;
 import com.github.alexthe666.citadel.client.event.EventPosePlayerHand;
 import com.google.common.base.MoreObjects;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Vector3f;
+import dev.architectury.event.EventResult;
+import io.github.fabricators_of_create.porting_lib.event.client.FogEvents;
+import io.github.fabricators_of_create.porting_lib.event.client.LivingEntityRenderEvents;
+import io.github.fabricators_of_create.porting_lib.event.client.OverlayRenderCallback;
+import io.github.fabricators_of_create.porting_lib.event.client.RenderHandCallback;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
+import net.minecraft.client.Camera;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -44,6 +58,7 @@ import net.minecraft.client.renderer.block.LiquidBlockRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -58,14 +73,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class ClientEvents {
 
@@ -77,13 +84,52 @@ public class ClientEvents {
     public long lastStaticTick = -1;
     public static int renderStaticScreenFor = 0;
 
-    @SubscribeEvent
-    public void onOutlineEntityColor(EventGetOutlineColor event) {
+    public ClientEvents() {
+        EventGetOutlineColor.EVENT.register(this::onOutlineEntityColor);
+        EventGetStarBrightness.EVENT.register(this::onGetStarBrightness);
+        FogEvents.SET_COLOR.register((data, partialTicks) -> {
+            onFogColor(data);
+        });
+        FogEvents.RENDER_FOG.register(((mode, type, camera, partialTick, renderDistance, nearDistance, farDistance, shape, fogData) -> {
+            onFogDensity(camera, fogData);
+            return false;
+        }));
+        LivingEntityRenderEvents.PRE.register(((entity, renderer, partialRenderTick, matrixStack, buffers, light) -> {
+            return onPreRenderEntity(entity, matrixStack, partialRenderTick, renderer, buffers, light);
+        }));
+        LivingEntityRenderEvents.POST.register(((entity, renderer, partialRenderTick, matrixStack, buffers, light) -> {
+            onPostRenderEntity(entity, renderer, partialRenderTick, matrixStack, buffers, light);
+        }));
+
+        EventPosePlayerHand.EVENT.register(this::onPoseHand);
+        RenderHandCallback.EVENT.register((event) -> {
+            onRenderHand(event);
+        });
+        WorldRenderEvents.LAST.register((context) -> {
+            onRenderWorldLastEvent(context);
+        });
+
+        EventGetFluidRenderType.EVENT.register(this::onGetFluidRenderType);
+
+        ClientTickEvents.START_CLIENT_TICK.register(this::clientTick);
+
+        ComputeCameraAnglesCallback.EVENT.register(this::onCameraSetup);
+
+        OverlayRenderCallback.EVENT.register((stack, partialTicks, window, type) -> {
+            onPostGameOverlay(stack, partialTicks, window, type);
+
+            return false;
+        });
+    }
+
+    public EventResult onOutlineEntityColor(EventGetOutlineColor event) {
+        var result = EventResult.pass();
+
         if(event.getEntityIn() instanceof Enemy && AlexsMobs.PROXY.getSingingBlueJayId() != -1){
             Entity entity = event.getEntityIn().level.getEntity(AlexsMobs.PROXY.getSingingBlueJayId());
             if(entity instanceof EntityBlueJay jay && jay.isAlive() && jay.isMakingMonstersBlue()){
                 event.setColor(0X4B95FE);
-                event.setResult(Event.Result.ALLOW);
+                result = EventResult.interruptTrue();
             }
         }
         if (event.getEntityIn() instanceof ItemEntity && ((ItemEntity) event.getEntityIn()).getItem().is(AMTagRegistry.VOID_WORM_DROPS)){
@@ -103,13 +149,14 @@ public class ClientEvents {
                     ((((int) (g * 255)) & 0xFF) << 8) |
                     ((((int) (b * 255)) & 0xFF) << 0);
             event.setColor(j);
-            event.setResult(Event.Result.ALLOW);
+            result = EventResult.interruptTrue();
         }
+
+        return result;
     }
 
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public void onGetStarBrightness(EventGetStarBrightness event) {
+    @Environment(EnvType.CLIENT)
+    public EventResult onGetStarBrightness(EventGetStarBrightness event) {
         if (Minecraft.getInstance().player.hasEffect(AMEffectRegistry.POWER_DOWN.get())) {
             if (Minecraft.getInstance().player.getEffect(AMEffectRegistry.POWER_DOWN.get()) != null) {
                 MobEffectInstance instance = Minecraft.getInstance().player.getEffect(AMEffectRegistry.POWER_DOWN.get());
@@ -118,15 +165,16 @@ public class ClientEvents {
                 float partialTicks = Minecraft.getInstance().getFrameTime();
                 float f = (Math.min(powerDown.getActiveTime(), duration) + partialTicks) * 0.1F;
                 event.setBrightness(0);
-                event.setResult(Event.Result.ALLOW);
+                return EventResult.interruptTrue();
             }
 
         }
+
+        return EventResult.pass();
     }
 
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public void onFogColor(ViewportEvent.ComputeFogColor event) {
+    @Environment(EnvType.CLIENT)
+    public void onFogColor(FogEvents.ColorData event) {
         if (Minecraft.getInstance().player.hasEffect(AMEffectRegistry.POWER_DOWN.get())) {
             if (Minecraft.getInstance().player.getEffect(AMEffectRegistry.POWER_DOWN.get()) != null) {
                 event.setBlue(0);
@@ -137,17 +185,16 @@ public class ClientEvents {
         }
     }
 
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public void onFogDensity(ViewportEvent.RenderFog event) {
-        FogType fogType = event.getCamera().getFluidInCamera();
+    @Environment(EnvType.CLIENT)
+    public void onFogDensity(Camera camera, FogEvents.FogData data) {
+        FogType fogType = camera.getFluidInCamera();
         if (Minecraft.getInstance().player.hasEffect(AMEffectRegistry.LAVA_VISION.get()) && fogType == FogType.LAVA) {
             RenderSystem.setShaderFogStart(-8.0F);
             RenderSystem.setShaderFogEnd(50.0F);
         }
         if (Minecraft.getInstance().player.hasEffect(AMEffectRegistry.POWER_DOWN.get()) && fogType == FogType.NONE) {
             if (Minecraft.getInstance().player.getEffect(AMEffectRegistry.POWER_DOWN.get()) != null) {
-                float initEnd = event.getFarPlaneDistance();
+                float initEnd = data.getFarPlaneDistance();
                 MobEffectInstance instance = Minecraft.getInstance().player.getEffect(AMEffectRegistry.POWER_DOWN.get());
                 EffectPowerDown powerDown = (EffectPowerDown) instance.getEffect();
                 int duration = instance.getDuration();
@@ -161,84 +208,84 @@ public class ClientEvents {
         }
     }
 
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public void onPreRenderEntity(RenderLivingEvent.Pre event) {
-        if (RockyChestplateUtil.isRockyRolling(event.getEntity())) {
-            event.setCanceled(true);
-            event.getPoseStack().pushPose();
-            float limbSwing = event.getEntity().animationPosition - event.getEntity().animationSpeed * (1.0F - event.getPartialTick());
-            float limbSwingAmount = Mth.lerp(event.getPartialTick(), event.getEntity().animationSpeedOld, event.getEntity().animationSpeed);
-            float yRot = event.getEntity().yBodyRotO + (event.getEntity().yBodyRot - event.getEntity().yBodyRotO) * event.getPartialTick();
-            float roll = event.getEntity().walkDistO + (event.getEntity().walkDist - event.getEntity().walkDistO) * event.getPartialTick();
-            VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(event.getMultiBufferSource(), RenderType.armorCutoutNoCull(ROCKY_CHESTPLATE_TEXTURE), false, event.getEntity().getItemBySlot(EquipmentSlot.CHEST).hasFoil());
-            event.getPoseStack().translate(0.0D, event.getEntity().getBbHeight() - event.getEntity().getBbHeight() * 0.5F, 0.0D);
-            event.getPoseStack().mulPose(Vector3f.YN.rotationDegrees(180F + yRot));
-            event.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-            event.getPoseStack().mulPose(Vector3f.XP.rotationDegrees(100F * roll));
-            ROCKY_CHESTPLATE_MODEL.setupAnim(event.getEntity(), limbSwing, limbSwingAmount, event.getEntity().tickCount + event.getPartialTick(), 0, 0);
-            ROCKY_CHESTPLATE_MODEL.renderToBuffer(event.getPoseStack(), vertexconsumer, event.getPackedLight(), OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-            event.getPoseStack().popPose();
-            MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Post(event.getEntity(), event.getRenderer(), event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight()));
-            return;
+    @Environment(EnvType.CLIENT)
+    public boolean onPreRenderEntity(LivingEntity entity, PoseStack poseStack, float partialTick, LivingEntityRenderer<?, ?> renderer, MultiBufferSource bufferSource, int packedLight) {
+        var isCancelled = false;
+        if (RockyChestplateUtil.isRockyRolling(entity)) {
+            isCancelled = true;
+            poseStack.pushPose();
+            float limbSwing = entity.animationPosition - entity.animationSpeed * (1.0F - partialTick);
+            float limbSwingAmount = Mth.lerp(partialTick, entity.animationSpeedOld, entity.animationSpeed);
+            float yRot = entity.yBodyRotO + (entity.yBodyRot - entity.yBodyRotO) * partialTick;
+            float roll = entity.walkDistO + (entity.walkDist - entity.walkDistO) * partialTick;
+            VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.armorCutoutNoCull(ROCKY_CHESTPLATE_TEXTURE), false, entity.getItemBySlot(EquipmentSlot.CHEST).hasFoil());
+            poseStack.translate(0.0D, entity.getBbHeight() - entity.getBbHeight() * 0.5F, 0.0D);
+            poseStack.mulPose(Vector3f.YN.rotationDegrees(180F + yRot));
+            poseStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
+            poseStack.mulPose(Vector3f.XP.rotationDegrees(100F * roll));
+            ROCKY_CHESTPLATE_MODEL.setupAnim(entity, limbSwing, limbSwingAmount, entity.tickCount + partialTick, 0, 0);
+            ROCKY_CHESTPLATE_MODEL.renderToBuffer(poseStack, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            poseStack.popPose();
+            LivingEntityRenderEvents.POST.invoker().afterRender(entity, renderer, partialTick, poseStack, bufferSource, packedLight);
+            return isCancelled;
         }
-        if (event.getEntity() instanceof WanderingTrader && event.getEntity().getType() == EntityType.WANDERING_TRADER) {
-            if (event.getEntity().getVehicle() instanceof EntityElephant) {
-                if (!(event.getRenderer().model instanceof ModelWanderingVillagerRider)) {
-                    event.getRenderer().model = new ModelWanderingVillagerRider(Minecraft.getInstance().getEntityModels().bakeLayer(AMModelLayers.SITTING_WANDERING_VILLAGER));
+        if (entity instanceof WanderingTrader && entity.getType() == EntityType.WANDERING_TRADER) {
+            if (entity.getVehicle() instanceof EntityElephant) {
+                if (!(renderer.getModel() instanceof ModelWanderingVillagerRider)) {
+                    ((LivingEntityRendererAccessor) renderer).setModel(new ModelWanderingVillagerRider(Minecraft.getInstance().getEntityModels().bakeLayer(AMModelLayers.SITTING_WANDERING_VILLAGER)));
                 }
             }
         }
-        if (event.getEntity().hasEffect(AMEffectRegistry.CLINGING.get()) && event.getEntity().getEyeHeight() < event.getEntity().getBbHeight() * 0.45F || event.getEntity().hasEffect(AMEffectRegistry.DEBILITATING_STING.get()) && event.getEntity().getMobType() == MobType.ARTHROPOD && event.getEntity().getBbWidth() > event.getEntity().getBbHeight()) {
-            event.getPoseStack().pushPose();
-            event.getPoseStack().translate(0.0D, event.getEntity().getBbHeight() + 0.1F, 0.0D);
-            event.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-            event.getEntity().yBodyRotO = -event.getEntity().yBodyRotO;
-            event.getEntity().yBodyRot = -event.getEntity().yBodyRot;
-            event.getEntity().yHeadRotO = -event.getEntity().yHeadRotO;
-            event.getEntity().yHeadRot = -event.getEntity().yHeadRot;
+        if (entity.hasEffect(AMEffectRegistry.CLINGING.get()) && entity.getEyeHeight() < entity.getBbHeight() * 0.45F || entity.hasEffect(AMEffectRegistry.DEBILITATING_STING.get()) && entity.getMobType() == MobType.ARTHROPOD && entity.getBbWidth() > entity.getBbHeight()) {
+            poseStack.pushPose();
+            poseStack.translate(0.0D, entity.getBbHeight() + 0.1F, 0.0D);
+            poseStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
+            entity.yBodyRotO = -entity.yBodyRotO;
+            entity.yBodyRot = -entity.yBodyRot;
+            entity.yHeadRotO = -entity.yHeadRotO;
+            entity.yHeadRot = -entity.yHeadRot;
         }
-        if (event.getEntity().hasEffect(AMEffectRegistry.ENDER_FLU.get())) {
-            event.getPoseStack().pushPose();
-            event.getPoseStack().mulPose(Vector3f.YP.rotationDegrees((float) (Math.cos((double) event.getEntity().tickCount * 7F) * Math.PI * (double) 1.2F)));
+        if (entity.hasEffect(AMEffectRegistry.ENDER_FLU.get())) {
+            poseStack.pushPose();
+            poseStack.mulPose(Vector3f.YP.rotationDegrees((float) (Math.cos((double) entity.tickCount * 7F) * Math.PI * (double) 1.2F)));
             float vibrate = 0.05F;
-            event.getPoseStack().translate((event.getEntity().getRandom().nextFloat() - 0.5F) * vibrate, (event.getEntity().getRandom().nextFloat() - 0.5F) * vibrate, (event.getEntity().getRandom().nextFloat() - 0.5F) * vibrate);
+            poseStack.translate((entity.getRandom().nextFloat() - 0.5F) * vibrate, (entity.getRandom().nextFloat() - 0.5F) * vibrate, (entity.getRandom().nextFloat() - 0.5F) * vibrate);
         }
+        
+        return isCancelled;
     }
 
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public void onPostRenderEntity(RenderLivingEvent.Post event) {
-        if (RockyChestplateUtil.isRockyRolling(event.getEntity())) {
+    @Environment(EnvType.CLIENT)
+    public void onPostRenderEntity(LivingEntity entity, LivingEntityRenderer<?, ?> renderer, float partialTick, PoseStack poseStack, MultiBufferSource buffers, int light) {
+        if (RockyChestplateUtil.isRockyRolling(entity)) {
             return;
         }
-        if (event.getEntity().hasEffect(AMEffectRegistry.ENDER_FLU.get())) {
-            event.getPoseStack().popPose();
+        if (entity.hasEffect(AMEffectRegistry.ENDER_FLU.get())) {
+            poseStack.popPose();
         }
-        if (event.getEntity().hasEffect(AMEffectRegistry.CLINGING.get()) && event.getEntity().getEyeHeight() < event.getEntity().getBbHeight() * 0.45F || event.getEntity().hasEffect(AMEffectRegistry.DEBILITATING_STING.get()) && event.getEntity().getMobType() == MobType.ARTHROPOD && event.getEntity().getBbWidth() > event.getEntity().getBbHeight()) {
-            event.getPoseStack().popPose();
-            event.getEntity().yBodyRotO = -event.getEntity().yBodyRotO;
-            event.getEntity().yBodyRot = -event.getEntity().yBodyRot;
-            event.getEntity().yHeadRotO = -event.getEntity().yHeadRotO;
-            event.getEntity().yHeadRot = -event.getEntity().yHeadRot;
+        if (entity.hasEffect(AMEffectRegistry.CLINGING.get()) && entity.getEyeHeight() < entity.getBbHeight() * 0.45F || entity.hasEffect(AMEffectRegistry.DEBILITATING_STING.get()) && entity.getMobType() == MobType.ARTHROPOD && entity.getBbWidth() > entity.getBbHeight()) {
+            poseStack.popPose();
+            entity.yBodyRotO = -entity.yBodyRotO;
+            entity.yBodyRot = -entity.yBodyRot;
+            entity.yHeadRotO = -entity.yHeadRotO;
+            entity.yHeadRot = -entity.yHeadRot;
         }
-        if (VineLassoUtil.hasLassoData(event.getEntity()) && !(event.getEntity() instanceof Player)) {
-            Entity lassoedOwner = VineLassoUtil.getLassoedTo(event.getEntity());
-            if (lassoedOwner instanceof LivingEntity && lassoedOwner != event.getEntity()) {
-                double d0 = Mth.lerp(event.getPartialTick(), event.getEntity().xOld, event.getEntity().getX());
-                double d1 = Mth.lerp(event.getPartialTick(), event.getEntity().yOld, event.getEntity().getY());
-                double d2 = Mth.lerp(event.getPartialTick(), event.getEntity().zOld, event.getEntity().getZ());
-                event.getPoseStack().pushPose();
-                event.getPoseStack().translate(-d0, -d1, -d2);
-                RenderVineLasso.renderVine(event.getEntity(), event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource(), (LivingEntity) lassoedOwner, ((LivingEntity) lassoedOwner).getMainArm() == HumanoidArm.LEFT, 0.1F);
-                event.getPoseStack().popPose();
+        if (VineLassoUtil.hasLassoData(entity) && !(entity instanceof Player)) {
+            Entity lassoedOwner = VineLassoUtil.getLassoedTo(entity);
+            if (lassoedOwner instanceof LivingEntity && lassoedOwner != entity) {
+                double d0 = Mth.lerp(partialTick, entity.xOld, entity.getX());
+                double d1 = Mth.lerp(partialTick, entity.yOld, entity.getY());
+                double d2 = Mth.lerp(partialTick, entity.zOld, entity.getZ());
+                poseStack.pushPose();
+                poseStack.translate(-d0, -d1, -d2);
+                RenderVineLasso.renderVine(entity, partialTick, poseStack, buffers, (LivingEntity) lassoedOwner, ((LivingEntity) lassoedOwner).getMainArm() == HumanoidArm.LEFT, 0.1F);
+                poseStack.popPose();
             }
         }
     }
 
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public void onPoseHand(EventPosePlayerHand event) {
+    @Environment(EnvType.CLIENT)
+    public EventResult onPoseHand(EventPosePlayerHand event) {
         LivingEntity player = (LivingEntity) event.getEntityIn();
         float f = Minecraft.getInstance().getFrameTime();
         boolean leftHand = false;
@@ -248,22 +295,25 @@ public class ClientEvents {
         } else if (player.getItemInHand(InteractionHand.OFF_HAND).getItem() == AMItemRegistry.VINE_LASSO.get()) {
             leftHand = player.getMainArm() != HumanoidArm.LEFT;
         }
+
+        var result = EventResult.pass();
         if (leftHand && event.isLeftHand() && usingLasso) {
             float swing = (float) Math.sin(player.tickCount + f) * 0.5F;
-            event.setResult(Event.Result.ALLOW);
+            result = EventResult.interruptTrue();
             event.getModel().leftArm.xRot = (float) Math.toRadians(-120F) + (float) Math.sin(player.tickCount + f) * 0.5F;
             event.getModel().leftArm.yRot = (float) Math.toRadians(-20F) + (float) Math.cos(player.tickCount + f) * 0.5F;
         }
         if (!leftHand && !event.isLeftHand() && usingLasso) {
-            event.setResult(Event.Result.ALLOW);
+            result = EventResult.interruptTrue();
             event.getModel().rightArm.xRot = (float) Math.toRadians(-120F) + (float) Math.sin(player.tickCount + f) * 0.5F;
             event.getModel().rightArm.yRot = (float) Math.toRadians(20F) - (float) Math.cos(player.tickCount + f) * 0.5F;
         }
+
+        return result;
     }
 
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public void onRenderHand(RenderHandEvent event) {
+    @Environment(EnvType.CLIENT)
+    public void onRenderHand(RenderHandCallback.RenderHandEvent event) {
         if (Minecraft.getInstance().getCameraEntity() instanceof IFalconry) {
             event.setCanceled(true);
         }
@@ -278,7 +328,7 @@ public class ClientEvents {
             for (Entity entity : player.getPassengers()) {
                 if (entity instanceof IFalconry) {
                     IFalconry falconry = (IFalconry)entity;
-                    float yaw = player.yBodyRotO + (player.yBodyRot - player.yBodyRotO) * event.getPartialTick();
+                    float yaw = player.yBodyRotO + (player.yBodyRot - player.yBodyRotO) * event.getPartialTicks();
                     ClientProxy.currentUnrenderedEntities.remove(entity.getUUID());
                     PoseStack matrixStackIn = event.getPoseStack();
                     matrixStackIn.pushPose();
@@ -290,7 +340,7 @@ public class ClientEvents {
                     } else {
                         matrixStackIn.mulPose(Vector3f.YN.rotationDegrees(90));
                     }
-                    renderEntity(entity, 0, 0, 0, 0, event.getPartialTick(), matrixStackIn, event.getMultiBufferSource(), event.getPackedLight());
+                    renderEntity(entity, 0, 0, 0, 0, event.getPartialTicks(), matrixStackIn, event.getMultiBufferSource(), event.getPackedLight());
                     matrixStackIn.popPose();
                     ClientProxy.currentUnrenderedEntities.add(entity.getUUID());
                 }
@@ -301,8 +351,8 @@ public class ClientEvents {
             matrixStackIn.pushPose();
             ItemInHandRenderer renderer = Minecraft.getInstance().getEntityRenderDispatcher().getItemInHandRenderer();
             InteractionHand hand = MoreObjects.firstNonNull(Minecraft.getInstance().player.swingingArm, InteractionHand.MAIN_HAND);
-            float f = Minecraft.getInstance().player.getAttackAnim(event.getPartialTick());
-            float f1 = Mth.lerp(event.getPartialTick(), Minecraft.getInstance().player.xRotO, Minecraft.getInstance().player.getXRot());
+            float f = Minecraft.getInstance().player.getAttackAnim(event.getPartialTicks());
+            float f1 = Mth.lerp(event.getPartialTicks(), Minecraft.getInstance().player.xRotO, Minecraft.getInstance().player.getXRot());
             float f5 = -0.4F * Mth.sin(Mth.sqrt(f) * (float) Math.PI);
             float f6 = 0.2F * Mth.sin(Mth.sqrt(f) * ((float) Math.PI * 2F));
             float f10 = -0.2F * Mth.sin(f * (float) Math.PI);
@@ -338,31 +388,29 @@ public class ClientEvents {
         }
     }
 
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public void onRenderNameplate(RenderNameTagEvent event) {
-        if (Minecraft.getInstance().getCameraEntity() instanceof EntityBaldEagle && event.getEntity() == Minecraft.getInstance().player) {
+    @Environment(EnvType.CLIENT)
+    public void onRenderNameplate(/*RenderNameTagEvent event*/ Entity entity) {
+        if (Minecraft.getInstance().getCameraEntity() instanceof EntityBaldEagle && entity == Minecraft.getInstance().player) {
             if (Minecraft.getInstance().hasSingleplayerServer()) {
-                event.setResult(Event.Result.DENY);
+                //event.setResult(Event.Result.DENY);
             }
         }
     }
 
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public void onRenderWorldLastEvent(RenderLevelStageEvent event) {
-        if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY){
+    @Environment(EnvType.CLIENT)
+    public void onRenderWorldLastEvent(WorldRenderContext context) {
+        if(true){
             if (!AMConfig.shadersCompat) {
                 if (Minecraft.getInstance().player.hasEffect(AMEffectRegistry.LAVA_VISION.get())) {
                     if (!previousLavaVision) {
-                        previousFluidRenderer = Minecraft.getInstance().getBlockRenderer().liquidBlockRenderer;
-                        Minecraft.getInstance().getBlockRenderer().liquidBlockRenderer = new LavaVisionFluidRenderer();
+                        previousFluidRenderer = ((BlockRenderDispatcherAccessor) Minecraft.getInstance().getBlockRenderer()).getLiquidBlockRenderer();
+                        ((BlockRenderDispatcherAccessor) Minecraft.getInstance().getBlockRenderer()).setLiquidBlockRenderer(new LavaVisionFluidRenderer());
                         updateAllChunks();
                     }
                 } else {
                     if (previousLavaVision) {
                         if (previousFluidRenderer != null) {
-                            Minecraft.getInstance().getBlockRenderer().liquidBlockRenderer = previousFluidRenderer;
+                            ((BlockRenderDispatcherAccessor) Minecraft.getInstance().getBlockRenderer()).setLiquidBlockRenderer(previousFluidRenderer);
                         }
                         updateAllChunks();
                     }
@@ -370,7 +418,7 @@ public class ClientEvents {
                 previousLavaVision = Minecraft.getInstance().player.hasEffect(AMEffectRegistry.LAVA_VISION.get());
                 if (AMConfig.clingingFlipEffect) {
                     if (Minecraft.getInstance().player.hasEffect(AMEffectRegistry.CLINGING.get()) && Minecraft.getInstance().player.getEyeHeight() < Minecraft.getInstance().player.getBbHeight() * 0.45F) {
-                        Minecraft.getInstance().gameRenderer.loadEffect(new ResourceLocation("shaders/post/flip.json"));
+                        ((GameRendererAccessor) Minecraft.getInstance().gameRenderer).callLoadEffect(new ResourceLocation("shaders/post/flip.json"));
                     } else if (Minecraft.getInstance().gameRenderer.currentEffect() != null && Minecraft.getInstance().gameRenderer.currentEffect().getName().equals("minecraft:shaders/post/flip.json")) {
                         Minecraft.getInstance().gameRenderer.shutdownEffect();
                     }
@@ -401,55 +449,51 @@ public class ClientEvents {
     }
 
     private void updateAllChunks() {
-        if (Minecraft.getInstance().levelRenderer.viewArea != null) {
-            int length = Minecraft.getInstance().levelRenderer.viewArea.chunks.length;
+        if (((LevelRendererAccessor) Minecraft.getInstance().levelRenderer).getViewArea() != null) {
+            int length = ((LevelRendererAccessor) Minecraft.getInstance().levelRenderer).getViewArea().chunks.length;
             for (int i = 0; i < length; i++) {
-                Minecraft.getInstance().levelRenderer.viewArea.chunks[i].dirty = true;
+                ((RenderChunkAccessor) ((LevelRendererAccessor) Minecraft.getInstance().levelRenderer).getViewArea().chunks[i]).setDirty(true);
             }
         }
     }
 
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public void onGetFluidRenderType(EventGetFluidRenderType event) {
+    @Environment(EnvType.CLIENT)
+    public EventResult onGetFluidRenderType(EventGetFluidRenderType event) {
         if (Minecraft.getInstance().player.hasEffect(AMEffectRegistry.LAVA_VISION.get()) && (event.getFluidState().is(Fluids.LAVA) || event.getFluidState().is(Fluids.FLOWING_LAVA))) {
             event.setRenderType(RenderType.translucent());
-            event.setResult(Event.Result.ALLOW);
+            return EventResult.interruptTrue();
         }
+
+        return EventResult.pass();
     }
 
-    @SubscribeEvent
-    public void clientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.START) {
-            AMItemstackRenderer.incrementTick();
-        }
+    public void clientTick(Minecraft client) {
+        AMItemstackRenderer.incrementTick();
     }
 
-    @SubscribeEvent
-    public void onCameraSetup(ViewportEvent.ComputeCameraAngles event) {
+    public void onCameraSetup(ComputeCameraAnglesCallback event) {
         if (Minecraft.getInstance().player.getEffect(AMEffectRegistry.EARTHQUAKE.get()) != null && !Minecraft.getInstance().isPaused()) {
             int duration = Minecraft.getInstance().player.getEffect(AMEffectRegistry.EARTHQUAKE.get()).getDuration();
             float f = (Math.min(10, duration) + Minecraft.getInstance().getFrameTime()) * 0.1F;
             double intensity = f * Minecraft.getInstance().options.screenEffectScale().get();
             RandomSource rng = Minecraft.getInstance().player.getRandom();
-            event.getCamera().move(rng.nextFloat() * 0.1F * intensity, rng.nextFloat() * 0.2F * intensity, rng.nextFloat() * 0.4F * intensity);
+            ((CameraAccessor) event.getCamera()).callMove(rng.nextFloat() * 0.1F * intensity, rng.nextFloat() * 0.2F * intensity, rng.nextFloat() * 0.4F * intensity);
         }
     }
 
-    @SubscribeEvent
-    public void onPostGameOverlay(RenderGuiOverlayEvent.Post event) {
+    public void onPostGameOverlay(PoseStack stack, float partialTick, Window window, OverlayRenderCallback.Types type) {
             if(renderStaticScreenFor > 0){
                 if (Minecraft.getInstance().player.isAlive() && lastStaticTick != Minecraft.getInstance().level.getGameTime()) {
                     renderStaticScreenFor--;
                 }
                 float staticLevel = (renderStaticScreenFor / 60F);
-                if (event.getOverlay().id().equals(VanillaGuiOverlay.HELMET.id())) {
-                    float screenWidth = event.getWindow().getScreenWidth();
-                    float screenHeight = event.getWindow().getScreenHeight();
+                if (type == OverlayRenderCallback.Types.CROSSHAIRS) {
+                    float screenWidth = window.getScreenWidth();
+                    float screenHeight = window.getScreenHeight();
                     RenderSystem.disableDepthTest();
                     RenderSystem.depthMask(false);
 
-                    float ageInTicks = Minecraft.getInstance().level.getGameTime() + event.getPartialTick();
+                    float ageInTicks = Minecraft.getInstance().level.getGameTime() + partialTick;
                     float staticIndexX = (float) Math.sin(ageInTicks * 0.2F) * 2;
                     float staticIndexY = (float) Math.cos(ageInTicks * 0.2F + 3F) * 2;
                     RenderSystem.defaultBlendFunc();

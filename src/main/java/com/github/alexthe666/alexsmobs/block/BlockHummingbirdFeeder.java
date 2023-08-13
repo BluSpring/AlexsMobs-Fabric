@@ -104,8 +104,8 @@ public class BlockHummingbirdFeeder extends Block {
 
     public void useItem(Player playerEntity, ItemStack stack){
         if(!playerEntity.isCreative()){
-            if(stack.hasCraftingRemainingItem()){
-                playerEntity.addItem(stack.getCraftingRemainingItem().copy());
+            if(stack.getItem().hasCraftingRemainingItem()){
+                playerEntity.addItem(stack.getItem().getCraftingRemainingItem().getDefaultInstance());
             }
             stack.shrink(1);
         }

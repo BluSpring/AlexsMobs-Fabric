@@ -1,5 +1,6 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
@@ -7,7 +8,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.RegistryObject;
 
 public class ItemStinkBottle extends AMBlockItem {
 

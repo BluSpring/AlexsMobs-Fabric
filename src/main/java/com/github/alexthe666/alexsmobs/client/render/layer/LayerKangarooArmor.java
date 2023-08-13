@@ -4,11 +4,13 @@ import com.github.alexthe666.alexsmobs.client.model.ModelKangaroo;
 import com.github.alexthe666.alexsmobs.client.render.RenderKangaroo;
 import com.github.alexthe666.alexsmobs.entity.EntityKangaroo;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import com.github.alexthe666.citadel.forge.extensions.IClientItemExtensions;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
+import io.github.fabricators_of_create.porting_lib.util.client.ClientHooks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
@@ -24,6 +26,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 
@@ -52,7 +55,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
         }
         String s1 = String.format("%s:textures/models/armor/%s_layer_%d%s.png", domain, texture, (1), type == null ? "" : String.format("_%s", type));
 
-        s1 = net.minecraftforge.client.ForgeHooksClient.getArmorTexture(entity, stack, s1, slot, type);
+        s1 = ClientHooks.getArmorTexture(entity, stack, s1, slot, type);
         ResourceLocation resourcelocation = ARMOR_TEXTURE_RES_MAP.get(s1);
 
         if (resourcelocation == null) {
@@ -83,7 +86,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
                 ItemStack itemstack = roo.getItemBySlot(EquipmentSlot.HEAD);
                 if (itemstack.getItem() instanceof ArmorItem) {
                     ArmorItem armoritem = (ArmorItem) itemstack.getItem();
-                    if (itemstack.canEquip(EquipmentSlot.HEAD, roo)) {
+                    if (Mob.getEquipmentSlotForItem(itemstack) == EquipmentSlot.HEAD) {
                         HumanoidModel a = defaultBipedModel;
                         a = getArmorModelHook(roo, itemstack, EquipmentSlot.HEAD, a);
                         boolean notAVanillaModel = a != defaultBipedModel;
@@ -256,7 +259,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
 
 
     protected HumanoidModel<?> getArmorModelHook(LivingEntity entity, ItemStack itemStack, EquipmentSlot slot, HumanoidModel model) {
-         Model basicModel = net.minecraftforge.client.ForgeHooksClient.getArmorModel(entity, itemStack, slot, model);
+         Model basicModel = IClientItemExtensions.of(itemStack).getGenericArmorModel(entity, itemStack, slot, model);
          return basicModel instanceof HumanoidModel ? (HumanoidModel<?>) basicModel : model;
     }
 }

@@ -9,6 +9,8 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -52,8 +54,6 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -251,7 +251,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
     }
 
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67) {
             AlexsMobs.PROXY.onEntityStatus(this, id);
@@ -410,8 +410,8 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
                            this.level.broadcastEntityEvent(this, (byte)6);
                        }
                     }
-                    if(stack.hasCraftingRemainingItem()){
-                        this.spawnAtLocation(stack.getCraftingRemainingItem());
+                    if(stack.getItem().hasCraftingRemainingItem()){
+                        this.spawnAtLocation(stack.getItem().getCraftingRemainingItem().getDefaultInstance());
                     }
                     stack.shrink(1);
                 }

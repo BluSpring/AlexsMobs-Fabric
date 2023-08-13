@@ -13,7 +13,6 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class RecipeMimicreamRepair extends CustomRecipe {
     public RecipeMimicreamRepair(ResourceLocation idIn) {
@@ -47,7 +46,7 @@ public class RecipeMimicreamRepair extends CustomRecipe {
     }
 
     public boolean isBlacklisted(ItemStack stack) {
-        ResourceLocation name = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        ResourceLocation name = Registry.ITEM.getKey(stack.getItem());
         return name != null && AMConfig.mimicreamBlacklist.contains(name.toString());
     }
 
@@ -98,8 +97,8 @@ public class RecipeMimicreamRepair extends CustomRecipe {
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inv.getItem(i);
-            if (itemstack.hasCraftingRemainingItem()) {
-                nonnulllist.set(i, itemstack.getCraftingRemainingItem());
+            if (itemstack.getItem().hasCraftingRemainingItem()) {
+                nonnulllist.set(i, itemstack.getItem().getCraftingRemainingItem().getDefaultInstance());
             } else if (itemstack.getItem().canBeDepleted()) {
                 ItemStack itemstack1 = itemstack.copy();
                 itemstack1.setCount(1);

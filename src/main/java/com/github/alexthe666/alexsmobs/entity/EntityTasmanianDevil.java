@@ -229,7 +229,7 @@ public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITa
         if (item == Items.ROTTEN_FLESH && this.getAnimation() != ANIMATION_HOWL) {
             this.gameEvent(GameEvent.EAT);
             this.playSound(SoundEvents.FOX_EAT, this.getSoundVolume(), this.getVoicePitch());
-            this.spawnAtLocation(item.getCraftingRemainingItem(itemstack));
+            this.spawnAtLocation(item.getCraftingRemainingItem());
             if (!player.isCreative()) {
                 itemstack.shrink(1);
             }

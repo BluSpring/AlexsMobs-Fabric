@@ -5,6 +5,7 @@ import com.github.alexthe666.alexsmobs.entity.ai.*;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import com.github.alexthe666.alexsmobs.mixin.LivingEntityAccessor;
 import com.google.common.collect.Maps;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -541,7 +542,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
     protected PathNavigation createNavigation(Level worldIn) {
         return new WallClimberNavigation(this, worldIn) {
             protected boolean canUpdatePath() {
-                return super.canUpdatePath() || ((EntitySugarGlider) mob).isBesideClimbableBlock() || mob.jumping;
+                return super.canUpdatePath() || ((EntitySugarGlider) mob).isBesideClimbableBlock() || ((LivingEntityAccessor) mob).isJumping();
             }
         };
     }

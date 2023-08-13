@@ -7,11 +7,13 @@ import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.item.ItemDimensionalCarver;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import io.github.fabricators_of_create.porting_lib.entity.MultiPartEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -26,9 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
-import org.antlr.v4.runtime.misc.Triple;
+import org.apache.commons.lang3.tuple.Triple;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -54,9 +54,9 @@ public class EntityVoidPortal extends Entity {
         super(entityTypeIn, worldIn);
     }
 
-    public EntityVoidPortal(PlayMessages.SpawnEntity spawnEntity, Level world) {
+    /*public EntityVoidPortal(PlayMessages.SpawnEntity spawnEntity, Level world) {
         this(AMEntityRegistry.VOID_PORTAL.get(), world);
-    }
+    }*/
 
     public EntityVoidPortal(Level world, ItemDimensionalCarver item) {
         this(AMEntityRegistry.VOID_PORTAL.get(), world);
@@ -71,7 +71,7 @@ public class EntityVoidPortal extends Entity {
 
     @Override
     public Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+        return new ClientboundAddEntityPacket(this);
     }
 
     public void tick() {
@@ -132,7 +132,7 @@ public class EntityVoidPortal extends Entity {
             if (this.getDestination() != null && this.getLifespan() > 20 && tickCount > 20) {
                 BlockPos offsetPos = this.getDestination().relative(this.getAttachmentFacing().getOpposite(), 2);
                 for (Entity e : entities) {
-                    if(e.isOnPortalCooldown() || e.isShiftKeyDown() || e instanceof EntityVoidPortal || e.getParts() != null || e.getType().is(AMTagRegistry.VOID_PORTAL_IGNORES)){
+                    if(e.isOnPortalCooldown() || e.isShiftKeyDown() || e instanceof EntityVoidPortal || (e instanceof MultiPartEntity mp && mp.getParts() != null) || e.getType().is(AMTagRegistry.VOID_PORTAL_IGNORES)){
                         continue;
                     }
                     if (e instanceof EntityVoidWormPart) {
@@ -178,7 +178,7 @@ public class EntityVoidPortal extends Entity {
 
     private void teleportEntityFromDimension(Entity entity, ServerLevel endpointWorld, BlockPos endpoint, boolean b) {
         if (entity instanceof ServerPlayer) {
-            ServerEvents.teleportPlayers.add(new Triple<>((ServerPlayer)entity, endpointWorld, endpoint));
+            ServerEvents.teleportPlayers.add(Triple.of((ServerPlayer)entity, endpointWorld, endpoint));
             if(this.getSisterId() == null){
                 createAndSetSister(endpointWorld, Direction.DOWN);
             }

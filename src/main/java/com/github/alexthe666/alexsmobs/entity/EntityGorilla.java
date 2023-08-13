@@ -400,8 +400,8 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
                             this.level.broadcastEntityEvent(this, (byte) 6);
                         }
                     }
-                    if (stack.hasCraftingRemainingItem()) {
-                        this.spawnAtLocation(stack.getCraftingRemainingItem());
+                    if (stack.getItem().hasCraftingRemainingItem()) {
+                        this.spawnAtLocation(stack.getItem().getCraftingRemainingItem());
                     }
                     stack.shrink(1);
                 }

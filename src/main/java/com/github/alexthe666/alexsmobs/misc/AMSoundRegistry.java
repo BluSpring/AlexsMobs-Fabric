@@ -1,15 +1,15 @@
 package com.github.alexthe666.alexsmobs.misc;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 public class AMSoundRegistry {
 
-    public static final DeferredRegister<SoundEvent> DEF_REG = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, AlexsMobs.MODID);
+    public static final LazyRegistrar<SoundEvent> DEF_REG = LazyRegistrar.create(Registry.SOUND_EVENT, AlexsMobs.MODID);
 
     public static final RegistryObject<SoundEvent> GRIZZLY_BEAR_IDLE = createSoundEvent("grizzly_bear_idle");
 

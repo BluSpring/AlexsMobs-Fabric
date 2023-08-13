@@ -8,6 +8,7 @@ import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -50,7 +51,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -456,7 +456,7 @@ public class EntityCatfish extends WaterAnimal implements FlyingAnimal, Bucketab
     public boolean swallowEntity(Entity entity) {
         if (this.getCatfishSize() == 2 && entity instanceof final Mob mob) {
             this.setHasSwallowedEntity(true);
-            final ResourceLocation mobtype = ForgeRegistries.ENTITY_TYPES.getKey(mob.getType());
+            final ResourceLocation mobtype = Registry.ENTITY_TYPE.getKey(mob.getType());
             if (mobtype != null) {
                 this.setSwallowedEntityType(mobtype.toString());
             }
@@ -482,7 +482,7 @@ public class EntityCatfish extends WaterAnimal implements FlyingAnimal, Bucketab
         this.eatCooldown = 60 + random.nextInt(60);
         if (this.getCatfishSize() == 2) {
             if (this.hasSwallowedEntity()) {
-                EntityType type = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(this.getSwallowedEntityType()));
+                EntityType type = Registry.ENTITY_TYPE.get(new ResourceLocation(this.getSwallowedEntityType()));
                 if (type != null) {
                     Entity entity = type.create(level);
                     if (entity instanceof final LivingEntity alive) {

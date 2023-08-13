@@ -7,6 +7,8 @@ import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.collect.Sets;
+import io.github.fabricators_of_create.porting_lib.entity.MultiPartEntity;
+import io.github.fabricators_of_create.porting_lib.entity.PartEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -62,7 +64,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fluids.FluidType;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -70,7 +71,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic {
+public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic, MultiPartEntity {
 
     private static final EntityDataAccessor<Boolean> OBSIDIAN = SynchedEntityData.defineId(EntityLaviathan.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> HEAD_HEIGHT = SynchedEntityData.defineId(EntityLaviathan.class, EntityDataSerializers.FLOAT);
@@ -420,9 +421,14 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
     }
 
     @Override
-    public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
+    public boolean rideableUnderWater() {
         return true;
     }
+
+    /*@Override
+    public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
+        return true;
+    }*/
 
     protected float getBlockSpeedFactor() {
         return shouldSwim() || this.onSoulSpeedBlock() ? 1.0F : super.getBlockSpeedFactor();
@@ -966,7 +972,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
     }
 
     @Override
-    public net.minecraftforge.entity.PartEntity<?>[] getParts() {
+    public PartEntity<?>[] getParts() {
         return this.allParts;
     }
 

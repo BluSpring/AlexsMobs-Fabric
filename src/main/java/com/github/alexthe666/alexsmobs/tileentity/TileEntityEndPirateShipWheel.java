@@ -1,15 +1,16 @@
 package com.github.alexthe666.alexsmobs.tileentity;
 
+import io.github.fabricators_of_create.porting_lib.block.CustomRenderBoundingBoxBlockEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class TileEntityEndPirateShipWheel extends BlockEntity {
+public class TileEntityEndPirateShipWheel extends BlockEntity implements CustomRenderBoundingBoxBlockEntity {
 
     private float wheelRot;
     private float prevWheelRot;
@@ -25,7 +26,7 @@ public class TileEntityEndPirateShipWheel extends BlockEntity {
         entity.tick();
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public AABB getRenderBoundingBox() {
         return new AABB(worldPosition.offset(-2, -2, -2), worldPosition.offset(2, 2, 2));
     }

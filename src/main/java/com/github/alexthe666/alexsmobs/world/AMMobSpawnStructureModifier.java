@@ -2,17 +2,17 @@ package com.github.alexthe666.alexsmobs.world;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.mojang.serialization.Codec;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraftforge.common.world.ModifiableStructureInfo;
-import net.minecraftforge.common.world.StructureModifier;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import xyz.bluspring.forgebiomemodifiers.structures.ModifiableStructureInfo;
+import xyz.bluspring.forgebiomemodifiers.structures.StructureModifier;
+import xyz.bluspring.forgebiomemodifiers.structures.StructureModifiers;
 
 public class AMMobSpawnStructureModifier implements StructureModifier {
 
-    private static final RegistryObject<Codec<? extends StructureModifier>> SERIALIZER = RegistryObject.create(new ResourceLocation(AlexsMobs.MODID, "am_structure_spawns"), ForgeRegistries.Keys.STRUCTURE_MODIFIER_SERIALIZERS, AlexsMobs.MODID);
+    private static final RegistryObject<Codec<? extends StructureModifier>> SERIALIZER = new RegistryObject(new ResourceLocation(AlexsMobs.MODID, "am_structure_spawns"), StructureModifiers.STRUCTURE_MODIFIER_SERIALIZER_KEY);
 
     public AMMobSpawnStructureModifier() {
     }

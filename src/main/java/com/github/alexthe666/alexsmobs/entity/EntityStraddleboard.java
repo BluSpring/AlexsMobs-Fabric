@@ -2,11 +2,15 @@ package com.github.alexthe666.alexsmobs.entity;
 
 import com.github.alexthe666.alexsmobs.enchantment.AMEnchantmentRegistry;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import io.github.fabricators_of_create.porting_lib.block.CustomFrictionBlock;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.BlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -32,10 +36,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 
 import javax.annotation.Nullable;
 
@@ -68,9 +68,9 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         this.blocksBuilding = true;
     }
 
-    public EntityStraddleboard(PlayMessages.SpawnEntity spawnEntity, Level world) {
+    /*public EntityStraddleboard(PlayMessages.SpawnEntity spawnEntity, Level world) {
         this(AMEntityRegistry.STRADDLEBOARD.get(), world);
-    }
+    }*/
 
     public EntityStraddleboard(Level worldIn, double x, double y, double z) {
         this(AMEntityRegistry.STRADDLEBOARD.get(), worldIn);
@@ -181,7 +181,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
 
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void animateHurt() {
         this.setTimeSinceHit(10);
         this.setDamageTaken(this.getDamageTaken() * 11.0F);
@@ -232,7 +232,9 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
                             blockpos$mutable.set(l1, k2, i2);
                             BlockState blockstate = this.level.getBlockState(blockpos$mutable);
                             if (!(blockstate.getBlock() instanceof WaterlilyBlock) && Shapes.joinIsNotEmpty(blockstate.getBlockSupportShape(this.level, blockpos$mutable).move(l1, k2, i2), voxelshape, BooleanOp.AND)) {
-                                f += blockstate.getFriction(this.level, blockpos$mutable, this);
+                                if (blockstate.getBlock() instanceof CustomFrictionBlock frictionBlock) {
+                                    f += frictionBlock.getFriction(blockstate, this.level, blockpos$mutable, this);
+                                }
                                 ++k1;
                             }
                         }
@@ -611,14 +613,14 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         this.entityData.set(ROCKING_TICKS, ticks);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public float getRockingAngle(float partialTicks) {
         return Mth.lerp(partialTicks, this.prevRockingAngle, this.rockingAngle);
     }
 
     @Override
     public Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+        return new ClientboundAddEntityPacket(this);
     }
 
 

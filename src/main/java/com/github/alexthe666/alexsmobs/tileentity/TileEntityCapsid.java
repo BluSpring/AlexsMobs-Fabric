@@ -4,9 +4,18 @@ import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.block.BlockCapsid;
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityEnderiophage;
+import com.github.alexthe666.alexsmobs.fabric.transfer.SidedInvWrapper;
 import com.github.alexthe666.alexsmobs.message.MessageUpdateCapsid;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.CapsidRecipe;
+import io.github.fabricators_of_create.porting_lib.block.CustomDataPacketHandlingBlockEntity;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.SlotExposedStorage;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -31,17 +40,14 @@ import net.minecraft.world.level.block.EndRodBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
+import xyz.bluspring.forgecapabilities.capabilities.Capability;
+import xyz.bluspring.forgecapabilities.capabilities.ForgeCapabilities;
+import xyz.bluspring.forgecapabilities.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class TileEntityCapsid extends BaseContainerBlockEntity implements WorldlyContainer {
+public class TileEntityCapsid extends BaseContainerBlockEntity implements WorldlyContainer, CustomDataPacketHandlingBlockEntity, ICapabilityProvider {
     private static final int[] slotsTop = new int[]{0};
     public int ticksExisted;
     public float prevFloatUpProgress;
@@ -49,8 +55,8 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
     public float prevYawSwitchProgress;
     public float yawSwitchProgress;
     public boolean vibratingThisTick = false;
-    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN);
+    LazyOptional<? extends SlotExposedStorage>[] handlers =
+            SidedInvWrapper.create(this, Direction.UP, Direction.DOWN);
     private float yawTarget = 0;
     private int transformTime = 0;
     private boolean fnaf = false;
@@ -74,10 +80,12 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
             BlockEntity up = level.getBlockEntity(this.worldPosition.above());
             if (up instanceof Container) {
                 if (floatUpProgress >= 1) {
-                    LazyOptional<IItemHandler> handler = level.getBlockEntity(this.worldPosition.above()).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP);
-                    if (handler.orElse(null) != null) {
-                        if (ItemHandlerHelper.insertItem(handler.orElse(null), this.getItem(0), true).isEmpty()) {
-                            ItemHandlerHelper.insertItem(handler.orElse(null), this.getItem(0).copy(), false);
+                    LazyOptional<SlotExposedStorage> handler = level.getBlockEntity(this.worldPosition.above()).getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP);
+                    var type = (SidedInvWrapper) handler.orElse(null);
+
+                    if (type != null) {
+                        if (type.insertItem(-1, this.getItem(0), true).isEmpty()) {
+                            type.insertItem(-1, this.getItem(0).copy(), false);
                             this.setItem(0, ItemStack.EMPTY);
                         }
                     }
@@ -143,7 +151,7 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public net.minecraft.world.phys.AABB getRenderBoundingBox() {
         return new net.minecraft.world.phys.AABB(worldPosition, worldPosition.offset(1, 2, 1));
     }
@@ -328,8 +336,8 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-        if (!this.remove && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        if (!this.remove && facing != null && capability == ForgeCapabilities.ITEM_HANDLER) {
             if (facing == Direction.DOWN)
                 return handlers[0].cast();
             else

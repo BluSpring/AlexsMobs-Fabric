@@ -1,6 +1,9 @@
 package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import com.github.alexthe666.alexsmobs.fabric.extensions.ElytraFlyingItem;
+import com.github.alexthe666.citadel.forge.extensions.IClientItemExtensions;
+import com.github.alexthe666.citadel.forge.extensions.ItemRenderExtension;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -12,11 +15,10 @@ import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nullable;
 
-public class ItemTarantulaHawkElytra extends ArmorItem {
+public class ItemTarantulaHawkElytra extends ArmorItem implements ItemRenderExtension, ElytraFlyingItem {
 
     public ItemTarantulaHawkElytra(Item.Properties props, AMArmorMaterial mat) {
         super(mat, EquipmentSlot.CHEST, props);

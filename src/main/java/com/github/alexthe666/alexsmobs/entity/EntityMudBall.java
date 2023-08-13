@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PlayMessages;
 
 public class EntityMudBall extends EntityMobProjectile {
 
@@ -26,9 +25,9 @@ public class EntityMudBall extends EntityMobProjectile {
         this.setPos(vec3.x, vec3.y, vec3.z);
     }
 
-    public EntityMudBall(PlayMessages.SpawnEntity spawnEntity, Level world) {
+    /*public EntityMudBall(PlayMessages.SpawnEntity spawnEntity, Level world) {
         this(AMEntityRegistry.MUD_BALL.get(), world);
-    }
+    }*/
 
     public void doBehavior() {
         this.setDeltaMovement(this.getDeltaMovement().scale((double)0.9F));

@@ -6,6 +6,7 @@ import com.github.alexthe666.alexsmobs.inventory.MenuTransmutationTable;
 import com.github.alexthe666.alexsmobs.message.MessageUpdateTransmutablesToDisplay;
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityTransmutationTable;
+import io.github.fabricators_of_create.porting_lib.block.PlayerDestroyBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -36,7 +37,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
-public class BlockTransmutationTable extends BaseEntityBlock implements AMSpecialRenderBlock {
+public class BlockTransmutationTable extends BaseEntityBlock implements AMSpecialRenderBlock, PlayerDestroyBlock {
 
     private static final Component CONTAINER_TITLE = Component.translatable("alexsmobs.container.transmutation_table");
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -111,7 +112,7 @@ public class BlockTransmutationTable extends BaseEntityBlock implements AMSpecia
         if(AMConfig.transmutingTableExplodes){
             level.explode(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 3F, false, Explosion.BlockInteraction.DESTROY);
         }
-        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+        return PlayerDestroyBlock.super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
     }
 }
 

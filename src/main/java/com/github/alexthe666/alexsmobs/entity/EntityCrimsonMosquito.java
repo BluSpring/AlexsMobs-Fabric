@@ -9,7 +9,10 @@ import com.github.alexthe666.alexsmobs.message.MessageMosquitoMountPlayer;
 import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -48,9 +51,6 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -495,7 +495,7 @@ public class EntityCrimsonMosquito extends Monster {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 79) {
             for(int i = 0; i < 27; ++i) {
@@ -541,7 +541,7 @@ public class EntityCrimsonMosquito extends Monster {
         Item item = itemstack.getItem();
         InteractionResult type = super.mobInteract(player, hand);
         if (item == AMItemRegistry.WARPED_MIXTURE.get() && !this.isSick()) {
-            this.spawnAtLocation(item.getCraftingRemainingItem(itemstack));
+            this.spawnAtLocation(item.getCraftingRemainingItem());
             if (!player.isCreative()) {
                 itemstack.shrink(1);
             }
@@ -808,7 +808,7 @@ public class EntityCrimsonMosquito extends Monster {
     }
 
     public boolean isNonMungusWarpedTrigger(Entity entity) {
-        final ResourceLocation mobtype = ForgeRegistries.ENTITY_TYPES.getKey(entity.getType());
+        final ResourceLocation mobtype = Registry.ENTITY_TYPE.getKey(entity.getType());
         return mobtype != null && !AMConfig.warpedMoscoMobTriggers.isEmpty() && AMConfig.warpedMoscoMobTriggers.contains(mobtype.toString());
     }
 }

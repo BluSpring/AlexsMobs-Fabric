@@ -38,7 +38,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fluids.FluidType;
 
 import javax.annotation.Nullable;
 
@@ -217,9 +216,14 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
     }
 
     @Override
-    public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
+    public boolean rideableUnderWater() {
         return true;
     }
+
+    /*@Override
+    public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
+        return true;
+    }*/
 
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {

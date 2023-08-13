@@ -6,6 +6,7 @@ import com.github.alexthe666.alexsmobs.message.MessageUpdateTransmutablesToDispl
 import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.TransmutationData;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -94,7 +95,7 @@ public class TileEntityTransmutationTable  extends BlockEntity {
         }
         for(int i = 0; i < 3; i++){
             if(possiblities[i] != null && !possiblities[i].isEmpty()){
-                tag.put("Possiblity" + i, possiblities[i].serializeNBT());
+                tag.put("Possiblity" + i, NBTSerializer.serializeNBT(possiblities[i]));
             }
         }
     }
