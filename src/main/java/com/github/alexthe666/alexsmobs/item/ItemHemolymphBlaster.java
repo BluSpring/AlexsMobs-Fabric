@@ -2,6 +2,7 @@ package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.entity.EntityHemolymph;
 import com.mojang.math.Vector3f;
+import io.github.fabricators_of_create.porting_lib.item.ReequipAnimationItem;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -18,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Predicate;
 
-public class ItemHemolymphBlaster extends Item {
+public class ItemHemolymphBlaster extends Item implements ReequipAnimationItem {
 
     public static final Predicate<ItemStack> HEMOLYMPH = (stack) -> {
         return stack.getItem() == AMItemRegistry.HEMOLYMPH_SAC.get();

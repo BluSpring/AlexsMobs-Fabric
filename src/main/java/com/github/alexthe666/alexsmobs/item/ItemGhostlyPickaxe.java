@@ -2,6 +2,7 @@ package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.mixin.BlockAccessor;
 import io.github.fabricators_of_create.porting_lib.block.CustomExpBlock;
+import io.github.fabricators_of_create.porting_lib.item.DamageableItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -28,7 +29,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ItemGhostlyPickaxe extends PickaxeItem {
+public class ItemGhostlyPickaxe extends PickaxeItem implements DamageableItem, com.github.alexthe666.alexsmobs.fabric.extensions.DamageableItem {
 
     public ItemGhostlyPickaxe(Properties props) {
         super(Tiers.IRON, 1, -2.8F, props);
@@ -57,7 +58,7 @@ public class ItemGhostlyPickaxe extends PickaxeItem {
                 state.spawnAfterBreak((ServerLevel)level, pos, stack, true);
                 int fortuneLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack);
                 int silkTouchLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, stack);
-                int exp = ((CustomExpBlock) state.getBlock()).getExpDrop(state, (ServerLevel)level, level.random, pos, fortuneLevel, silkTouchLevel);
+                int exp = (state.getBlock() instanceof CustomExpBlock expBlock) ? expBlock.getExpDrop(state, (ServerLevel)level, level.random, pos, fortuneLevel, silkTouchLevel) : 0;
                 if(exp > 0){
                     ((BlockAccessor) state.getBlock()).callPopExperience((ServerLevel)level, pos, exp);
                 }
@@ -172,14 +173,14 @@ public class ItemGhostlyPickaxe extends PickaxeItem {
         dropAllContents(itemEntity.level, itemEntity.position(), itemEntity.getItem());
     }
 
-    /*@Override
+    @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        int i = super.damageItem(stack, amount, entity, onBroken);
+        int i = com.github.alexthe666.alexsmobs.fabric.extensions.DamageableItem.super.damageItem(stack, amount, entity, onBroken);
         if(i + stack.getDamageValue() >= stack.getMaxDamage() && entity != null){
             dropAllContents(entity.level, entity.position(), stack);
         }
         return i;
-    }*/
+    }
 
     public int getMaxDamage(ItemStack stack) {
         return 700;

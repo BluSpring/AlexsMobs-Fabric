@@ -2,6 +2,10 @@ package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityVoidPortal;
+import io.github.fabricators_of_create.porting_lib.item.CustomMaxCountItem;
+import io.github.fabricators_of_create.porting_lib.item.ReequipAnimationItem;
+import io.github.fabricators_of_create.porting_lib.item.UsingTickItem;
+import io.github.fabricators_of_create.porting_lib.item.XpRepairItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
@@ -23,7 +27,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class ItemDimensionalCarver extends Item {
+public class ItemDimensionalCarver extends Item implements UsingTickItem, CustomMaxCountItem, XpRepairItem, ReequipAnimationItem {
 
     public static final int MAX_TIME = 200;
 

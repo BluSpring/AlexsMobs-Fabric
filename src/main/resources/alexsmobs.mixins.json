@@ -5,7 +5,8 @@
   "client": [
     "GameRendererMixin",
     "elytra.LocalPlayerMixin",
-    "liquid.LiquidBlockRendererMixin"
+    "liquid.LiquidBlockRendererMixin",
+    "render.ItemRendererMixin"
   ],
   "mixins": [
     "BlockAccessor",
@@ -14,6 +15,7 @@
     "EnderDragonAccessor",
     "FireworkRocketEntityAccessor",
     "GameRendererAccessor",
+    "ItemStackMixin",
     "LevelChunkSectionAccessor",
     "LevelRendererAccessor",
     "LivingEntityAccessor",
@@ -27,7 +29,8 @@
     "TagValueAccessor",
     "elytra.LivingEntityMixin",
     "elytra.PlayerMixin",
-    "event.MobMixin"
+    "event.MobMixin",
+    "event.PlayerMixin"
   ],
   "minVersion": "0.8"
 }

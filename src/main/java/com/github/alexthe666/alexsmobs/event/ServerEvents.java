@@ -31,10 +31,12 @@ import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.*;
 import dev.architectury.registry.level.entity.trade.TradeRegistry;
 import io.github.fabricators_of_create.porting_lib.event.client.FieldOfViewEvents;
+import io.github.fabricators_of_create.porting_lib.event.common.BlockEvents;
 import io.github.fabricators_of_create.porting_lib.event.common.LivingEntityEvents;
 import io.github.fabricators_of_create.porting_lib.event.common.MobEntitySetTargetCallback;
 import io.github.fabricators_of_create.porting_lib.event.common.ProjectileImpactCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -65,6 +67,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -94,6 +97,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -538,7 +542,7 @@ public class ServerEvents {
     static {
         LivingEntityEvents.DROPS_WITH_LEVEL.register(((target, source, drops, lootingLevel, recentlyHit) -> {
             onEntityDrops(target, drops);
-            return true;
+            return false;
         }));
 
         SpecialSpawnCallback.EVENT.register(((entity, level, x, y, z, spawner, spawnReason) -> {
@@ -828,9 +832,7 @@ public class ServerEvents {
 
         onAddReloadListener();
 
-        BlockEvent.BREAK.register(((level, pos, state, player, xp) -> {
-            return onHarvestCheck(player);
-        }));
+        //BlockEvents.BLOCK_BREAK.register(ServerEvents::onHarvestCheck);
     }
 
     public static boolean onLivingAttack(LivingEntity entity, DamageSource source, float amount) {
@@ -900,13 +902,14 @@ public class ServerEvents {
         });
     }
 
-    public static EventResult onHarvestCheck(Player entity){
+    public static boolean onHarvestCheck(Player entity) {
         if(entity.isHolding(AMItemRegistry.GHOSTLY_PICKAXE.get()) && ItemGhostlyPickaxe.shouldStoreInGhost(entity, entity.getMainHandItem())){
             //stops drops from being spawned
-            return EventResult.interruptFalse();
+
+            return false;
         }
 
-        return EventResult.pass();
+        return true;
     }
 
 }

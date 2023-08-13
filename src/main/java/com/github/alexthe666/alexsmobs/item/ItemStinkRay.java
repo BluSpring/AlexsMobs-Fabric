@@ -6,6 +6,7 @@ import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.citadel.forge.extensions.IClientItemExtensions;
 import com.github.alexthe666.citadel.forge.extensions.ItemRenderExtension;
 import com.mojang.math.Vector3f;
+import io.github.fabricators_of_create.porting_lib.item.ReequipAnimationItem;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -22,7 +23,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Predicate;
 
-public class ItemStinkRay extends Item implements ItemRenderExtension {
+public class ItemStinkRay extends Item implements ItemRenderExtension, ReequipAnimationItem {
 
     public static final Predicate<ItemStack> IS_FART_BOTTLE = (stack) -> {
         return stack.getItem() == AMItemRegistry.STINK_BOTTLE.get();

@@ -127,6 +127,7 @@ public class AlexsMobs implements ModInitializer {
         AMWorldRegistry.init();
 
         AMEntityRegistry.initializeAttributes();
+        NETWORK_WRAPPER.initServerListener();
     }
 
     public static boolean isAprilFools() {
@@ -193,6 +194,7 @@ public class AlexsMobs implements ModInitializer {
     private void setupClient() {
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
+                NETWORK_WRAPPER.initClientListener();
                 PROXY.clientInit();
             });
         }

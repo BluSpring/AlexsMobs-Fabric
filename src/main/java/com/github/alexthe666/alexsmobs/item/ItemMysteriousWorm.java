@@ -7,6 +7,7 @@ import com.github.alexthe666.alexsmobs.entity.EntityVoidWorm;
 import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.citadel.forge.extensions.IClientItemExtensions;
 import com.github.alexthe666.citadel.forge.extensions.ItemRenderExtension;
+import io.github.fabricators_of_create.porting_lib.item.EntityTickListenerItem;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
@@ -15,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Random;
 import java.util.UUID;
 
-public class ItemMysteriousWorm extends Item implements ItemRenderExtension {
+public class ItemMysteriousWorm extends Item implements ItemRenderExtension, EntityTickListenerItem {
     public ItemMysteriousWorm(Properties props) {
         super(props);
     }

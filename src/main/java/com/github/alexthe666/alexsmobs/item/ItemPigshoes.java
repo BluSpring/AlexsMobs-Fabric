@@ -1,12 +1,13 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import io.github.fabricators_of_create.porting_lib.enchant.CustomEnchantingBehaviorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-public class ItemPigshoes extends Item {
+public class ItemPigshoes extends Item implements CustomEnchantingBehaviorItem {
 
     public ItemPigshoes(Item.Properties props) {
         super(props);
