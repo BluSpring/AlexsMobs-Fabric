@@ -28,12 +28,14 @@ import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import io.github.fabricators_of_create.porting_lib.event.client.ModelsBakedCallback;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -260,6 +262,23 @@ public class ClientProxy extends CommonProxy {
         BlockEntityRendererRegistry.register(AMTileEntityRegistry.VOID_WORM_BEAK.get(), RenderVoidWormBeak::new);
         BlockEntityRendererRegistry.register(AMTileEntityRegistry.TRANSMUTATION_TABLE.get(), RenderTransmutationTable::new);
         MenuScreens.register(AMMenuRegistry.TRANSMUTATION_TABLE.get(), GUITransmutationTable::new);
+
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
+                AMBlockRegistry.BANANA_PEEL.get(),
+                AMBlockRegistry.HUMMINGBIRD_FEEDER.get(),
+                AMBlockRegistry.BISON_CARPET.get(),
+                AMBlockRegistry.BISON_FUR_BLOCK.get(),
+                AMBlockRegistry.VOID_WORM_BEAK.get()
+        );
+
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(),
+                AMBlockRegistry.BANANA_SLUG_SLIME_BLOCK.get(),
+                AMBlockRegistry.CRYSTALIZED_BANANA_SLUG_MUCUS.get(),
+                AMBlockRegistry.CAPSID.get(),
+                AMBlockRegistry.ENDER_RESIDUE.get(),
+                AMBlockRegistry.RAINBOW_GLASS.get(),
+                AMBlockRegistry.SKUNK_SPRAY.get()
+        );
     }
 
     private void initRainbowBuffers() {
