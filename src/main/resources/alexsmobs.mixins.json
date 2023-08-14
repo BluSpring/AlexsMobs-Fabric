@@ -30,7 +30,8 @@
     "elytra.LivingEntityMixin",
     "elytra.PlayerMixin",
     "event.MobMixin",
-    "event.PlayerMixin"
+    "event.PlayerMixin",
+    "worldgen.ModifiableStructureInfoMixin"
   ],
   "minVersion": "0.8"
 }

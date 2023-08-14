@@ -3,8 +3,8 @@
   "values": [
     "#minecraft:base_stone_overworld",
     "#minecraft:dirt",
-    "#forge:sand",
-    "#forge:gravel",
+    "#c:sand",
+    "#c:gravel",
     "#minecraft:terracotta",
     "minecraft:mud"
   ]

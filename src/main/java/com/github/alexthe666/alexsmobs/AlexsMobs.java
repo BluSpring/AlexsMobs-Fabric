@@ -27,8 +27,11 @@ import me.pepperbell.simplenetworking.S2CPacket;
 import me.pepperbell.simplenetworking.SimpleChannel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -104,12 +107,18 @@ public class AlexsMobs implements ModInitializer {
         AMRecipeRegistry.DEF_REG.register();
         AMLootRegistry.DEF_REG.register();
         AMBannerRegistry.DEF_REG.register();
+        /*
         final LazyRegistrar<Codec<? extends BiomeModifier>> biomeModifiers = LazyRegistrar.create(BiomeModifiers.BIOME_MODIFIER_SERIALIZER_KEY, AlexsMobs.MODID);
-        biomeModifiers.register();
+
         biomeModifiers.register("am_mob_spawns", AMMobSpawnBiomeModifier::makeCodec);
+        biomeModifiers.register();
         final LazyRegistrar<Codec<? extends StructureModifier>> structureModifiers = LazyRegistrar.create(StructureModifiers.STRUCTURE_MODIFIER_SERIALIZER_KEY, AlexsMobs.MODID);
-        structureModifiers.register();
         structureModifiers.register("am_structure_spawns", AMMobSpawnStructureModifier::makeCodec);
+        structureModifiers.register();*/
+
+        ModConfigEvents.loading(MODID).register(this::onModConfigEvent);
+        ModConfigEvents.reloading(MODID).register(this::onModConfigEvent);
+
         ModLoadingContext.registerConfig(MODID, ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC, "alexsmobs.toml");
         PROXY.init();
         //MinecraftForge.EVENT_BUS.register(this);
@@ -119,9 +128,6 @@ public class AlexsMobs implements ModInitializer {
         calendar.setTime(new Date());
         isAprilFools = calendar.get(Calendar.MONTH) + 1 == 4 && calendar.get(Calendar.DATE) == 1;
         isHalloween = calendar.get(Calendar.MONTH) + 1 == 10 && calendar.get(Calendar.DATE) >= 29 && calendar.get(Calendar.DATE) <= 31;
-
-        ModConfigEvents.loading(MODID).register(this::onModConfigEvent);
-        ModConfigEvents.reloading(MODID).register(this::onModConfigEvent);
 
         AMWorldRegistry.init();
 
@@ -151,6 +157,7 @@ public class AlexsMobs implements ModInitializer {
             AMConfig.bake(config);
         }
         BiomeConfig.init();
+        AMMobSpawnBiomeModifier.init();
     }
 
     public static <MSG extends C2SPacket> void sendMSGToServer(MSG message) {
