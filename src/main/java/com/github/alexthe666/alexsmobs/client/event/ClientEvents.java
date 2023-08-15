@@ -34,15 +34,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Vector3f;
 import dev.architectury.event.EventResult;
-import io.github.fabricators_of_create.porting_lib.event.client.FogEvents;
-import io.github.fabricators_of_create.porting_lib.event.client.LivingEntityRenderEvents;
-import io.github.fabricators_of_create.porting_lib.event.client.OverlayRenderCallback;
-import io.github.fabricators_of_create.porting_lib.event.client.RenderHandCallback;
+import dev.architectury.event.events.client.ClientTooltipEvent;
+import io.github.fabricators_of_create.porting_lib.event.client.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.minecraft.ChatFormatting;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
@@ -60,6 +59,8 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -70,9 +71,12 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.EntityHitResult;
+
+import java.util.List;
 
 public class ClientEvents {
 
@@ -97,6 +101,9 @@ public class ClientEvents {
         LivingEntityRenderEvents.PRE.register(((entity, renderer, partialRenderTick, matrixStack, buffers, light) -> {
             return onPreRenderEntity(entity, matrixStack, partialRenderTick, renderer, buffers, light);
         }));
+        ClientTooltipEvent.ITEM.register((stack, lines, flag) -> {
+            onTooltip(stack, lines);
+        });
         LivingEntityRenderEvents.POST.register(((entity, renderer, partialRenderTick, matrixStack, buffers, light) -> {
             onPostRenderEntity(entity, renderer, partialRenderTick, matrixStack, buffers, light);
         }));
@@ -120,6 +127,13 @@ public class ClientEvents {
 
             return false;
         });
+    }
+
+    public static void onTooltip(ItemStack itemStack, List<Component> tooltip) {
+        CompoundTag tag = itemStack.getTag();
+        if (tag != null && tag.contains("BisonFur") && tag.getBoolean("BisonFur")) {
+            tooltip.add(Component.translatable("item.alexsmobs.insulated_with_fur").withStyle(ChatFormatting.AQUA));
+        }
     }
 
     public EventResult onOutlineEntityColor(EventGetOutlineColor event) {

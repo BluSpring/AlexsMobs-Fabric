@@ -676,10 +676,6 @@ public class ServerEvents {
         MobEntitySetTargetCallback.EVENT.register((ServerEvents::onLivingSetTargetEvent));
 
         LivingEntityEvents.TICK.register(ServerEvents::onLivingUpdateEvent);
-
-        FieldOfViewEvents.COMPUTE.register(((renderer, camera, partialTicks, usedFovSetting, fov) -> {
-            return onFOVUpdate(Minecraft.getInstance().player, fov);
-        }));
     }
 
     public static void onLivingSetTargetEvent(LivingEntity entity, LivingEntity target) {
@@ -826,10 +822,6 @@ public class ServerEvents {
             onChestGenerated(id, tableBuilder);
         }));
 
-        ClientTooltipEvent.ITEM.register((stack, lines, flag) -> {
-            onTooltip(stack, lines);
-        });
-
         onAddReloadListener();
 
         //BlockEvents.BLOCK_BREAK.register(ServerEvents::onHarvestCheck);
@@ -877,13 +869,6 @@ public class ServerEvents {
             final var item = LootItem.lootTableItem(AMItemRegistry.PIGSHOES.get()).setQuality(5).setWeight(8);
             LootPool.Builder builder = new LootPool.Builder().name("am_pigshoes").add(item).when(LootItemRandomChanceCondition.randomChance((float) AMConfig.tusklinShoesBarteringChance)).setRolls(ConstantValue.exactly(1));
             tableBuilder.pool(builder.build());
-        }
-    }
-
-    public static void onTooltip(ItemStack itemStack, List<Component> tooltip) {
-        CompoundTag tag = itemStack.getTag();
-        if (tag != null && tag.contains("BisonFur") && tag.getBoolean("BisonFur")) {
-            tooltip.add(Component.translatable("item.alexsmobs.insulated_with_fur").withStyle(ChatFormatting.AQUA));
         }
     }
 

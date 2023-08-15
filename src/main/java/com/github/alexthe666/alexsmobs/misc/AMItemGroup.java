@@ -36,7 +36,6 @@ public class AMItemGroup {
         return new ItemStack(AMItemRegistry.TAB_ICON.get());
     }
 
-    @Environment(EnvType.CLIENT)
     public void fillItemList(List<ItemStack> items) {
         //super.fillItemList(items);
         try {

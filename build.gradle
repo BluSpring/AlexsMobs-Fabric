@@ -131,7 +131,7 @@ dependencies {
 
     modApi "dev.architectury:architectury-fabric:6.5.85"
 
-    include(modApi("com.github.BluSpring:Citadel-Fabric:f26362a794")) {
+    include(modApi("com.github.BluSpring:Citadel-Fabric:9ea656c024")) {
         exclude group: "com.github.KiltMC"
     }
     modImplementation("curse.maven:jei-238222:4494409")
@@ -154,7 +154,6 @@ jar {
 
 // Example configuration to allow publishing using the maven-publish task
 // This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 //publish.dependsOn('reobfJar')
 

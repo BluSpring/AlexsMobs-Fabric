@@ -26,6 +26,7 @@ import me.pepperbell.simplenetworking.C2SPacket;
 import me.pepperbell.simplenetworking.S2CPacket;
 import me.pepperbell.simplenetworking.SimpleChannel;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -69,9 +70,15 @@ public class AlexsMobs implements ModInitializer {
         NETWORK_WRAPPER = new SimpleChannel(new ResourceLocation("alexsmobs", "main_channel"));
 
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT)
-            PROXY = new ClientProxy();
+            setClientProxy();
         else
             PROXY = new CommonProxy();
+    }
+
+    // fuck the proxy system
+    @Environment(EnvType.CLIENT)
+    private static void setClientProxy() {
+        PROXY = new ClientProxy();
     }
 
     @Override
