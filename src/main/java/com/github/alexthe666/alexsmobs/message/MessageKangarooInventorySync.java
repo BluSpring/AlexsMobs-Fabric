@@ -59,7 +59,7 @@ public class MessageKangarooInventorySync implements C2SPacket, S2CPacket {
 
     @Override
     public void encode(FriendlyByteBuf buf) {
-
+        write(this, buf);
     }
 
     public static class Handler {
