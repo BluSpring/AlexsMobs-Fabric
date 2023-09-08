@@ -1,5 +1,6 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
+import com.github.alexthe666.alexsmobs.fabric.extensions.ForcedPoseEntity;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.citadel.Citadel;
 import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
@@ -75,12 +76,12 @@ public class RockyChestplateUtil {
                 update = true;
                 rollFor(roller, MAX_ROLL_TICKS);
             }
-            if(roller instanceof Player &&  ((Player)roller).getPose() == Pose.SWIMMING){
-                ((Player)roller).setPose(null);
+            if(roller instanceof Player &&  ((ForcedPoseEntity)roller).getForcedPose() == Pose.SWIMMING){
+                ((ForcedPoseEntity)roller).setForcedPose(null);
             }
         }else{
             if(roller instanceof Player){
-                ((Player)roller).setPose(Pose.SWIMMING);
+                ((ForcedPoseEntity)roller).setForcedPose(Pose.SWIMMING);
             }
             if(!roller.level.isClientSide){
                 for (Entity entity : roller.level.getEntitiesOfClass(LivingEntity.class, roller.getBoundingBox().inflate(1.0F))) {
