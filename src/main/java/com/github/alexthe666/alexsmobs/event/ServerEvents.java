@@ -5,6 +5,7 @@ import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
+import com.github.alexthe666.alexsmobs.effect.EffectClinging;
 import com.github.alexthe666.alexsmobs.entity.*;
 import com.github.alexthe666.alexsmobs.entity.util.FlyingFishBootsUtil;
 import com.github.alexthe666.alexsmobs.entity.util.RainbowUtil;
@@ -31,10 +32,7 @@ import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.*;
 import dev.architectury.registry.level.entity.trade.TradeRegistry;
 import io.github.fabricators_of_create.porting_lib.event.client.FieldOfViewEvents;
-import io.github.fabricators_of_create.porting_lib.event.common.BlockEvents;
-import io.github.fabricators_of_create.porting_lib.event.common.LivingEntityEvents;
-import io.github.fabricators_of_create.porting_lib.event.common.MobEntitySetTargetCallback;
-import io.github.fabricators_of_create.porting_lib.event.common.ProjectileImpactCallback;
+import io.github.fabricators_of_create.porting_lib.event.common.*;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
@@ -153,6 +151,8 @@ public class ServerEvents {
         ProjectileImpactCallback.EVENT.register(ServerEvents::onProjectileHit);
 
         MobDespawnCallback.EVENT.register(ServerEvents::onEntityDespawnAttempt);
+
+        EntityEvents.EYE_HEIGHT.register(ServerEvents::onEntityResize);
     }
 
     public static void onServerTick(Level level) {
@@ -207,19 +207,20 @@ public class ServerEvents {
         }
     }
 
-    /*public static void onEntityResize(ScaleData data) {
-        if (data.getEntity() instanceof Player entity) {
-            final var potions = entity.getActiveEffectsMap();
-            if (data.getEntity().level != null && potions != null && !potions.isEmpty()
+    public static float onEntityResize(Entity entity, float eyeHeight) {
+        if (entity instanceof Player player) {
+            final var potions = player.getActiveEffectsMap();
+            if (entity.level != null && potions != null && !potions.isEmpty()
                 && potions.containsKey(AMEffectRegistry.CLINGING)) {
-                if (EffectClinging.isUpsideDown(entity)) {
-                    float minus = data.getInitialScale() - data.getPrevScale();
-                    event.setNewEyeHeight(minus);
+                if (EffectClinging.isUpsideDown(player)) {
+                    float minus = eyeHeight - entity.getEyeHeight();
+                    return minus;
                 }
             }
         }
 
-    }*/
+        return eyeHeight;
+    }
 
     public static void onPlayerLoggedIn(ServerGamePacketListenerImpl handler, PacketSender sender, MinecraftServer server) {
         server.execute(() -> {
