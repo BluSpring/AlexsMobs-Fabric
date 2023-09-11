@@ -6,6 +6,7 @@ import dev.architectury.mixin.fabric.BiomeAccessor;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
 import net.minecraft.core.Holder;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -37,33 +38,35 @@ public class AMMobSpawnBiomeModifier implements BiomeModifier {
     public static void init() {
         var modifier = new AMMobSpawnBiomeModifier();
 
-        for (Holder.Reference<Biome> biomeHolder : BuiltinRegistries.BIOME.holders().toList()) {
-            var biome = biomeHolder.value();
-            var builder = ModifiableBiomeInfo.BiomeInfo.Builder.copyOf(new ModifiableBiomeInfo.BiomeInfo(((BiomeAccessor) (Object) biome).getClimateSettings(), biome.getSpecialEffects(), biome.getGenerationSettings(), biome.getMobSettings()));
+        BiomeModifications.create(new ResourceLocation("alexsmobs", "am_spawner"))
+                .add(ModificationPhase.ADDITIONS, BiomeSelectors.all(), (selection, modification) -> {
+                    var biomeHolder = selection.getBiomeRegistryEntry();
+                    var biome = selection.getBiome();
+                    var builder = ModifiableBiomeInfo.BiomeInfo.Builder.copyOf(new ModifiableBiomeInfo.BiomeInfo(((BiomeAccessor) (Object) biome).getClimateSettings(), biome.getSpecialEffects(), biome.getGenerationSettings(), biome.getMobSettings()));
 
-            modifier.modify(biomeHolder, Phase.ADD, builder);
+                    modifier.modify(biomeHolder, Phase.ADD, builder);
 
-            var info = builder.build();
-            var originalMobSettings = biome.getMobSettings();
+                    var info = builder.build();
+                    var originalMobSettings = biome.getMobSettings();
 
-            for (MobCategory mobCategory : MobCategory.values()) {
-                var original = originalMobSettings.getMobs(mobCategory).isEmpty() ? List.of() : originalMobSettings.getMobs(mobCategory).unwrap();
+                    for (MobCategory mobCategory : MobCategory.values()) {
+                        var original = originalMobSettings.getMobs(mobCategory).isEmpty() ? List.of() : originalMobSettings.getMobs(mobCategory).unwrap();
 
-                var mobs = info.mobSpawnSettings().getMobs(mobCategory);
+                        var mobs = info.mobSpawnSettings().getMobs(mobCategory);
 
-                if (mobs.isEmpty())
-                    continue;
+                        if (mobs.isEmpty())
+                            continue;
 
-                var mobsList = mobs.unwrap().stream().filter(m -> !original.contains(m)).toList();
+                        var mobsList = mobs.unwrap().stream().filter(m -> !original.contains(m)).toList();
 
-                if (mobsList.isEmpty())
-                    continue;
+                        if (mobsList.isEmpty())
+                            continue;
 
-                for (MobSpawnSettings.SpawnerData spawnerData : mobsList) {
-                    BiomeModifications.addSpawn(BiomeSelectors.includeByKey(biomeHolder.key()), mobCategory, spawnerData.type, spawnerData.getWeight().asInt(), spawnerData.minCount, spawnerData.maxCount);
-                }
-            }
-        }
+                        for (MobSpawnSettings.SpawnerData spawnerData : mobsList) {
+                            modification.getSpawnSettings().addSpawn(mobCategory, spawnerData);
+                        }
+                    }
+                });
     }
 
     public static Codec<AMMobSpawnBiomeModifier> makeCodec() {

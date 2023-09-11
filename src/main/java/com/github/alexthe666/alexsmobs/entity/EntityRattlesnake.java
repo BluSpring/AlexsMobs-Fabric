@@ -32,6 +32,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -227,7 +228,7 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
         return new Animation[]{ANIMATION_BITE};
     }
 
-    public static boolean canRattlesnakeSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean canRattlesnakeSpawn(EntityType<? extends Animal> animal, @NotNull LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
         boolean spawnBlock = worldIn.getBlockState(pos.below()).is(AMTagRegistry.RATTLESNAKE_SPAWNS);
         return spawnBlock && worldIn.getRawBrightness(pos, 0) > 8;
 }
