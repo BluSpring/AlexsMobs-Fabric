@@ -60,7 +60,10 @@ public class EntityEmu extends Animal implements IAnimatedEntity, IHerdPanic {
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.MOVEMENT_SPEED, 0.35F).add(Attributes.ATTACK_DAMAGE, 3F);
+        return Monster.createMonsterAttributes()
+                .add(Attributes.MAX_HEALTH, 60.0D) // original: 20.0D
+                .add(Attributes.MOVEMENT_SPEED, 0.35F)
+                .add(Attributes.ATTACK_DAMAGE, 6F); // original: 3F
     }
 
 

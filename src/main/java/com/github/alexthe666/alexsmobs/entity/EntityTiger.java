@@ -40,10 +40,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -102,7 +99,9 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
     }
 
     public static boolean canTigerSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return worldIn.getRawBrightness(pos, 0) > 8;
+        return worldIn.getRawBrightness(pos, 0) > 8
+                // crimecraft addition
+                && worldIn.getBrightness(LightLayer.BLOCK, pos) < 4;
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {
