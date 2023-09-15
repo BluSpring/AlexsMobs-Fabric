@@ -2,44 +2,19 @@ package com.github.alexthe666.alexsmobs.fabric.transfer;
 
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.SlotExposedStorage;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.core.Direction;
-import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class SidedInvWrapper extends ForgeItemHandler
+public class InvWrapper extends ForgeItemHandler
 {
-    protected final WorldlyContainer inv;
-    @Nullable
-    protected final Direction side;
+    private final Container inv;
 
-    @SuppressWarnings("unchecked")
-    public static LazyOptional<SlotExposedStorage>[] create(WorldlyContainer inv, Direction... sides) {
-        LazyOptional<SlotExposedStorage>[] ret = new LazyOptional[sides.length];
-        for (int x = 0; x < sides.length; x++) {
-            final Direction side = sides[x];
-            ret[x] = LazyOptional.of(() -> new SidedInvWrapper(inv, side));
-        }
-        return ret;
-    }
-
-    public SidedInvWrapper(WorldlyContainer inv, @Nullable Direction side)
+    public InvWrapper(Container inv)
     {
         this.inv = inv;
-        this.side = side;
-    }
-
-    public static int getSlot(WorldlyContainer inv, int slot, @Nullable Direction side)
-    {
-        int[] slots = inv.getSlotsForFace(side);
-        if (slot < slots.length)
-            return slots[slot];
-        return -1;
     }
 
     @Override
@@ -50,31 +25,29 @@ public class SidedInvWrapper extends ForgeItemHandler
         if (o == null || getClass() != o.getClass())
             return false;
 
-        SidedInvWrapper that = (SidedInvWrapper) o;
+        InvWrapper that = (InvWrapper) o;
 
-        return inv.equals(that.inv) && side == that.side;
+        return getInv().equals(that.getInv());
+
     }
 
     @Override
     public int hashCode()
     {
-        int result = inv.hashCode();
-        result = 31 * result + (side == null ? 0 : side.hashCode());
-        return result;
+        return getInv().hashCode();
     }
 
     @Override
     public int getSlots()
     {
-        return inv.getSlotsForFace(side).length;
+        return getInv().getContainerSize();
     }
 
     @Override
     @NotNull
     public ItemStack getStackInSlot(int slot)
     {
-        int i = getSlot(inv, slot, side);
-        return i == -1 ? ItemStack.EMPTY : inv.getItem(i);
+        return getInv().getItem(slot);
     }
 
     @NotNull
@@ -83,12 +56,7 @@ public class SidedInvWrapper extends ForgeItemHandler
         if (stack.isEmpty())
             return ItemStack.EMPTY;
 
-        int slot1 = getSlot(inv, slot, side);
-
-        if (slot1 == -1)
-            return stack;
-
-        ItemStack stackInSlot = inv.getItem(slot1);
+        ItemStack stackInSlot = getInv().getItem(slot);
 
         int m;
         if (!stackInSlot.isEmpty())
@@ -99,7 +67,7 @@ public class SidedInvWrapper extends ForgeItemHandler
             if (!ItemHandlerHelper.canItemStacksStack(stack, stackInSlot))
                 return stack;
 
-            if (!inv.canPlaceItemThroughFace(slot1, stack, side) || !inv.canPlaceItem(slot1, stack))
+            if (!getInv().canPlaceItem(slot, stack))
                 return stack;
 
             m = Math.min(stack.getMaxStackSize(), getSlotLimit(slot)) - stackInSlot.getCount();
@@ -110,7 +78,8 @@ public class SidedInvWrapper extends ForgeItemHandler
                 {
                     ItemStack copy = stack.copy();
                     copy.grow(stackInSlot.getCount());
-                    setInventorySlotContents(slot1, copy);
+                    getInv().setItem(slot, copy);
+                    getInv().setChanged();
                 }
 
                 return ItemStack.EMPTY;
@@ -123,7 +92,8 @@ public class SidedInvWrapper extends ForgeItemHandler
                 {
                     ItemStack copy = stack.split(m);
                     copy.grow(stackInSlot.getCount());
-                    setInventorySlotContents(slot1, copy);
+                    getInv().setItem(slot, copy);
+                    getInv().setChanged();
                     return stack;
                 }
                 else
@@ -135,7 +105,7 @@ public class SidedInvWrapper extends ForgeItemHandler
         }
         else
         {
-            if (!inv.canPlaceItemThroughFace(slot1, stack, side) || !inv.canPlaceItem(slot1, stack))
+            if (!getInv().canPlaceItem(slot, stack))
                 return stack;
 
             m = Math.min(stack.getMaxStackSize(), getSlotLimit(slot));
@@ -145,7 +115,8 @@ public class SidedInvWrapper extends ForgeItemHandler
                 stack = stack.copy();
                 if (!simulate)
                 {
-                    setInventorySlotContents(slot1, stack.split(m));
+                    getInv().setItem(slot, stack.split(m));
+                    getInv().setChanged();
                     return stack;
                 }
                 else
@@ -157,25 +128,14 @@ public class SidedInvWrapper extends ForgeItemHandler
             else
             {
                 if (!simulate)
-                    setInventorySlotContents(slot1, stack);
+                {
+                    getInv().setItem(slot, stack);
+                    getInv().setChanged();
+                }
                 return ItemStack.EMPTY;
             }
         }
 
-    }
-
-    @Override
-    public void setStackInSlot(int slot, @NotNull ItemStack stack)
-    {
-        int slot1 = getSlot(inv, slot, side);
-
-        if (slot1 != -1)
-            setInventorySlotContents(slot1, stack);
-    }
-
-    private void setInventorySlotContents(int slot, ItemStack stack) {
-        inv.setChanged(); //Notify vanilla of updates, We change the handler to be responsible for this instead of the caller. So mimic vanilla behavior
-        inv.setItem(slot, stack);
     }
 
     @NotNull
@@ -184,17 +144,9 @@ public class SidedInvWrapper extends ForgeItemHandler
         if (amount == 0)
             return ItemStack.EMPTY;
 
-        int slot1 = getSlot(inv, slot, side);
-
-        if (slot1 == -1)
-            return ItemStack.EMPTY;
-
-        ItemStack stackInSlot = inv.getItem(slot1);
+        ItemStack stackInSlot = getInv().getItem(slot);
 
         if (stackInSlot.isEmpty())
-            return ItemStack.EMPTY;
-
-        if (!inv.canTakeItemThroughFace(slot1, stackInSlot, side))
             return ItemStack.EMPTY;
 
         if (simulate)
@@ -213,22 +165,32 @@ public class SidedInvWrapper extends ForgeItemHandler
         else
         {
             int m = Math.min(stackInSlot.getCount(), amount);
-            ItemStack ret = inv.removeItem(slot1, m);
-            inv.setChanged();
-            return ret;
+
+            ItemStack decrStackSize = getInv().removeItem(slot, m);
+            getInv().setChanged();
+            return decrStackSize;
         }
+    }
+
+    @Override
+    public void setStackInSlot(int slot, @NotNull ItemStack stack)
+    {
+        getInv().setItem(slot, stack);
     }
 
     @Override
     public int getSlotLimit(int slot)
     {
-        return inv.getMaxStackSize();
+        return getInv().getMaxStackSize();
     }
 
     public boolean isItemValid(int slot, @NotNull ItemStack stack)
     {
-        int slot1 = getSlot(inv, slot, side);
-        return slot1 == -1 ? false : inv.canPlaceItem(slot1, stack);
+        return getInv().canPlaceItem(slot, stack);
+    }
+
+    public Container getInv()
+    {
+        return inv;
     }
 }
-

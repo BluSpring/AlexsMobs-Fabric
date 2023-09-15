@@ -4,6 +4,8 @@ import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.block.BlockCapsid;
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityEnderiophage;
+import com.github.alexthe666.alexsmobs.fabric.transfer.ForgeItemHandler;
+import com.github.alexthe666.alexsmobs.fabric.transfer.ForgeItemHandlerHelper;
 import com.github.alexthe666.alexsmobs.fabric.transfer.SidedInvWrapper;
 import com.github.alexthe666.alexsmobs.message.MessageUpdateCapsid;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
@@ -81,11 +83,11 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
             if (up instanceof Container) {
                 if (floatUpProgress >= 1) {
                     LazyOptional<SlotExposedStorage> handler = level.getBlockEntity(this.worldPosition.above()).getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP);
-                    var type = (SidedInvWrapper) handler.orElse(null);
+                    var type = handler.orElse(null);
 
-                    if (type != null) {
-                        if (type.insertItem(-1, this.getItem(0), true).isEmpty()) {
-                            type.insertItem(-1, this.getItem(0).copy(), false);
+                    if (type instanceof ForgeItemHandler itemHandler) {
+                        if (ForgeItemHandlerHelper.insertItem(itemHandler, this.getItem(0), true).isEmpty()) {
+                            ForgeItemHandlerHelper.insertItem(itemHandler, this.getItem(0).copy(), false);
                             this.setItem(0, ItemStack.EMPTY);
                         }
                     }
