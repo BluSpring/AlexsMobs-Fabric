@@ -24,7 +24,7 @@ public abstract class BrewingStandBlockEntityMixin extends BaseContainerBlockEnt
     }
 
     @Unique
-    LazyOptional<? extends SlotExposedStorage>[] handlers = SidedInvWrapper.create((AbstractFurnaceBlockEntity) (Object) this, Direction.UP, Direction.DOWN, Direction.NORTH);
+    LazyOptional<? extends SlotExposedStorage>[] handlers = SidedInvWrapper.create((BrewingStandBlockEntity) (Object) this, Direction.UP, Direction.DOWN, Direction.NORTH);
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
@@ -51,6 +51,6 @@ public abstract class BrewingStandBlockEntityMixin extends BaseContainerBlockEnt
     @Override
     public void reviveCaps() {
         super.reviveCaps();
-        this.handlers = SidedInvWrapper.create((AbstractFurnaceBlockEntity) (Object) this, Direction.UP, Direction.DOWN, Direction.NORTH);
+        this.handlers = SidedInvWrapper.create((BrewingStandBlockEntity) (Object) this, Direction.UP, Direction.DOWN, Direction.NORTH);
     }
 }
