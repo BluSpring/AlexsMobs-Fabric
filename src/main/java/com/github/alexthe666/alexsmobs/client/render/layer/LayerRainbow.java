@@ -50,6 +50,14 @@ public class LayerRainbow extends RenderLayer {
                 return AMRenderTypes.WEEZER_GLINT;
             case BRAZIL:
                 return AMRenderTypes.BRAZIL_GLINT;
+            case PAN:
+                return AMRenderTypes.PAN_GLINT;
+            case ARO:
+                return AMRenderTypes.ARO_GLINT;
+            case LESBIAN:
+                return AMRenderTypes.LESBIAN_GLINT;
+            case AGENDER:
+                return AMRenderTypes.AGENDER_GLINT;
             default:
                 return AMRenderTypes.RAINBOW_GLINT;
         }

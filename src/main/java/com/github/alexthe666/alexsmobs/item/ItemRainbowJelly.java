@@ -60,7 +60,7 @@ public class ItemRainbowJelly extends Item {
     }
 
     public enum RainbowType {
-        RAINBOW, TRANS, NONBI, BI, ACE, WEEZER, BRAZIL;
+        RAINBOW, TRANS, NONBI, BI, ACE, WEEZER, BRAZIL, PAN, LESBIAN, ARO, AGENDER;
 
 
         public static RainbowType getFromString(String name) {
@@ -68,6 +68,8 @@ public class ItemRainbowJelly extends Item {
                 return NONBI;
             }else if (name.contains("trans")) {
                 return TRANS;
+            } else if (name.contains("lesbian")) {
+                return LESBIAN;
             }else if (name.contains("bi")) {
                 return BI;
             }else if (name.contains("asexual") || name.contains("ace")) {
@@ -76,6 +78,12 @@ public class ItemRainbowJelly extends Item {
                 return WEEZER;
             }else if (name.contains("brazil")) {
                 return BRAZIL;
+            } else if (name.contains("pan")) {
+                return PAN;
+            } else if (name.contains("aro")) {
+                return ARO;
+            } else if (name.contains("agender")) {
+                return AGENDER;
             }
             return RAINBOW;
         }
