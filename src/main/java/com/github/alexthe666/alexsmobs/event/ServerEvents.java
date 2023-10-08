@@ -182,19 +182,9 @@ public class ServerEvents {
         }
     }
 
-    protected static BlockHitResult rayTrace(Level worldIn, Player player, ClipContext.Fluid fluidMode) {
-        final float x = player.getXRot();
-        final float y = player.getYRot();
-        Vec3 vector3d = player.getEyePosition(1.0F);
-        final float f2 = Mth.cos(-y * ((float) Math.PI / 180F) - (float) Math.PI);
-        final float f3 = Mth.sin(-y * ((float) Math.PI / 180F) - (float) Math.PI);
-        final float f4 = -Mth.cos(-x * ((float) Math.PI / 180F));
-        final float f5 = Mth.sin(-x * ((float) Math.PI / 180F));
-        final float f6 = f3 * f4;
-        final float f7 = f2 * f4;
-        final double d0 = player.getAttribute(ReachEntityAttributes.REACH).getValue();
-        Vec3 vector3d1 = vector3d.add(f6 * d0, f5 * d0, f7 * d0);
-        return worldIn.clip(new ClipContext(vector3d, vector3d1, ClipContext.Block.OUTLINE, fluidMode, player));
+    protected static HitResult rayTrace(Level worldIn, Player player, ClipContext.Fluid fluidMode) {
+        final double d0 = ReachEntityAttributes.getReachDistance(player, 9.0);
+        return player.pick(d0, 0f, true);
     }
 
 
