@@ -1,6 +1,7 @@
 package com.github.alexthe666.alexsmobs.entity;
 
 import com.github.alexthe666.alexsmobs.enchantment.AMEnchantmentRegistry;
+import com.github.alexthe666.alexsmobs.fabric.extensions.SittableVehicle;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import io.github.fabricators_of_create.porting_lib.block.CustomFrictionBlock;
 import net.fabricmc.api.EnvType;
@@ -39,7 +40,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
-public class EntityStraddleboard extends Entity implements PlayerRideableJumping {
+public class EntityStraddleboard extends Entity implements PlayerRideableJumping, SittableVehicle {
     private static final EntityDataAccessor<ItemStack> ITEMSTACK = SynchedEntityData.defineId(EntityStraddleboard.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> TIME_SINCE_HIT = SynchedEntityData.defineId(EntityStraddleboard.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DAMAGE_TAKEN = SynchedEntityData.defineId(EntityStraddleboard.class, EntityDataSerializers.FLOAT);

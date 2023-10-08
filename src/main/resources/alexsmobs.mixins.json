@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "GameRendererMixin",
+    "LivingEntityRendererMixin",
     "elytra.LocalPlayerMixin",
     "liquid.LiquidBlockRendererMixin",
     "render.ItemRendererMixin"
