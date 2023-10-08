@@ -68,12 +68,12 @@ public class ItemTendonWhip extends SwordItem implements ILeftClick, ReequipAnim
             HitResult hitresult = worldIn.clip(new ClipContext(playerEyes, playerEyes.add(playerIn.getLookAngle().scale(12.0D)), ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, playerIn));
             if (hitresult instanceof EntityHitResult) {
                 Entity entity = ((EntityHitResult) hitresult).getEntity();
-                if (!entity.equals(playerIn) && !playerIn.isAlliedTo(entity) && !entity.isAlliedTo(playerIn) && entity instanceof Mob && playerIn.hasLineOfSight(entity)) {
+                if (!entity.equals(playerIn) && !playerIn.isAlliedTo(entity) && !entity.isAlliedTo(playerIn) && (entity instanceof Mob || entity instanceof Player) && playerIn.hasLineOfSight(entity)) {
                     closestValid = entity;
                 }
             } else {
                 for (Entity entity : worldIn.getEntitiesOfClass(LivingEntity.class, playerIn.getBoundingBox().inflate(12.0D))) {
-                    if (!entity.equals(playerIn) && !playerIn.isAlliedTo(entity) && !entity.isAlliedTo(playerIn) && entity instanceof Mob && playerIn.hasLineOfSight(entity)) {
+                    if (!entity.equals(playerIn) && !playerIn.isAlliedTo(entity) && !entity.isAlliedTo(playerIn) && (entity instanceof Mob || entity instanceof Player) && playerIn.hasLineOfSight(entity)) {
                         if (closestValid == null || playerIn.distanceTo(entity) < playerIn.distanceTo(closestValid)) {
                             closestValid = entity;
                         }
