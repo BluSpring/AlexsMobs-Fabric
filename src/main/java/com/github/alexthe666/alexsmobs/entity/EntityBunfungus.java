@@ -158,7 +158,7 @@ public class EntityBunfungus extends PathfinderMob implements IAnimatedEntity {
         this.entityData.define(TRANSFORMS_IN, 0);
     }
 
-    public boolean causeFallDamage(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 

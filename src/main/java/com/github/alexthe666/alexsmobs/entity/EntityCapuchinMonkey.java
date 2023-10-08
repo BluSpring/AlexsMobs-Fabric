@@ -259,7 +259,8 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    public boolean causeFallDamage(float distance, float damageMultiplier) {
+    @Override
+    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
         return false;
     }
 

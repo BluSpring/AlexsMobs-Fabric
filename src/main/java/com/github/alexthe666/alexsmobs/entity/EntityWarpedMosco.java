@@ -5,6 +5,7 @@ import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
 import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
 import com.github.alexthe666.alexsmobs.entity.ai.FlightMoveController;
 import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
+import com.github.alexthe666.alexsmobs.fabric.extensions.SittableVehicle;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
@@ -48,7 +49,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
+public class EntityWarpedMosco extends Monster implements IAnimatedEntity, SittableVehicle {
 
     public static final Animation ANIMATION_PUNCH_R = Animation.create(25);
     public static final Animation ANIMATION_PUNCH_L = Animation.create(25);
@@ -138,7 +139,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
         this.entityData.define(HAND_SIDE, true);
     }
 
-    public boolean causeFallDamage(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 

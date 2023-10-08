@@ -3,6 +3,7 @@ package com.github.alexthe666.alexsmobs.client.render;
 import com.github.alexthe666.alexsmobs.client.model.ModelTiger;
 import com.github.alexthe666.alexsmobs.client.render.layer.LayerTigerEyes;
 import com.github.alexthe666.alexsmobs.entity.EntityTiger;
+import com.github.alexthe666.alexsmobs.fabric.extensions.SittableVehicle;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
@@ -48,7 +49,7 @@ public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
         matrixStackIn.pushPose();
         this.model.attackTime = this.getAttackAnim(entityIn, partialTicks);
 
-        boolean shouldSit = entityIn.isPassenger() && (entityIn.getVehicle() != null/* && entityIn.getVehicle().shouldRiderSit()*/);
+        boolean shouldSit = entityIn.isPassenger() && (entityIn.getVehicle() != null && (!(entityIn.getVehicle() instanceof SittableVehicle sittableVehicle) || sittableVehicle.shouldRiderSit()));
         this.model.riding = shouldSit;
         this.model.young = entityIn.isBaby();
         float f = Mth.rotLerp(partialTicks, entityIn.yBodyRotO, entityIn.yBodyRot);

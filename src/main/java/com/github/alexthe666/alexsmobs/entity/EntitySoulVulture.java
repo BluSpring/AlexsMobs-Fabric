@@ -317,7 +317,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         return this.distanceToSqr(Vec3.atCenterOf(perchPos)) > 13 || landingCooldown == 0;
     }
 
-    public boolean causeFallDamage(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 

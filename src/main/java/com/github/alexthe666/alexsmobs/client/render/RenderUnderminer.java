@@ -4,6 +4,7 @@ import com.github.alexthe666.alexsmobs.client.model.ModelUnderminerDwarf;
 import com.github.alexthe666.alexsmobs.client.model.layered.AMModelLayers;
 import com.github.alexthe666.alexsmobs.client.render.layer.LayerUnderminerItem;
 import com.github.alexthe666.alexsmobs.entity.EntityUnderminer;
+import com.github.alexthe666.alexsmobs.fabric.extensions.SittableVehicle;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -80,7 +81,7 @@ public class RenderUnderminer extends MobRenderer<EntityUnderminer, EntityModel<
         matrixStackIn.pushPose();
         this.model.attackTime = this.getAttackAnim(entityIn, partialTicks);
 
-        boolean shouldSit = entityIn.isPassenger() && (entityIn.getVehicle() != null/* && entityIn.getVehicle().shouldRiderSit()*/);
+        boolean shouldSit = entityIn.isPassenger() && (entityIn.getVehicle() != null && (!(entityIn.getVehicle() instanceof SittableVehicle sittableVehicle) || sittableVehicle.shouldRiderSit()));
         this.model.riding = shouldSit;
         this.model.young = entityIn.isBaby();
         float f = Mth.rotLerp(partialTicks, entityIn.yBodyRotO, entityIn.yBodyRot);

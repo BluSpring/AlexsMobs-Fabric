@@ -141,7 +141,7 @@ public class EntityHummingbird extends Animal {
         return flyingpathnavigator;
     }
 
-    public boolean causeFallDamage(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 

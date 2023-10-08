@@ -511,7 +511,7 @@ public class EntityCrimsonMosquito extends Monster {
 
     }
 
-    public boolean causeFallDamage(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 

@@ -282,7 +282,7 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
         return super.getMaxFallDistance() * 2;
     }
 
-    public boolean causeFallDamage(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 

@@ -126,7 +126,7 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
         return true;
     }
 
-    public boolean causeFallDamage(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 

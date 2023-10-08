@@ -80,7 +80,7 @@ public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITarge
         return stack.getItem() == AMItemRegistry.MOOSE_RIBS.get() || stack.getItem() == AMItemRegistry.COOKED_MOOSE_RIBS.get();
     }
 
-    public boolean causeFallDamage(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 

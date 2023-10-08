@@ -183,7 +183,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         this.entityData.define(MISSING_EYE, false);
     }
 
-    public boolean causeFallDamage(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 

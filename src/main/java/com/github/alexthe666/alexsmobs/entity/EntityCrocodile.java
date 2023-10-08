@@ -5,6 +5,7 @@ import com.github.alexthe666.alexsmobs.block.BlockCrocodileEgg;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.*;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
+import com.github.alexthe666.alexsmobs.fabric.extensions.SittableVehicle;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
@@ -56,7 +57,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
-public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, ISemiAquatic {
+public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, ISemiAquatic, SittableVehicle {
 
     public static final Animation ANIMATION_LUNGE = Animation.create(23);
     public static final Animation ANIMATION_DEATHROLL = Animation.create(40);
