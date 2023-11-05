@@ -82,7 +82,7 @@ repositories{
     }
 }
 
-version = '1.21.3'
+version = '1.21.4'
 group = 'com.github.alexthe667' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 //archivesBaseName = 'alexsmobs'
 
