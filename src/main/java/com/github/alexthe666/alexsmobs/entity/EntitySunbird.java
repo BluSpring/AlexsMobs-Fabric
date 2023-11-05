@@ -53,12 +53,10 @@ import java.util.stream.Stream;
 
 public class EntitySunbird extends Animal implements FlyingAnimal {
 
-    public static final Predicate<? super Entity> SCORCH_PRED = new com.google.common.base.Predicate<Entity>() {
-        @Override
-        public boolean apply(@Nullable Entity e) {
-            return e.isAlive() && e.getType().is(AMTagRegistry.SUNBIRD_SCORCH_TARGETS);
-        }
-    };
+    public static final Predicate<? super Entity> SCORCH_PRED = e ->
+        e.isAlive() && e.getType().is(AMTagRegistry.SUNBIRD_SCORCH_TARGETS)
+                // Crimecraft: Prevent sunbird from burning anything that isn't visible to the sky
+                && e.level.canSeeSky(e.blockPosition());
     private static final EntityDataAccessor<Boolean> SCORCHING = SynchedEntityData.defineId(EntitySunbird.class, EntityDataSerializers.BOOLEAN);
     public float birdPitch = 0;
     public float prevBirdPitch = 0;
