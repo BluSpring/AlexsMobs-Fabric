@@ -33,7 +33,7 @@ public class RenderStraddleboard extends EntityRenderer<EntityStraddleboard> {
     public void render(EntityStraddleboard entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 180F, true));
-        matrixStackIn.mulPose(Vector3f.YN.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) + 180));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot())));
         matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot())));
         matrixStackIn.pushPose();
         boolean lava = entityIn.isVehicle();
@@ -47,7 +47,6 @@ public class RenderStraddleboard extends EntityRenderer<EntityStraddleboard> {
         float b = (float)(k & 255) / 255.0F;
         float boardRot = entityIn.prevBoardRot + partialTicks * (entityIn.getBoardRot() - entityIn.prevBoardRot);
         matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(boardRot));
-        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
         matrixStackIn.translate(0, -1.5F - Math.abs(boardRot * 0.007F) - (lava ? 0 : 0.25F), 0);
         BOARD_MODEL.animateBoard(entityIn, entityIn.tickCount + partialTicks);
         VertexConsumer ivertexbuilder2 = bufferIn.getBuffer(RenderType.entityCutoutNoCull(TEXTURE_OVERLAY));
