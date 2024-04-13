@@ -7,7 +7,6 @@ import com.google.common.collect.ImmutableList;
 import io.github.fabricators_of_create.porting_lib.event.client.EntityAddedLayerCallback;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -54,7 +53,7 @@ public class ClientLayerRegistry {
             }catch (Exception e){
                 AlexsMobs.LOGGER.warn("Could not apply rainbow color layer to " + Registry.ENTITY_TYPE.getKey(entityType) + ", has custom renderer that is not LivingEntityRenderer.");
             }
-            if(renderer != null){
+            if(renderer != null && renderer instanceof LivingEntityRenderer<?,?>){
                 ((LivingEntityRendererAccessor) renderer).callAddLayer(new LayerRainbow((RenderLayerParent) renderer));
             }
         }
