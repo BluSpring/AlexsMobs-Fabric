@@ -1,5 +1,9 @@
 {
-  "values": [
-    "minecraft:lush_caves"
-  ]
+    "values": [
+        "minecraft:lush_caves",
+        {
+            "id": "#c:is_lush",
+            "required": false
+        }
+    ]
 }

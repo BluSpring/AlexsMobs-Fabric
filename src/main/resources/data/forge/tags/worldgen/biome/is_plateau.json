@@ -1,7 +1,11 @@
 {
-  "values": [
-    "minecraft:savanna_plateau",
-    "minecraft:wooded_badlands",
-    "minecraft:meadow"
-  ]
+    "values": [
+        "minecraft:savanna_plateau",
+        "minecraft:wooded_badlands",
+        "minecraft:meadow",
+        {
+            "id": "#c:is_plateau",
+            "required": false
+        }
+    ]
 }

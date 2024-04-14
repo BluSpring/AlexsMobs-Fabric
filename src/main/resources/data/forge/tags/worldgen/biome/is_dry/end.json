@@ -1,9 +1,13 @@
 {
-  "values": [
-    "minecraft:the_end",
-    "minecraft:small_end_islands",
-    "minecraft:end_midlands",
-    "minecraft:end_highlands",
-    "minecraft:end_barrens"
-  ]
+    "values": [
+        "minecraft:the_end",
+        "minecraft:small_end_islands",
+        "minecraft:end_midlands",
+        "minecraft:end_highlands",
+        "minecraft:end_barrens",
+        {
+            "id": "#c:is_dry/end",
+            "required": false
+        }
+    ]
 }

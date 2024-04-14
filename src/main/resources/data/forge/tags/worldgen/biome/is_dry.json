@@ -1,7 +1,11 @@
 {
-  "values": [
-    "#forge:is_dry/overworld",
-    "#forge:is_dry/nether",
-    "#forge:is_dry/end"
-  ]
+    "values": [
+        "#forge:is_dry/overworld",
+        "#forge:is_dry/nether",
+        "#forge:is_dry/end",
+        {
+            "id": "#c:is_dry",
+            "required": false
+        }
+    ]
 }

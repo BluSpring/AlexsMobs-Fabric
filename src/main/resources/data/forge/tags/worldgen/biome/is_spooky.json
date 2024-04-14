@@ -1,6 +1,10 @@
 {
-  "values": [
-    "minecraft:dark_forest",
-    "minecraft:deep_dark"
-  ]
+    "values": [
+        "minecraft:dark_forest",
+        "minecraft:deep_dark",
+        {
+            "id": "#c:is_spooky",
+            "required": false
+        }
+    ]
 }

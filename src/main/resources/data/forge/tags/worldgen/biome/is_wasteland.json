@@ -1,5 +1,9 @@
 {
-  "values": [
-    "minecraft:snowy_plains"
-  ]
+    "values": [
+        "minecraft:snowy_plains",
+        {
+            "id": "#c:is_wasteland",
+            "required": false
+        }
+    ]
 }

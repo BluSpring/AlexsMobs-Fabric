@@ -1,6 +1,10 @@
 {
-  "values": [
-    "#forge:is_peak",
-    "#forge:is_slope"
-  ]
+    "values": [
+        "#forge:is_peak",
+        "#forge:is_slope",
+        {
+            "id": "#c:is_mountain",
+            "required": false
+        }
+    ]
 }

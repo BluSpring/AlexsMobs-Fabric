@@ -1,6 +1,10 @@
 {
   "replace": false,
   "values": [
-    "alexsmobs:soul_heart"
+    "alexsmobs:soul_heart",
+    {
+      "id": "#c:heart",
+      "required": false
+    }
   ]
 }

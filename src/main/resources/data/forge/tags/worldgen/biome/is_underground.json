@@ -1,5 +1,9 @@
 {
-  "values": [
-    "#forge:is_cave"
-  ]
+    "values": [
+        "#forge:is_cave",
+        {
+            "id": "#c:is_underground",
+            "required": false
+        }
+    ]
 }
