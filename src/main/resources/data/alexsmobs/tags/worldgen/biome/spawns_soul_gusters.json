@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "minecraft:soul_sand_valley"
+    "minecraft:soul_sand_valley",
+    "#c:in_nether"
   ]
 }
