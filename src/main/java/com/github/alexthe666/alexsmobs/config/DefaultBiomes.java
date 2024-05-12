@@ -948,7 +948,9 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:old_growth_birch_forest", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:white_cliffs", 2)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:birch_forest", 3)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 4);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 4)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terrestria:rainbow_rainforest", 5)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "regions_unexplored:eucalyptus_forest", 6);
 
     public static final SpawnBiomeData FARSEER = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "minecraft:mushroom_fields", 0);
