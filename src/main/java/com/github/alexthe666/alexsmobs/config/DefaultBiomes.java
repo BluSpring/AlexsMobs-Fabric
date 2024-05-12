@@ -234,7 +234,11 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:mesa", 8)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_hot", 9)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:plains", 9)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:savanna", 10);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:savanna", 10)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_hot", 11)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:vegetation_sparse", 11)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_dry", 12)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:vegetation_sparse", 12);
 
     public static final SpawnBiomeData CAPUCHIN_MONKEY = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_jungle", 0)
