@@ -354,8 +354,6 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "minecraft:is_ocean", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "forge:is_mushroom", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 13)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:caves", 13)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "minecraft:deep_dark", 0)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/andesite_caves", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/desert_caves", 2)
@@ -368,7 +366,9 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/frostfire_caves", 9)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/mantle_caves", 10)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/deep_caves", 11)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/tuff_caves", 12);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/tuff_caves", 12)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 13)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:caves", 13);
 
     public static final SpawnBiomeData SHOEBILL = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
@@ -377,7 +377,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:orchid_swamp", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:red_oasis", 2)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 3)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "forge:is_swamp", 3);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:swamp", 3);
 
     public static final SpawnBiomeData ELEPHANT = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
