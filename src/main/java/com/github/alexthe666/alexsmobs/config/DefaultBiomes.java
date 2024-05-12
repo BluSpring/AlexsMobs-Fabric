@@ -203,14 +203,15 @@ public class DefaultBiomes {
     public static final SpawnBiomeData HAMMERHEAD = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_ocean", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:ocean", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "forge:is_hot/overworld", 0);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "forge:is_hot/overworld", 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:ocean", 2)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_hot", 2);
 
     public static final SpawnBiomeData LOBSTER = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_beach", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:beach", 3)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:gravel_beach", 1)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:stony_shore", 2);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:stony_shore", 2)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:beach", 3);
 
     public static final SpawnBiomeData KOMODO_DRAGON = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_jungle", 0)
