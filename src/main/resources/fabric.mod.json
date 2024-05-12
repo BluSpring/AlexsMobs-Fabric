@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "alexsmobs",
-  "version": "1.21.4+fabric",
+  "version": "1.22.1",
   "name": "Alex's Mobs",
   "description": "Generate cities all over the world",
   "authors": [
