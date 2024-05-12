@@ -156,7 +156,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:mountain", 29)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:mountain_peak", 30)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:mountain_slope", 31)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:extreme_hills", 32);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:extreme_hills", 32)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:windswept", 33);
 
     public static final SpawnBiomeData GORILLA = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_jungle", 0)
@@ -263,7 +264,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:warped_desert", 2)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "incendium:inverted_forest", 3)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "incendium:quartz_flats", 4)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:in_nether", 5);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:in_nether", 5);
         
     public static final SpawnBiomeData MOOSE = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
