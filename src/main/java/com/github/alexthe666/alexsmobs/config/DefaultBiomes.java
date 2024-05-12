@@ -12,10 +12,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_forest", 0)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "minecraft:sparse_jungle", 0)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_taiga", 1)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:forest", 27)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:taiga", 26)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:forest", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:alpine_grove", 2)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:blooming_valley", 3)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:lavender_forest", 4)
@@ -39,7 +36,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:yosemite_lowlands", 22)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:bryce_canyon", 23)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:skylands_autumn", 24)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "biomesoplenty:redwood_forest", 25);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "biomesoplenty:redwood_forest", 25)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:taiga", 26);
 
     public static final SpawnBiomeData ROADRUNNER = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_badlands", 0)
