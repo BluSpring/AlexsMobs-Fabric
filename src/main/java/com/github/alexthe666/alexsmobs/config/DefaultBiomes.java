@@ -37,7 +37,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:bryce_canyon", 23)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:skylands_autumn", 24)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "biomesoplenty:redwood_forest", 25)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:taiga", 26);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:taiga", 26)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:flower_forests", 27);
 
     public static final SpawnBiomeData ROADRUNNER = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_badlands", 0)
@@ -54,7 +55,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:white_mesa", 9)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:red_oasis", 10)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_hot", 11)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_dry", 11);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_dry", 11)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:badlands", 12);
 
     public static final SpawnBiomeData ALL_NETHER = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_nether", 0)
@@ -82,7 +84,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:warm_river", 6)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_cold", 7)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:river", 8)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:is_swamp", 9);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:swamp", 9);
 
     public static final SpawnBiomeData FLY = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "minecraft:is_end", 0)
@@ -212,7 +214,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_beach", 0)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:gravel_beach", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:stony_shore", 2)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:beach", 3);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:beach", 3)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:stony_shores", 4);
 
     public static final SpawnBiomeData KOMODO_DRAGON = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_jungle", 0)
@@ -221,8 +224,10 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:red_oasis", 2)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:skylands_summer", 3)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "biomesoplenty:tropics", 4)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 5)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 5);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 5)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:vegetation_dense", 5)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 6)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:vegetation_sparse", 6);
 
     public static final SpawnBiomeData CAPUCHIN_MONKEY = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_jungle", 0)
@@ -256,7 +261,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 13)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:caves", 13)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:mushroom", 14)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:ocean", 14);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:ocean", 14)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:underground", 15);
 
     public static final SpawnBiomeData WARPED_TOAD = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:warped_forest", 0)
@@ -264,7 +270,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:warped_desert", 2)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "incendium:inverted_forest", 3)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "incendium:quartz_flats", 4)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:in_nether", 5);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:in_nether", 5)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:nether_forests", 6);
         
     public static final SpawnBiomeData MOOSE = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
@@ -369,7 +376,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/deep_caves", 11)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/tuff_caves", 12)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 13)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:caves", 13);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:caves", 13)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:underground", 14);
 
     public static final SpawnBiomeData SHOEBILL = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
@@ -503,7 +511,9 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:ashen_savanna", 4)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:cave/desert_caves", 5)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_dry", 6)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_hot", 6);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_hot", 6)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:desert", 7)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:badlands", 8);
 
     public static final SpawnBiomeData STRADDLER = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:basalt_deltas", 0)
@@ -529,7 +539,9 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 11)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:savanna", 11)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 12)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:badlands", 12);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:badlands", 12)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 13)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:mesa", 13);
 
 
     public static final SpawnBiomeData ICE_FREE_RIVER = new SpawnBiomeData()
