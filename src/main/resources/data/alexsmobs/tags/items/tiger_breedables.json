@@ -1,7 +1,15 @@
 {
-  "__comment": "included since some packs have acacia blossoms disabled.",
-  "replace": false,
-  "values": [
-    "alexsmobs:acacia_blossom"
-  ]
+    "__comment": "included since some packs have acacia blossoms disabled.",
+    "replace": false,
+    "values": [
+        "alexsmobs:acacia_blossom",
+        {
+            "id": "#c:raw_meat",
+            "required": false
+        },
+        {
+            "id": "#c:raw_meats",
+            "required": false
+        }
+    ]
 }

@@ -5,6 +5,7 @@
     "minecraft:hay_block",
     "minecraft:melon",
     "minecraft:hay_block",
-    "minecraft:sweet_berry_bush"
+    "minecraft:sweet_berry_bush",
+    "#c:leaves"	
   ]
 }

@@ -1,8 +1,16 @@
 {
-  "replace": false,
-  "values": [
-    "#minecraft:fishes",
-    "alexsmobs:lobster_tail",
-    "alexsmobs:cooked_lobster_tail"
-  ]
+    "replace": false,
+    "values": [
+        "#minecraft:fishes",
+        "alexsmobs:lobster_tail",
+        "alexsmobs:cooked_lobster_tail",
+        {
+            "id": "#c:raw_fish",
+            "required": false
+        },
+        {
+            "id": "#c:raw_fishes",
+            "required": false
+        }
+    ]
 }
