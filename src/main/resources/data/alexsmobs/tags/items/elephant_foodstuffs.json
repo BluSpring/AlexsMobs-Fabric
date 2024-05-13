@@ -23,6 +23,10 @@
         {
             "id": "#c:vegetables",
             "required": false
-        }
+        },
+        {
+            "id": "#c:berries",
+            "required": false
+        }		
     ]
 }

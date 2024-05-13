@@ -686,7 +686,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:amethyst_rainforest", 6)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:skylands_spring", 7)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 8)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 8);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 8)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "regions_unexplored:bamboo_forest", 9);
 
     public static final SpawnBiomeData DESERT = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "forge:is_dry/overworld", 0)

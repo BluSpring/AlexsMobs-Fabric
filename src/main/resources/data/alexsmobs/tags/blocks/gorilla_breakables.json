@@ -6,6 +6,10 @@
         {
             "id": "#c:leaves",
             "required": false
-        }
+        },
+        {
+            "id": "regions_unexplored:bamboo_log",
+            "required": false
+        }		
     ]
 }
