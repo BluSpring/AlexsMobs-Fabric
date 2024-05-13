@@ -1,11 +1,14 @@
 {
-  "replace": false,
-  "values": [
-    "#minecraft:leaves",
-    "minecraft:hay_block",
-    "minecraft:melon",
-    "minecraft:hay_block",
-    "minecraft:sweet_berry_bush",
-    "#c:leaves"	
-  ]
+    "replace": false,
+    "values": [
+        "#minecraft:leaves",
+        "minecraft:hay_block",
+        "minecraft:melon",
+        "minecraft:hay_block",
+        "minecraft:sweet_berry_bush",
+        {
+            "id": "#c:leaves",
+            "required": false
+        }
+    ]
 }
