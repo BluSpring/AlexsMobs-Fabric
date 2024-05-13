@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+	"#minecraft:is_desert",
     "#c:desert"
   ]
 }
