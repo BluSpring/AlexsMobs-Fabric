@@ -1,7 +1,11 @@
 {
-  "replace": false,
-  "values": [
-    "#minecraft:leaves",
-    "minecraft:bamboo"
-  ]
+    "replace": false,
+    "values": [
+        "#minecraft:leaves",
+        "minecraft:bamboo",
+        {
+            "id": "#c:leaves",
+            "required": false
+        }
+    ]
 }

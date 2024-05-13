@@ -1,6 +1,10 @@
 {
-  "replace": false,
-  "values": [
-    "#minecraft:leaves"
-  ]
+    "replace": false,
+    "values": [
+        "#minecraft:leaves",
+        {
+            "id": "#c:leaves",
+            "required": false
+        }
+    ]
 }
