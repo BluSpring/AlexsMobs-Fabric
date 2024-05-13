@@ -1,7 +1,11 @@
 {
-  "replace": false,
-  "values": [
-    "minecraft:bone_block",
-    "#minecraft:logs"
-  ]
+    "replace": false,
+    "values": [
+        "minecraft:bone_block",
+        "#minecraft:logs",
+        {
+            "id": "#c:logs",
+            "required": false
+        }
+    ]
 }
