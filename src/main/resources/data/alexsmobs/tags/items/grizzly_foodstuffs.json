@@ -4,6 +4,11 @@
     "#alexsmobs:grizzly_honey",
     "minecraft:salmon",
     "minecraft:bee_nest",
-    "minecraft:beetroot"
+    "minecraft:beetroot",
+	"#c:honey",
+	"#c:vegetables",
+	"#c:raw_fish",	
+	"#c:raw_fishes",	
+	"#minecraft:fishes",		
   ]
 }

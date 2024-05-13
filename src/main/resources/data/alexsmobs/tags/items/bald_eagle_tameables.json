@@ -2,6 +2,9 @@
   "__comment": "included since some packs have fish oil disabled.",
   "replace": false,
   "values": [
-    "alexsmobs:fish_oil"
+    "alexsmobs:fish_oil",
+	"#minecraft:fishes",	
+	"#c:raw_fish",	
+	"#c:raw_fishes"	
   ]
 }
