@@ -5,10 +5,22 @@
     "minecraft:salmon",
     "minecraft:bee_nest",
     "minecraft:beetroot",
-	"#c:honey",
-	"#c:vegetables",
-	"#c:raw_fish",	
-	"#c:raw_fishes",	
-	"#minecraft:fishes",		
+	"#minecraft:fishes",
+        {
+            "id": "#c:raw_fishes",
+            "required": false
+        },
+        {
+            "id": "#c:raw_fish",
+            "required": false
+        },	
+        {
+            "id": "#c:vegetables",
+            "required": false
+        },
+        {
+            "id": "#c:berries",
+            "required": false
+        }		
   ]
 }

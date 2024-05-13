@@ -1,10 +1,16 @@
 {
-  "__comment": "included since some packs have fish oil disabled.",
-  "replace": false,
-  "values": [
-    "alexsmobs:fish_oil",
-	"#minecraft:fishes",	
-	"#c:raw_fish",	
-	"#c:raw_fishes"	
-  ]
+    "__comment": "included since some packs have fish oil disabled.",
+    "replace": false,
+    "values": [
+        "alexsmobs:fish_oil",
+        "#minecraft:fishes",
+        {
+            "id": "#c:raw_fishes",
+            "required": false
+        },
+        {
+            "id": "#c:raw_fish",
+            "required": false
+        }
+    ]
 }
