@@ -529,7 +529,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_dry", 6)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_hot", 6)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:desert", 7)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:badlands", 8);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:badlands", 8)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:soul_sand_valley", 9);
 
     public static final SpawnBiomeData STRADDLER = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:basalt_deltas", 0)
