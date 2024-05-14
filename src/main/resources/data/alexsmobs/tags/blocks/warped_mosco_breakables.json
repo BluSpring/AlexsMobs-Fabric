@@ -1,8 +1,12 @@
 {
-  "replace": false,
-  "values": [
-    "#minecraft:leaves",
-    "minecraft:nether_wart_block",
-    "minecraft:warped_wart_block"
-  ]
+    "replace": false,
+    "values": [
+        "#minecraft:leaves",
+        "minecraft:nether_wart_block",
+        "minecraft:warped_wart_block",
+        {
+            "id": "#c:leaves",
+            "required": false
+        }
+    ]
 }

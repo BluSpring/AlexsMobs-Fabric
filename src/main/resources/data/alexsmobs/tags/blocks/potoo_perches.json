@@ -2,6 +2,14 @@
   "replace": false,
   "values": [
     "#minecraft:logs",
-    "#minecraft:leaves"
+    "#minecraft:leaves",
+        {
+            "id": "#c:leaves",
+            "required": false
+        },
+        {
+            "id": "#c:logs",
+            "required": false
+        }		
   ]
 }

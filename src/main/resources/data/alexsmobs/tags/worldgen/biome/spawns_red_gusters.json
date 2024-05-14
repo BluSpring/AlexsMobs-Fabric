@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "#minecraft:is_badlands",
-	"#c:badlands"
+	"#c:badlands",
+	"#c:mesa"
   ]
 }

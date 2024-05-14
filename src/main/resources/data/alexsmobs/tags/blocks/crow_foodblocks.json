@@ -1,6 +1,10 @@
 {
-  "replace": false,
-  "values": [
-    "#minecraft:crops"
-  ]
+    "replace": false,
+    "values": [
+        "#minecraft:crops",
+        {
+            "id": "#c:crops",
+            "required": false
+        }
+    ]
 }

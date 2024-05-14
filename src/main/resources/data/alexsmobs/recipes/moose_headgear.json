@@ -9,10 +9,10 @@
       "item": "alexsmobs:moose_antler"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:iron_ingots"
     },
     "S": {
-      "tag": "forge:string"
+      "tag": "c:string"
     }
   },
   "result": {

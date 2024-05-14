@@ -1,8 +1,12 @@
 {
-  "replace": false,
-  "values": [
-    "minecraft:glow_berries",
-    "#alexsmobs:insect_items",
-    "#c:seeds"
-  ]
+    "replace": false,
+    "values": [
+        "minecraft:glow_berries",
+        "#alexsmobs:insect_items",
+        "#c:seeds",
+        {
+            "id": "#c:berries",
+            "required": false
+        }
+    ]
 }

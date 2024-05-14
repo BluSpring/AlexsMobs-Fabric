@@ -1,10 +1,18 @@
 {
-  "replace": false,
-  "values": [
-    "minecraft:egg",
-    "minecraft:turtle_egg",
-    "alexsmobs:crocodile_egg",
-    "alexsmobs:terrapin_egg",
-    "minecraft:sugar"
-  ]
+    "replace": false,
+    "values": [
+        "minecraft:egg",
+        "minecraft:turtle_egg",
+        "alexsmobs:crocodile_egg",
+        "alexsmobs:terrapin_egg",
+        "minecraft:sugar",
+        {
+            "id": "#c:egg",
+            "required": false
+        },
+        {
+            "id": "#c:eggs",
+            "required": false
+        }
+    ]
 }

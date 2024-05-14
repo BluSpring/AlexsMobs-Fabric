@@ -1,7 +1,15 @@
 {
-  "replace": false,
-  "values": [
-    "#minecraft:leaves",
-    "minecraft:bamboo"
-  ]
+    "replace": false,
+    "values": [
+        "#minecraft:leaves",
+        "minecraft:bamboo",
+        {
+            "id": "#c:leaves",
+            "required": false
+        },
+        {
+            "id": "regions_unexplored:bamboo_log",
+            "required": false
+        }		
+    ]
 }

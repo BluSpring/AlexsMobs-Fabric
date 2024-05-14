@@ -13,7 +13,7 @@
       "item": "minecraft:end_stone"
     },
     "I": {
-      "tag": "forge:nuggets/iron"
+      "tag": "c:iron_nuggets"
     }
   },
   "result": {

@@ -1,6 +1,14 @@
 {
-  "replace": false,
-  "values": [
-    "#minecraft:fishes"
-  ]
+    "replace": false,
+    "values": [
+        "#minecraft:fishes",
+        {
+            "id": "#c:raw_fishes",
+            "required": false
+        },
+        {
+            "id": "#c:raw_fish",
+            "required": false
+        }
+    ]
 }

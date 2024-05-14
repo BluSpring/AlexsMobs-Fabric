@@ -171,7 +171,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:rocky_jungle", 4)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:tropical_jungle", 5)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:skylands_summer", 6)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 7);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 7)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "minecraft:bamboo_jungle", 7);
 
     public static final SpawnBiomeData CRIMSON_MOSQUITO = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:crimson_forest", 0)
@@ -686,7 +687,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:amethyst_rainforest", 6)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:skylands_spring", 7)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 8)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 8);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 8)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "regions_unexplored:bamboo_forest", 9);
 
     public static final SpawnBiomeData DESERT = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "forge:is_dry/overworld", 0)

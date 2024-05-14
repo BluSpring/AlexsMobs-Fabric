@@ -1,11 +1,23 @@
 {
-  "replace": false,
-  "values": [
-    "#minecraft:base_stone_overworld",
-    "#minecraft:dirt",
-    "#c:sand",
-    "#c:gravel",
-    "#minecraft:terracotta",
-    "minecraft:mud"
-  ]
+    "replace": false,
+    "values": [
+        "#minecraft:base_stone_overworld",
+        "#minecraft:dirt",
+        "#c:sand",
+        "#c:gravel",
+        "#minecraft:terracotta",
+        "minecraft:mud",
+        {
+            "id": "#c:dirt",
+            "required": false
+        },	
+        {
+            "id": "#c:dirts",
+            "required": false
+        },		
+        {
+            "id": "#c:mud",
+            "required": false
+        }
+    ]
 }
