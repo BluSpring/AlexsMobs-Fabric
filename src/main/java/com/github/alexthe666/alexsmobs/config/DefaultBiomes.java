@@ -171,7 +171,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:rocky_jungle", 4)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:tropical_jungle", 5)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:skylands_summer", 6)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 7);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 7)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "minecraft:bamboo_jungle", 7);
 
     public static final SpawnBiomeData CRIMSON_MOSQUITO = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:crimson_forest", 0)
