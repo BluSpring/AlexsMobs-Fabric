@@ -9,6 +9,10 @@
         {
             "id": "#c:fruits",
             "required": false
-        }
+        },
+        {
+            "id": "#c:berries",
+            "required": false
+        }		
     ]
 }
