@@ -13,7 +13,7 @@
       "item": "alexsmobs:cachalot_whale_tooth"
     },
     "P": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:iron_ingots"
     }
   },
   "result": {
