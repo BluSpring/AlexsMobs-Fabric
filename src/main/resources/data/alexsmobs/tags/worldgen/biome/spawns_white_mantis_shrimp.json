@@ -1,6 +1,10 @@
 {
   "replace": false,
   "values": [
-    "minecraft:mangrove_swamp"
+    "minecraft:mangrove_swamp",
+    {
+      "id": "byg:white_mangrove_marshes",
+      "required": false
+    }
   ]
 }
