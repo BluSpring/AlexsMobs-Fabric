@@ -595,7 +595,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 2)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_hot", 2)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:ocean", 2)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 2)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 3)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:shallow_ocean", 3)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 4)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:white_mangrove_marshes", 4);
