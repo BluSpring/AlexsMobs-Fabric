@@ -1,13 +1,14 @@
 {
   "schemaVersion": 1,
   "id": "alexsmobs",
-  "version": "1.22.2",
+  "version": "1.22.3",
   "name": "Alex's Mobs",
-  "description": "Generate cities all over the world",
+  "description": "A port of Alex's Mobs to Fabric 1.19.2",
   "authors": [
     "BluSpring",
     "Alexthe668",
-    "Carro1001"
+    "Carro1001",
+    "Sunconure11"
   ],
   "contact": {},
   "license": "MIT",
