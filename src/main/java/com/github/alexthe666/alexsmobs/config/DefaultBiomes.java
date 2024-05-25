@@ -1091,8 +1091,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:flower_forests", 14)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 15)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:swamp", 15)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 12)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "regions_unexplored:bamboo_forest", 12);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 16)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "regions_unexplored:bamboo_forest", 16);
 
     public static final SpawnBiomeData DESERT = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
