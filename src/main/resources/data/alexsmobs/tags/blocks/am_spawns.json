@@ -4,17 +4,17 @@
         "#minecraft:base_stone_overworld",
         "#minecraft:dirt",
         "#minecraft:terracotta",
-		"#minecraft:animals_spawnable_on",
+        "#minecraft:animals_spawnable_on",
         "minecraft:mud",
         "minecraft:grass_block",
         {
             "id": "#c:dirt",
             "required": false
-        },	
+        },
         {
             "id": "#c:dirts",
             "required": false
-        },		
+        },
         {
             "id": "#c:mud",
             "required": false
