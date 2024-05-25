@@ -296,7 +296,9 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:plains", 7)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:savanna", 7)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "minecraft:bamboo_jungle", 8)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "regions_unexplored:bamboo_forest", 8);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "regions_unexplored:bamboo_forest", 8)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 9)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 9);
 
     public static final SpawnBiomeData CRIMSON_MOSQUITO = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:crimson_forest", 0)
