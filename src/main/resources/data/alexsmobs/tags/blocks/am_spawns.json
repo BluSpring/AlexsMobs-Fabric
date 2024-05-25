@@ -7,6 +7,7 @@
         "#c:gravel",
         "#minecraft:terracotta",
         "minecraft:mud",
+        "minecraft:grass_block",
         {
             "id": "#c:dirt",
             "required": false
@@ -17,6 +18,14 @@
         },		
         {
             "id": "#c:mud",
+            "required": false
+        },
+        {
+            "id": "#c:grass",
+            "required": false
+        },
+        {
+            "id": "#c:grass_variants",
             "required": false
         }
     ]
