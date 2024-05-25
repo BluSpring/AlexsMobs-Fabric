@@ -812,7 +812,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 4)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:swamp", 4)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 5)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:white_mangrove_marshes", 5);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "byg:white_mangrove_marshes", 5);
 
     public static final SpawnBiomeData MUNGUS = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
@@ -837,7 +837,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 4)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:white_mangrove_marshes", 4)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 5)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:warm_ocean", 5);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:warm_ocean", 5);
 
     public static final SpawnBiomeData GUSTER = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
@@ -1558,5 +1558,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 10)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "autumnity:maple_forest", 10)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 11)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:taiga", 11);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:taiga", 11)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 12)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:taiga", 12)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:vegetation_dense", 12);
 }
