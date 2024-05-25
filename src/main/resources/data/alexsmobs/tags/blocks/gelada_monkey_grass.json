@@ -2,7 +2,6 @@
     "replace": false,
     "values": [
         "minecraft:grass",
-        "minecraft:grass_blocks",
         "minecraft:tall_grass",
         "minecraft:dead_bush",
         "minecraft:fern",

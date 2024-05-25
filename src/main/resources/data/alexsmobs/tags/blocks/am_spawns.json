@@ -3,8 +3,6 @@
     "values": [
         "#minecraft:base_stone_overworld",
         "#minecraft:dirt",
-        "#c:sand",
-        "#c:gravel",
         "#minecraft:terracotta",
 		"#minecraft:animals_spawnable_on",
         "minecraft:mud",
@@ -27,6 +25,14 @@
         },
         {
             "id": "#c:grass_variants",
+            "required": false
+        },
+        {
+            "id": "#c:sand",
+            "required": false
+        },
+        {
+            "id": "#c:gravel",
             "required": false
         }
     ]
