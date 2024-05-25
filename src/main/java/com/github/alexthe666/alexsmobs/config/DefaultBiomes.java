@@ -438,7 +438,10 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:white_mangrove_marshes", 11)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 12)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 12)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "regions_unexplored:bamboo_forest", 12);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "regions_unexplored:bamboo_forest", 12)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 12)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_cold", 13)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_dry", 13);
 
     public static final SpawnBiomeData CAVES = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
@@ -647,6 +650,8 @@ public class DefaultBiomes {
     public static final SpawnBiomeData SHOEBILL = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "forge:is_swamp", 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_cold", 0)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_dry", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "minecraft:mangrove_swamp", 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 2)
@@ -655,11 +660,14 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:red_oasis", 3)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 4)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:swamp", 4)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_cold", 4)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_dry", 4)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 5)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "byg:white_mangrove_marshes", 5)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 6)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:river", 6)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_cold", 6);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_cold", 6)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_dry", 6);
 
     public static final SpawnBiomeData ELEPHANT = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
