@@ -2,7 +2,6 @@ package com.github.alexthe666.alexsmobs.config;
 
 import com.github.alexthe666.citadel.config.biome.BiomeEntryType;
 import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 
 public class DefaultBiomes {
 
@@ -68,7 +67,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:flower_forests", 27);
 
     public static final SpawnBiomeData ROADRUNNER = new SpawnBiomeData()
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 1)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_badlands", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "forge:is_dry/overworld", 1)
@@ -139,12 +138,12 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:red_oasis", 5)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:warm_river", 6)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 7)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:river", 7)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:swamp", 7)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_cold", 7)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 8)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:river", 8)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:swamp", 8)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_cold", 8)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 9)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:white_mangrove_marshes", 9);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:white_mangrove_marshes", 8);
 
     public static final SpawnBiomeData FLY = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "minecraft:is_end", 0)
