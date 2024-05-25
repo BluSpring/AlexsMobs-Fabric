@@ -678,7 +678,9 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 13)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:desert", 13)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 14)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "regions_unexplored:bamboo_forest", 14);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "regions_unexplored:bamboo_forest", 14)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 15)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "c:plains", 15);
 
     public static final SpawnBiomeData SOUL_VULTURE = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:soul_sand_valley", 0)
