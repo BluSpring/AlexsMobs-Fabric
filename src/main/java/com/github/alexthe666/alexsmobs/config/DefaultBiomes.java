@@ -292,8 +292,9 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:skylands_summer", 6)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 7)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 7)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:forest", 7)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:flower_forests", 7)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:forest", 7)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:plains", 7)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:savanna", 7)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "minecraft:bamboo_jungle", 8)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "regions_unexplored:bamboo_forest", 8);
 
