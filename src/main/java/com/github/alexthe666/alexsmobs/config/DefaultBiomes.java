@@ -650,7 +650,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "byg:white_mangrove_marshes", 5)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 6)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:river", 6)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_cold", 6);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_cold", 6);
 
     public static final SpawnBiomeData ELEPHANT = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
