@@ -293,8 +293,9 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 7)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:jungle", 7)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:forest", 7)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "minecraft:bamboo_jungle", 7)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "regions_unexplored:bamboo_forest", 7);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:flower_forest", 7)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "minecraft:bamboo_jungle", 8)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "regions_unexplored:bamboo_forest", 8);
 
     public static final SpawnBiomeData CRIMSON_MOSQUITO = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:crimson_forest", 0)
@@ -654,6 +655,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 7)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:red_oasis", 7)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 8)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "minecraft:bamboo_jungle", 8)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 9)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:savanna", 9)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 10)
@@ -661,7 +663,11 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 11)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:forest", 11)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 12)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:desert", 12);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:desert", 12)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 13)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:desert", 13)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 14)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "regions_unexplored:bamboo_forest", 14);
 
     public static final SpawnBiomeData SOUL_VULTURE = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:soul_sand_valley", 0)
@@ -1084,7 +1090,9 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 14)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:flower_forests", 14)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 15)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:swamp", 15);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:swamp", 15)
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 12)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "regions_unexplored:bamboo_forest", 12);
 
     public static final SpawnBiomeData DESERT = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
