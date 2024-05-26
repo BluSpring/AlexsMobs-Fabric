@@ -2,7 +2,6 @@ package com.github.alexthe666.alexsmobs.config;
 
 import com.github.alexthe666.citadel.config.biome.BiomeEntryType;
 import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 
 public class DefaultBiomes {
 
@@ -284,7 +283,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "incendium:quartz_flats", 4)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:in_nether", 5)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:nether_forests", 6);
-        
+
     public static final SpawnBiomeData MOOSE = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "forge:is_snowy", 0)
@@ -398,15 +397,11 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "forge:is_swamp", 0)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "minecraft:mangrove_swamp", 0)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "byg:white_mangrove_marsh", 0)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:orchid_swamp", 1)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:red_oasis", 2)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 3)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:swamp", 3);
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:red_oasis", 3)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 4)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:swamp", 4)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 5)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:white_mangrove_marshes", 5);
 
     public static final SpawnBiomeData ELEPHANT = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
@@ -521,7 +516,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:mangrove_swamp", 1)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_hot", 2)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:ocean", 2)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:ocean", 3);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:ocean", 3)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:white_mangrove_marsh", 4);
 
     public static final SpawnBiomeData GUSTER = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "forge:is_hot/overworld", 0)
@@ -710,7 +706,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:climate_dry", 7)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:badlands", 7)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:desert", 8);
-    
+
     public static final SpawnBiomeData MIMIC_OCTOPUS = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "forge:is_hot/overworld", 0)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_ocean", 0)
@@ -845,7 +841,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "terralith:valley_clearing", 5)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 6)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:plains", 6);
-        
+
     public static final SpawnBiomeData COMB_JELLY = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:frozen_ocean", 0)
             .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "minecraft:deep_frozen_ocean", 1)
