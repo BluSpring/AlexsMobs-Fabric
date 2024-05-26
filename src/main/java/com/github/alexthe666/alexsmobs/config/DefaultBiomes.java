@@ -749,7 +749,8 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_temperate", 9)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:plains", 10)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:savanna", 11)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_cold", 12);
+            .addBiomeEntry(BiomeEntryType.BIOME_TAG, true, "c:climate_cold", 12)
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "traverse:flatlands", 13);
 
     public static final SpawnBiomeData MANED_WOLF = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_savanna", 0)
