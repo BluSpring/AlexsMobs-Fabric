@@ -4,10 +4,10 @@ license="GNU LESSER GENERAL PUBLIC LICENSE"
 issueTrackerURL="https://github.com/Alex-the-666/AlexsMobs/issues" #optional
 [[mods]] #mandatory
 modId="alexsmobs" #mandatory
-version="1.22.2" #mandatory
+version="1.22.3 #mandatory
 displayName="Alex's Mobs" #mandatory
 displayURL="https://www.curseforge.com/minecraft/mc-mods/alexs-mobs" #optional
-authors="Alexthe668, Carro1001" #optional
+authors="Alexthe668, Carro1001, BluSpring, Sunconure11" #optional
 description='''New, original, engaging, and aesthetic mobs for Minecraft.'''
 [[dependencies.alexsmobs]] #optional
     # the modid of the dependency
