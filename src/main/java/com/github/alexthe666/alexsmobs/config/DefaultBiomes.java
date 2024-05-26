@@ -406,9 +406,7 @@ public class DefaultBiomes {
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 4)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:swamp", 4)
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 5)
-            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, true, "byg:white_mangrove_marshes", 5)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 6)
-            .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "c:river", 6);
+            .addBiomeEntry(BiomeEntryType.REGISTRY_NAME, false, "byg:white_mangrove_marshes", 5);
 
     public static final SpawnBiomeData ELEPHANT = new SpawnBiomeData()
             .addBiomeEntry(BiomeEntryType.BIOME_TAG, false, "minecraft:is_overworld", 0)
