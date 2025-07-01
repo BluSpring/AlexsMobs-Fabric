@@ -104,6 +104,7 @@ public class AlexsMobs implements ModInitializer {
 
         AMRecipeRegistry.init();
         AMTileEntityRegistry.DEF_REG.register();
+        AMTileEntityRegistry.register();
         AMPointOfInterestRegistry.DEF_REG.register();
         AMFeatureRegistry.DEF_REG.register();
         AMFeatureRegistry.AMConfiguredFeatureRegistry.DEF_REG.register();

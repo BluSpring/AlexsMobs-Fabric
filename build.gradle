@@ -117,7 +117,6 @@ dependencies {
 
     include(modImplementation("io.github.fabricators_of_create.Porting-Lib:porting-lib:2.1.875+1.19.2"))
     include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:2.3.0")
-    include(modImplementation('com.github.KiltMC:ForgeCapabilities:54b0bd031c'))
     include(modImplementation('com.github.KiltMC:ForgeBiomeModifiers:834a616002'))
     include(modImplementation("com.github.KiltMC:EnumExtension:74f3690f92"))
 

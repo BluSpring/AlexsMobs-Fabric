@@ -16,8 +16,13 @@ import io.github.fabricators_of_create.porting_lib.transfer.item.SlotExposedStor
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.base.SingleItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -42,14 +47,13 @@ import net.minecraft.world.level.block.EndRodBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import xyz.bluspring.forgecapabilities.capabilities.Capability;
-import xyz.bluspring.forgecapabilities.capabilities.ForgeCapabilities;
-import xyz.bluspring.forgecapabilities.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
-public class TileEntityCapsid extends BaseContainerBlockEntity implements WorldlyContainer, CustomDataPacketHandlingBlockEntity, ICapabilityProvider {
+public class TileEntityCapsid extends BaseContainerBlockEntity implements WorldlyContainer, CustomDataPacketHandlingBlockEntity {
     private static final int[] slotsTop = new int[]{0};
     public int ticksExisted;
     public float prevFloatUpProgress;
@@ -57,8 +61,7 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
     public float prevYawSwitchProgress;
     public float yawSwitchProgress;
     public boolean vibratingThisTick = false;
-    LazyOptional<? extends SlotExposedStorage>[] handlers =
-            SidedInvWrapper.create(this, Direction.UP, Direction.DOWN);
+    private final CapsidTransferWrapper transferWrapper = new CapsidTransferWrapper();
     private float yawTarget = 0;
     private int transformTime = 0;
     private boolean fnaf = false;
@@ -73,6 +76,14 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
         entity.tick();
     }
 
+    public Storage<ItemVariant> getSidedStorage(Direction direction) {
+        if (direction == Direction.UP || direction == Direction.DOWN) {
+            return transferWrapper;
+        }
+
+        return null;
+    }
+
     public void tick() {
         prevFloatUpProgress = floatUpProgress;
         prevYawSwitchProgress = yawSwitchProgress;
@@ -82,13 +93,17 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
             BlockEntity up = level.getBlockEntity(this.worldPosition.above());
             if (up instanceof Container) {
                 if (floatUpProgress >= 1) {
-                    LazyOptional<SlotExposedStorage> handler = level.getBlockEntity(this.worldPosition.above()).getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP);
-                    var type = handler.orElse(null);
-
-                    if (type instanceof ForgeItemHandler itemHandler) {
-                        if (ForgeItemHandlerHelper.insertItem(itemHandler, this.getItem(0), true).isEmpty()) {
-                            ForgeItemHandlerHelper.insertItem(itemHandler, this.getItem(0).copy(), false);
-                            this.setItem(0, ItemStack.EMPTY);
+                    var handler = ItemStorage.SIDED.find(level, this.worldPosition.above(), Direction.UP);
+                    if (handler != null) {
+                        try (Transaction transaction = Transaction.openOuter()) {
+                            var stack = this.getItem(0);
+                            var originalCount = stack.getCount();
+                            var inserted = handler.simulateInsert(ItemVariant.of(stack), originalCount, transaction);
+                            if (inserted >= originalCount) {
+                                handler.insert(ItemVariant.of(stack), originalCount, transaction);
+                                transaction.commit();
+                                this.setItem(0, ItemStack.EMPTY);
+                            }
                         }
                     }
                     yawTarget = 0F;
@@ -337,14 +352,86 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
         return 0.0F;
     }
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (!this.remove && facing != null && capability == ForgeCapabilities.ITEM_HANDLER) {
-            if (facing == Direction.DOWN)
-                return handlers[0].cast();
-            else
-                return handlers[1].cast();
+    private class CapsidTransferWrapper implements Storage<ItemVariant> {
+        @Override
+        public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            var snapshot = new ForgeItemHandler.ItemSnapshot((int) maxAmount, value -> {
+                var currentStack = TileEntityCapsid.this.getItem(0);
+                if (resource.matches(currentStack)) {
+                    currentStack.setCount(currentStack.getCount() + value);
+                    TileEntityCapsid.this.setItem(0, currentStack);
+                } else {
+                    TileEntityCapsid.this.setItem(0, resource.toStack(value));
+                }
+            });
+            snapshot.updateSnapshots(transaction);
+
+            var item = TileEntityCapsid.this.getItem(0);
+            if (item.isEmpty()) {
+                var total = (int) Math.min(64L, maxAmount);
+                snapshot.setCurrent(total);
+                snapshot.updateSnapshots(transaction);
+                return total;
+            } else if (resource.matches(item)) {
+                var count = item.getCount();
+                var capacity = item.getMaxStackSize();
+                var total = (int) Math.min(capacity - count, maxAmount);
+                snapshot.setCurrent(total);
+                snapshot.updateSnapshots(transaction);
+
+                return total;
+            }
+
+            return 0;
         }
-        return super.getCapability(capability, facing);
+
+        @Override
+        public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+            var snapshot = new ForgeItemHandler.ItemSnapshot(0, value -> TileEntityCapsid.this.setItem(0, ItemStack.EMPTY));
+            snapshot.updateSnapshots(transaction);
+
+            var item = TileEntityCapsid.this.getItem(0);
+
+            if (item.isEmpty() || resource.matches(item)) {
+                if (maxAmount >= item.getCount()) {
+                    return Math.min(maxAmount, item.getCount());
+                }
+            }
+
+            return 0;
+        }
+
+        @Override
+        public Iterator<StorageView<ItemVariant>> iterator() {
+            var list = new ArrayList<StorageView<ItemVariant>>();
+            for (ItemStack stack : TileEntityCapsid.this.stacks) {
+                list.add(new SingleItemStorage() {
+                    @Override
+                    public long getCapacity() {
+                        return 64;
+                    }
+
+                    @Override
+                    protected long getCapacity(ItemVariant variant) {
+                        if (variant.isBlank())
+                            return 64;
+
+                        return variant.getItem().getMaxStackSize();
+                    }
+
+                    @Override
+                    public ItemVariant getResource() {
+                        return ItemVariant.of(stack);
+                    }
+
+                    @Override
+                    public long getAmount() {
+                        return stack.getCount();
+                    }
+                });
+            }
+
+            return list.iterator();
+        }
     }
 }

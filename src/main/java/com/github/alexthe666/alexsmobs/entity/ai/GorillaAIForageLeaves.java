@@ -1,6 +1,7 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
 import com.github.alexthe666.alexsmobs.entity.EntityGorilla;
+import com.github.alexthe666.alexsmobs.fabric.ForgeEventFactory;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -80,7 +81,7 @@ public class GorillaAIForageLeaves extends MoveToBlockGoal {
     }
 
     private void breakLeaves() {
-        if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(gorilla.level, gorilla)) {
+        if (ForgeEventFactory.getMobGriefingEvent(gorilla.level, gorilla)) {
             BlockState blockstate = gorilla.level.getBlockState(this.blockPos);
             if (blockstate.is(AMTagRegistry.GORILLA_BREAKABLES)) {
                 gorilla.level.destroyBlock(blockPos, false);

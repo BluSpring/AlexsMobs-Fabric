@@ -1,4 +1,4 @@
-package net.minecraftforge.event;
+package com.github.alexthe666.alexsmobs.fabric;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameRules;

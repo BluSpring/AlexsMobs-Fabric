@@ -14,9 +14,4 @@ public abstract class ShulkerBoxBlockEntityMixin extends BaseContainerBlockEntit
     public ShulkerBoxBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
     }
-
-    @Override
-    protected SlotExposedStorage createUnSidedHandler() {
-        return new SidedInvWrapper((ShulkerBoxBlockEntity) (Object) this, Direction.UP);
-    }
 }

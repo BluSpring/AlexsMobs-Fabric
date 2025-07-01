@@ -13,9 +13,4 @@ public abstract class HopperBlockEntityMixin extends BaseContainerBlockEntityMix
     public HopperBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
     }
-
-    @Override
-    protected SlotExposedStorage createUnSidedHandler() {
-        return new VanillaHopperItemHandler((HopperBlockEntity) (Object) this);
-    }
 }
