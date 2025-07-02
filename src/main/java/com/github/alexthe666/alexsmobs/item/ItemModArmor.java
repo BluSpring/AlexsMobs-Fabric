@@ -39,7 +39,7 @@ public class ItemModArmor extends ArmorItem implements ItemRenderExtension, Armo
     }
 
     @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
+    public void citadel$initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
         consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getArmorRenderProperties());
     }
 

@@ -1,11 +1,12 @@
 plugins {
     id 'java'
-    id 'fabric-loom' version '1.3-SNAPSHOT'
+    id 'fabric-loom' version '1.10-SNAPSHOT'
     id 'maven-publish'
 }
 
 
 repositories{
+    mavenLocal()
     maven {
         name = "CurseForge"
         url = "https://minecraft.curseforge.com/api/maven/"
@@ -130,7 +131,7 @@ dependencies {
 
     modApi "dev.architectury:architectury-fabric:6.5.85"
 
-    include(modApi("com.github.BluSpring:Citadel-Fabric:9ea656c024")) {
+    include(modApi("com.tfar.citadel:Citadel:2.1.6-1.19")) {
         exclude group: "com.github.KiltMC"
     }
     modImplementation("curse.maven:jei-238222:4494409")
