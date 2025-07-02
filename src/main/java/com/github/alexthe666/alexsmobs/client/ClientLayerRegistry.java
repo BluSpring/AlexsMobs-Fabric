@@ -42,7 +42,11 @@ public class ClientLayerRegistry {
             addLayerIfApplicable(entityType, renderers);
         }));
         for (String skinType : skinMap.keySet()){
-            ((LivingEntityRendererAccessor) skinMap.get(skinType)).callAddLayer(new LayerRainbow((RenderLayerParent) skinMap.get(skinType)));
+            var renderer = skinMap.get(skinType);
+
+            if (renderer instanceof LivingEntityRenderer<?,?>) {
+                ((LivingEntityRendererAccessor) renderer).callAddLayer(new LayerRainbow((RenderLayerParent) skinMap.get(skinType)));
+            }
         }
     }
 
@@ -54,7 +58,7 @@ public class ClientLayerRegistry {
             }catch (Exception e){
                 AlexsMobs.LOGGER.warn("Could not apply rainbow color layer to " + Registry.ENTITY_TYPE.getKey(entityType) + ", has custom renderer that is not LivingEntityRenderer.");
             }
-            if(renderer != null){
+            if(renderer != null && renderer instanceof LivingEntityRenderer<?,?>){
                 ((LivingEntityRendererAccessor) renderer).callAddLayer(new LayerRainbow((RenderLayerParent) renderer));
             }
         }
