@@ -5,7 +5,7 @@ import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
-import com.github.alexthe666.alexsmobs.message.MessageStartDancing;
+import com.github.alexthe666.alexsmobs.message.MessageSetDancing;
 import com.github.alexthe666.alexsmobs.misc.AMPointOfInterestRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
@@ -46,8 +46,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.api.distmarker.Dist;
+import net.neoforged.neoforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -344,7 +344,7 @@ public class EntityManedWolf extends Animal implements ITargetsDroppedItems, IDa
 
     @OnlyIn(Dist.CLIENT)
     public void setRecordPlayingNearby(BlockPos pos, boolean isPartying) {
-        AlexsMobs.sendMSGToServer(new MessageStartDancing(this.getId(), isPartying, pos));
+        AlexsMobs.sendMSGToServer(new MessageSetDancing(this.getId(), isPartying, pos));
         this.setDancing(isPartying);
         if (isPartying) {
             this.setJukeboxPos(pos);

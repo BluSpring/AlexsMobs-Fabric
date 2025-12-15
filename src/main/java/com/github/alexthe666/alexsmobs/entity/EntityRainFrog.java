@@ -4,7 +4,7 @@ import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
 import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
-import com.github.alexthe666.alexsmobs.message.MessageStartDancing;
+import com.github.alexthe666.alexsmobs.message.MessageSetDancing;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import net.minecraft.core.BlockPos;
@@ -368,7 +368,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
     }
 
     public void setRecordPlayingNearby(BlockPos pos, boolean isPartying) {
-        AlexsMobs.sendMSGToServer(new MessageStartDancing(this.getId(), isPartying, pos));
+        AlexsMobs.sendMSGToServer(new MessageSetDancing(this.getId(), isPartying, pos));
         if (isPartying) {
             this.setJukeboxPos(pos);
         } else {

@@ -3,20 +3,23 @@ package com.github.alexthe666.alexsmobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.misc.CapsidRecipeManager;
 import com.github.alexthe666.citadel.server.entity.pathfinding.raycoms.PathfindingConstants;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 
 import static com.github.alexthe666.alexsmobs.AlexsMobs.MODID;
 
-@Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = MODID)
 public class CommonProxy {
 
-    private CapsidRecipeManager capsidRecipeManager;
+    protected CapsidRecipeManager capsidRecipeManager;
 
-    public void init() {
+    public void init(IEventBus bus) {
     }
 
     public void clientInit() {
@@ -76,10 +79,16 @@ public class CommonProxy {
     public void setPupfishChunkForItem(int chunkX, int chunkZ) {
     }
 
+    public CapsidRecipeManager initCapsidRecipeManager(RegistryAccess registryAccess) {
+        capsidRecipeManager = new CapsidRecipeManager(registryAccess);
+        return capsidRecipeManager;
+    }
+
     public CapsidRecipeManager getCapsidRecipeManager(){
         if(capsidRecipeManager == null){
-            capsidRecipeManager = new CapsidRecipeManager();
+            throw new IllegalStateException("Capsid recipe manager loaded too early!");
         }
+
         return capsidRecipeManager;
     }
 

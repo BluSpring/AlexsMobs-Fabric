@@ -2,6 +2,9 @@ package com.github.alexthe666.alexsmobs.misc;
 
 import com.github.alexthe666.citadel.client.model.container.JsonUtils;
 import com.google.gson.*;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.NonNullList;
@@ -12,26 +15,29 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import java.lang.reflect.Type;
 
 public class CapsidRecipe {
+    public static final Codec<CapsidRecipe> CODEC = RecordCodecBuilder.create(instance ->
+        instance.group(
+            NonNullList.codecOf(Ingredient.CODEC)
+                .fieldOf("ingredients")
+                .forGetter(recipe -> recipe.ingredients),
+            ItemStack.OPTIONAL_CODEC
+                .optionalFieldOf("result", ItemStack.EMPTY)
+                .forGetter(recipe -> recipe.result),
+            Codec.INT
+                .fieldOf("time")
+                .forGetter(recipe -> recipe.time)
+        )
+            .apply(instance, CapsidRecipe::new)
+    );
+
     private final NonNullList<Ingredient> ingredients;
-    private ItemStack result = ItemStack.EMPTY;
-    private int time = 0;
+    private final ItemStack result;
+    private final int time;
 
     public CapsidRecipe(NonNullList<Ingredient> ingredients, ItemStack result, int time) {
         this.result = result;
         this.ingredients = ingredients;
         this.time = time;
-    }
-
-    private static NonNullList<Ingredient> readIngredients(JsonArray ingredientArray) {
-        NonNullList<Ingredient> nonnulllist = NonNullList.create();
-
-        for (int i = 0; i < ingredientArray.size(); ++i) {
-            Ingredient ingredient = Ingredient.fromJson(ingredientArray.get(i));
-            if (!ingredient.isEmpty()) {
-                nonnulllist.add(ingredient);
-            }
-        }
-        return nonnulllist;
     }
 
     public ItemStack getResult() {
@@ -51,29 +57,13 @@ public class CapsidRecipe {
         ItemStack[] copy = new ItemStack[stacks.length];
         for (int j = 0; j < copy.length; j++) {
             copy[j] = stacks[j].copy();
-            for (int i = 0; i < ingredients.size(); i++) {
-                if (ingredients.get(i).test(copy[j])) {
+            for (Ingredient ingredient : ingredients) {
+                if (ingredient.test(copy[j])) {
                     taken.add(j);
                     copy[j].shrink(1);
                 }
             }
         }
         return taken.size() >= ingredients.size();
-    }
-
-    public static class Deserializer implements JsonDeserializer<CapsidRecipe> {
-
-        @Override
-        public CapsidRecipe deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonobject = json.getAsJsonObject();
-            int time = JsonUtils.getInt(jsonobject, "time");
-            ItemStack result = ItemStack.EMPTY;
-            if (jsonobject.has("result")) {
-                result = ShapedRecipe.itemStackFromJson(JsonUtils.getJsonObject(jsonobject, "result"));
-            }
-            NonNullList<Ingredient> nonnulllist = readIngredients(JsonUtils.getJsonArray(jsonobject, "ingredients"));
-            return new CapsidRecipe(nonnulllist, result, time);
-        }
-
     }
 }

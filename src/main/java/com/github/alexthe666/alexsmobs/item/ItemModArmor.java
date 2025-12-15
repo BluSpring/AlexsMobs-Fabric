@@ -4,19 +4,16 @@ import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.ForgeMod;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -29,8 +26,8 @@ public class ItemModArmor extends ArmorItem {
     private Multimap<Attribute, AttributeModifier> attributeMapFlyingFish;
     private Multimap<Attribute, AttributeModifier> attributeMapKimono;
 
-    public ItemModArmor(AMArmorMaterial armorMaterial, ArmorItem.Type slot) {
-        super(armorMaterial, slot, new Item.Properties());
+    public ItemModArmor(Holder<ArmorMaterial> armorMaterial, ArmorItem.Type slot, int durabilityFactor) {
+        super(armorMaterial, slot, new Item.Properties().durability(slot.getDurability(durabilityFactor)));
     }
 
     @Override

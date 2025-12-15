@@ -2,9 +2,9 @@ package com.github.alexthe666.alexsmobs.misc;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import net.minecraft.world.entity.decoration.PaintingVariant;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.RegistryObject;
 
 public class AMPaintingRegistry {
     public static final DeferredRegister<PaintingVariant> DEF_REG = DeferredRegister.create(ForgeRegistries.PAINTING_VARIANTS, AlexsMobs.MODID);

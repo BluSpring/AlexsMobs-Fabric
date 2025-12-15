@@ -3,59 +3,53 @@ package com.github.alexthe666.alexsmobs.message;
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityKangaroo;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.function.Supplier;
 
-public class MessageKangarooInventorySync {
+public record MessageKangarooInventorySync(
+    int kangaroo, int slotId,
+    ItemStack stack
+) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<MessageKangarooInventorySync> TYPE = new CustomPacketPayload.Type<>(AlexsMobs.id("kangaroo_inventory_sync"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, MessageKangarooInventorySync> STREAM_CODEC = StreamCodec.composite(
+        ByteBufCodecs.VAR_INT, MessageKangarooInventorySync::kangaroo,
+        ByteBufCodecs.VAR_INT, MessageKangarooInventorySync::slotId,
+        ItemStack.OPTIONAL_STREAM_CODEC, MessageKangarooInventorySync::stack,
+        MessageKangarooInventorySync::new
+    );
 
-    public int kangaroo;
-    public int slotId;
-    public ItemStack stack;
-
-    public MessageKangarooInventorySync(int kangaroo, int slotId, ItemStack stack) {
-        this.kangaroo = kangaroo;
-        this.slotId = slotId;
-        this.stack = stack;
-    }
-
-    public MessageKangarooInventorySync() {
-    }
-
-    public static MessageKangarooInventorySync read(FriendlyByteBuf buf) {
-        return new MessageKangarooInventorySync(buf.readInt(), buf.readInt(), buf.readItem());
-    }
-
-    public static void write(MessageKangarooInventorySync message, FriendlyByteBuf buf) {
-        buf.writeInt(message.kangaroo);
-        buf.writeInt(message.slotId);
-        buf.writeItem(message.stack);
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
     public static class Handler {
         public Handler() {
         }
 
-        public static void handle(MessageKangarooInventorySync message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            context.get().enqueueWork(() -> {
-                Player player = context.get().getSender();
-                if (context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT) {
-                    player = AlexsMobs.PROXY.getClientSidePlayer();
-                }
+        public static void handle(MessageKangarooInventorySync message, IPayloadContext context) {
+            context.enqueueWork(() -> {
+                Player player = context.player();
+                
 
                 if (player != null) {
                     if (player.level() != null) {
                         Entity entity = player.level().getEntity(message.kangaroo);
-                        if (entity instanceof EntityKangaroo && ((EntityKangaroo) entity).kangarooInventory != null) {
+                        if (entity instanceof EntityKangaroo kangaroo && kangaroo.kangarooInventory != null) {
                             if (message.slotId < 0) {
 
                             } else {
-                                ((EntityKangaroo) entity).kangarooInventory.setItem(message.slotId, message.stack);
+                                kangaroo.kangarooInventory.setItem(message.slotId, message.stack);
                             }
                         }
                     }

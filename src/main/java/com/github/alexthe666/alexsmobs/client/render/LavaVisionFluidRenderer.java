@@ -47,8 +47,8 @@ public class LavaVisionFluidRenderer extends LiquidBlockRenderer {
     public void tesselate(BlockAndTintGetter lightReaderIn, BlockPos posIn, VertexConsumer vertexBuilderIn, BlockState blockstateIn, FluidState fluidStateIn) {
         try {
             if (fluidStateIn.is(FluidTags.LAVA)) {
-                TextureAtlasSprite[] atextureatlassprite = net.minecraftforge.client.ForgeHooksClient.getFluidSprites(lightReaderIn, posIn, fluidStateIn);
-                final int i = net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions.of(fluidStateIn).getTintColor(fluidStateIn, lightReaderIn, posIn);
+                TextureAtlasSprite[] atextureatlassprite = net.neoforged.neoforge.client.ForgeHooksClient.getFluidSprites(lightReaderIn, posIn, fluidStateIn);
+                final int i = net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions.of(fluidStateIn).getTintColor(fluidStateIn, lightReaderIn, posIn);
                 final float alpha = (float) AMConfig.lavaOpacity;
                 final float f = (float)(i >> 16 & 255) / 255.0F;
                 final float f1 = (float)(i >> 8 & 255) / 255.0F;

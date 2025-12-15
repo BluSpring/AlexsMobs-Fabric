@@ -313,7 +313,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         final boolean flag = blockstate.isAir();
         if (flag && !blockstate.getFluidState().is(FluidTags.WATER)) {
             this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
-            net.minecraftforge.event.entity.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, x, y, z);
+            net.neoforged.neoforge.event.entity.EntityTeleportEvent.EnderEntity event = net.neoforged.neoforge.event.ForgeEventFactory.onEnderTeleport(this, x, y, z);
             if (event.isCanceled()) return false;
             level().broadcastEntityEvent(this, (byte) 46);
             this.teleportTo(event.getTargetX(), event.getTargetY(), event.getTargetZ());

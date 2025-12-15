@@ -53,8 +53,8 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.api.distmarker.Dist;
+import net.neoforged.neoforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -396,7 +396,7 @@ public class EntityVoidWorm extends Monster {
             DamageSource source = this.getLastDamageSource() == null ? damageSources().generic() : this.getLastDamageSource();
             Entity entity = source.getEntity();
 
-            final int i = net.minecraftforge.common.ForgeHooks.getLootingLevel(this, entity, source);
+            final int i = net.neoforged.neoforge.common.ForgeHooks.getLootingLevel(this, entity, source);
             this.captureDrops(new java.util.ArrayList<>());
 
             final boolean flag = this.lastHurtByPlayerTime > 0;
@@ -409,7 +409,7 @@ public class EntityVoidWorm extends Monster {
 
             Collection<ItemEntity> drops = captureDrops(null);
 
-            if (!net.minecraftforge.common.ForgeHooks.onLivingDrops(this, source, drops, i, lastHurtByPlayerTime > 0)){
+            if (!net.neoforged.neoforge.common.ForgeHooks.onLivingDrops(this, source, drops, i, lastHurtByPlayerTime > 0)){
                 if(!drops.isEmpty()){
                     this.placeDropsSafely(drops);
                 }
@@ -645,7 +645,7 @@ public class EntityVoidWorm extends Monster {
             return;
         }
         boolean flag = false;
-        if (!this.level().isClientSide && this.blockBreakCounter == 0 && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(level(), this)) {
+        if (!this.level().isClientSide && this.blockBreakCounter == 0 && net.neoforged.neoforge.event.ForgeEventFactory.getMobGriefingEvent(level(), this)) {
             for (int a = (int) Math.round(this.getBoundingBox().minX); a <= (int) Math.round(this.getBoundingBox().maxX); a++) {
                 for (int b = (int) Math.round(this.getBoundingBox().minY) - 1; (b <= (int) Math.round(this.getBoundingBox().maxY) + 1) && (b <= 127); b++) {
                     for (int c = (int) Math.round(this.getBoundingBox().minZ); c <= (int) Math.round(this.getBoundingBox().maxZ); c++) {

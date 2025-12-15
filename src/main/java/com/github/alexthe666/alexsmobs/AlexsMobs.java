@@ -20,28 +20,34 @@ import com.github.alexthe666.alexsmobs.world.AMLeafcutterAntBiomeModifier;
 import com.github.alexthe666.alexsmobs.world.AMMobSpawnBiomeModifier;
 import com.github.alexthe666.alexsmobs.world.AMMobSpawnStructureModifier;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.world.BiomeModifier;
-import net.minecraftforge.common.world.StructureModifier;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.world.BiomeModifier;
+import net.neoforged.neoforge.common.world.StructureModifier;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.NetworkRegistry;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,36 +55,24 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Mod(AlexsMobs.MODID)
-@Mod.EventBusSubscriber(modid = AlexsMobs.MODID)
+@EventBusSubscriber(modid = AlexsMobs.MODID)
 public class AlexsMobs {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "alexsmobs";
-    public static final SimpleChannel NETWORK_WRAPPER;
     private static final String PROTOCOL_VERSION = Integer.toString(1);
-    public static final CommonProxy PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
-    private static int packetsRegistered;
+    public static final CommonProxy PROXY = FMLLoader.getDist() == Dist.CLIENT ? new ClientProxy() : new CommonProxy();
     private static boolean isAprilFools = false;
     private static boolean isHalloween = false;
 
-    static {
-        NetworkRegistry.ChannelBuilder channel = NetworkRegistry.ChannelBuilder.named(new ResourceLocation("alexsmobs", "main_channel"));
-        String version = PROTOCOL_VERSION;
-        version.getClass();
-        channel = channel.clientAcceptedVersions(version::equals);
-        version = PROTOCOL_VERSION;
-        version.getClass();
-        NETWORK_WRAPPER = channel.serverAcceptedVersions(version::equals).networkProtocolVersion(() -> {
-            return PROTOCOL_VERSION;
-        }).simpleChannel();
-    }
-
-    public AlexsMobs() {
-        IEventBus modBusEvent = FMLJavaModLoadingContext.get().getModEventBus();
+    public AlexsMobs(ModContainer container, IEventBus modBusEvent) {
         modBusEvent.addListener(this::setup);
         modBusEvent.addListener(this::setupClient);
         modBusEvent.addListener(this::onModConfigEvent);
         modBusEvent.addListener(this::setupEntityModelLayers);
-        final ModLoadingContext modLoadingContext = ModLoadingContext.get();
+        modBusEvent.addListener(this::registerPayloads);
+        AMArmorMaterialRegistry.DEF_REG.register(modBusEvent);
+        AMDataComponentTypeRegistry.DEF_REG.register(modBusEvent);
+        AMAdvancementTriggerRegistry.DEF_REG.register(modBusEvent);
         AMBlockRegistry.DEF_REG.register(modBusEvent);
         AMEntityRegistry.DEF_REG.register(modBusEvent);
         AMItemRegistry.DEF_REG.register(modBusEvent);
@@ -96,17 +90,17 @@ public class AlexsMobs {
         AMLootRegistry.DEF_REG.register(modBusEvent);
         AMBannerRegistry.DEF_REG.register(modBusEvent);
         AMCreativeTabRegistry.DEF_REG.register(modBusEvent);
-        final DeferredRegister<Codec<? extends BiomeModifier>> biomeModifiers = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, AlexsMobs.MODID);
+        final DeferredRegister<MapCodec<? extends BiomeModifier>> biomeModifiers = DeferredRegister.create(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, AlexsMobs.MODID);
         biomeModifiers.register(modBusEvent);
-        biomeModifiers.register("am_mob_spawns", AMMobSpawnBiomeModifier::makeCodec);
-        biomeModifiers.register("am_leafcutter_ant_spawns", AMLeafcutterAntBiomeModifier::makeCodec);
-        final DeferredRegister<Codec<? extends StructureModifier>> structureModifiers = DeferredRegister.create(ForgeRegistries.Keys.STRUCTURE_MODIFIER_SERIALIZERS, AlexsMobs.MODID);
+        biomeModifiers.register("am_mob_spawns", () -> AMMobSpawnBiomeModifier.CODEC);
+        biomeModifiers.register("am_leafcutter_ant_spawns", () -> AMLeafcutterAntBiomeModifier.CODEC);
+        final DeferredRegister<MapCodec<? extends StructureModifier>> structureModifiers = DeferredRegister.create(NeoForgeRegistries.Keys.STRUCTURE_MODIFIER_SERIALIZERS, AlexsMobs.MODID);
         structureModifiers.register(modBusEvent);
-        structureModifiers.register("am_structure_spawns", AMMobSpawnStructureModifier::makeCodec);
-        modLoadingContext.registerConfig(ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC, "alexsmobs.toml");
-        PROXY.init();
-        MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(new ServerEvents());
+        structureModifiers.register("am_structure_spawns", () -> AMMobSpawnStructureModifier.CODEC);
+        container.registerConfig(ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC, "alexsmobs.toml");
+        PROXY.init(modBusEvent);
+        NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(new ServerEvents());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         isAprilFools = calendar.get(Calendar.MONTH) + 1 == 4 && calendar.get(Calendar.DATE) == 1;
@@ -135,44 +129,48 @@ public class AlexsMobs {
         BiomeConfig.init();
     }
 
-    public static <MSG> void sendMSGToServer(MSG message) {
-        NETWORK_WRAPPER.sendToServer(message);
+    @OnlyIn(Dist.CLIENT)
+    public static <MSG extends CustomPacketPayload> void sendMSGToServer(MSG message) {
+        Minecraft.getInstance().getConnection().send(message);
     }
 
-    public static <MSG> void sendMSGToAll(MSG message) {
+    public static <MSG extends CustomPacketPayload> void sendMSGToAll(MSG message) {
         for (ServerPlayer player : ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers()) {
             sendNonLocal(message, player);
         }
     }
 
-    public static <MSG> void sendNonLocal(MSG msg, ServerPlayer player) {
-        NETWORK_WRAPPER.sendTo(msg, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+    public static <MSG extends CustomPacketPayload> void sendNonLocal(MSG msg, ServerPlayer player) {
+        player.connection.send(msg);
+    }
+
+    private void registerPayloads(RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar(PROTOCOL_VERSION);
+
+        registrar.playToClient(MessageMosquitoMountPlayer.TYPE, MessageMosquitoMountPlayer.STREAM_CODEC, MessageMosquitoMountPlayer.Handler::handle);
+        registrar.playBidirectional(MessageMosquitoDismount.TYPE, MessageMosquitoDismount.STREAM_CODEC, MessageMosquitoDismount.Handler::handle);
+        registrar.playBidirectional(MessageHurtMultipart.TYPE, MessageHurtMultipart.STREAM_CODEC, MessageHurtMultipart.Handler::handle);
+        registrar.playToClient(MessageCrowMountPlayer.TYPE, MessageCrowMountPlayer.STREAM_CODEC, MessageCrowMountPlayer.Handler::handle);
+        registrar.playToClient(MessageCrowDismount.TYPE, MessageCrowDismount.STREAM_CODEC, MessageCrowDismount.Handler::handle);
+        registrar.playToClient(MessageMungusBiomeChange.TYPE, MessageMungusBiomeChange.STREAM_CODEC, MessageMungusBiomeChange.Handler::handle);
+        registrar.playToClient(MessageKangarooInventorySync.TYPE, MessageKangarooInventorySync.STREAM_CODEC, MessageKangarooInventorySync.Handler::handle);
+        registrar.playToClient(MessageKangarooEat.TYPE, MessageKangarooEat.STREAM_CODEC, MessageKangarooEat.Handler::handle);
+        registrar.playToClient(MessageUpdateCapsid.TYPE, MessageUpdateCapsid.STREAM_CODEC, MessageUpdateCapsid.Handler::handle);
+        registrar.playToServer(MessageSwingArm.TYPE, MessageSwingArm.STREAM_CODEC, MessageSwingArm.Handler::handle);
+        registrar.playToServer(MessageUpdateEagleControls.TYPE, MessageUpdateEagleControls.STREAM_CODEC, MessageUpdateEagleControls.Handler::handle);
+        registrar.playBidirectional(MessageSyncEntityPos.TYPE, MessageSyncEntityPos.STREAM_CODEC, MessageSyncEntityPos.Handler::handle);
+        registrar.playToClient(MessageTarantulaHawkSting.TYPE, MessageTarantulaHawkSting.STREAM_CODEC, MessageTarantulaHawkSting.Handler::handle);
+        registrar.playToServer(MessageSetDancing.TYPE, MessageSetDancing.STREAM_CODEC, MessageSetDancing.Handler::handle);
+        registrar.playToServer(MessageInteractMultipart.TYPE, MessageInteractMultipart.STREAM_CODEC, MessageInteractMultipart.Handler::handle);
+        registrar.playToClient(MessageSendVisualFlagFromServer.TYPE, MessageSendVisualFlagFromServer.STREAM_CODEC, MessageSendVisualFlagFromServer.Handler::handle);
+        registrar.playToClient(MessageSetPupfishChunkOnClient.TYPE, MessageSetPupfishChunkOnClient.STREAM_CODEC, MessageSetPupfishChunkOnClient.Handler::handle);
+        registrar.playToClient(MessageUpdateTransmutablesToDisplay.TYPE, MessageUpdateTransmutablesToDisplay.STREAM_CODEC, MessageUpdateTransmutablesToDisplay.Handler::handle);
+        registrar.playToServer(MessageTransmuteFromMenu.TYPE, MessageTransmuteFromMenu.STREAM_CODEC, MessageTransmuteFromMenu.Handler::handle);
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageMosquitoMountPlayer.class, MessageMosquitoMountPlayer::write, MessageMosquitoMountPlayer::read, MessageMosquitoMountPlayer.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageMosquitoDismount.class, MessageMosquitoDismount::write, MessageMosquitoDismount::read, MessageMosquitoDismount.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageHurtMultipart.class, MessageHurtMultipart::write, MessageHurtMultipart::read, MessageHurtMultipart.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageCrowMountPlayer.class, MessageCrowMountPlayer::write, MessageCrowMountPlayer::read, MessageCrowMountPlayer.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageCrowDismount.class, MessageCrowDismount::write, MessageCrowDismount::read, MessageCrowDismount.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageMungusBiomeChange.class, MessageMungusBiomeChange::write, MessageMungusBiomeChange::read, MessageMungusBiomeChange.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageKangarooInventorySync.class, MessageKangarooInventorySync::write, MessageKangarooInventorySync::read, MessageKangarooInventorySync.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageKangarooEat.class, MessageKangarooEat::write, MessageKangarooEat::read, MessageKangarooEat.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageUpdateCapsid.class, MessageUpdateCapsid::write, MessageUpdateCapsid::read, MessageUpdateCapsid.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSwingArm.class, MessageSwingArm::write, MessageSwingArm::read, MessageSwingArm.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageUpdateEagleControls.class, MessageUpdateEagleControls::write, MessageUpdateEagleControls::read, MessageUpdateEagleControls.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSyncEntityPos.class, MessageSyncEntityPos::write, MessageSyncEntityPos::read, MessageSyncEntityPos.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageTarantulaHawkSting.class, MessageTarantulaHawkSting::write, MessageTarantulaHawkSting::read, MessageTarantulaHawkSting.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageStartDancing.class, MessageStartDancing::write, MessageStartDancing::read, MessageStartDancing.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageInteractMultipart.class, MessageInteractMultipart::write, MessageInteractMultipart::read, MessageInteractMultipart.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSendVisualFlagFromServer.class, MessageSendVisualFlagFromServer::write, MessageSendVisualFlagFromServer::read, MessageSendVisualFlagFromServer.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageSetPupfishChunkOnClient.class, MessageSetPupfishChunkOnClient::write, MessageSetPupfishChunkOnClient::read, MessageSetPupfishChunkOnClient.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageUpdateTransmutablesToDisplay.class, MessageUpdateTransmutablesToDisplay::write, MessageUpdateTransmutablesToDisplay::read, MessageUpdateTransmutablesToDisplay.Handler::handle);
-        NETWORK_WRAPPER.registerMessage(packetsRegistered++, MessageTransmuteFromMenu.class, MessageTransmuteFromMenu::write, MessageTransmuteFromMenu::read, MessageTransmuteFromMenu.Handler::handle);
         event.enqueueWork(AMItemRegistry::init);
         event.enqueueWork(AMItemRegistry::initDispenser);
-        AMAdvancementTriggerRegistry.init();
-        AMEffectRegistry.init();
         AMRecipeRegistry.init();
         PROXY.initPathfinding();
     }
@@ -181,4 +179,7 @@ public class AlexsMobs {
         event.enqueueWork(PROXY::clientInit);
     }
 
+    public static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+    }
 }

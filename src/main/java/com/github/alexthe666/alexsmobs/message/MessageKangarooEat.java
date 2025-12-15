@@ -5,52 +5,46 @@ import com.github.alexthe666.alexsmobs.entity.EntityKangaroo;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.function.Supplier;
 
-public class MessageKangarooEat {
+public record MessageKangarooEat(
+    int kangaroo,
+    ItemStack stack
+) implements CustomPacketPayload {
+    public static final Type<MessageKangarooEat> TYPE = new Type<>(AlexsMobs.id("kangaroo_eat"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, MessageKangarooEat> STREAM_CODEC = StreamCodec.composite(
+        ByteBufCodecs.VAR_INT, MessageKangarooEat::kangaroo,
+        ItemStack.STREAM_CODEC, MessageKangarooEat::stack,
+        MessageKangarooEat::new
+    );
 
-    public int kangaroo;
-    public ItemStack stack;
-
-    public MessageKangarooEat(int kangaroo, ItemStack stack) {
-        this.kangaroo = kangaroo;
-        this.stack = stack;
-    }
-
-    public MessageKangarooEat() {
-    }
-
-    public static MessageKangarooEat read(FriendlyByteBuf buf) {
-        return new MessageKangarooEat(buf.readInt(), buf.readItem());
-    }
-
-    public static void write(MessageKangarooEat message, FriendlyByteBuf buf) {
-        buf.writeInt(message.kangaroo);
-        buf.writeItem(message.stack);
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
     public static class Handler {
         public Handler() {
         }
 
-        public static void handle(MessageKangarooEat message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            context.get().enqueueWork(() -> {
-                Player player = context.get().getSender();
-                if (context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT) {
-                    player = AlexsMobs.PROXY.getClientSidePlayer();
-                }
+        public static void handle(MessageKangarooEat message, IPayloadContext context) {
+            context.enqueueWork(() -> {
+                Player player = context.player();
 
                 if (player != null) {
                     if (player.level() != null) {
                         Entity entity = player.level().getEntity(message.kangaroo);
-                        if (entity instanceof EntityKangaroo kangaroo && ((EntityKangaroo) entity).kangarooInventory != null) {
+                        if (entity instanceof EntityKangaroo kangaroo && kangaroo.kangarooInventory != null) {
                             for (int i = 0; i < 7; i++) {
                                 double d2 = kangaroo.getRandom().nextGaussian() * 0.02D;
                                 double d0 = kangaroo.getRandom().nextGaussian() * 0.02D;

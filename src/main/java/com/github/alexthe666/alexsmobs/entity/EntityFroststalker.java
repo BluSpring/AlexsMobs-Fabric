@@ -445,7 +445,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
         float f = this.getYRot() * Mth.DEG_TO_RAD;
         this.setDeltaMovement(this.getDeltaMovement().add(-Mth.sin(f) * 0.2F, 0, Mth.cos(f) * 0.2F));
         this.hasImpulse = true;
-        net.minecraftforge.common.ForgeHooks.onLivingJump(this);
+        net.neoforged.neoforge.common.ForgeHooks.onLivingJump(this);
     }
 
     public void frostJump() {

@@ -46,7 +46,7 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.function.Predicate;
 
-public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquatic, Shearable, net.minecraftforge.common.IForgeShearable {
+public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquatic, Shearable, net.neoforged.neoforge.common.IForgeShearable {
 
     public static final Predicate<LivingEntity> TARGET_PRED = (animal) -> {
         return !(animal instanceof EntityAlligatorSnappingTurtle) && !(animal instanceof ArmorStand) && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(animal) && animal.isAlive();

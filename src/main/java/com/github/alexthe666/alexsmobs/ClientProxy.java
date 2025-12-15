@@ -20,6 +20,7 @@ import com.github.alexthe666.alexsmobs.entity.*;
 import com.github.alexthe666.alexsmobs.entity.util.RainbowUtil;
 import com.github.alexthe666.alexsmobs.inventory.AMMenuRegistry;
 import com.github.alexthe666.alexsmobs.item.*;
+import com.github.alexthe666.alexsmobs.misc.CapsidRecipeManager;
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -38,26 +39,26 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraft.world.item.component.DyedItemColor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(modid = AlexsMobs.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = AlexsMobs.MODID, value = Dist.CLIENT)
 public class ClientProxy extends CommonProxy {
 
     public static final Int2ObjectMap<SoundBearMusicBox> BEAR_MUSIC_BOX_SOUND_MAP = new Int2ObjectOpenHashMap<>();
@@ -77,8 +78,8 @@ public class ClientProxy extends CommonProxy {
     public static void onItemColors(RegisterColorHandlersEvent.Item event) {
 
         AlexsMobs.LOGGER.info("loaded in item colorizer");
-        if(AMItemRegistry.STRADDLEBOARD.isPresent()){
-            event.register((stack, colorIn) -> colorIn < 1 ? -1 : ((DyeableLeatherItem) stack.getItem()).getColor(stack), AMItemRegistry.STRADDLEBOARD.get());
+        if(AMItemRegistry.STRADDLEBOARD.isBound()){
+            event.register((stack, colorIn) -> colorIn < 1 ? -1 : DyedItemColor.getOrDefault(stack, DyedItemColor.LEATHER_COLOR), AMItemRegistry.STRADDLEBOARD.get());
         }else{
             AlexsMobs.LOGGER.warn("Could not add straddleboard item to colorizer...");
         }
@@ -93,8 +94,7 @@ public class ClientProxy extends CommonProxy {
         }, AMBlockRegistry.RAINBOW_GLASS.get());
     }
 
-    public void init() {
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+    public void init(IEventBus bus) {
         bus.addListener(ClientProxy::onBakingCompleted);
         bus.addListener(ClientProxy::onItemColors);
         bus.addListener(ClientProxy::onBlockColors);
@@ -103,7 +103,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     public void clientInit() {
-        MinecraftForge.EVENT_BUS.register(new ClientEvents());
+        NeoForge.EVENT_BUS.register(new ClientEvents());
         initRainbowBuffers();
         ItemRenderer itemRendererIn = Minecraft.getInstance().getItemRenderer();
         EntityRenderers.register(AMEntityRegistry.GRIZZLY_BEAR.get(), RenderGrizzlyBear::new);
@@ -471,4 +471,12 @@ public class ClientProxy extends CommonProxy {
         return singingBlueJayId;
     }
 
+    @Override
+    public CapsidRecipeManager getCapsidRecipeManager() {
+        if (capsidRecipeManager == null && Minecraft.getInstance().level != null) {
+            return initCapsidRecipeManager(Minecraft.getInstance().level.registryAccess());
+        }
+
+        return super.getCapsidRecipeManager();
+    }
 }

@@ -3,44 +3,40 @@ package com.github.alexthe666.alexsmobs.message;
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityCrow;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.function.Supplier;
 
-public class MessageCrowDismount {
+public record MessageCrowDismount(
+    int rider, int mount
+) implements CustomPacketPayload {
+    public static final Type<MessageCrowDismount> TYPE = new Type<>(AlexsMobs.id("crow_dismount"));
+    public static final StreamCodec<FriendlyByteBuf, MessageCrowDismount> STREAM_CODEC = StreamCodec.composite(
+        ByteBufCodecs.VAR_INT, MessageCrowDismount::rider,
+        ByteBufCodecs.VAR_INT, MessageCrowDismount::mount,
+        MessageCrowDismount::new
+    );
 
-    public int rider;
-    public int mount;
-
-    public MessageCrowDismount(int rider, int mount) {
-        this.rider = rider;
-        this.mount = mount;
-    }
-
-    public MessageCrowDismount() {
-    }
-
-    public static MessageCrowDismount read(FriendlyByteBuf buf) {
-        return new MessageCrowDismount(buf.readInt(), buf.readInt());
-    }
-
-    public static void write(MessageCrowDismount message, FriendlyByteBuf buf) {
-        buf.writeInt(message.rider);
-        buf.writeInt(message.mount);
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
     public static class Handler {
         public Handler() {
         }
 
-        public static void handle(MessageCrowDismount message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            context.get().enqueueWork(() ->{
-                Player player = context.get().getSender();
-                if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
+        public static void handle(MessageCrowDismount message, IPayloadContext context) {
+            context.enqueueWork(() ->{
+                Player player = context.player();
+                if(context.flow().getReceptionSide() == LogicalSide.CLIENT){
                     player = AlexsMobs.PROXY.getClientSidePlayer();
                 }
 

@@ -48,7 +48,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
+import net.neoforged.neoforge.common.ForgeMod;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollower {

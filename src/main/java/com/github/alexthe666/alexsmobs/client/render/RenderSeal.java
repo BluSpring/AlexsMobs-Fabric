@@ -48,7 +48,7 @@ public class RenderSeal extends MobRenderer<EntitySeal, ModelSeal> {
     protected void renderNameTag(EntitySeal seal, Component text, PoseStack poseStack, MultiBufferSource bufferSrc, int numberIn) {
         if(seal.isTearsEasterEgg()){
             double d0 = this.entityRenderDispatcher.distanceToSqr(seal);
-            if (net.minecraftforge.client.ForgeHooksClient.isNameplateInRenderDistance(seal, d0)) {
+            if (net.neoforged.neoforge.client.ForgeHooksClient.isNameplateInRenderDistance(seal, d0)) {
                 boolean flag = !seal.isDiscrete();
                 float f = seal.getBbHeight() + 0.5F;
                 String[] split = text.getString(512).split(" ");

@@ -6,6 +6,8 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -18,13 +20,15 @@ import java.util.List;
 import java.util.Map;
 
 public class CapsidRecipeManager extends SimpleJsonResourceReloadListener {
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(CapsidRecipe.class, new CapsidRecipe.Deserializer()).create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final RandomSource RANDOM = RandomSource.create();
 
     private final List<CapsidRecipe> capsidRecipes = Lists.newArrayList();
+    private final HolderLookup.Provider registries;
 
-    public CapsidRecipeManager() {
+    public CapsidRecipeManager(HolderLookup.Provider registries) {
         super(GSON, "capsid_recipes");
+        this.registries = registries;
     }
 
     protected void apply(Map<ResourceLocation, JsonElement> jsonMap, ResourceManager resourceManager, ProfilerFiller profile) {
@@ -33,7 +37,7 @@ public class CapsidRecipeManager extends SimpleJsonResourceReloadListener {
         AlexsMobs.LOGGER.log(Level.ALL, "Loading in capsid_recipes jsons...");
         jsonMap.forEach((resourceLocation, jsonElement) -> {
             try {
-                CapsidRecipe capsidRecipe = GSON.fromJson(jsonElement, CapsidRecipe.class);
+                CapsidRecipe capsidRecipe = CapsidRecipe.CODEC.parse(this.registries.createSerializationContext(JsonOps.INSTANCE), jsonElement).getOrThrow();
                 builder.put(resourceLocation, capsidRecipe);
             } catch (Exception exception) {
                 AlexsMobs.LOGGER.error("Couldn't parse capsid recipe {}", resourceLocation, exception);

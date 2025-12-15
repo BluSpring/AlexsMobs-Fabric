@@ -52,7 +52,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ToolActions;
+import net.neoforged.neoforge.common.ToolActions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -349,7 +349,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
                 InteractionHand hand = holder.getUsedItemHand();
                 holder.getUseItem().hurtAndBreak(i, holder, (p_213833_1_) -> {
                     p_213833_1_.broadcastBreakEvent(hand);
-                    net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(holder, holder.getUseItem(), hand);
+                    net.neoforged.neoforge.event.ForgeEventFactory.onPlayerDestroyItem(holder, holder.getUseItem(), hand);
                 });
                 if (holder.getUseItem().isEmpty()) {
                     if (hand == InteractionHand.MAIN_HAND) {

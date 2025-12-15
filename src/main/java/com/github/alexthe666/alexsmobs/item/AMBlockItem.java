@@ -17,13 +17,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
 public class AMBlockItem extends BlockItem implements CustomTabBehavior {
 
-    private final RegistryObject<Block> blockSupplier;
+    private final DeferredBlock<Block> blockSupplier;
 
-    public AMBlockItem(RegistryObject<Block> blockSupplier, Item.Properties props) {
+    public AMBlockItem(DeferredBlock<Block> blockSupplier, Item.Properties props) {
         super((Block)null, props);
         this.blockSupplier = blockSupplier;
     }
@@ -33,24 +33,9 @@ public class AMBlockItem extends BlockItem implements CustomTabBehavior {
         return blockSupplier.get();
     }
 
-    public boolean canFitInsideCraftingRemainingItems() {
-        return !(blockSupplier.get() instanceof ShulkerBoxBlock);
-    }
-
-    public void onDestroyed(ItemEntity p_150700_) {
-        if (this.blockSupplier.get() instanceof ShulkerBoxBlock) {
-            ItemStack itemstack = p_150700_.getItem();
-            CompoundTag compoundtag = getBlockEntityData(itemstack);
-            if (compoundtag != null && compoundtag.contains("Items", 9)) {
-                ListTag listtag = compoundtag.getList("Items", 10);
-                ItemUtils.onContainerDestroyed(p_150700_, listtag.stream().map(CompoundTag.class::cast).map(ItemStack::of));
-            }
-        }
-    }
-
-
-    public boolean canBeHurtBy(DamageSource damage) {
-        return super.canBeHurtBy(damage) && (this != AMBlockRegistry.TRANSMUTATION_TABLE.get().asItem() || !damage.is(DamageTypeTags.IS_EXPLOSION));
+    @Override
+    public boolean canBeHurtBy(ItemStack stack, DamageSource source) {
+        return super.canBeHurtBy(stack, source) && (this != AMBlockRegistry.TRANSMUTATION_TABLE.get().asItem() || !source.is(DamageTypeTags.IS_EXPLOSION));
     }
 
     @Override
@@ -62,10 +47,12 @@ public class AMBlockItem extends BlockItem implements CustomTabBehavior {
         }
     }
 
+    @Override
     public InteractionResult useOn(UseOnContext context) {
         return blockSupplier.equals(AMBlockRegistry.TRIOPS_EGGS) ? InteractionResult.PASS : super.useOn(context);
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if(blockSupplier.equals(AMBlockRegistry.TRIOPS_EGGS)){
             BlockHitResult blockhitresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);

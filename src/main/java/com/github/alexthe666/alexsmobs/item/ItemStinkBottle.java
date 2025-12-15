@@ -7,11 +7,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
 public class ItemStinkBottle extends AMBlockItem {
 
-    public ItemStinkBottle(RegistryObject<Block> blockSupplier, Item.Properties props) {
+    public ItemStinkBottle(DeferredBlock<Block> blockSupplier, Item.Properties props) {
         super(blockSupplier, props);
     }
 

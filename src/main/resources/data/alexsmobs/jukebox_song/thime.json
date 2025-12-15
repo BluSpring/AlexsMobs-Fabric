@@ -1,0 +1,8 @@
+{
+    "comparator_output": 14,
+    "description": {
+        "translate": "alexsmobs.sound.subtitle.music_disc.thime"
+    },
+    "length_in_seconds": 6280,
+    "sound_event": "alexsmobs:music_disc_thime"
+}

@@ -2,17 +2,15 @@ package com.github.alexthe666.alexsmobs.world;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraftforge.common.world.ModifiableStructureInfo;
-import net.minecraftforge.common.world.StructureModifier;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.world.ModifiableStructureInfo;
+import net.neoforged.neoforge.common.world.StructureModifier;
 
 public class AMMobSpawnStructureModifier implements StructureModifier {
-
-    private static final RegistryObject<Codec<? extends StructureModifier>> SERIALIZER = RegistryObject.create(new ResourceLocation(AlexsMobs.MODID, "am_structure_spawns"), ForgeRegistries.Keys.STRUCTURE_MODIFIER_SERIALIZERS, AlexsMobs.MODID);
+    public static final MapCodec<AMMobSpawnStructureModifier> CODEC = MapCodec.unit(AMMobSpawnStructureModifier::new);
 
     public AMMobSpawnStructureModifier() {
     }
@@ -25,11 +23,7 @@ public class AMMobSpawnStructureModifier implements StructureModifier {
         }
     }
 
-    public Codec<? extends StructureModifier> codec() {
-        return (Codec)SERIALIZER.get();
-    }
-
-    public static Codec<AMMobSpawnStructureModifier> makeCodec() {
-        return Codec.unit(AMMobSpawnStructureModifier::new);
+    public MapCodec<? extends StructureModifier> codec() {
+        return CODEC;
     }
 }

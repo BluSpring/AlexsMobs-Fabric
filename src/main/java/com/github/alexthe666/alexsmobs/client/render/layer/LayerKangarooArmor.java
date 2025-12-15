@@ -53,7 +53,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
         }
         String s1 = String.format("%s:textures/models/armor/%s_layer_%d%s.png", domain, texture, (1), type == null ? "" : String.format("_%s", type));
 
-        s1 = net.minecraftforge.client.ForgeHooksClient.getArmorTexture(entity, stack, s1, slot, type);
+        s1 = net.neoforged.neoforge.client.ForgeHooksClient.getArmorTexture(entity, stack, s1, slot, type);
         ResourceLocation resourcelocation = ARMOR_TEXTURE_RES_MAP.get(s1);
 
         if (resourcelocation == null) {
@@ -258,7 +258,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
 
 
     protected HumanoidModel<?> getArmorModelHook(LivingEntity entity, ItemStack itemStack, EquipmentSlot slot, HumanoidModel model) {
-         Model basicModel = net.minecraftforge.client.ForgeHooksClient.getArmorModel(entity, itemStack, slot, model);
+         Model basicModel = net.neoforged.neoforge.client.ForgeHooksClient.getArmorModel(entity, itemStack, slot, model);
          return basicModel instanceof HumanoidModel ? (HumanoidModel<?>) basicModel : model;
     }
 }
