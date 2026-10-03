@@ -62,7 +62,7 @@ public class BananaLootModifier implements IGlobalLootModifier {
             int bananaStep = (int)Math.floor(AMConfig.bananaChance * 0.1F);
             int bananaRarity = AMConfig.bananaChance - (bonusLevel * bananaStep);
             if (bananaRarity < 1 || random.nextInt(bananaRarity) == 0) {
-                generatedLoot.add(new ItemStack(AMItemRegistry.BANANA.get()));
+                generatedLoot.add(new ItemStack(AMItemRegistry.BANANA));
             }
         }
         return generatedLoot;

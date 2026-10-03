@@ -321,7 +321,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return AMEntityRegistry.MUDSKIPPER.get().create(serverLevel);
+        return AMEntityRegistry.MUDSKIPPER.create(serverLevel);
     }
 
     public boolean isMouthOpen() {
@@ -340,15 +340,15 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
     }
 
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(AMSoundRegistry.MUDSKIPPER_WALK.get(), 1F, 1.0F);
+        this.playSound(AMSoundRegistry.MUDSKIPPER_WALK, 1F, 1.0F);
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.MUDSKIPPER_HURT.get();
+        return AMSoundRegistry.MUDSKIPPER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.MUDSKIPPER_HURT.get();
+        return AMSoundRegistry.MUDSKIPPER_HURT;
     }
 
     public int getCommand() {
@@ -401,7 +401,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
     @Override
     @Nonnull
     public ItemStack getBucketItemStack() {
-        ItemStack stack = new ItemStack(AMItemRegistry.MUDSKIPPER_BUCKET.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.MUDSKIPPER_BUCKET);
         if (this.hasCustomName()) {
             stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }

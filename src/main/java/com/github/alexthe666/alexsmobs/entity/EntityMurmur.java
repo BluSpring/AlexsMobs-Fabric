@@ -56,11 +56,11 @@ public class EntityMurmur extends Monster implements ISemiAquatic {
 
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.MURMUR_HURT.get();
+        return AMSoundRegistry.MURMUR_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.MURMUR_HURT.get();
+        return AMSoundRegistry.MURMUR_HURT;
     }
 
     protected void playStepSound(BlockPos pos, BlockState blockIn) {

@@ -58,7 +58,7 @@ public class BlockLeafcutterAntChamber extends Block {
             if(!worldIn.isClientSide){
                 if(worldIn.random.nextInt(2) == 0){
                     Direction dir = Direction.getRandom(worldIn.random);
-                    if(worldIn.getBlockState(pos.above()).getBlock() == AMBlockRegistry.LEAFCUTTER_ANTHILL.get()){
+                    if(worldIn.getBlockState(pos.above()).getBlock() == AMBlockRegistry.LEAFCUTTER_ANTHILL){
                         dir = Direction.DOWN;
                     }
                     BlockPos offset = pos.relative(dir);
@@ -66,7 +66,7 @@ public class BlockLeafcutterAntChamber extends Block {
                         worldIn.setBlockAndUpdate(offset, this.defaultBlockState());
                     }
                 }
-                popResource(worldIn, pos, new ItemStack(AMItemRegistry.GONGYLIDIA.get()));
+                popResource(worldIn, pos, new ItemStack(AMItemRegistry.GONGYLIDIA));
             }
             return InteractionResult.SUCCESS;
         }

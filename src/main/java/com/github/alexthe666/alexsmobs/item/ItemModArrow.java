@@ -16,7 +16,7 @@ public class ItemModArrow extends ArrowItem {
 
     @Override
     public AbstractArrow createArrow(Level worldIn, ItemStack stack, LivingEntity shooter, ItemStack weaponStack) {
-        if(this == AMItemRegistry.SHARK_TOOTH_ARROW.get()){
+        if(this == AMItemRegistry.SHARK_TOOTH_ARROW){
             Arrow arrowentity = new EntitySharkToothArrow(worldIn, shooter);
             return arrowentity;
         }else {

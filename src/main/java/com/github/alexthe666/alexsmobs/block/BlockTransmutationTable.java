@@ -111,7 +111,7 @@ public class BlockTransmutationTable extends BaseEntityBlock implements AMSpecia
 
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152180_, BlockState p_152181_, BlockEntityType<T> p_152182_) {
-        return createTickerHelper(p_152182_, AMTileEntityRegistry.TRANSMUTATION_TABLE.get(), TileEntityTransmutationTable::commonTick);
+        return createTickerHelper(p_152182_, AMTileEntityRegistry.TRANSMUTATION_TABLE, TileEntityTransmutationTable::commonTick);
     }
 
     @Override

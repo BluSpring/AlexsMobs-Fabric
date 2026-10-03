@@ -83,8 +83,8 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
     });
     public static final Map<Block, List<Item>> LEAF_TO_RARES = Util.make(Maps.newHashMap(), (map) -> {
         map.put(Blocks.OAK_LEAVES, List.of(Items.APPLE));
-        map.put(Blocks.JUNGLE_LEAVES, List.of(AMItemRegistry.BANANA.get(), AMItemRegistry.LEAFCUTTER_ANT_PUPA.get(), Items.COCOA_BEANS));
-        map.put(Blocks.ACACIA_LEAVES, List.of(AMItemRegistry.ACACIA_BLOSSOM.get()));
+        map.put(Blocks.JUNGLE_LEAVES, List.of(AMItemRegistry.BANANA, AMItemRegistry.LEAFCUTTER_ANT_PUPA, Items.COCOA_BEANS));
+        map.put(Blocks.ACACIA_LEAVES, List.of(AMItemRegistry.ACACIA_BLOSSOM));
     });
 
     private static final EntityDataAccessor<Direction> ATTACHED_FACE = SynchedEntityData.defineId(EntitySugarGlider.class, EntityDataSerializers.DIRECTION);
@@ -171,15 +171,15 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.SUGAR_GLIDER_IDLE.get();
+        return AMSoundRegistry.SUGAR_GLIDER_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.SUGAR_GLIDER_HURT.get();
+        return AMSoundRegistry.SUGAR_GLIDER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.SUGAR_GLIDER_HURT.get();
+        return AMSoundRegistry.SUGAR_GLIDER_HURT;
     }
 
     public static boolean canSugarGliderSpawn(EntityType type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
@@ -548,7 +548,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return AMEntityRegistry.SUGAR_GLIDER.get().create(serverLevel);
+        return AMEntityRegistry.SUGAR_GLIDER.create(serverLevel);
     }
 
     private boolean shouldStopGliding() {

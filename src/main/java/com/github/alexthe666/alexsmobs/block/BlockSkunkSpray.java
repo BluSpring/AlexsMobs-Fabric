@@ -87,7 +87,7 @@ public class BlockSkunkSpray extends MultifaceBlock implements SimpleWaterlogged
            Direction dir = hit.getDirection().getOpposite();
            if(hasFace(state, dir)){
                worldIn.setBlockAndUpdate(pos, removeStinkFace(state, dir));
-               ItemStack bottle = new ItemStack(AMItemRegistry.STINK_BOTTLE.get());
+               ItemStack bottle = new ItemStack(AMItemRegistry.STINK_BOTTLE);
                if(!player.addItem(bottle)){
                    player.drop(bottle, false);
                }
@@ -117,7 +117,7 @@ public class BlockSkunkSpray extends MultifaceBlock implements SimpleWaterlogged
 
 
     public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
-        return !context.getItemInHand().is(AMBlockRegistry.SKUNK_SPRAY.get().asItem()) || super.canBeReplaced(state, context);
+        return !context.getItemInHand().is(AMBlockRegistry.SKUNK_SPRAY.asItem()) || super.canBeReplaced(state, context);
     }
 
     public FluidState getFluidState(BlockState state) {
@@ -146,7 +146,7 @@ public class BlockSkunkSpray extends MultifaceBlock implements SimpleWaterlogged
                 double d0 = direction.getStepX() == 0 ? randomSource.nextDouble() : 0.5D + (double) direction.getStepX() * 0.8D;
                 double d1 = direction.getStepY() == 0 ? randomSource.nextDouble() : 0.5D + (double) direction.getStepY() * 0.8D;
                 double d2 = direction.getStepZ() == 0 ? randomSource.nextDouble() : 0.5D + (double) direction.getStepZ() * 0.8D;
-                level.addParticle(AMParticleRegistry.SMELLY.get(), (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, 0.0D, 0.0D, 0.0D);
+                level.addParticle(AMParticleRegistry.SMELLY, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, 0.0D, 0.0D, 0.0D);
             }
         }
     }

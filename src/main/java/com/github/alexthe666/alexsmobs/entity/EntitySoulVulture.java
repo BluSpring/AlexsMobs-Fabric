@@ -85,19 +85,19 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
     public static boolean canVultureSpawn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
         BlockPos blockpos = pos.below();
         boolean spawnBlock = worldIn.getBlockState(blockpos).is(AMTagRegistry.SOUL_VULTURE_SPAWNS);
-        return reason == MobSpawnType.SPAWNER || spawnBlock && checkMobSpawnRules(AMEntityRegistry.SOUL_VULTURE.get(), worldIn, reason, pos, randomIn);
+        return reason == MobSpawnType.SPAWNER || spawnBlock && checkMobSpawnRules(AMEntityRegistry.SOUL_VULTURE, worldIn, reason, pos, randomIn);
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.SOUL_VULTURE_IDLE.get();
+        return AMSoundRegistry.SOUL_VULTURE_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.SOUL_VULTURE_HURT.get();
+        return AMSoundRegistry.SOUL_VULTURE_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.SOUL_VULTURE_HURT.get();
+        return AMSoundRegistry.SOUL_VULTURE_HURT;
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {

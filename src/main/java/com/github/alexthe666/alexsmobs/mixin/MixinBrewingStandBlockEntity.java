@@ -14,9 +14,9 @@ public class MixinBrewingStandBlockEntity {
     @Inject(method = "canPlaceItem", at = @At("HEAD"), cancellable = true)
     public void am_canPlaceItem(int index, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         if (index >= 0 && index <= 2) { // Bottle slots
-            if (stack.is(AMItemRegistry.LAVA_BOTTLE.get()) || 
-                stack.is(AMItemRegistry.KOMODO_SPIT_BOTTLE.get()) || 
-                stack.is(AMItemRegistry.POISON_BOTTLE.get())) {
+            if (stack.is(AMItemRegistry.LAVA_BOTTLE) || 
+                stack.is(AMItemRegistry.KOMODO_SPIT_BOTTLE) || 
+                stack.is(AMItemRegistry.POISON_BOTTLE)) {
                 cir.setReturnValue(true);
             }
         }

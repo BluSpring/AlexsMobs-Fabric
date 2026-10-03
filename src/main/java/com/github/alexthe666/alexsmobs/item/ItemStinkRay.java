@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 public class ItemStinkRay extends Item {
 
     public static final Predicate<ItemStack> IS_FART_BOTTLE = (stack) -> {
-        return stack.getItem() == AMItemRegistry.STINK_BOTTLE.get();
+        return stack.getItem() == AMItemRegistry.STINK_BOTTLE;
     };
 
     public ItemStinkRay(Properties properties) {
@@ -70,7 +70,7 @@ public class ItemStinkRay extends Item {
                 Vec3 vector3d = entity.getViewVector(1.0F);
                 RandomSource rand = level.getRandom();
                 entity.gameEvent(GameEvent.ITEM_INTERACT_START);
-                entity.playSound(AMSoundRegistry.STINK_RAY.get(), 1.0F, 0.9F + (rand.nextFloat() - rand.nextFloat()) * 0.2F);
+                entity.playSound(AMSoundRegistry.STINK_RAY, 1.0F, 0.9F + (rand.nextFloat() - rand.nextFloat()) * 0.2F);
                 blood.shoot((double) vector3d.x(), (double) vector3d.y(), (double) vector3d.z(), 0.2F + getPowerForTime(i) * 0.4F, 10);
                 if (!level.isClientSide) {
                     level.addFreshEntity(blood);
@@ -108,7 +108,7 @@ public class ItemStinkRay extends Item {
 
     public ItemStack findAmmo(Player entity) {
         if (entity.isCreative()) {
-            return new ItemStack(AMItemRegistry.STINK_BOTTLE.get());
+            return new ItemStack(AMItemRegistry.STINK_BOTTLE);
         }
         for (int i = 0; i < entity.getInventory().getContainerSize(); ++i) {
             ItemStack itemstack1 = entity.getInventory().getItem(i);

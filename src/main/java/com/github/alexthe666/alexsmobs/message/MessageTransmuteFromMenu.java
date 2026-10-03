@@ -7,7 +7,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class MessageTransmuteFromMenu implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageTransmuteFromMenu> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "transmute_from_menu"));
@@ -35,8 +36,8 @@ public class MessageTransmuteFromMenu implements CustomPacketPayload {
     @Override
     public Type<? extends CustomPacketPayload> type() { return TYPE; }
 
-    public static void handle(MessageTransmuteFromMenu message, IPayloadContext context) {
-        context.enqueueWork(() -> {
+    public static void handle(MessageTransmuteFromMenu message, ServerPlayNetworking.Context context) {
+        context.server().execute(() -> {
             Player player = context.player();
             if (player != null && player.getId() == message.playerId && player.containerMenu instanceof MenuTransmutationTable) {
                 MenuTransmutationTable table = (MenuTransmutationTable) player.containerMenu;

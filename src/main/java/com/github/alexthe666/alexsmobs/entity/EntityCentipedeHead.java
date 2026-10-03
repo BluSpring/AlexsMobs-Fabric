@@ -80,15 +80,15 @@ public class EntityCentipedeHead extends Monster {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.CENTIPEDE_HURT.get();
+        return AMSoundRegistry.CENTIPEDE_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.CENTIPEDE_HURT.get();
+        return AMSoundRegistry.CENTIPEDE_HURT;
     }
 
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(AMSoundRegistry.CENTIPEDE_WALK.get(), 1F, 1.0F);
+        this.playSound(AMSoundRegistry.CENTIPEDE_WALK, 1F, 1.0F);
     }
 
     public int getMaxHeadXRot() {
@@ -130,7 +130,7 @@ public class EntityCentipedeHead extends Monster {
                 }
                 ((LivingEntity) entityIn).addEffect(new MobEffectInstance(MobEffects.POISON, i * 20, 1));
             }
-            this.playSound(AMSoundRegistry.CENTIPEDE_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
+            this.playSound(AMSoundRegistry.CENTIPEDE_ATTACK, this.getSoundVolume(), this.getVoicePitch());
             this.gameEvent(GameEvent.ENTITY_INTERACT);
             return true;
         } else {
@@ -282,7 +282,7 @@ public class EntityCentipedeHead extends Monster {
 
 
     public EntityCentipedeBody createBody(LivingEntity parent, boolean tail) {
-        return tail ? new EntityCentipedeBody(AMEntityRegistry.CENTIPEDE_TAIL.get(), parent, 0.84F, 180, 0) : new EntityCentipedeBody(AMEntityRegistry.CENTIPEDE_BODY.get(), parent, 0.84F, 180, 0);
+        return tail ? new EntityCentipedeBody(AMEntityRegistry.CENTIPEDE_TAIL, parent, 0.84F, 180, 0) : new EntityCentipedeBody(AMEntityRegistry.CENTIPEDE_BODY, parent, 0.84F, 180, 0);
     }
 
     public boolean canBeLeashed(Player player) {

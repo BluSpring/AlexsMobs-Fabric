@@ -44,7 +44,7 @@ public class EntitySeaBear extends WaterAnimal implements IAnimatedEntity {
     private Animation currentAnimation;
     private BlockPos lastCircle = null;
     public static final Predicate<LivingEntity> SOMBRERO = (player) -> {
-        return player.getItemBySlot(EquipmentSlot.HEAD).is(AMItemRegistry.SOMBRERO.get());
+        return player.getItemBySlot(EquipmentSlot.HEAD).is(AMItemRegistry.SOMBRERO);
     };
 
     protected EntitySeaBear(EntityType entityType, Level level) {
@@ -69,19 +69,19 @@ public class EntitySeaBear extends WaterAnimal implements IAnimatedEntity {
             return true;
         }
         BlockState state = entity.level().getBlockState(entity.blockPosition().below());
-        return state.is(AMBlockRegistry.SAND_CIRCLE.get()) || state.is(AMBlockRegistry.RED_SAND_CIRCLE.get());
+        return state.is(AMBlockRegistry.SAND_CIRCLE) || state.is(AMBlockRegistry.RED_SAND_CIRCLE);
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.GRIZZLY_BEAR_IDLE.get();
+        return AMSoundRegistry.GRIZZLY_BEAR_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.GRIZZLY_BEAR_HURT.get();
+        return AMSoundRegistry.GRIZZLY_BEAR_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.GRIZZLY_BEAR_DIE.get();
+        return AMSoundRegistry.GRIZZLY_BEAR_DIE;
     }
 
     protected void registerGoals() {

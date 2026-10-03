@@ -76,11 +76,11 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.RATTLESNAKE_HURT.get();
+        return AMSoundRegistry.RATTLESNAKE_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.RATTLESNAKE_HURT.get();
+        return AMSoundRegistry.RATTLESNAKE_HURT;
     }
 
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
@@ -162,7 +162,7 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
         }
         if (this.getAnimation() == ANIMATION_BITE) {
             if (this.getAnimationTick() == 4) {
-                this.playSound(AMSoundRegistry.RATTLESNAKE_ATTACK.get(), getSoundVolume(), getVoicePitch());
+                this.playSound(AMSoundRegistry.RATTLESNAKE_ATTACK, getSoundVolume(), getVoicePitch());
             }
             if (this.getAnimationTick() == 8 && target != null && this.distanceTo(target) < 2D) {
                 final boolean meepMeep = target instanceof EntityRoadrunner;
@@ -176,7 +176,7 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
         if(isRattling()){
             if(loopSoundTick == 0){
                 this.gameEvent(GameEvent.ENTITY_ACTION);
-                this.playSound(AMSoundRegistry.RATTLESNAKE_LOOP.get(), this.getSoundVolume() * 0.5F, this.getVoicePitch());
+                this.playSound(AMSoundRegistry.RATTLESNAKE_LOOP, this.getSoundVolume() * 0.5F, this.getVoicePitch());
             }
             loopSoundTick++;
             if(loopSoundTick > 50){
@@ -207,7 +207,7 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
-        return AMEntityRegistry.RATTLESNAKE.get().create(p_241840_1_);
+        return AMEntityRegistry.RATTLESNAKE.create(p_241840_1_);
     }
 
     @Override

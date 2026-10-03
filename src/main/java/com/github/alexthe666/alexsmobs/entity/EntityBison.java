@@ -95,15 +95,15 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.BISON_IDLE.get();
+        return AMSoundRegistry.BISON_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.BISON_HURT.get();
+        return AMSoundRegistry.BISON_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.BISON_HURT.get();
+        return AMSoundRegistry.BISON_HURT;
     }
 
     protected void playStepSound(BlockPos p_28301_, BlockState p_28302_) {
@@ -151,7 +151,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob mob) {
-        return AMEntityRegistry.BISON.get().create(level());
+        return AMEntityRegistry.BISON.create(level());
     }
 
     public void readAdditionalSaveData(CompoundTag compound) {
@@ -410,7 +410,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
         this.feedingsSinceLastShear = 0;
         java.util.List<ItemStack> drops = new java.util.ArrayList<>();
         for (int i = 0; i < 2 + random.nextInt(2); i++) {
-            drops.add(new ItemStack(AMItemRegistry.BISON_FUR.get()));
+            drops.add(new ItemStack(AMItemRegistry.BISON_FUR));
         }
         return drops;
     }
@@ -422,7 +422,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
         this.setSheared(true);
         this.feedingsSinceLastShear = 0;
         for (int i = 0; i < 2 + random.nextInt(2); i++) {
-            this.spawnAtLocation(AMItemRegistry.BISON_FUR.get());
+            this.spawnAtLocation(AMItemRegistry.BISON_FUR);
         }
     }
 

@@ -41,7 +41,7 @@ public class FlyingFishBootsUtil {
     }
 
     public static boolean isWearing(LivingEntity entity) {
-        return entity.getItemBySlot(EquipmentSlot.FEET).getItem() == AMItemRegistry.FLYING_FISH_BOOTS.get();
+        return entity.getItemBySlot(EquipmentSlot.FEET).getItem() == AMItemRegistry.FLYING_FISH_BOOTS;
     }
 
     public static void tickFlyingFishBoots(LivingEntity fishy) {

@@ -90,7 +90,7 @@ public class ItemDimensionalCarver extends Item {
                 tag.putDouble("BLOCKZ", z);
                 setCustomData(itemstack, tag);
             }
-            worldIn.addParticle(AMParticleRegistry.INVERT_DIG.get(), x, y, z, playerIn.getId(), 0, 0);
+            worldIn.addParticle(AMParticleRegistry.INVERT_DIG, x, y, z, playerIn.getId(), 0, 0);
             return InteractionResultHolder.consume(itemstack);
         }
 
@@ -118,7 +118,7 @@ public class ItemDimensionalCarver extends Item {
             double y = tag.getDouble("BLOCKY");
             double z = tag.getDouble("BLOCKZ");
             if (random.nextFloat() < 0.2) {
-                player.level().addParticle(AMParticleRegistry.WORM_PORTAL.get(), x + random.nextGaussian() * 0.1F, y + random.nextGaussian() * 0.1F, z + random.nextGaussian() * 0.1F, random.nextGaussian() * 0.1F, -0.1F, random.nextGaussian() * 0.1F);
+                player.level().addParticle(AMParticleRegistry.WORM_PORTAL, x + random.nextGaussian() * 0.1F, y + random.nextGaussian() * 0.1F, z + random.nextGaussian() * 0.1F, random.nextGaussian() * 0.1F, -0.1F, random.nextGaussian() * 0.1F);
             }
             if (player.distanceToSqr(x, y, z) > 9) {
                 flag = true;

@@ -268,13 +268,13 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         if(this.getSingTime() > 0){
             this.setSingTime(this.getSingTime() - 1);
             if(this.prevSingTime % 15 == 0){
-               this.playSound(AMSoundRegistry.BLUE_JAY_SONG.get(), this.getSoundVolume(), this.getVoicePitch());
+               this.playSound(AMSoundRegistry.BLUE_JAY_SONG, this.getSoundVolume(), this.getVoicePitch());
             }
             if(this.level().isClientSide){
                 if(this.getSingTime() % 5 == 0 && this.level().isClientSide){
                     Vec3 modelFront = new Vec3(0, 0.2F, 0.3F).scale(this.getScale()).xRot(-this.getXRot() * Mth.DEG_TO_RAD).yRot(-this.getYRot() * Mth.DEG_TO_RAD);
                     Vec3 particleFrom = this.position().add(modelFront);
-                    this.level().addParticle(AMParticleRegistry.BIRD_SONG.get(), particleFrom.x, particleFrom.y, particleFrom.z, modelFront.x, modelFront.y, modelFront.z);
+                    this.level().addParticle(AMParticleRegistry.BIRD_SONG, particleFrom.x, particleFrom.y, particleFrom.z, modelFront.x, modelFront.y, modelFront.z);
                 }
             }
         }
@@ -409,15 +409,15 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.BLUE_JAY_IDLE.get();
+        return AMSoundRegistry.BLUE_JAY_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.BLUE_JAY_HURT.get();
+        return AMSoundRegistry.BLUE_JAY_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.BLUE_JAY_HURT.get();
+        return AMSoundRegistry.BLUE_JAY_HURT;
     }
 
     public boolean isTargetBlocked(Vec3 target) {
@@ -552,7 +552,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob mob) {
-        return AMEntityRegistry.BLUE_JAY.get().create(level());
+        return AMEntityRegistry.BLUE_JAY.create(level());
     }
 
 

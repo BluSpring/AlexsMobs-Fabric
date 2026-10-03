@@ -75,15 +75,15 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.ALLIGATOR_SNAPPING_TURTLE_IDLE.get();
+        return AMSoundRegistry.ALLIGATOR_SNAPPING_TURTLE_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.ALLIGATOR_SNAPPING_TURTLE_HURT.get();
+        return AMSoundRegistry.ALLIGATOR_SNAPPING_TURTLE_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.ALLIGATOR_SNAPPING_TURTLE_HURT.get();
+        return AMSoundRegistry.ALLIGATOR_SNAPPING_TURTLE_HURT;
     }
 
 
@@ -399,7 +399,7 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
         this.gameEvent(GameEvent.ENTITY_INTERACT);
         if (!this.level().isClientSide()) {
             if (random.nextFloat() < this.getMoss() * 0.05F) {
-                this.spawnAtLocation(AMItemRegistry.SPIKED_SCUTE.get());
+                this.spawnAtLocation(AMItemRegistry.SPIKED_SCUTE);
             } else {
                 this.spawnAtLocation(Items.SEAGRASS);
             }
@@ -417,7 +417,7 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
         if (!level().isClientSide()) {
             if (random.nextFloat() < this.getMoss() * 0.05F) {
                 this.setMoss(0);
-                return Collections.singletonList(new ItemStack(AMItemRegistry.SPIKED_SCUTE.get()));
+                return Collections.singletonList(new ItemStack(AMItemRegistry.SPIKED_SCUTE));
             } else {
                 this.setMoss(0);
                 return Collections.singletonList(new ItemStack(Items.SEAGRASS));
@@ -429,6 +429,6 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
-        return AMEntityRegistry.ALLIGATOR_SNAPPING_TURTLE.get().create(p_241840_1_);
+        return AMEntityRegistry.ALLIGATOR_SNAPPING_TURTLE.create(p_241840_1_);
     }
 }

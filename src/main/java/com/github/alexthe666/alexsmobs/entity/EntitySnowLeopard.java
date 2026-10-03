@@ -102,15 +102,15 @@ public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITarge
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.SNOW_LEOPARD_IDLE.get();
+        return AMSoundRegistry.SNOW_LEOPARD_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.SNOW_LEOPARD_HURT.get();
+        return AMSoundRegistry.SNOW_LEOPARD_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.SNOW_LEOPARD_HURT.get();
+        return AMSoundRegistry.SNOW_LEOPARD_HURT;
     }
 
     @Override
@@ -149,7 +149,7 @@ public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITarge
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        return AMEntityRegistry.SNOW_LEOPARD.get().create(serverWorld);
+        return AMEntityRegistry.SNOW_LEOPARD.create(serverWorld);
     }
 
     public void tick(){

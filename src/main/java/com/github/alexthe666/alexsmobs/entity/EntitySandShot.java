@@ -39,13 +39,13 @@ public class EntitySandShot extends Entity {
     }
 
     public EntitySandShot(Level worldIn, EntityGuster p_i47273_2_) {
-        this(AMEntityRegistry.SAND_SHOT.get(), worldIn);
+        this(AMEntityRegistry.SAND_SHOT, worldIn);
         this.setShooter(p_i47273_2_);
         this.setPos(p_i47273_2_.getX() - (double) (p_i47273_2_.getBbWidth() + 1.0F) * 0.35D * (double) Mth.sin(p_i47273_2_.yBodyRot * Mth.DEG_TO_RAD), p_i47273_2_.getEyeY() + (double) 0.2F, p_i47273_2_.getZ() + (double) (p_i47273_2_.getBbWidth() + 1.0F) * 0.35D * (double) Mth.cos(p_i47273_2_.yBodyRot * Mth.DEG_TO_RAD));
     }
 
     public EntitySandShot(Level worldIn, LivingEntity p_i47273_2_, boolean right) {
-        this(AMEntityRegistry.SAND_SHOT.get(), worldIn);
+        this(AMEntityRegistry.SAND_SHOT, worldIn);
         this.setShooter(p_i47273_2_);
         float rot = p_i47273_2_.yHeadRot + (right ? 60 : -60);
         this.setPos(p_i47273_2_.getX() - (double) (p_i47273_2_.getBbWidth()) * 0.5D * (double) Mth.sin(rot * Mth.DEG_TO_RAD), p_i47273_2_.getEyeY() - (double) 0.2F, p_i47273_2_.getZ() + (double) (p_i47273_2_.getBbWidth()) * 0.5D * (double) Mth.cos(rot * Mth.DEG_TO_RAD));
@@ -53,7 +53,7 @@ public class EntitySandShot extends Entity {
 
     @OnlyIn(Dist.CLIENT)
     public EntitySandShot(Level worldIn, double x, double y, double z, double p_i47274_8_, double p_i47274_10_, double p_i47274_12_) {
-        this(AMEntityRegistry.SAND_SHOT.get(), worldIn);
+        this(AMEntityRegistry.SAND_SHOT, worldIn);
         this.setPos(x, y, z);
         this.setDeltaMovement(p_i47274_8_, p_i47274_10_, p_i47274_12_);
     }
@@ -82,7 +82,7 @@ public class EntitySandShot extends Entity {
         if (!this.leftOwner) {
             this.leftOwner = this.checkLeftOwner();
         }
-        ParticleOptions type = this.getVariant() == 2 ? AMParticleRegistry.GUSTER_SAND_SHOT_SOUL.get() : this.getVariant() == 1 ? AMParticleRegistry.GUSTER_SAND_SHOT_RED.get() : AMParticleRegistry.GUSTER_SAND_SHOT.get();
+        ParticleOptions type = this.getVariant() == 2 ? AMParticleRegistry.GUSTER_SAND_SHOT_SOUL : this.getVariant() == 1 ? AMParticleRegistry.GUSTER_SAND_SHOT_RED : AMParticleRegistry.GUSTER_SAND_SHOT;
         for (int i = 0; i < 3 + random.nextInt(6); ++i) {
             double d0 = 0.1D + 0.3D * (double) i;
             level().addParticle(type, this.getX() + 0.25F * (random.nextFloat() - 0.5F), this.getY() + 0.25F * (random.nextFloat() - 0.5F), this.getZ() + 0.25F * (random.nextFloat() - 0.5F), this.getDeltaMovement().x * d0, this.getDeltaMovement().y, this.getDeltaMovement().z * d0);

@@ -104,15 +104,15 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
 
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.RACCOON_IDLE.get();
+        return AMSoundRegistry.RACCOON_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.RACCOON_HURT.get();
+        return AMSoundRegistry.RACCOON_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.RACCOON_HURT.get();
+        return AMSoundRegistry.RACCOON_HURT;
     }
 
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
@@ -575,7 +575,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        return AMEntityRegistry.RACCOON.get().create(serverWorld);
+        return AMEntityRegistry.RACCOON.create(serverWorld);
     }
 
     public void travel(Vec3 vec3d) {

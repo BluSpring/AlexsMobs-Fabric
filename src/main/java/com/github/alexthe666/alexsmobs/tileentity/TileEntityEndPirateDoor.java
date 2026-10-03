@@ -22,7 +22,7 @@ public class TileEntityEndPirateDoor extends BlockEntity {
     public int ticksExisted;
 
     public TileEntityEndPirateDoor(BlockPos pos, BlockState state) {
-        super(AMTileEntityRegistry.END_PIRATE_DOOR.get(), pos, state);
+        super(AMTileEntityRegistry.END_PIRATE_DOOR, pos, state);
         if(state.getBlock() instanceof BlockEndPirateDoor && state.getValue(BlockEndPirateDoor.OPEN)){
             openProgress = 1F;
             prevOpenProgress = 1F;
@@ -49,7 +49,7 @@ public class TileEntityEndPirateDoor extends BlockEntity {
         }
         if(opened && openProgress == 0F || !opened && openProgress == 1F){
             this.level.gameEvent(GameEvent.BLOCK_ACTIVATE, this.getBlockPos(), GameEvent.Context.of(this.getBlockState()));
-            this.level.playSound((Player)null, this.getBlockPos(), AMSoundRegistry.END_PIRATE_DOOR.get(), SoundSource.BLOCKS, 1F, 1F);
+            this.level.playSound((Player)null, this.getBlockPos(), AMSoundRegistry.END_PIRATE_DOOR, SoundSource.BLOCKS, 1F, 1F);
         }
         if(opened && openProgress < 1F){
             openProgress += 0.25F;

@@ -109,11 +109,11 @@ public class EntityAnteater extends Animal implements NeutralMob, IAnimatedEntit
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.ANTEATER_HURT.get();
+        return AMSoundRegistry.ANTEATER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.ANTEATER_HURT.get();
+        return AMSoundRegistry.ANTEATER_HURT;
     }
 
     public void addAdditionalSaveData(CompoundTag compound) {
@@ -366,7 +366,7 @@ public class EntityAnteater extends Animal implements NeutralMob, IAnimatedEntit
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob parent) {
-        return AMEntityRegistry.ANTEATER.get().create(level());
+        return AMEntityRegistry.ANTEATER.create(level());
     }
 
     @Override

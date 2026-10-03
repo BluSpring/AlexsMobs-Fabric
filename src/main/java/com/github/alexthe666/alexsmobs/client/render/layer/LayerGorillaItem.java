@@ -26,7 +26,7 @@ public class LayerGorillaItem extends RenderLayer<EntityGorilla, ModelGorilla> {
         String name = entitylivingbaseIn.getName().getString().toLowerCase();
         ItemInHandRenderer renderer = Minecraft.getInstance().getEntityRenderDispatcher().getItemInHandRenderer();
         if(name.contains("harambe")){
-            ItemStack haloStack = new ItemStack(AMItemRegistry.HALO.get());
+            ItemStack haloStack = new ItemStack(AMItemRegistry.HALO);
             matrixStackIn.pushPose();
             this.getParentModel().root.translateAndRotate(matrixStackIn);
             this.getParentModel().body.translateAndRotate(matrixStackIn);

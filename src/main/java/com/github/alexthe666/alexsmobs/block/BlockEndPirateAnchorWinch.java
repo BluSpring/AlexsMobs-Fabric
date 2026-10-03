@@ -93,6 +93,6 @@ public class BlockEndPirateAnchorWinch extends BaseEntityBlock implements AMSpec
 
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152180_, BlockState state, BlockEntityType<T> p_152182_) {
-        return createTickerHelper(p_152182_, AMTileEntityRegistry.END_PIRATE_ANCHOR_WINCH.get(), TileEntityEndPirateAnchorWinch::commonTick);
+        return createTickerHelper(p_152182_, AMTileEntityRegistry.END_PIRATE_ANCHOR_WINCH, TileEntityEndPirateAnchorWinch::commonTick);
     }
 }

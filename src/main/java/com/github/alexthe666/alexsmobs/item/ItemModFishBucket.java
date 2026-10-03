@@ -25,10 +25,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -50,7 +47,7 @@ public class ItemModFishBucket extends MobBucketItem {
             TooltipFlag flagIn) {
         EntityType fishType = getFishType();
         CompoundTag compoundnbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (fishType == AMEntityRegistry.LOBSTER.get()) {
+        if (fishType == AMEntityRegistry.LOBSTER) {
             if (compoundnbt.contains("BucketVariantTag", 3)) {
                 int i = compoundnbt.getInt("BucketVariantTag");
                 String s = "entity.alexsmobs.lobster.variant_" + EntityLobster.getVariantName(i);
@@ -58,7 +55,7 @@ public class ItemModFishBucket extends MobBucketItem {
                         (Component.translatable(s)).withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
             }
         }
-        if (fishType == AMEntityRegistry.TERRAPIN.get()) {
+        if (fishType == AMEntityRegistry.TERRAPIN) {
             if (compoundnbt.contains("TerrapinData")) {
                 int i = compoundnbt.getCompound("TerrapinData").getInt("TurtleType");
                 tooltip.add((Component
@@ -67,7 +64,7 @@ public class ItemModFishBucket extends MobBucketItem {
                         .withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
             }
         }
-        if (fishType == AMEntityRegistry.COMB_JELLY.get()) {
+        if (fishType == AMEntityRegistry.COMB_JELLY) {
             if (compoundnbt.contains("BucketVariantTag", 3)) {
                 int i = compoundnbt.getInt("BucketVariantTag");
                 String s = "entity.alexsmobs.comb_jelly.variant_" + i;
@@ -97,11 +94,11 @@ public class ItemModFishBucket extends MobBucketItem {
 
     private void addExtraAttributes(Entity entity, ItemStack stack) {
         if (entity instanceof EntityCatfish catfish) {
-            if (stack.is(AMItemRegistry.SMALL_CATFISH_BUCKET.get())) {
+            if (stack.is(AMItemRegistry.SMALL_CATFISH_BUCKET)) {
                 catfish.setCatfishSize(0);
-            } else if (stack.is(AMItemRegistry.MEDIUM_CATFISH_BUCKET.get())) {
+            } else if (stack.is(AMItemRegistry.MEDIUM_CATFISH_BUCKET)) {
                 catfish.setCatfishSize(1);
-            } else if (stack.is(AMItemRegistry.LARGE_CATFISH_BUCKET.get())) {
+            } else if (stack.is(AMItemRegistry.LARGE_CATFISH_BUCKET)) {
                 catfish.setCatfishSize(2);
             }
         }

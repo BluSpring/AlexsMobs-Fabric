@@ -69,7 +69,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
     private static final EntityDataAccessor<Integer> COMMAND = SynchedEntityData.defineId(EntityBaldEagle.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> SITTING = SynchedEntityData.defineId(EntityBaldEagle.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> LAUNCHED = SynchedEntityData.defineId(EntityBaldEagle.class, EntityDataSerializers.BOOLEAN);
-    private static final Ingredient TEMPT_ITEMS = Ingredient.of(Items.ROTTEN_FLESH, AMItemRegistry.FISH_OIL.get());
+    private static final Ingredient TEMPT_ITEMS = Ingredient.of(Items.ROTTEN_FLESH, AMItemRegistry.FISH_OIL);
     public float prevAttackProgress;
     public float attackProgress;
     public float prevFlyProgress;
@@ -148,15 +148,15 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.BALD_EAGLE_IDLE.get();
+        return AMSoundRegistry.BALD_EAGLE_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.BALD_EAGLE_HURT.get();
+        return AMSoundRegistry.BALD_EAGLE_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.BALD_EAGLE_HURT.get();
+        return AMSoundRegistry.BALD_EAGLE_HURT;
     }
 
 
@@ -365,7 +365,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
             }
             return InteractionResult.CONSUME;
         } else if (isTame() && !isFood(itemstack)) {
-            if (!this.isBaby() && item == AMItemRegistry.FALCONRY_HOOD.get()) {
+            if (!this.isBaby() && item == AMItemRegistry.FALCONRY_HOOD) {
                 if (!this.hasCap()) {
                     this.setCap(true);
                     if (!player.isCreative()) {
@@ -383,10 +383,10 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
                         itemstack.shrink(1);
                     }
                 }
-                this.spawnAtLocation(AMItemRegistry.FALCONRY_HOOD.get());
+                this.spawnAtLocation(AMItemRegistry.FALCONRY_HOOD);
                 this.setCap(false);
                 return InteractionResult.SUCCESS;
-            } else if (!this.isBaby() && getRidingFalcons(player) <= 0 && (player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE.get() || player.getItemInHand(InteractionHand.OFF_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE.get())) {
+            } else if (!this.isBaby() && getRidingFalcons(player) <= 0 && (player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE || player.getItemInHand(InteractionHand.OFF_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE)) {
                 boardingCooldown = 30;
                 this.setLaunched(false);
                 this.ejectPassengers();
@@ -436,9 +436,9 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
                 Entity mount = this.getVehicle();
                 if (mount instanceof Player) {
                     float yawAdd = 0;
-                    if (((Player) mount).getItemInHand(InteractionHand.MAIN_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE.get()) {
+                    if (((Player) mount).getItemInHand(InteractionHand.MAIN_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE) {
                         yawAdd = ((Player) mount).getMainArm() == HumanoidArm.LEFT ? 135 : -135;
-                    } else if (((Player) mount).getItemInHand(InteractionHand.OFF_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE.get()) {
+                    } else if (((Player) mount).getItemInHand(InteractionHand.OFF_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE) {
                         yawAdd = ((Player) mount).getMainArm() == HumanoidArm.LEFT ? -135 : 135;
                     } else {
                         this.setCommand(2);
@@ -617,7 +617,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
-        return AMEntityRegistry.BALD_EAGLE.get().create(p_241840_1_);
+        return AMEntityRegistry.BALD_EAGLE.create(p_241840_1_);
     }
 
     public boolean causeFallDamage(float distance, float damageMultiplier) {

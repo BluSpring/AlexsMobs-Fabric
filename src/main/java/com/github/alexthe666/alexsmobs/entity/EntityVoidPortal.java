@@ -53,8 +53,8 @@ public class EntityVoidPortal extends Entity {
     }
 
     public EntityVoidPortal(Level world, ItemDimensionalCarver item) {
-        this(AMEntityRegistry.VOID_PORTAL.get(), world);
-        if(item == AMItemRegistry.SHATTERED_DIMENSIONAL_CARVER.get()){
+        this(AMEntityRegistry.VOID_PORTAL, world);
+        if(item == AMItemRegistry.SHATTERED_DIMENSIONAL_CARVER){
             this.setShattered(true);
             this.setLifespan(2000);
         }else{
@@ -72,7 +72,7 @@ public class EntityVoidPortal extends Entity {
         }
         if(!madeOpenNoise){
             this.gameEvent(GameEvent.ENTITY_PLACE);
-            this.playSound(AMSoundRegistry.VOID_PORTAL_OPEN.get(), 1.0F, 1 + random.nextFloat() * 0.2F);
+            this.playSound(AMSoundRegistry.VOID_PORTAL_OPEN, 1.0F, 1 + random.nextFloat() * 0.2F);
             madeOpenNoise = true;
         }
         Direction direction2 = this.getAttachmentFacing().getOpposite();
@@ -108,7 +108,7 @@ public class EntityVoidPortal extends Entity {
             final double particleX = this.getBoundingBox().minX + random.nextFloat() * (this.getBoundingBox().maxX - this.getBoundingBox().minX);
             final double particleY = this.getBoundingBox().minY + random.nextFloat() * (this.getBoundingBox().maxY - this.getBoundingBox().minY);
             final double particleZ = this.getBoundingBox().minZ + random.nextFloat() * (this.getBoundingBox().maxZ - this.getBoundingBox().minZ);
-            level().addParticle(AMParticleRegistry.WORM_PORTAL.get(), particleX, particleY, particleZ, 0.1 * random.nextGaussian(), 0.1 * random.nextGaussian(), 0.1 * random.nextGaussian());
+            level().addParticle(AMParticleRegistry.WORM_PORTAL, particleX, particleY, particleZ, 0.1 * random.nextGaussian(), 0.1 * random.nextGaussian(), 0.1 * random.nextGaussian());
         }
         List<Entity> entities = new ArrayList<>();
         entities.addAll(this.level().getEntities(this, bb.deflate(0.2F)));
@@ -151,7 +151,7 @@ public class EntityVoidPortal extends Entity {
         if(this.getLifespan() <= 20){
             if(!madeCloseNoise){
                 this.gameEvent(GameEvent.ENTITY_PLACE);
-                this.playSound(AMSoundRegistry.VOID_PORTAL_CLOSE.get(), 1.0F, 1 + random.nextFloat() * 0.2F);
+                this.playSound(AMSoundRegistry.VOID_PORTAL_CLOSE, 1.0F, 1 + random.nextFloat() * 0.2F);
                 madeCloseNoise = true;
             }
         }
@@ -246,7 +246,7 @@ public class EntityVoidPortal extends Entity {
     }
 
     public void createAndSetSister(Level world, Direction dir){
-        EntityVoidPortal portal = AMEntityRegistry.VOID_PORTAL.get().create(world);
+        EntityVoidPortal portal = AMEntityRegistry.VOID_PORTAL.create(world);
         portal.setAttachmentFacing(dir != null ? dir : this.getAttachmentFacing().getOpposite());
         BlockPos safeDestination = this.getDestination();
         // teleportToWithTicket removed in 1.21, use teleportTo

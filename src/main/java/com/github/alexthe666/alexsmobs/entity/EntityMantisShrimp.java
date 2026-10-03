@@ -97,11 +97,11 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.MANTIS_SHRIMP_HURT.get();
+        return AMSoundRegistry.MANTIS_SHRIMP_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.MANTIS_SHRIMP_HURT.get();
+        return AMSoundRegistry.MANTIS_SHRIMP_HURT;
     }
 
 
@@ -445,7 +445,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
                 this.getTarget().hurt(this.damageSources().mobAttack(this), (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE));
             }
             if(punchProgress == 1){
-                this.playSound(AMSoundRegistry.MANTIS_SHRIMP_SNAP.get(), this.getVoicePitch(), this.getSoundVolume());
+                this.playSound(AMSoundRegistry.MANTIS_SHRIMP_SNAP, this.getVoicePitch(), this.getSoundVolume());
             }
             if (punchProgress == 2 && this.level().isClientSide && this.isInWater()) {
                 for (int i = 0; i < 10 + random.nextInt(8); i++) {
@@ -570,7 +570,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        EntityMantisShrimp shrimp = AMEntityRegistry.MANTIS_SHRIMP.get().create(serverWorld);
+        EntityMantisShrimp shrimp = AMEntityRegistry.MANTIS_SHRIMP.create(serverWorld);
         shrimp.setVariant(getRandom().nextInt(3));
         return shrimp;
     }

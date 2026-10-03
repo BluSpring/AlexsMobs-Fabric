@@ -114,7 +114,7 @@ public class EntityFly extends Animal implements FlyingAnimal {
 
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.FLY_IDLE.get();
+        return AMSoundRegistry.FLY_IDLE;
     }
 
     public int getAmbientSoundInterval() {
@@ -122,11 +122,11 @@ public class EntityFly extends Animal implements FlyingAnimal {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.FLY_HURT.get();
+        return AMSoundRegistry.FLY_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.FLY_HURT.get();
+        return AMSoundRegistry.FLY_HURT;
     }
 
     public int getMaxSpawnClusterSize() {
@@ -192,7 +192,7 @@ public class EntityFly extends Animal implements FlyingAnimal {
             this.setNoDespawn(true);
             conversionTime++;
             if(conversionTime > 300){
-                EntityCrimsonMosquito mosquito = AMEntityRegistry.CRIMSON_MOSQUITO.get().create(level());
+                EntityCrimsonMosquito mosquito = AMEntityRegistry.CRIMSON_MOSQUITO.create(level());
                 mosquito.copyPosition(this);
                 if(!this.level().isClientSide){
                     mosquito.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.CONVERSION, null);
@@ -238,7 +238,7 @@ public class EntityFly extends Animal implements FlyingAnimal {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob parent) {
-        EntityFly fly = AMEntityRegistry.FLY.get().create(level());
+        EntityFly fly = AMEntityRegistry.FLY.create(level());
         fly.setNoDespawn(true);
         return fly;
     }

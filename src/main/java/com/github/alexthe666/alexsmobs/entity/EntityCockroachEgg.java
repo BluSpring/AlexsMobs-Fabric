@@ -22,11 +22,11 @@ public class EntityCockroachEgg extends ThrowableItemProjectile {
     }
 
     public EntityCockroachEgg(Level worldIn, LivingEntity throwerIn) {
-        super(AMEntityRegistry.COCKROACH_EGG.get(), throwerIn, worldIn);
+        super(AMEntityRegistry.COCKROACH_EGG, throwerIn, worldIn);
     }
 
     public EntityCockroachEgg(Level worldIn, double x, double y, double z) {
-        super(AMEntityRegistry.COCKROACH_EGG.get(), x, y, z, worldIn);
+        super(AMEntityRegistry.COCKROACH_EGG, x, y, z, worldIn);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -45,7 +45,7 @@ public class EntityCockroachEgg extends ThrowableItemProjectile {
             this.level().broadcastEntityEvent(this, (byte)3);
             int i = random.nextInt(3);
             for (int j = 0; j < i; ++j) {
-                final EntityCockroach croc = AMEntityRegistry.COCKROACH.get().create(this.level());
+                final EntityCockroach croc = AMEntityRegistry.COCKROACH.create(this.level());
                 croc.setAge(-24000);
                 croc.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 croc.finalizeSpawn((ServerLevel)level(), level().getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.TRIGGERED, (SpawnGroupData)null);
@@ -59,6 +59,6 @@ public class EntityCockroachEgg extends ThrowableItemProjectile {
     }
 
     protected Item getDefaultItem() {
-        return AMItemRegistry.COCKROACH_OOTHECA.get();
+        return AMItemRegistry.COCKROACH_OOTHECA;
     }
 }

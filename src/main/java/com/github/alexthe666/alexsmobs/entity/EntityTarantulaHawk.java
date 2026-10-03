@@ -148,11 +148,11 @@ public class EntityTarantulaHawk extends TamableAnimal implements IFollower {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.TARANTULA_HAWK_HURT.get();
+        return AMSoundRegistry.TARANTULA_HAWK_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.TARANTULA_HAWK_HURT.get();
+        return AMSoundRegistry.TARANTULA_HAWK_HURT;
     }
 
     public boolean fireImmune() {
@@ -370,7 +370,7 @@ public class EntityTarantulaHawk extends TamableAnimal implements IFollower {
             }
             if (isFlying()) {
                 if(timeFlying % 25 == 0){
-                    this.playSound(AMSoundRegistry.TARANTULA_HAWK_WING.get(), this.getSoundVolume(), this.getVoicePitch());
+                    this.playSound(AMSoundRegistry.TARANTULA_HAWK_WING, this.getSoundVolume(), this.getVoicePitch());
                 }
                 timeFlying++;
                 this.setNoGravity(true);

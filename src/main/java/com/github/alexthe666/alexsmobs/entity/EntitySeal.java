@@ -78,15 +78,15 @@ public class EntitySeal extends Animal implements ISemiAquatic, IHerdPanic, ITar
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.SEAL_IDLE.get();
+        return AMSoundRegistry.SEAL_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.SEAL_HURT.get();
+        return AMSoundRegistry.SEAL_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.SEAL_HURT.get();
+        return AMSoundRegistry.SEAL_HURT;
     }
 
 
@@ -407,7 +407,7 @@ public class EntitySeal extends Animal implements ISemiAquatic, IHerdPanic, ITar
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        EntitySeal seal = AMEntityRegistry.SEAL.get().create(serverWorld);
+        EntitySeal seal = AMEntityRegistry.SEAL.create(serverWorld);
         seal.setArctic(this.isBiomeArctic(serverWorld, this.blockPosition()));
         return seal;
     }

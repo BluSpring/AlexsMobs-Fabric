@@ -74,11 +74,11 @@ public class EntityCosmicCod extends Mob implements Bucketable {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.COSMIC_COD_HURT.get();
+        return AMSoundRegistry.COSMIC_COD_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.COSMIC_COD_HURT.get();
+        return AMSoundRegistry.COSMIC_COD_HURT;
     }
 
 
@@ -118,7 +118,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
     @Override
     @Nonnull
     public ItemStack getBucketItemStack() {
-        ItemStack stack = new ItemStack(AMItemRegistry.COSMIC_COD_BUCKET.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.COSMIC_COD_BUCKET);
         if (this.hasCustomName()) {
             stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }

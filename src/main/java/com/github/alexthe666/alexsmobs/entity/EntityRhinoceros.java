@@ -202,22 +202,22 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
 
     protected void playStepSound(BlockPos pos, BlockState state) {
         if (!isBaby()) {
-            this.playSound(AMSoundRegistry.ELEPHANT_WALK.get(), 0.2F, 1.2F);
+            this.playSound(AMSoundRegistry.ELEPHANT_WALK, 0.2F, 1.2F);
         } else {
             super.playStepSound(pos, state);
         }
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.RHINOCEROS_IDLE.get();
+        return AMSoundRegistry.RHINOCEROS_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.RHINOCEROS_HURT.get();
+        return AMSoundRegistry.RHINOCEROS_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.RHINOCEROS_HURT.get();
+        return AMSoundRegistry.RHINOCEROS_HURT;
     }
 
     public boolean isFood(ItemStack stack) {
@@ -347,7 +347,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return AMEntityRegistry.RHINOCEROS.get().create(serverLevel);
+        return AMEntityRegistry.RHINOCEROS.create(serverLevel);
     }
 
     public boolean isAngry() {

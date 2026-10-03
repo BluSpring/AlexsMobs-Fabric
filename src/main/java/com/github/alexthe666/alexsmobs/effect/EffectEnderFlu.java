@@ -20,7 +20,7 @@ public class EffectEnderFlu extends MobEffect {
             int phages = amplifier + 1;
             entity.hurt(entity.damageSources().magic(), phages * 10);
             for (int i = 0; i < phages; i++) {
-                EntityEnderiophage phage = AMEntityRegistry.ENDERIOPHAGE.get().create(entity.level());
+                EntityEnderiophage phage = AMEntityRegistry.ENDERIOPHAGE.create(entity.level());
                 phage.copyPosition(entity);
                 phage.onSpawnFromEffect();
                 phage.setSkinForDimension();

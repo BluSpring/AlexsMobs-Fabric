@@ -89,15 +89,15 @@ public class EntityRoadrunner extends Animal {
     }
 
     protected SoundEvent getAmbientSound() {
-        return isMeep() || random.nextInt(2000) == 0 ? AMSoundRegistry.ROADRUNNER_MEEP.get() : AMSoundRegistry.ROADRUNNER_IDLE.get();
+        return isMeep() || random.nextInt(2000) == 0 ? AMSoundRegistry.ROADRUNNER_MEEP : AMSoundRegistry.ROADRUNNER_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.ROADRUNNER_HURT.get();
+        return AMSoundRegistry.ROADRUNNER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.ROADRUNNER_HURT.get();
+        return AMSoundRegistry.ROADRUNNER_HURT;
     }
 
 
@@ -133,7 +133,7 @@ public class EntityRoadrunner extends Animal {
             this.wingRotDelta = 1.0F;
         }
         if (!this.level().isClientSide && this.isAlive() && !this.isBaby() && --this.timeUntilNextFeather <= 0) {
-            this.spawnAtLocation(AMItemRegistry.ROADRUNNER_FEATHER.get());
+            this.spawnAtLocation(AMItemRegistry.ROADRUNNER_FEATHER);
             this.timeUntilNextFeather = this.random.nextInt(24000) + 24000;
         }
         this.wingRotDelta = (float) ((double) this.wingRotDelta * 0.9D);
@@ -206,7 +206,7 @@ public class EntityRoadrunner extends Animal {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
-        return AMEntityRegistry.ROADRUNNER.get().create(p_241840_1_);
+        return AMEntityRegistry.ROADRUNNER.create(p_241840_1_);
     }
 
     public static boolean canRoadrunnerSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {

@@ -69,15 +69,15 @@ public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITa
 
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.TASMANIAN_DEVIL_IDLE.get();
+        return AMSoundRegistry.TASMANIAN_DEVIL_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.TASMANIAN_DEVIL_HURT.get();
+        return AMSoundRegistry.TASMANIAN_DEVIL_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.TASMANIAN_DEVIL_HURT.get();
+        return AMSoundRegistry.TASMANIAN_DEVIL_HURT;
     }
     
     protected void registerGoals() {
@@ -203,7 +203,7 @@ public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITa
         }
         if(this.getAnimation() == ANIMATION_HOWL && this.getAnimationTick() == 1){
             this.gameEvent(GameEvent.ENTITY_ACTION);
-            this.playSound(AMSoundRegistry.TASMANIAN_DEVIL_ROAR.get(), this.getSoundVolume() * 2F, this.getVoicePitch());
+            this.playSound(AMSoundRegistry.TASMANIAN_DEVIL_ROAR, this.getSoundVolume() * 2F, this.getVoicePitch());
         }
         if(this.getAnimation() == ANIMATION_HOWL && this.getAnimationTick() > 3){
             scareMobsTime = 40;
@@ -291,7 +291,7 @@ public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITa
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        return AMEntityRegistry.TASMANIAN_DEVIL.get().create(serverWorld);
+        return AMEntityRegistry.TASMANIAN_DEVIL.create(serverWorld);
     }
 
     @Override

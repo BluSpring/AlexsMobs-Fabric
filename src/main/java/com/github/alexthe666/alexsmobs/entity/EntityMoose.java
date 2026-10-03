@@ -207,7 +207,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
         if (timeUntilAntlerDrop == 0) {
             if (this.isAntlered()) {
                 this.setAntlered(false);
-                this.spawnAtLocation(new ItemStack(AMItemRegistry.MOOSE_ANTLER.get()));
+                this.spawnAtLocation(new ItemStack(AMItemRegistry.MOOSE_ANTLER));
                 timeUntilAntlerDrop = 2 * DAY + this.random.nextInt(3) * DAY;
             } else {
                 this.setAntlered(true);
@@ -263,15 +263,15 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.MOOSE_IDLE.get();
+        return AMSoundRegistry.MOOSE_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.MOOSE_HURT.get();
+        return AMSoundRegistry.MOOSE_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.MOOSE_HURT.get();
+        return AMSoundRegistry.MOOSE_HURT;
     }
 
 
@@ -406,7 +406,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        return AMEntityRegistry.MOOSE.get().create(serverWorld);
+        return AMEntityRegistry.MOOSE.create(serverWorld);
     }
 
     public boolean canJostleWith(EntityMoose moose) {
@@ -414,7 +414,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
     }
 
     public void playJostleSound() {
-        this.playSound(AMSoundRegistry.MOOSE_JOSTLE.get(), this.getVoicePitch(), this.getSoundVolume());
+        this.playSound(AMSoundRegistry.MOOSE_JOSTLE, this.getVoicePitch(), this.getSoundVolume());
     }
 
 }

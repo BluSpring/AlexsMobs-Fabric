@@ -183,11 +183,11 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return isQueen() ? AMSoundRegistry.LEAFCUTTER_ANT_QUEEN_HURT.get() : AMSoundRegistry.LEAFCUTTER_ANT_HURT.get();
+        return isQueen() ? AMSoundRegistry.LEAFCUTTER_ANT_QUEEN_HURT : AMSoundRegistry.LEAFCUTTER_ANT_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return isQueen() ? AMSoundRegistry.LEAFCUTTER_ANT_QUEEN_HURT.get() : AMSoundRegistry.LEAFCUTTER_ANT_HURT.get();
+        return isQueen() ? AMSoundRegistry.LEAFCUTTER_ANT_QUEEN_HURT : AMSoundRegistry.LEAFCUTTER_ANT_HURT;
     }
 
     protected void playStepSound(BlockPos pos, BlockState state) {
@@ -216,7 +216,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
                 int babies = 1 + random.nextInt(1);
                 pacifyAllNearby();
                 for(int i = 0; i < babies; i++){
-                    EntityLeafcutterAnt leafcutterAnt = AMEntityRegistry.LEAFCUTTER_ANT.get().create(level());
+                    EntityLeafcutterAnt leafcutterAnt = AMEntityRegistry.LEAFCUTTER_ANT.create(level());
                     leafcutterAnt.copyPosition(this);
                     leafcutterAnt.setAge(-24000);
                     if(!this.level().isClientSide){

@@ -152,15 +152,15 @@ public class EntityCachalotWhale extends Animal {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.CACHALOT_WHALE_IDLE.get();
+        return AMSoundRegistry.CACHALOT_WHALE_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.CACHALOT_WHALE_HURT.get();
+        return AMSoundRegistry.CACHALOT_WHALE_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.CACHALOT_WHALE_HURT.get();
+        return AMSoundRegistry.CACHALOT_WHALE_HURT;
     }
 
     public void scaleParts() {
@@ -319,7 +319,7 @@ public class EntityCachalotWhale extends Animal {
                 final double extraZ = (radius * (1F + random.nextFloat() * 0.13F)) * Mth.cos(angle) + (random.nextFloat() - 0.5F) + this.getDeltaMovement().z * 2F;
                 final double motX = this.random.nextGaussian();
                 final double motZ = this.random.nextGaussian();
-                this.level().addParticle(AMParticleRegistry.WHALE_SPLASH.get(), this.headPart.getX() + extraX, this.headPart.getY() + this.headPart.getBbHeight(), this.headPart.getZ() + extraZ, motX * 0.1F + this.getDeltaMovement().x, 2F, motZ * 0.1F + this.getDeltaMovement().z);
+                this.level().addParticle(AMParticleRegistry.WHALE_SPLASH, this.headPart.getX() + extraX, this.headPart.getY() + this.headPart.getBbHeight(), this.headPart.getZ() + extraZ, motX * 0.1F + this.getDeltaMovement().x, 2F, motZ * 0.1F + this.getDeltaMovement().z);
             }
         }
     }
@@ -461,7 +461,7 @@ public class EntityCachalotWhale extends Animal {
             if (this.distanceTo(rewardPlayer) < 10F) {
                 if (!this.level().isClientSide) {
                     final Vec3 vec = this.getMouthVec();
-                    final ItemEntity itementity = new ItemEntity(this.level(), vec.x, vec.y, vec.z, new ItemStack(AMItemRegistry.AMBERGRIS.get(), 2 + random.nextInt(2)));
+                    final ItemEntity itementity = new ItemEntity(this.level(), vec.x, vec.y, vec.z, new ItemStack(AMItemRegistry.AMBERGRIS, 2 + random.nextInt(2)));
                     itementity.setDefaultPickUpDelay();
                     level().addFreshEntity(itementity);
                 }
@@ -627,7 +627,7 @@ public class EntityCachalotWhale extends Animal {
                         whaleSpeedMod = 0.25F;
                         if (echoTimer % 10 == 0) {
                             if (echoTimer % 40 == 0) {
-                                this.playSound(AMSoundRegistry.CACHALOT_WHALE_CLICK.get(), this.getSoundVolume(), this.getVoicePitch());
+                                this.playSound(AMSoundRegistry.CACHALOT_WHALE_CLICK, this.getSoundVolume(), this.getVoicePitch());
                                 this.gameEvent(GameEvent.ENTITY_ACTION);
                             }
                             final EntityCachalotEcho echo = new EntityCachalotEcho(this.level(), this);
@@ -701,7 +701,7 @@ public class EntityCachalotWhale extends Animal {
                                     chargeCooldown = target instanceof Player ? 30 : 100;
                                     if (random.nextInt(10) == 0) {
                                         Vec3 vec = this.getMouthVec();
-                                        ItemEntity itementity = new ItemEntity(this.level(), vec.x, vec.y, vec.z, new ItemStack(AMItemRegistry.CACHALOT_WHALE_TOOTH.get()));
+                                        ItemEntity itementity = new ItemEntity(this.level(), vec.x, vec.y, vec.z, new ItemStack(AMItemRegistry.CACHALOT_WHALE_TOOTH));
                                         itementity.setDefaultPickUpDelay();
                                         level().addFreshEntity(itementity);
                                     }
@@ -830,7 +830,7 @@ public class EntityCachalotWhale extends Animal {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        EntityCachalotWhale whale = AMEntityRegistry.CACHALOT_WHALE.get().create(serverWorld);
+        EntityCachalotWhale whale = AMEntityRegistry.CACHALOT_WHALE.create(serverWorld);
         whale.setAlbino(this.isAlbino());
         return whale;
     }

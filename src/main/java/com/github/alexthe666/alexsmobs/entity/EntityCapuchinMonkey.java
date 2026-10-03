@@ -150,15 +150,15 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.CAPUCHIN_MONKEY_IDLE.get();
+        return AMSoundRegistry.CAPUCHIN_MONKEY_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.CAPUCHIN_MONKEY_HURT.get();
+        return AMSoundRegistry.CAPUCHIN_MONKEY_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.CAPUCHIN_MONKEY_HURT.get();
+        return AMSoundRegistry.CAPUCHIN_MONKEY_HURT;
     }
 
     public boolean isAlliedTo(Entity entityIn) {
@@ -285,7 +285,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
     protected void dropEquipment() {
         super.dropEquipment();
         if (hasDart()) {
-            this.spawnAtLocation(AMItemRegistry.ANCIENT_DART.get());
+            this.spawnAtLocation(AMItemRegistry.ANCIENT_DART);
         }
     }
 
@@ -401,7 +401,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
-        EntityCapuchinMonkey monkey = AMEntityRegistry.CAPUCHIN_MONKEY.get().create(p_241840_1_);
+        EntityCapuchinMonkey monkey = AMEntityRegistry.CAPUCHIN_MONKEY.create(p_241840_1_);
         monkey.setVariant(this.getVariant());
         return monkey;
     }
@@ -456,7 +456,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         final InteractionResult interactionresult = itemstack.interactLivingEntity(player, this, hand);
         final InteractionResult type = super.mobInteract(player, hand);
         if (interactionresult != InteractionResult.SUCCESS && type != InteractionResult.SUCCESS && isTame() && isOwnedBy(player) && !isFood(itemstack) && !isTameableFood(itemstack) && !getAllFoods().test(itemstack)) {
-            if (!this.hasDart() && itemstack.getItem() == AMItemRegistry.ANCIENT_DART.get()) {
+            if (!this.hasDart() && itemstack.getItem() == AMItemRegistry.ANCIENT_DART) {
                 this.setDart(true);
                 this.usePlayerItem(player, hand, itemstack);
                 return InteractionResult.CONSUME;
@@ -517,7 +517,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         this.playSound(SoundEvents.CAT_EAT, this.getSoundVolume(), this.getVoicePitch());
         if (e.getItem().is(AMTagRegistry.BANANAS)) {
             if (getRandom().nextInt(4) == 0) {
-                this.spawnAtLocation(new ItemStack(AMBlockRegistry.BANANA_PEEL.get()));
+                this.spawnAtLocation(new ItemStack(AMBlockRegistry.BANANA_PEEL));
             }
         }
 

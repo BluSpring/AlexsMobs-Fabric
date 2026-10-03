@@ -35,7 +35,7 @@ public class TileEntitySculkBoomer extends BlockEntity implements GameEventListe
     private int screamTime = 0;
 
     public TileEntitySculkBoomer(BlockPos pos, BlockState state) {
-        super(AMTileEntityRegistry.SCULK_BOOMER.get(), pos, state);
+        super(AMTileEntityRegistry.SCULK_BOOMER, pos, state);
     }
 
     public static void commonTick(Level level, BlockPos pos, BlockState state, TileEntitySculkBoomer tileEntity) {
@@ -64,12 +64,12 @@ public class TileEntitySculkBoomer extends BlockEntity implements GameEventListe
             }
             boolean openNow = state.getValue(BlockSculkBoomer.OPEN);
             if(!tileEntity.prevOpen && openNow){
-                SoundEvent sound = AMSoundRegistry.SCULK_BOOMER.get();
+                SoundEvent sound = AMSoundRegistry.SCULK_BOOMER;
                 if(level.getRandom().nextInt(100) == 0){
-                    sound = AMSoundRegistry.SCULK_BOOMER_FART.get();
+                    sound = AMSoundRegistry.SCULK_BOOMER_FART;
                 }
                 level.playSound((Player)null, pos, sound, SoundSource.BLOCKS, 4F, level.random.nextFloat() * 0.2F + 0.9F);
-                level.addParticle(AMParticleRegistry.SKULK_BOOM.get(), pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0, 0, 0);
+                level.addParticle(AMParticleRegistry.SKULK_BOOM, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0, 0, 0);
             }
             tileEntity.prevOpen = openNow;
         }

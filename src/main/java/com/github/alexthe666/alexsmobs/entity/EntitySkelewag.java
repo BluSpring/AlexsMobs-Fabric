@@ -77,15 +77,15 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.SKELEWAG_IDLE.get();
+        return AMSoundRegistry.SKELEWAG_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.SKELEWAG_HURT.get();
+        return AMSoundRegistry.SKELEWAG_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.SKELEWAG_HURT.get();
+        return AMSoundRegistry.SKELEWAG_HURT;
     }
 
     public float getWalkTargetValue(BlockPos pos, LevelReader level) {
@@ -160,7 +160,7 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
             if (this.onGround() && random.nextFloat() < 0.2F) {
                 this.setDeltaMovement(this.getDeltaMovement().add((this.random.nextFloat() * 2.0F - 1.0F) * 0.2F, 0.5D, (this.random.nextFloat() * 2.0F - 1.0F) * 0.2F));
                 this.setYRot(this.random.nextFloat() * 360.0F);
-                this.playSound(AMSoundRegistry.SKELEWAG_HURT.get(), this.getSoundVolume(), this.getVoicePitch());
+                this.playSound(AMSoundRegistry.SKELEWAG_HURT, this.getSoundVolume(), this.getVoicePitch());
             }
         }
         AnimationHandler.INSTANCE.updateAnimations(this);

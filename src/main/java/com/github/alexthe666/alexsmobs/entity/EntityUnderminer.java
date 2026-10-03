@@ -154,15 +154,15 @@ public class EntityUnderminer extends PathfinderMob {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.UNDERMINER_IDLE.get();
+        return AMSoundRegistry.UNDERMINER_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.UNDERMINER_HURT.get();
+        return AMSoundRegistry.UNDERMINER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.UNDERMINER_HURT.get();
+        return AMSoundRegistry.UNDERMINER_HURT;
     }
 
 
@@ -239,7 +239,7 @@ public class EntityUnderminer extends PathfinderMob {
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource p_218949_, DifficultyInstance p_218950_) {
         super.populateDefaultEquipmentSlots(p_218949_, p_218950_);
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(AMItemRegistry.GHOSTLY_PICKAXE.get()));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(AMItemRegistry.GHOSTLY_PICKAXE));
     }
 
     protected float getEquipmentDropChance(EquipmentSlot slot) {
@@ -290,7 +290,7 @@ public class EntityUnderminer extends PathfinderMob {
                 }
             }
             if(lastPosition != null && lastPosition.distSqr(this.blockPosition()) > 2.5F && Math.abs(distToFloor) < 0.5){
-                this.playSound(AMSoundRegistry.UNDERMINER_STEP.get(), 1F, 0.75F + random.nextFloat() * 0.25F);
+                this.playSound(AMSoundRegistry.UNDERMINER_STEP, 1F, 0.75F + random.nextFloat() * 0.25F);
                 lastPosition = this.blockPosition();
                 if(random.nextFloat() < 0.015F && !level().canSeeSky(lastPosition)){
                     this.playSound(SoundEvents.AMBIENT_CAVE.value(), 3F, 0.75F + random.nextFloat() * 0.25F);
@@ -446,7 +446,7 @@ public class EntityUnderminer extends PathfinderMob {
     }
 
     private boolean hasPick(){
-        return this.getItemInHand(InteractionHand.MAIN_HAND).is(AMItemRegistry.GHOSTLY_PICKAXE.get());
+        return this.getItemInHand(InteractionHand.MAIN_HAND).is(AMItemRegistry.GHOSTLY_PICKAXE);
     }
 
     private class PathNavigator extends GroundPathNavigation {
@@ -513,7 +513,7 @@ public class EntityUnderminer extends PathfinderMob {
         public void stop() {
             if(minePretendPos != null && minePretendStartState != null && !minePretendStartState.equals(level().getBlockState(minePretendPos))){
                 for(ServerPlayer serverplayerentity : EntityUnderminer.this.level().getEntitiesOfClass(ServerPlayer.class, EntityUnderminer.this.getBoundingBox().inflate(12.0D, 12.0D, 12.0D))) {
-                    AMAdvancementTriggerRegistry.UNDERMINE_UNDERMINER.get().trigger(serverplayerentity);
+                    AMAdvancementTriggerRegistry.UNDERMINE_UNDERMINER.trigger(serverplayerentity);
                 }
             }
             minePretendPos = null;

@@ -124,7 +124,7 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
                 worldIn.removeBlock(pos, false);
                 for (int j = 0; j < state.getValue(EGGS); ++j) {
                     worldIn.levelEvent(2001, pos, Block.getId(state));
-                    EntityTerrapin turtleentity = AMEntityRegistry.TERRAPIN.get().create(worldIn);
+                    EntityTerrapin turtleentity = AMEntityRegistry.TERRAPIN.create(worldIn);
                     turtleentity.setAge(-24000);
                     if(worldIn.getBlockEntity(pos) instanceof TileEntityTerrapinEgg eggTE){
                         eggTE.addAttributesToOffspring(turtleentity, random);
@@ -198,7 +198,7 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
             silkTouch = pickaxe.getEnchantmentLevel(level.holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH)) > 0;
         }
         if (silkTouch && blockentity instanceof TileEntityTerrapinEgg) {
-            ItemStack stack = new ItemStack(AMBlockRegistry.TERRAPIN_EGG.get());
+            ItemStack stack = new ItemStack(AMBlockRegistry.TERRAPIN_EGG);
             TileEntityTerrapinEgg egg = (TileEntityTerrapinEgg)blockentity;
             CompoundTag tag = new CompoundTag();
             CompoundTag parent1 = new CompoundTag();
@@ -238,7 +238,7 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
     */
 
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState state2, boolean b) {
-        if (state.is(AMBlockRegistry.TERRAPIN_EGG.get()) && state.getValue(EGGS) <= 1) {
+        if (state.is(AMBlockRegistry.TERRAPIN_EGG) && state.getValue(EGGS) <= 1) {
             super.onRemove(state, level, pos, state2, b);
         }
     }

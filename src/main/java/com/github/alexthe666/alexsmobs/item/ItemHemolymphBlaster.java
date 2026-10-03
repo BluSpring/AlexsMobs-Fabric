@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 public class ItemHemolymphBlaster extends Item {
 
     public static final Predicate<ItemStack> HEMOLYMPH = (stack) -> {
-        return stack.getItem() == AMItemRegistry.HEMOLYMPH_SAC.get();
+        return stack.getItem() == AMItemRegistry.HEMOLYMPH_SAC;
     };
 
     public ItemHemolymphBlaster(Item.Properties properties) {

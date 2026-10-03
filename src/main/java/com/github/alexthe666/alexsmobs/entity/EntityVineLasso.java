@@ -35,14 +35,14 @@ public class EntityVineLasso extends Entity {
     }
 
     public EntityVineLasso(Level worldIn, LivingEntity entity) {
-        this(AMEntityRegistry.VINE_LASSO.get(), worldIn);
+        this(AMEntityRegistry.VINE_LASSO, worldIn);
         this.setShooter(entity);
         this.setPos(entity.getX(), entity.getEyeY() + (double)0.15F, entity.getZ());
     }
 
     @OnlyIn(Dist.CLIENT)
     public EntityVineLasso(Level worldIn, double x, double y, double z, double p_i47274_8_, double p_i47274_10_, double p_i47274_12_) {
-        this(AMEntityRegistry.VINE_LASSO.get(), worldIn);
+        this(AMEntityRegistry.VINE_LASSO, worldIn);
         this.setPos(x, y, z);
         this.setDeltaMovement(p_i47274_8_, p_i47274_10_, p_i47274_12_);
     }
@@ -99,7 +99,7 @@ public class EntityVineLasso extends Entity {
 
     private void removeAndAddToInventory(){
         Entity entity = this.getOwner();
-        ItemStack item = new ItemStack(AMItemRegistry.VINE_LASSO.get());
+        ItemStack item = new ItemStack(AMItemRegistry.VINE_LASSO);
         if(!this.isRemoved()){
             if (!(entity instanceof Player) || !((Player) entity).addItem(item)) {
                 this.spawnAtLocation(item);

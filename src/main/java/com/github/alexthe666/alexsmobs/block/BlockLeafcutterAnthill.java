@@ -55,7 +55,7 @@ public class BlockLeafcutterAnthill extends BaseEntityBlock {
     public ItemInteractionResult useItemOn(ItemStack heldItem, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (worldIn.getBlockEntity(pos) instanceof TileEntityLeafcutterAnthill) {
             TileEntityLeafcutterAnthill hill = (TileEntityLeafcutterAnthill) worldIn.getBlockEntity(pos);
-            if (heldItem.getItem() == AMItemRegistry.GONGYLIDIA.get() && hill.hasQueen()) {
+            if (heldItem.getItem() == AMItemRegistry.GONGYLIDIA && hill.hasQueen()) {
                 hill.releaseQueens();
                 if (!player.isCreative()) {
                     heldItem.shrink(1);
@@ -102,7 +102,7 @@ public class BlockLeafcutterAnthill extends BaseEntityBlock {
                 TileEntityLeafcutterAnthill beehivetileentity = (TileEntityLeafcutterAnthill) worldIn.getBlockEntity(pos);
                 beehivetileentity.angerAnts((LivingEntity) entityIn, worldIn.getBlockState(pos), BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
                 if(entityIn instanceof ServerPlayer){
-                    AMAdvancementTriggerRegistry.STOMP_LEAFCUTTER_ANTHILL.get().trigger((ServerPlayer)entityIn);
+                    AMAdvancementTriggerRegistry.STOMP_LEAFCUTTER_ANTHILL.trigger((ServerPlayer)entityIn);
                 }
             }
         }
@@ -157,6 +157,6 @@ public class BlockLeafcutterAnthill extends BaseEntityBlock {
 
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152180_, BlockState p_152181_, BlockEntityType<T> p_152182_) {
-        return p_152180_.isClientSide ? null : createTickerHelper(p_152182_, AMTileEntityRegistry.LEAFCUTTER_ANTHILL.get(), TileEntityLeafcutterAnthill::serverTick);
+        return p_152180_.isClientSide ? null : createTickerHelper(p_152182_, AMTileEntityRegistry.LEAFCUTTER_ANTHILL, TileEntityLeafcutterAnthill::serverTick);
     }
 }

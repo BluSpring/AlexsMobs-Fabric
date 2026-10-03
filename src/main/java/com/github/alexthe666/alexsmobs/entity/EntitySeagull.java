@@ -101,15 +101,15 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.SEAGULL_IDLE.get();
+        return AMSoundRegistry.SEAGULL_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.SEAGULL_HURT.get();
+        return AMSoundRegistry.SEAGULL_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.SEAGULL_HURT.get();
+        return AMSoundRegistry.SEAGULL_HURT;
     }
 
     public void addAdditionalSaveData(CompoundTag compound) {
@@ -547,7 +547,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        return AMEntityRegistry.SEAGULL.get().create(serverWorld);
+        return AMEntityRegistry.SEAGULL.create(serverWorld);
     }
 
     public void peck() {

@@ -156,7 +156,7 @@ public class EntityHammerheadShark extends WaterAnimal {
                     if(dist < 2D){
                         shark.doHurtTarget(prey);
                         if(shark.random.nextFloat() < 0.3F){
-                            shark.spawnAtLocation(new ItemStack(AMItemRegistry.SHARK_TOOTH.get()));
+                            shark.spawnAtLocation(new ItemStack(AMItemRegistry.SHARK_TOOTH));
                         }
                         stop();
                     }

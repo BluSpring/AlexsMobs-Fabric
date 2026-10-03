@@ -46,7 +46,7 @@ public class CaimanAIBellow extends Goal {
             }
             if(d1 > 0.19F && d1 < 0.5F){
                 bellowTime++;
-                caiman.playSound(AMSoundRegistry.CAIMAN_SPLASH.get(), 1, caiman.getVoicePitch());
+                caiman.playSound(AMSoundRegistry.CAIMAN_SPLASH, 1, caiman.getVoicePitch());
                 caiman.setBellowing(true);
             }
         }

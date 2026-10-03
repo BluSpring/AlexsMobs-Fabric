@@ -86,15 +86,15 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.DROPBEAR_IDLE.get();
+        return AMSoundRegistry.DROPBEAR_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.DROPBEAR_HURT.get();
+        return AMSoundRegistry.DROPBEAR_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.DROPBEAR_HURT.get();
+        return AMSoundRegistry.DROPBEAR_HURT;
     }
 
     public boolean doHurtTarget(Entity entityIn) {

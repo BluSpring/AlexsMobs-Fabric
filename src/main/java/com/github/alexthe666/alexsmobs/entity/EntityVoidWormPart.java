@@ -299,7 +299,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
                 final double d0 = this.random.nextGaussian() * 0.02D;
                 final double d1 = this.random.nextGaussian() * 0.02D;
                 final double d2 = this.random.nextGaussian() * 0.02D;
-                this.level().addParticle(AMParticleRegistry.WORM_PORTAL.get(), this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
+                this.level().addParticle(AMParticleRegistry.WORM_PORTAL, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
             }
         }
 
@@ -312,7 +312,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
             worm.setSegmentCount(segments);
             if (this.getChild() instanceof EntityVoidWormPart) {
                 EntityVoidWormPart segment = (EntityVoidWormPart) this.getChild();
-                EntityVoidWorm worm2 = AMEntityRegistry.VOID_WORM.get().create(level());
+                EntityVoidWorm worm2 = AMEntityRegistry.VOID_WORM.create(level());
                 worm2.setNoAi(worm.isNoAi());
                 worm2.setInvulnerable(worm.isInvulnerable());
                 worm2.copyPosition(this);
@@ -330,7 +330,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
                 worm2.resetWormScales();
                 if (!this.level().isClientSide) {
                     if (cause != null && cause.getEntity() instanceof ServerPlayer) {
-                        AMAdvancementTriggerRegistry.VOID_WORM_SPLIT.get().trigger((ServerPlayer) cause.getEntity());
+                        AMAdvancementTriggerRegistry.VOID_WORM_SPLIT.trigger((ServerPlayer) cause.getEntity());
                     }
                 }
             }

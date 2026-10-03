@@ -140,15 +140,15 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.MIMIC_OCTOPUS_IDLE.get();
+        return AMSoundRegistry.MIMIC_OCTOPUS_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.MIMIC_OCTOPUS_HURT.get();
+        return AMSoundRegistry.MIMIC_OCTOPUS_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.MIMIC_OCTOPUS_HURT.get();
+        return AMSoundRegistry.MIMIC_OCTOPUS_HURT;
     }
 
     public boolean checkSpawnObstruction(LevelReader worldIn) {
@@ -214,7 +214,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     @Override
     @Nonnull
     public ItemStack getBucketItemStack() {
-        ItemStack stack = new ItemStack(AMItemRegistry.MIMIC_OCTOPUS_BUCKET.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.MIMIC_OCTOPUS_BUCKET);
         if (this.hasCustomName()) {
             stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -570,7 +570,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
                     double d2 = this.random.nextGaussian() * 0.1D;
                     double d0 = this.random.nextGaussian() * 0.1D;
                     double d1 = this.random.nextGaussian() * 0.1D;
-                    this.level().addParticle(AMParticleRegistry.SHOCKED.get(), e.getX(), e.getEyeY() + e.getBbHeight() * 0.15F + (double) (this.random.nextFloat() * e.getBbHeight() * 0.15F), e.getZ(), d0, d1, d2);
+                    this.level().addParticle(AMParticleRegistry.SHOCKED, e.getX(), e.getEyeY() + e.getBbHeight() * 0.15F + (double) (this.random.nextFloat() * e.getBbHeight() * 0.15F), e.getZ(), d0, d1, d2);
                 }
             }
         }
@@ -746,7 +746,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        return AMEntityRegistry.MIMIC_OCTOPUS.get().create(serverWorld);
+        return AMEntityRegistry.MIMIC_OCTOPUS.create(serverWorld);
     }
 
     @Override

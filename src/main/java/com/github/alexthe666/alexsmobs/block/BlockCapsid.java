@@ -122,6 +122,6 @@ public class BlockCapsid extends BaseEntityBlock {
 
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152180_, BlockState p_152181_, BlockEntityType<T> p_152182_) {
-        return createTickerHelper(p_152182_, AMTileEntityRegistry.CAPSID.get(), TileEntityCapsid::commonTick);
+        return createTickerHelper(p_152182_, AMTileEntityRegistry.CAPSID, TileEntityCapsid::commonTick);
     }
 }

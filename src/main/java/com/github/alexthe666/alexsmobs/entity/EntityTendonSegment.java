@@ -68,7 +68,7 @@ public class EntityTendonSegment  extends Entity {
             onJoinWorld();
         }else if(tickCount == 1){
             if(!this.level().isClientSide){
-                this.playSound(AMSoundRegistry.TENDON_WHIP.get(),1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+                this.playSound(AMSoundRegistry.TENDON_WHIP,1.0F, 0.8F + this.random.nextFloat() * 0.4F);
             }
         }
         super.tick();
@@ -148,7 +148,7 @@ public class EntityTendonSegment  extends Entity {
     }
 
     private double getDamageFor(LivingEntity creator, LivingEntity entity) {
-        ItemStack stack = creator.getItemInHand(InteractionHand.MAIN_HAND).is(AMItemRegistry.TENDON_WHIP.get()) ? creator.getItemInHand(InteractionHand.MAIN_HAND) : creator.getItemInHand(InteractionHand.OFF_HAND);
+        ItemStack stack = creator.getItemInHand(InteractionHand.MAIN_HAND).is(AMItemRegistry.TENDON_WHIP) ? creator.getItemInHand(InteractionHand.MAIN_HAND) : creator.getItemInHand(InteractionHand.OFF_HAND);
         double dmg = this.getBaseDamage();
         // getDamageBonus with MobType removed in 1.21 - enchantments are applied differently
         // For now just return base damage; enchantment damage is applied via separate mechanisms
@@ -196,7 +196,7 @@ public class EntityTendonSegment  extends Entity {
 
     private void createChain(Entity closestValid) {
         this.entityData.set(HAS_CLAW, false);
-        EntityTendonSegment child = AMEntityRegistry.TENDON_SEGMENT.get().create(this.level());
+        EntityTendonSegment child = AMEntityRegistry.TENDON_SEGMENT.create(this.level());
         child.previouslyTouched = new ArrayList<>(previouslyTouched);
         child.previouslyTouched.add(closestValid);
         child.setCreatorEntityUUID(this.getCreatorEntityUUID());
@@ -217,8 +217,8 @@ public class EntityTendonSegment  extends Entity {
         Entity prior = getFromEntity();
         if(creator instanceof Player){
             Player player = (Player)creator;
-            ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND).is(AMItemRegistry.TENDON_WHIP.get()) ? player.getItemInHand(InteractionHand.MAIN_HAND) : player.getItemInHand(InteractionHand.OFF_HAND);
-            if(stack.is(AMItemRegistry.TENDON_WHIP.get())){
+            ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND).is(AMItemRegistry.TENDON_WHIP) ? player.getItemInHand(InteractionHand.MAIN_HAND) : player.getItemInHand(InteractionHand.OFF_HAND);
+            if(stack.is(AMItemRegistry.TENDON_WHIP)){
                 this.setHasGlint(stack.hasFoil());
             }
             float dmg = 2;

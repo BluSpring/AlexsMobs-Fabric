@@ -124,15 +124,15 @@ public class EntityJerboa extends Animal {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.JERBOA_IDLE.get();
+        return AMSoundRegistry.JERBOA_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.JERBOA_HURT.get();
+        return AMSoundRegistry.JERBOA_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.JERBOA_HURT.get();
+        return AMSoundRegistry.JERBOA_HURT;
     }
 
 
@@ -435,7 +435,7 @@ public class EntityJerboa extends Animal {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_146743_, AgeableMob p_146744_) {
-        EntityJerboa boa = AMEntityRegistry.JERBOA.get().create(p_146743_);
+        EntityJerboa boa = AMEntityRegistry.JERBOA.create(p_146743_);
         boa.setBefriended(true);
         return boa;
     }

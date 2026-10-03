@@ -60,11 +60,11 @@ public class EntityGazelle extends Animal implements IAnimatedEntity, IHerdPanic
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.GAZELLE_HURT.get();
+        return AMSoundRegistry.GAZELLE_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.GAZELLE_HURT.get();
+        return AMSoundRegistry.GAZELLE_HURT;
     }
 
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
@@ -185,7 +185,7 @@ public class EntityGazelle extends Animal implements IAnimatedEntity, IHerdPanic
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
-        return AMEntityRegistry.GAZELLE.get().create(p_241840_1_);
+        return AMEntityRegistry.GAZELLE.create(p_241840_1_);
     }
 
     @Override

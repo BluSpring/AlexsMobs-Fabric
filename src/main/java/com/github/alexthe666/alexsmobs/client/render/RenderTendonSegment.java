@@ -103,7 +103,7 @@ public class RenderTendonSegment extends EntityRenderer<EntityTendonSegment> {
             double d1 = (double) Mth.cos(f2);
             double d2 = (double) i * 0.35D;
             ItemStack itemstack = player.getMainHandItem();
-            if (!itemstack.is(AMItemRegistry.TENDON_WHIP.get())) {
+            if (!itemstack.is(AMItemRegistry.TENDON_WHIP)) {
                 i = -i;
             }
             if ((this.entityRenderDispatcher.options == null || this.entityRenderDispatcher.options.getCameraType().isFirstPerson()) && player == Minecraft.getInstance().player) {

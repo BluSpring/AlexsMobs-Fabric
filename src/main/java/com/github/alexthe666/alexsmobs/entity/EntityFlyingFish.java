@@ -274,7 +274,7 @@ public class EntityFlyingFish extends WaterAnimal implements FlyingAnimal, Bucke
 
     @Nonnull
     public ItemStack getBucketItemStack() {
-        ItemStack stack = new ItemStack(AMItemRegistry.FLYING_FISH_BUCKET.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.FLYING_FISH_BUCKET);
         if (this.hasCustomName()) {
             stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }

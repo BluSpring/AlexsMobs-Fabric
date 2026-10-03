@@ -79,7 +79,7 @@ public class BlockSculkBoomer extends BaseEntityBlock {
 
     @javax.annotation.Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_222100_, BlockState p_222101_, BlockEntityType<T> p_222102_) {
-        return createTickerHelper(p_222102_, AMTileEntityRegistry.SCULK_BOOMER.get(), TileEntitySculkBoomer::commonTick);
+        return createTickerHelper(p_222102_, AMTileEntityRegistry.SCULK_BOOMER, TileEntitySculkBoomer::commonTick);
     }
 
 

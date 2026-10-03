@@ -62,7 +62,7 @@ public class BlossomLootModifier implements IGlobalLootModifier {
             int blossomStep = (int) Math.floor(AMConfig.acaciaBlossomChance * 0.1F);
             int blossomRarity = AMConfig.acaciaBlossomChance - (bonusLevel * blossomStep);
             if (blossomRarity < 1 || random.nextInt(blossomRarity) == 0) {
-                generatedLoot.add(new ItemStack(AMItemRegistry.ACACIA_BLOSSOM.get()));
+                generatedLoot.add(new ItemStack(AMItemRegistry.ACACIA_BLOSSOM));
             }
         }
         return generatedLoot;

@@ -70,15 +70,15 @@ public class EntityGuster extends Monster {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.GUSTER_IDLE.get();
+        return AMSoundRegistry.GUSTER_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.GUSTER_HURT.get();
+        return AMSoundRegistry.GUSTER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.GUSTER_HURT.get();
+        return AMSoundRegistry.GUSTER_HURT;
     }
 
     public boolean isSensitiveToWater() {
@@ -234,7 +234,7 @@ public class EntityGuster extends Monster {
         }
         float f = (float) this.getY();
         if (this.isAlive()) {
-            ParticleOptions type = this.getVariant() == 2 ? AMParticleRegistry.GUSTER_SAND_SPIN_SOUL.get() : this.getVariant() == 1 ? AMParticleRegistry.GUSTER_SAND_SPIN_RED.get() : AMParticleRegistry.GUSTER_SAND_SPIN.get();
+            ParticleOptions type = this.getVariant() == 2 ? AMParticleRegistry.GUSTER_SAND_SPIN_SOUL : this.getVariant() == 1 ? AMParticleRegistry.GUSTER_SAND_SPIN_RED : AMParticleRegistry.GUSTER_SAND_SPIN;
             for (int j = 0; j < 4; ++j) {
                 float f1 = (this.random.nextFloat() * 2.0F - 1.0F) * this.getBbWidth() * 0.95F;
                 float f2 = (this.random.nextFloat() * 2.0F - 1.0F) * this.getBbWidth() * 0.95F;

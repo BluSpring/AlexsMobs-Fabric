@@ -225,7 +225,7 @@ public class BlockEndPirateDoor extends BaseEntityBlock {
 
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152180_, BlockState state, BlockEntityType<T> p_152182_) {
-        return state.getValue(SEGMENT) == 0 ? createTickerHelper(p_152182_, AMTileEntityRegistry.END_PIRATE_DOOR.get(), TileEntityEndPirateDoor::commonTick) : null;
+        return state.getValue(SEGMENT) == 0 ? createTickerHelper(p_152182_, AMTileEntityRegistry.END_PIRATE_DOOR, TileEntityEndPirateDoor::commonTick) : null;
     }
 
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {

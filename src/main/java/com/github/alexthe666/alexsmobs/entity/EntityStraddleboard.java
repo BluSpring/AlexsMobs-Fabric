@@ -65,7 +65,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
     }
 
     public EntityStraddleboard(Level worldIn, double x, double y, double z) {
-        this(AMEntityRegistry.STRADDLEBOARD.get(), worldIn);
+        this(AMEntityRegistry.STRADDLEBOARD, worldIn);
         this.setPos(x, y, z);
         this.setDeltaMovement(Vec3.ZERO);
         this.xo = x;
@@ -84,7 +84,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(TIME_SINCE_HIT, 0);
-        builder.define(ITEMSTACK, new ItemStack(AMItemRegistry.STRADDLEBOARD.get()));
+        builder.define(ITEMSTACK, new ItemStack(AMItemRegistry.STRADDLEBOARD));
         builder.define(DEFAULT_COLOR, true);
         builder.define(COLOR, 0);
         builder.define(BOARD_ROT, 0F);

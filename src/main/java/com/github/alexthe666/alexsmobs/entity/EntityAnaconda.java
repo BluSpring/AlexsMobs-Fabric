@@ -77,16 +77,16 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.ANACONDA_HURT.get();
+        return AMSoundRegistry.ANACONDA_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.ANACONDA_HURT.get();
+        return AMSoundRegistry.ANACONDA_HURT;
     }
 
     protected void playStepSound(BlockPos pos, BlockState state) {
         if (!isBaby()) {
-            this.playSound(AMSoundRegistry.ANACONDA_SLITHER.get(), 1.0F, 1.0F);
+            this.playSound(AMSoundRegistry.ANACONDA_SLITHER, 1.0F, 1.0F);
         } else {
             super.playStepSound(pos, state);
         }
@@ -332,7 +332,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
                 for (int i = 0; i < segments; i++) {
                     final float prevReqRot = calcPartRotation(i) + getYawForPart(i);
                     final float reqRot = calcPartRotation(i + 1) + getYawForPart(i);
-                    EntityAnacondaPart part = new EntityAnacondaPart(AMEntityRegistry.ANACONDA_PART.get(), this);
+                    EntityAnacondaPart part = new EntityAnacondaPart(AMEntityRegistry.ANACONDA_PART, this);
                     part.setParent(partParent);
                     part.copyDataFrom(this);
                     part.setBodyIndex(i);
@@ -388,7 +388,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         if (this.getSheddingTime() > 0) {
             this.setSheddingTime(this.getSheddingTime() - 1);
             if (this.getSheddingTime() == 0) {
-                this.spawnItemAtOffset(new ItemStack(AMItemRegistry.SHED_SNAKE_SKIN.get()), 1 + random.nextFloat(), 0.2F);
+                this.spawnItemAtOffset(new ItemStack(AMItemRegistry.SHED_SNAKE_SKIN), 1 + random.nextFloat(), 0.2F);
                 shedCooldown = 1000 + random.nextInt(2000);
             }
         }
@@ -517,7 +517,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob mob) {
-        EntityAnaconda anaconda = AMEntityRegistry.ANACONDA.get().create(serverWorld);
+        EntityAnaconda anaconda = AMEntityRegistry.ANACONDA.create(serverWorld);
         anaconda.setYellow(this.isYellow());
         return anaconda;
     }
@@ -591,7 +591,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
                 if (jumpAttemptCooldown == 0 && snake.distanceTo(target) < 1 + target.getBbWidth() && !snake.isStrangling()) {
                     target.hurt(snake.damageSources().mobAttack(snake), 4);
                     snake.setStrangling(target.getBbWidth() <= 2.0F && !(target instanceof EntityAnaconda));
-                    snake.playSound(AMSoundRegistry.ANACONDA_ATTACK.get(), snake.getSoundVolume(), snake.getVoicePitch());
+                    snake.playSound(AMSoundRegistry.ANACONDA_ATTACK, snake.getSoundVolume(), snake.getVoicePitch());
                     jumpAttemptCooldown = 5 + random.nextInt(5);
                 }
                 if (snake.isStrangling()) {

@@ -91,7 +91,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
     @Override
     @Nonnull
     public ItemStack getBucketItemStack() {
-        ItemStack stack = new ItemStack(AMItemRegistry.STRADPOLE_BUCKET.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.STRADPOLE_BUCKET);
         if (this.hasCustomName()) {
             stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -120,7 +120,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
                 itemstack.shrink(1);
             }
             if(random.nextFloat() < 0.45F){
-                EntityStraddler straddler = AMEntityRegistry.STRADDLER.get().create(level());
+                EntityStraddler straddler = AMEntityRegistry.STRADDLER.create(level());
                 straddler.copyPosition(this);
                 if(!this.level().isClientSide && level().addFreshEntity(straddler)){
                     this.remove(RemovalReason.DISCARDED);

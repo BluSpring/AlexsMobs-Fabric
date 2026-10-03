@@ -39,7 +39,7 @@ public class RecipeMimicreamRepair extends CustomRecipe {
                 if (itemstack1.isDamageableItem() && !isBlacklisted(itemstack1)) {
                     damageableStack = itemstack1;
                 } else {
-                    if (itemstack1.getItem() == AMItemRegistry.MIMICREAM.get()) {
+                    if (itemstack1.getItem() == AMItemRegistry.MIMICREAM) {
                         mimicreamCount++;
                     }
                 }
@@ -67,7 +67,7 @@ public class RecipeMimicreamRepair extends CustomRecipe {
                 if (itemstack1.isDamageableItem() && !isBlacklisted(itemstack1)) {
                     damageableStack = itemstack1;
                 } else {
-                    if (itemstack1.getItem() == AMItemRegistry.MIMICREAM.get()) {
+                    if (itemstack1.getItem() == AMItemRegistry.MIMICREAM) {
                         mimicreamCount++;
                     }
                 }
@@ -77,7 +77,7 @@ public class RecipeMimicreamRepair extends CustomRecipe {
         if (!damageableStack.isEmpty() && mimicreamCount >= 8) {
             ItemStack itemstack2 = damageableStack.copy();
 
-            if (damageableStack.is(AMItemRegistry.GHOSTLY_PICKAXE.get())) {
+            if (damageableStack.is(AMItemRegistry.GHOSTLY_PICKAXE)) {
                 CustomData.update(DataComponents.CUSTOM_DATA, itemstack2, tag -> {
                     if (tag.contains("Items")) {
                         tag.remove("Items");

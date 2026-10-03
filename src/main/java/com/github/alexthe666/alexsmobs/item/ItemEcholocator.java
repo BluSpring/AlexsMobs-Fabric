@@ -44,7 +44,7 @@ public class ItemEcholocator extends Item {
     private List<BlockPos> getNearbyPortals(BlockPos blockpos, ServerLevel world, int range) {
         if(type == EchoType.ENDER){
             PoiManager pointofinterestmanager = world.getPoiManager();
-            Stream<BlockPos> stream = pointofinterestmanager.findAll(poiTypeHolder -> poiTypeHolder.is(AMPointOfInterestRegistry.END_PORTAL_FRAME.getKey()), Predicates.alwaysTrue(), blockpos, range, PoiManager.Occupancy.ANY);
+            Stream<BlockPos> stream = pointofinterestmanager.findAll(poiTypeHolder -> poiTypeHolder.is(AMPointOfInterestRegistry.END_PORTAL_FRAME), Predicates.alwaysTrue(), blockpos, range, PoiManager.Occupancy.ANY);
             List<BlockPos> portals = stream.collect(Collectors.toList());
             if(portals.isEmpty()){
                 BlockPos nearestMapStructure = world.findNearestMapStructure(StructureTags.EYE_OF_ENDER_LOCATED, blockpos, 100, false);
@@ -130,7 +130,7 @@ public class ItemEcholocator extends Item {
                 whaleEcho.shoot(d0, d1, d2, 0.4F, 0.3F);
                 worldIn.addFreshEntity(whaleEcho);
                 livingEntityIn.gameEvent(GameEvent.ITEM_INTERACT_START);
-                worldIn.playSound((Player)null, whaleEcho.getX(), whaleEcho.getY(), whaleEcho.getZ(), AMSoundRegistry.CACHALOT_WHALE_CLICK.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                worldIn.playSound((Player)null, whaleEcho.getX(), whaleEcho.getY(), whaleEcho.getZ(), AMSoundRegistry.CACHALOT_WHALE_CLICK, SoundSource.PLAYERS, 1.0F, 1.0F);
                 stack.hurtAndBreak(1, livingEntityIn, EquipmentSlot.MAINHAND);
             }
         }

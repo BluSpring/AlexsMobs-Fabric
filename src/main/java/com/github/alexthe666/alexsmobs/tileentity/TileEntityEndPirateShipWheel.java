@@ -19,7 +19,7 @@ public class TileEntityEndPirateShipWheel extends BlockEntity {
 
 
     public TileEntityEndPirateShipWheel(BlockPos pos, BlockState state) {
-        super(AMTileEntityRegistry.END_PIRATE_SHIP_WHEEL.get(), pos, state);
+        super(AMTileEntityRegistry.END_PIRATE_SHIP_WHEEL, pos, state);
     }
 
     public static void commonTick(Level level, BlockPos pos, BlockState state, TileEntityEndPirateShipWheel entity) {

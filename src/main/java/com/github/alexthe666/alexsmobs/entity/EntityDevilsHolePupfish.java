@@ -93,11 +93,11 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
 
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.DEVILS_HOLE_PUPFISH_HURT.get();
+        return AMSoundRegistry.DEVILS_HOLE_PUPFISH_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.DEVILS_HOLE_PUPFISH_HURT.get();
+        return AMSoundRegistry.DEVILS_HOLE_PUPFISH_HURT;
     }
 
     protected void registerGoals() {
@@ -256,7 +256,7 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
     @Override
     @Nonnull
     public ItemStack getBucketItemStack() {
-        ItemStack stack = new ItemStack(AMItemRegistry.DEVILS_HOLE_PUPFISH_BUCKET.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.DEVILS_HOLE_PUPFISH_BUCKET);
         if (this.hasCustomName()) {
             stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -471,7 +471,7 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
     }
 
     private void spawnBabiesWith(EntityDevilsHolePupfish chasePartner) {
-        EntityDevilsHolePupfish baby = AMEntityRegistry.DEVILS_HOLE_PUPFISH.get().create(level());
+        EntityDevilsHolePupfish baby = AMEntityRegistry.DEVILS_HOLE_PUPFISH.create(level());
         baby.copyPosition(this);
         baby.setPupfishScale(0.65F + random.nextFloat() * 0.35F);
         baby.setBabyAge(-24000);

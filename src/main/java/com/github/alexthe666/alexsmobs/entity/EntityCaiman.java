@@ -173,15 +173,15 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
     }
 
     protected SoundEvent getAmbientSound() {
-        return isBaby() ? AMSoundRegistry.CROCODILE_BABY.get() : AMSoundRegistry.CAIMAN_IDLE.get();
+        return isBaby() ? AMSoundRegistry.CROCODILE_BABY : AMSoundRegistry.CAIMAN_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.CAIMAN_HURT.get();
+        return AMSoundRegistry.CAIMAN_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.CAIMAN_HURT.get();
+        return AMSoundRegistry.CAIMAN_HURT;
     }
 
     public void tick() {
@@ -396,7 +396,7 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return AMEntityRegistry.CAIMAN.get().create(serverLevel);
+        return AMEntityRegistry.CAIMAN.create(serverLevel);
     }
 
     public Vec3 getShakePreyPos() {
@@ -502,7 +502,7 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
                 Level world = this.caiman.level();
                 caiman.gameEvent(GameEvent.BLOCK_PLACE);
                 world.playSound(null, blockpos, SoundEvents.TURTLE_LAY_EGG, SoundSource.BLOCKS, 0.3F, 0.9F + world.random.nextFloat() * 0.2F);
-                world.setBlock(this.blockPos.above(), AMBlockRegistry.CAIMAN_EGG.get().defaultBlockState().setValue(BlockReptileEgg.EGGS, Integer.valueOf(this.caiman.random.nextInt(1) + 3)), 3);
+                world.setBlock(this.blockPos.above(), AMBlockRegistry.CAIMAN_EGG.defaultBlockState().setValue(BlockReptileEgg.EGGS, Integer.valueOf(this.caiman.random.nextInt(1) + 3)), 3);
                 this.caiman.setHasEgg(false);
                 this.caiman.setInLoveTime(600);
             }

@@ -68,7 +68,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
             float headPitch) {
         matrixStackIn.pushPose();
         if (roo.isRoger()) {
-            ItemStack haloStack = new ItemStack(AMItemRegistry.HALO.get());
+            ItemStack haloStack = new ItemStack(AMItemRegistry.HALO);
             matrixStackIn.pushPose();
             translateToHead(matrixStackIn);
             float f = 0.1F * (float) Math.sin((roo.tickCount + partialTicks) * 0.1F) + (roo.isBaby() ? 0.2F : 0F);
@@ -93,7 +93,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
                         this.setModelSlotVisible(a, EquipmentSlot.HEAD);
                         translateToHead(matrixStackIn);
                         matrixStackIn.translate(0, 0.015F, -0.05F);
-                        if (itemstack.getItem() == AMItemRegistry.FEDORA.get()) {
+                        if (itemstack.getItem() == AMItemRegistry.FEDORA) {
                             matrixStackIn.translate(0, 0.05F, 0F);
 
                         }

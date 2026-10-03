@@ -171,11 +171,11 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.KANGAROO_IDLE.get();
+        return AMSoundRegistry.KANGAROO_IDLE;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.KANGAROO_IDLE.get();
+        return AMSoundRegistry.KANGAROO_IDLE;
     }
 
     private void initKangarooInventory() {
@@ -781,7 +781,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        return AMEntityRegistry.KANGAROO.get().create(serverWorld);
+        return AMEntityRegistry.KANGAROO.create(serverWorld);
     }
 
     public void setMovementSpeed(double newSpeed) {

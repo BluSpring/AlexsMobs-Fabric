@@ -19,7 +19,7 @@ public class EntityMudBall extends EntityMobProjectile {
     }
 
     public EntityMudBall(Level worldIn, EntityMudskipper mudskipper) {
-        super(AMEntityRegistry.MUD_BALL.get(), worldIn, mudskipper);
+        super(AMEntityRegistry.MUD_BALL, worldIn, mudskipper);
         Vec3 vec3 = mudskipper.position().add(calcOffsetVec(new Vec3(0, 0, 0.2F * mudskipper.getScale()), 0F, mudskipper.getYRot()));
         this.setPos(vec3.x, vec3.y, vec3.z);
     }

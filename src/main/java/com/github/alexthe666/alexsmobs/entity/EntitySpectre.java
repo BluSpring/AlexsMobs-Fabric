@@ -64,15 +64,15 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.SPECTRE_IDLE.get();
+        return AMSoundRegistry.SPECTRE_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.SPECTRE_HURT.get();
+        return AMSoundRegistry.SPECTRE_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.SPECTRE_HURT.get();
+        return AMSoundRegistry.SPECTRE_HURT;
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {
@@ -107,7 +107,7 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
     }
 
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new TemptHeartGoal(this, 1.0D, Ingredient.of(AMItemRegistry.SOUL_HEART.get()), false));
+        this.goalSelector.addGoal(1, new TemptHeartGoal(this, 1.0D, Ingredient.of(AMItemRegistry.SOUL_HEART), false));
         this.goalSelector.addGoal(2, new FlyGoal(this));
     }
 

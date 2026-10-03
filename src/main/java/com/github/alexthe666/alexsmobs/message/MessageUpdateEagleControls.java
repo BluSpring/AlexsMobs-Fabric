@@ -8,7 +8,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class MessageUpdateEagleControls implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageUpdateEagleControls> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "update_eagle_controls"));
@@ -45,8 +46,8 @@ public class MessageUpdateEagleControls implements CustomPacketPayload {
     @Override
     public Type<? extends CustomPacketPayload> type() { return TYPE; }
 
-    public static void handle(MessageUpdateEagleControls message, IPayloadContext context) {
-        context.enqueueWork(() -> {
+    public static void handle(MessageUpdateEagleControls message, ServerPlayNetworking.Context context) {
+        context.server().execute(() -> {
             Player player = context.player();
             if (player != null && player.level() != null) {
                 Entity entity = player.level().getEntity(message.eagleId);

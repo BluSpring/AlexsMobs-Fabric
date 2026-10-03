@@ -47,7 +47,7 @@ public class PigshoesLootModifier implements IGlobalLootModifier {
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         if (AMConfig.addLootToChests) {
             if (context.getRandom().nextFloat() <= AMConfig.tusklinShoesBarteringChance) {
-                generatedLoot.add(new ItemStack(AMItemRegistry.PIGSHOES.get()));
+                generatedLoot.add(new ItemStack(AMItemRegistry.PIGSHOES));
             }
         }
         return generatedLoot;

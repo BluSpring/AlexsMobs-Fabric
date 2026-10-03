@@ -53,7 +53,7 @@ public class MantisShrimpAIFryRice extends MoveToBlockGoal {
             cookingTicks++;
             if(cookingTicks > 200){
                 cookingTicks = 0;
-                ItemStack rice = new ItemStack(AMItemRegistry.SHRIMP_FRIED_RICE.get());
+                ItemStack rice = new ItemStack(AMItemRegistry.SHRIMP_FRIED_RICE);
                 rice.setCount(mantisShrimp.getMainHandItem().getCount());
                 mantisShrimp.setItemInHand(InteractionHand.MAIN_HAND, rice);
 

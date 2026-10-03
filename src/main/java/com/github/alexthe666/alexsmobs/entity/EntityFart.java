@@ -34,7 +34,7 @@ public class EntityFart extends Entity {
 
 
     public EntityFart(Level worldIn, LivingEntity p_i47273_2_, boolean right) {
-        this(AMEntityRegistry.FART.get(), worldIn);
+        this(AMEntityRegistry.FART, worldIn);
         this.setShooter(p_i47273_2_);
         float rot = p_i47273_2_.yHeadRot + (right ? 60 : -60);
         this.setPos(p_i47273_2_.getX() - (double) (p_i47273_2_.getBbWidth()) * 0.5D * (double) Mth.sin(rot * Mth.DEG_TO_RAD), p_i47273_2_.getEyeY() - (double) 0.2F, p_i47273_2_.getZ() + (double) (p_i47273_2_.getBbWidth()) * 0.5D * (double) Mth.cos(rot * Mth.DEG_TO_RAD));
@@ -76,7 +76,7 @@ public class EntityFart extends Entity {
         if (result.getEntity() instanceof LivingEntity living) {
             living.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 300, 0));
             for(int i = 0; i < 10 + random.nextInt(6); i++){
-                level().addParticle(AMParticleRegistry.SMELLY.get(), living.getRandomX(1.0F), living.getRandomY(), living.getRandomZ(1.0F), 0, 0, 0);
+                level().addParticle(AMParticleRegistry.SMELLY, living.getRandomX(1.0F), living.getRandomY(), living.getRandomZ(1.0F), 0, 0, 0);
             }
             for (Mob nearby : level().getEntitiesOfClass(Mob.class, living.getBoundingBox().inflate(15))) {
                 if(nearby == living || nearby.getId() == living.getId() ||nearby.getUUID().equals(living.getUUID()) || nearby.isAlliedTo(living) || living.isAlliedTo(nearby) || living instanceof IHurtableMultipart){

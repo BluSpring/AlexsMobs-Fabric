@@ -81,7 +81,7 @@ public class BlockEndPirateFlag extends BaseEntityBlock {
 
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152180_, BlockState p_152181_, BlockEntityType<T> p_152182_) {
-        return createTickerHelper(p_152182_, AMTileEntityRegistry.END_PIRATE_FLAG.get(), TileEntityEndPirateFlag::commonTick);
+        return createTickerHelper(p_152182_, AMTileEntityRegistry.END_PIRATE_FLAG, TileEntityEndPirateFlag::commonTick);
     }
 
     public void animateTick(BlockState p_53094_, Level p_53095_, BlockPos p_53096_, Random p_53097_) {

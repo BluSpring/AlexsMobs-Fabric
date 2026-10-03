@@ -155,15 +155,15 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.ELEPHANT_IDLE.get();
+        return AMSoundRegistry.ELEPHANT_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.ELEPHANT_HURT.get();
+        return AMSoundRegistry.ELEPHANT_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.ELEPHANT_DIE.get();
+        return AMSoundRegistry.ELEPHANT_DIE;
     }
 
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
@@ -228,7 +228,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
 
     protected void playStepSound(BlockPos pos, BlockState state) {
         if (!isBaby()) {
-            this.playSound(AMSoundRegistry.ELEPHANT_WALK.get(), 0.2F, 1.0F);
+            this.playSound(AMSoundRegistry.ELEPHANT_WALK, 0.2F, 1.0F);
         } else {
             super.playStepSound(pos, state);
         }
@@ -421,7 +421,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         }
         if (this.getAnimation() == ANIMATION_TRUMPET_0 && this.getAnimationTick() == 8 || this.getAnimation() == ANIMATION_TRUMPET_1 && this.getAnimationTick() == 4) {
             this.gameEvent(GameEvent.ENTITY_ACTION);
-            this.playSound(AMSoundRegistry.ELEPHANT_TRUMPET.get(), this.getSoundVolume(), this.getVoicePitch());
+            this.playSound(AMSoundRegistry.ELEPHANT_TRUMPET, this.getSoundVolume(), this.getVoicePitch());
         }
         if (this.isAlive() && charging) {
             for (Entity entity : this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(1.0D))) {
@@ -540,7 +540,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
                 this.gameEvent(GameEvent.ENTITY_INTERACT);
                 this.playSound(SoundEvents.LLAMA_SWAG.value(), 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
                 if(!this.level().isClientSide && player instanceof ServerPlayer serverPlayer){
-                    AMAdvancementTriggerRegistry.ELEPHANT_SWAG.get().trigger(serverPlayer);
+                    AMAdvancementTriggerRegistry.ELEPHANT_SWAG.trigger(serverPlayer);
                 }
                 stack.shrink(1);
                 this.setColor(color);
@@ -643,7 +643,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        EntityElephant baby = AMEntityRegistry.ELEPHANT.get().create(serverWorld);
+        EntityElephant baby = AMEntityRegistry.ELEPHANT.create(serverWorld);
         baby.setTusked(this.getNearestTusked(level(), 15) == null || random.nextInt(2) == 0);
         return baby;
     }

@@ -14,7 +14,7 @@ public class TileEntityTerrapinEgg extends BlockEntity {
     public ParentData parent2;
 
     public TileEntityTerrapinEgg(BlockPos pos, BlockState state) {
-        super(AMTileEntityRegistry.TERRAPIN_EGG.get(), pos, state);
+        super(AMTileEntityRegistry.TERRAPIN_EGG, pos, state);
     }
 
     public void addAttributesToOffspring(EntityTerrapin baby, RandomSource random){

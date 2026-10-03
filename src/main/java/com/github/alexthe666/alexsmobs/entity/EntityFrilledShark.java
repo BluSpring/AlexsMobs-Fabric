@@ -185,7 +185,7 @@ public class EntityFrilledShark extends WaterAnimal implements IAnimatedEntity, 
     @Override
     @Nonnull
     public ItemStack getBucketItemStack() {
-        ItemStack stack = new ItemStack(AMItemRegistry.FRILLED_SHARK_BUCKET.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.FRILLED_SHARK_BUCKET);
         if (this.hasCustomName()) {
             stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -265,7 +265,7 @@ public class EntityFrilledShark extends WaterAnimal implements IAnimatedEntity, 
             if (this.getTarget().hurt(this.damageSources().mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue())){
                 this.getTarget().addEffect(new MobEffectInstance(AMEffectRegistry.EXSANGUINATION, 60, 2));
                 if(random.nextInt(15) == 0 && this.getTarget() instanceof Squid){
-                    this.spawnAtLocation(AMItemRegistry.SERRATED_SHARK_TOOTH.get());
+                    this.spawnAtLocation(AMItemRegistry.SERRATED_SHARK_TOOTH);
                 }
             }
 
@@ -342,7 +342,7 @@ public class EntityFrilledShark extends WaterAnimal implements IAnimatedEntity, 
             double x = this.getX() + extraX + d0;
             double y = this.getY() + this.getBbHeight() * 0.15F + d1;
             double z = this.getZ() + extraZ + d2;
-            level().addParticle(AMParticleRegistry.TEETH_GLINT.get(), x, y, z, this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z);
+            level().addParticle(AMParticleRegistry.TEETH_GLINT, x, y, z, this.getDeltaMovement().x, this.getDeltaMovement().y, this.getDeltaMovement().z);
         } else {
             super.handleEntityEvent(id);
         }

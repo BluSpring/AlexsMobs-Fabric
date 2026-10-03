@@ -32,14 +32,14 @@ public class EntityIceShard extends Entity {
     }
 
     public EntityIceShard(Level worldIn, EntityFroststalker stalker) {
-        this(AMEntityRegistry.ICE_SHARD.get(), worldIn);
+        this(AMEntityRegistry.ICE_SHARD, worldIn);
         this.setShooter(stalker);
         this.setPos(stalker.getRandomX(0.5F), stalker.getEyeY() + (double)0.1F, stalker.getRandomZ(0.5F));
     }
 
     @OnlyIn(Dist.CLIENT)
     public EntityIceShard(Level worldIn, double x, double y, double z, double p_i47274_8_, double p_i47274_10_, double p_i47274_12_) {
-        this(AMEntityRegistry.ICE_SHARD.get(), worldIn);
+        this(AMEntityRegistry.ICE_SHARD, worldIn);
         this.setPos(x, y, z);
         this.setDeltaMovement(p_i47274_8_, p_i47274_10_, p_i47274_12_);
     }

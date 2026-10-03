@@ -30,7 +30,7 @@ public class ItemMysteriousWorm extends Item {
             String dim = entity.level().dimension().location().toString();
             if(AMConfig.voidWormSpawnDimensions.contains(dim) && entity.getY() < -60 && !entity.isRemoved()){
                 entity.kill();
-                EntityVoidWorm worm = AMEntityRegistry.VOID_WORM.get().create(entity.level());
+                EntityVoidWorm worm = AMEntityRegistry.VOID_WORM.create(entity.level());
                 worm.setPos(entity.getX(), 0, entity.getZ());
                 worm.setSegmentCount(25 + new Random().nextInt(15));
                 worm.setXRot(-90.0F);
@@ -42,7 +42,7 @@ public class ItemMysteriousWorm extends Item {
                     if(thrower != null){
                         UUID uuid = thrower.getUUID();
                         if(entity.level().getPlayerByUUID(uuid) instanceof ServerPlayer){
-                            AMAdvancementTriggerRegistry.VOID_WORM_SUMMON.get().trigger((ServerPlayer)entity.level().getPlayerByUUID(uuid));
+                            AMAdvancementTriggerRegistry.VOID_WORM_SUMMON.trigger((ServerPlayer)entity.level().getPlayerByUUID(uuid));
                         }
                     }
                     entity.level().addFreshEntity(worm);

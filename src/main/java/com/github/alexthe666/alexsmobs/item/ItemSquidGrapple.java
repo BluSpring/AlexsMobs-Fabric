@@ -50,7 +50,7 @@ public class ItemSquidGrapple extends Item {
         if(livingEntityIn.isFallFlying()){
             return;
         }
-        livingEntityIn.playSound(AMSoundRegistry.GIANT_SQUID_TENTACLE.get(),1.0F, 1.0F + (livingEntityIn.getRandom().nextFloat() - livingEntityIn.getRandom().nextFloat()) * 0.2F);
+        livingEntityIn.playSound(AMSoundRegistry.GIANT_SQUID_TENTACLE,1.0F, 1.0F + (livingEntityIn.getRandom().nextFloat() - livingEntityIn.getRandom().nextFloat()) * 0.2F);
         livingEntityIn.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
         if (!worldIn.isClientSide) {
             boolean left = false;
@@ -73,7 +73,7 @@ public class ItemSquidGrapple extends Item {
     }
 
     public boolean isValidRepairItem(ItemStack s, ItemStack s1) {
-        return s1.is(AMItemRegistry.LOST_TENTACLE.get());
+        return s1.is(AMItemRegistry.LOST_TENTACLE);
     }
 
     public static float getPowerForTime(int p) {

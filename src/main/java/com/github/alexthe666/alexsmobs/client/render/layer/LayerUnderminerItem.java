@@ -27,7 +27,7 @@ public class LayerUnderminerItem extends RenderLayer<EntityUnderminer, EntityMod
         if(!entitylivingbaseIn.isFullyHidden()){
             ItemStack itemstack = entitylivingbaseIn.getItemBySlot(EquipmentSlot.MAINHAND);
             if(RenderUnderminer.renderWithPickaxe){
-                itemstack = new ItemStack(AMItemRegistry.GHOSTLY_PICKAXE.get());
+                itemstack = new ItemStack(AMItemRegistry.GHOSTLY_PICKAXE);
             }
             matrixStackIn.pushPose();
             matrixStackIn.pushPose();

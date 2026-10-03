@@ -136,7 +136,7 @@ public class AnteaterAIRaidNest extends MoveToBlockGoal {
     private void breakHiveEffect(){
         if (net.neoforged.neoforge.event.EventHooks.canEntityGrief(anteater.level(), anteater)) {
             BlockState blockstate = anteater.level().getBlockState(this.blockPos);
-            if (blockstate.is(AMBlockRegistry.LEAFCUTTER_ANTHILL.get())) {
+            if (blockstate.is(AMBlockRegistry.LEAFCUTTER_ANTHILL)) {
                 if (anteater.level().getBlockEntity(this.blockPos) instanceof TileEntityLeafcutterAnthill) {
                     TileEntityLeafcutterAnthill anthill = (TileEntityLeafcutterAnthill) anteater.level().getBlockEntity(this.blockPos);
                     anthill.angerAntsBecauseAnteater(anteater, blockstate, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
@@ -146,7 +146,7 @@ public class AnteaterAIRaidNest extends MoveToBlockGoal {
                     }
                     dropDigItems();
                 }
-            }else if(blockstate.is(AMBlockRegistry.LEAFCUTTER_ANT_CHAMBER.get())){
+            }else if(blockstate.is(AMBlockRegistry.LEAFCUTTER_ANT_CHAMBER)){
                 anteater.level().destroyBlock(blockPos, false);
                 anteater.level().setBlockAndUpdate(blockPos, blockstate);
             }
@@ -156,7 +156,7 @@ public class AnteaterAIRaidNest extends MoveToBlockGoal {
     private void eatHive() {
         if (net.neoforged.neoforge.event.EventHooks.canEntityGrief(anteater.level(), anteater)) {
             BlockState blockstate = anteater.level().getBlockState(this.blockPos);
-            if (blockstate.is(AMBlockRegistry.LEAFCUTTER_ANTHILL.get())) {
+            if (blockstate.is(AMBlockRegistry.LEAFCUTTER_ANTHILL)) {
                 if (anteater.level().getBlockEntity(this.blockPos) instanceof TileEntityLeafcutterAnthill) {
                     final RandomSource rand = this.anteater.getRandom();
                     TileEntityLeafcutterAnthill anthill = (TileEntityLeafcutterAnthill) anteater.level().getBlockEntity(this.blockPos);
@@ -164,8 +164,8 @@ public class AnteaterAIRaidNest extends MoveToBlockGoal {
                     anteater.level().updateNeighbourForOutputSignal(this.blockPos, blockstate.getBlock());
                     if(!anthill.hasNoAnts()){
                         BlockState state = anthill.shrinkFungus();
-                        if(state != null && state.is(AMBlockRegistry.LEAFCUTTER_ANT_CHAMBER.get()) && state.getValue(BlockLeafcutterAntChamber.FUNGUS) >= 5){
-                            ItemStack stack = new ItemStack(AMItemRegistry.GONGYLIDIA.get());
+                        if(state != null && state.is(AMBlockRegistry.LEAFCUTTER_ANT_CHAMBER) && state.getValue(BlockLeafcutterAntChamber.FUNGUS) >= 5){
+                            ItemStack stack = new ItemStack(AMItemRegistry.GONGYLIDIA);
                             ItemEntity itementity = new ItemEntity(anteater.level(), blockPos.getX() + rand.nextFloat(), blockPos.getY() + rand.nextFloat(), blockPos.getZ() + rand.nextFloat(), stack);
                             itementity.setDefaultPickUpDelay();
                             anteater.level().addFreshEntity(itementity);
@@ -173,11 +173,11 @@ public class AnteaterAIRaidNest extends MoveToBlockGoal {
                         anteater.setAntOnTongue(true);
                     }
                 }
-            }else if(blockstate.is(AMBlockRegistry.LEAFCUTTER_ANT_CHAMBER.get())){
+            }else if(blockstate.is(AMBlockRegistry.LEAFCUTTER_ANT_CHAMBER)){
                 anteater.level().destroyBlock(blockPos, false);
                 if(blockstate.getValue(BlockLeafcutterAntChamber.FUNGUS) >= 5){
                     final RandomSource rand = this.anteater.getRandom();
-                    ItemStack stack = new ItemStack(AMItemRegistry.GONGYLIDIA.get());
+                    ItemStack stack = new ItemStack(AMItemRegistry.GONGYLIDIA);
                     ItemEntity itementity = new ItemEntity(anteater.level(), blockPos.getX() + rand.nextFloat(), blockPos.getY() + rand.nextFloat(), blockPos.getZ() + rand.nextFloat(), stack);
                     itementity.setDefaultPickUpDelay();
                     anteater.level().addFreshEntity(itementity);
@@ -196,7 +196,7 @@ public class AnteaterAIRaidNest extends MoveToBlockGoal {
 
     @Override
     protected boolean isValidTarget(LevelReader worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos).is(AMBlockRegistry.LEAFCUTTER_ANT_CHAMBER.get()) || worldIn.getBlockState(pos).is(AMBlockRegistry.LEAFCUTTER_ANTHILL.get()) && worldIn.getBlockEntity(pos) instanceof TileEntityLeafcutterAnthill && this.isValidAnthill(pos, (TileEntityLeafcutterAnthill)worldIn.getBlockEntity(pos));
+        return worldIn.getBlockState(pos).is(AMBlockRegistry.LEAFCUTTER_ANT_CHAMBER) || worldIn.getBlockState(pos).is(AMBlockRegistry.LEAFCUTTER_ANTHILL) && worldIn.getBlockEntity(pos) instanceof TileEntityLeafcutterAnthill && this.isValidAnthill(pos, (TileEntityLeafcutterAnthill)worldIn.getBlockEntity(pos));
     }
 
     private boolean isValidAnthill(BlockPos pos, TileEntityLeafcutterAnthill blockEntity) {

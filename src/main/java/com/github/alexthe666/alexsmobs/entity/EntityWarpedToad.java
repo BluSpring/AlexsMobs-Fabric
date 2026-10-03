@@ -98,15 +98,15 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.WARPED_TOAD_IDLE.get();
+        return AMSoundRegistry.WARPED_TOAD_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.WARPED_TOAD_HURT.get();
+        return AMSoundRegistry.WARPED_TOAD_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.WARPED_TOAD_HURT.get();
+        return AMSoundRegistry.WARPED_TOAD_HURT;
     }
 
     @Override
@@ -486,7 +486,7 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        return AMEntityRegistry.WARPED_TOAD.get().create(serverWorld);
+        return AMEntityRegistry.WARPED_TOAD.create(serverWorld);
     }
 
     public float getTongueLength() {

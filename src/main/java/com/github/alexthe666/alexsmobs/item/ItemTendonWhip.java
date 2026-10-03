@@ -56,7 +56,7 @@ public class ItemTendonWhip extends SwordItem implements ILeftClick {
     }
 
     public boolean onLeftClick(ItemStack stack, LivingEntity playerIn){
-        if(stack.is(AMItemRegistry.TENDON_WHIP.get()) && (!(playerIn instanceof Player) || isCharged((Player)playerIn, stack))){
+        if(stack.is(AMItemRegistry.TENDON_WHIP) && (!(playerIn instanceof Player) || isCharged((Player)playerIn, stack))){
             Level worldIn = playerIn.level();
             Entity closestValid = null;
             Vec3 playerEyes = playerIn.getEyePosition(1.0F);
@@ -89,7 +89,7 @@ public class ItemTendonWhip extends SwordItem implements ILeftClick {
             TendonWhipUtil.retractFarTendons(worldIn, playerIn);
             if (!worldIn.isClientSide) {
                 if (closestValid != null) {
-                    EntityTendonSegment segment = AMEntityRegistry.TENDON_SEGMENT.get().create(worldIn);
+                    EntityTendonSegment segment = AMEntityRegistry.TENDON_SEGMENT.create(worldIn);
                     segment.copyPosition(playerIn);
                     worldIn.addFreshEntity(segment);
                     segment.setCreatorEntityUUID(playerIn.getUUID());
@@ -119,7 +119,7 @@ public class ItemTendonWhip extends SwordItem implements ILeftClick {
     }
 
     public boolean isValidRepairItem(ItemStack pickaxe, ItemStack stack) {
-        return stack.is(AMItemRegistry.ELASTIC_TENDON.get());
+        return stack.is(AMItemRegistry.ELASTIC_TENDON);
     }
 
 }

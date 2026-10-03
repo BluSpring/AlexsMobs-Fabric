@@ -51,40 +51,40 @@ public class CustomArmorRenderProperties implements IClientItemExtensions {
             initializeModels();
         }
         final var item = itemStack.getItem();
-        if(item == AMItemRegistry.TARANTULA_HAWK_ELYTRA.get()){
+        if(item == AMItemRegistry.TARANTULA_HAWK_ELYTRA){
             return ELYTRA_MODEL.withAnimations(entityLiving);
         }
-        if(item == AMItemRegistry.ROADDRUNNER_BOOTS.get()){
+        if(item == AMItemRegistry.ROADDRUNNER_BOOTS){
             return ROADRUNNER_BOOTS_MODEL;
         }
-        if(item == AMItemRegistry.MOOSE_HEADGEAR.get()){
+        if(item == AMItemRegistry.MOOSE_HEADGEAR){
             return MOOSE_HEADGEAR_MODEL;
         }
-        if(item == AMItemRegistry.FRONTIER_CAP.get()){
+        if(item == AMItemRegistry.FRONTIER_CAP){
             return FRONTIER_CAP_MODEL.withAnimations(entityLiving);
         }
-        if(item == AMItemRegistry.FEDORA.get()){
+        if(item == AMItemRegistry.FEDORA){
             return FEDORA_MODEL;
         }
-        if(item == AMItemRegistry.SPIKED_TURTLE_SHELL.get()){
+        if(item == AMItemRegistry.SPIKED_TURTLE_SHELL){
             return SPIKED_TURTLE_SHELL_MODEL;
         }
-        if(item == AMItemRegistry.SOMBRERO.get()){
+        if(item == AMItemRegistry.SOMBRERO){
             return AlexsMobs.isAprilFools() ? SOMBRERO_GOOFY_FASHION_MODEL : SOMBRERO_MODEL;
         }
-        if(item == AMItemRegistry.FROSTSTALKER_HELMET.get()){
+        if(item == AMItemRegistry.FROSTSTALKER_HELMET){
             return FROSTSTALKER_HELMET_MODEL;
         }
-        if(item == AMItemRegistry.ROCKY_CHESTPLATE.get()){
+        if(item == AMItemRegistry.ROCKY_CHESTPLATE){
             return ROCKY_CHESTPLATE_MODEL;
         }
-        if(item == AMItemRegistry.FLYING_FISH_BOOTS.get()){
+        if(item == AMItemRegistry.FLYING_FISH_BOOTS){
             return FLYING_FISH_BOOTS_MODEL.withAnimations(entityLiving);
         }
-        if(item == AMItemRegistry.NOVELTY_HAT.get()){
+        if(item == AMItemRegistry.NOVELTY_HAT){
             return NOVELTY_HAT_MODEL;
         }
-        if(item == AMItemRegistry.UNSETTLING_KIMONO.get()){
+        if(item == AMItemRegistry.UNSETTLING_KIMONO){
             return UNSETTLING_KIMONO_MODEL;
         }
         return _default;

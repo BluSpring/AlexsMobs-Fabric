@@ -96,21 +96,21 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
 
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.PLATYPUS_IDLE.get();
+        return AMSoundRegistry.PLATYPUS_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.PLATYPUS_HURT.get();
+        return AMSoundRegistry.PLATYPUS_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.PLATYPUS_HURT.get();
+        return AMSoundRegistry.PLATYPUS_HURT;
     }
 
     @Override
     @Nonnull
     public ItemStack getBucketItemStack() {
-        ItemStack stack = new ItemStack(AMItemRegistry.PLATYPUS_BUCKET.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.PLATYPUS_BUCKET);
         if (this.hasCustomName()) {
             stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -142,7 +142,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
     @Nonnull
     public InteractionResult mobInteract(@Nonnull Player player, @Nonnull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        if(itemstack.getItem() == AMItemRegistry.FEDORA.get() && !this.hasFedora()){
+        if(itemstack.getItem() == AMItemRegistry.FEDORA && !this.hasFedora()){
             if (!player.isCreative()) {
                 itemstack.shrink(1);
             }
@@ -282,7 +282,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.hasFedora()) {
-            this.spawnAtLocation(AMItemRegistry.FEDORA.get());
+            this.spawnAtLocation(AMItemRegistry.FEDORA);
         }
 
     }
@@ -404,7 +404,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
                 double actualZ = radius * Mth.cos(angle);
                 double motX = actualX - extraX;
                 double motZ = actualZ - extraZ;
-                this.level().addParticle(AMParticleRegistry.PLATYPUS_SENSE.get(), this.getX() + extraX, this.getBbHeight() * 0.3F + this.getY(), this.getZ() + extraZ, motX * 0.1F, 0, motZ * 0.1F);
+                this.level().addParticle(AMParticleRegistry.PLATYPUS_SENSE, this.getX() + extraX, this.getBbHeight() * 0.3F + this.getY(), this.getZ() + extraZ, motX * 0.1F, 0, motZ * 0.1F);
             }
         }
     }
@@ -452,7 +452,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        return AMEntityRegistry.PLATYPUS.get().create(serverWorld);
+        return AMEntityRegistry.PLATYPUS.create(serverWorld);
     }
 
     @Override
@@ -547,7 +547,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
                 final Level world = this.turtle.level();
                 turtle.gameEvent(GameEvent.BLOCK_PLACE);
                 world.playSound(null, blockpos, SoundEvents.TURTLE_LAY_EGG, SoundSource.BLOCKS, 0.3F, 0.9F + world.random.nextFloat() * 0.2F);
-                world.setBlock(this.blockPos.above(), AMBlockRegistry.PLATYPUS_EGG.get().defaultBlockState().setValue(BlockReptileEgg.EGGS, this.turtle.random.nextInt(3) + 1), 3);
+                world.setBlock(this.blockPos.above(), AMBlockRegistry.PLATYPUS_EGG.defaultBlockState().setValue(BlockReptileEgg.EGGS, this.turtle.random.nextInt(3) + 1), 3);
                 this.turtle.setHasEgg(false);
                 this.turtle.setDigging(false);
                 this.turtle.setInLoveTime(600);

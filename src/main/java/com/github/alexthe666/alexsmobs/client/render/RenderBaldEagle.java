@@ -43,9 +43,9 @@ public class RenderBaldEagle extends MobRenderer<EntityBaldEagle, ModelBaldEagle
             if (eagle.getVehicle() instanceof Player) {
                 Player mount = (Player)eagle.getVehicle();
                 boolean leftHand = false;
-                if(mount.getItemInHand(InteractionHand.MAIN_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE.get()){
+                if(mount.getItemInHand(InteractionHand.MAIN_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE){
                     leftHand = mount.getMainArm() == HumanoidArm.LEFT;
-                }else if(mount.getItemInHand(InteractionHand.OFF_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE.get()){
+                }else if(mount.getItemInHand(InteractionHand.OFF_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE){
                     leftHand = mount.getMainArm() != HumanoidArm.LEFT;
                 }
                 EntityRenderer playerRender = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(mount);

@@ -129,15 +129,15 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.MUNGUS_IDLE.get();
+        return AMSoundRegistry.MUNGUS_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.MUNGUS_HURT.get();
+        return AMSoundRegistry.MUNGUS_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.MUNGUS_HURT.get();
+        return AMSoundRegistry.MUNGUS_HURT;
     }
 
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
@@ -161,7 +161,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
     public void tick(){
         super.tick();
         if (!this.level().isClientSide && this.isAlive() && !this.isBaby() && --this.timeUntilNextEgg <= 0) {
-            ItemEntity dropped = this.spawnAtLocation(AMItemRegistry.MUNGAL_SPORES.get());
+            ItemEntity dropped = this.spawnAtLocation(AMItemRegistry.MUNGAL_SPORES);
             dropped.setDefaultPickUpDelay();
             this.timeUntilNextEgg = this.random.nextInt(24000) + 24000;
 
@@ -465,7 +465,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
                 double d5 = 1.0F;
                 double eyeHeight = this.getY() + 1.0F;
                 if (beamCounter % 20 == 0) {
-                    this.playSound(AMSoundRegistry.MUNGUS_LASER_LOOP.get(), this.getVoicePitch(), this.getSoundVolume());
+                    this.playSound(AMSoundRegistry.MUNGUS_LASER_LOOP, this.getVoicePitch(), this.getSoundVolume());
                 }
                 beamCounter++;
 
@@ -518,9 +518,9 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
                                 }
                             }
                         }
-                        this.playSound(AMSoundRegistry.MUNGUS_LASER_END.get(), this.getVoicePitch(), this.getSoundVolume());
+                        this.playSound(AMSoundRegistry.MUNGUS_LASER_END, this.getVoicePitch(), this.getSoundVolume());
                         if (flag) {
-                            this.playSound(AMSoundRegistry.MUNGUS_LASER_GROW.get(), this.getVoicePitch(), this.getSoundVolume());
+                            this.playSound(AMSoundRegistry.MUNGUS_LASER_GROW, this.getVoicePitch(), this.getSoundVolume());
                         }
                         this.setBeamTarget(null);
                         beamCounter = -1200;
@@ -591,7 +591,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
-        return AMEntityRegistry.MUNGUS.get().create(p_241840_1_);
+        return AMEntityRegistry.MUNGUS.create(p_241840_1_);
     }
 
     public boolean isMushroomTarget(BlockPos pos) {

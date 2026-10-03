@@ -15,7 +15,7 @@ public class EntityPollenBall extends EntityMobProjectile {
     }
 
     public EntityPollenBall(Level worldIn, EntityFlutter flutter) {
-        super(AMEntityRegistry.POLLEN_BALL.get(), worldIn, flutter);
+        super(AMEntityRegistry.POLLEN_BALL, worldIn, flutter);
         Vec3 vec3 = flutter.position().add(calcOffsetVec(new Vec3(0, 0.4F * flutter.getScale(), 0), flutter.getFlutterPitch(), flutter.getYRot()));
         this.setPos(vec3.x, vec3.y, vec3.z);
     }

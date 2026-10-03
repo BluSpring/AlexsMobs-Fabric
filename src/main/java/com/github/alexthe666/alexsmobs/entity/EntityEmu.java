@@ -75,15 +75,15 @@ public class EntityEmu extends Animal implements IAnimatedEntity, IHerdPanic {
 
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.EMU_IDLE.get();
+        return AMSoundRegistry.EMU_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.EMU_HURT.get();
+        return AMSoundRegistry.EMU_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.EMU_HURT.get();
+        return AMSoundRegistry.EMU_HURT;
     }
     
     public int getVariant() {
@@ -193,7 +193,7 @@ public class EntityEmu extends Animal implements IAnimatedEntity, IHerdPanic {
         }
         if (!this.level().isClientSide && this.isAlive() && !this.isBaby() && --this.timeUntilNextEgg <= 0) {
             this.playSound(SoundEvents.CHICKEN_EGG, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-            this.spawnAtLocation(AMItemRegistry.EMU_EGG.get());
+            this.spawnAtLocation(AMItemRegistry.EMU_EGG);
             this.timeUntilNextEgg = this.random.nextInt(6000) + 6000;
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
@@ -228,7 +228,7 @@ public class EntityEmu extends Animal implements IAnimatedEntity, IHerdPanic {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        EntityEmu emu = AMEntityRegistry.EMU.get().create(serverWorld);
+        EntityEmu emu = AMEntityRegistry.EMU.create(serverWorld);
         emu.setVariant(this.getVariant());
         return emu;
     }

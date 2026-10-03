@@ -10,7 +10,7 @@ public class SoundLaCucaracha extends AbstractTickableSoundInstance {
     private final EntityCockroach cockroach;
 
     public SoundLaCucaracha(EntityCockroach cockroach) {
-        super(AMSoundRegistry.LA_CUCARACHA.get(), SoundSource.RECORDS, cockroach.getRandom());
+        super(AMSoundRegistry.LA_CUCARACHA, SoundSource.RECORDS, cockroach.getRandom());
         this.cockroach = cockroach;
         this.attenuation = Attenuation.LINEAR;
         this.looping = true;

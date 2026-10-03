@@ -43,7 +43,7 @@ public class TileEntityTransmutationTable  extends BlockEntity {
     private UUID rerollPlayerUUID = null;
 
     public TileEntityTransmutationTable(BlockPos pos, BlockState state) {
-        super(AMTileEntityRegistry.TRANSMUTATION_TABLE.get(), pos, state);
+        super(AMTileEntityRegistry.TRANSMUTATION_TABLE, pos, state);
     }
 
     public static void commonTick(Level level, BlockPos pos, BlockState state, TileEntityTransmutationTable entity) {
@@ -169,7 +169,7 @@ public class TileEntityTransmutationTable  extends BlockEntity {
         playerToData.put(player.getUUID(), data);
         totalTransmuteCount += from.getCount();
         if(player instanceof ServerPlayer && totalTransmuteCount >= 1000){
-            AMAdvancementTriggerRegistry.TRANSMUTE_1000_ITEMS.get().trigger((ServerPlayer)player);
+            AMAdvancementTriggerRegistry.TRANSMUTE_1000_ITEMS.trigger((ServerPlayer)player);
         }
         setRerollPlayerUUID(player.getUUID());
     }
@@ -179,7 +179,7 @@ public class TileEntityTransmutationTable  extends BlockEntity {
         if(rerollPlayerUUID != null){
             Player player = level.getPlayerByUUID(rerollPlayerUUID);
             if(player != null){
-                this.level.playSound(null, this.getBlockPos(), AMSoundRegistry.TRANSMUTE_ITEM.get(), SoundSource.BLOCKS, 1F, 0.9F + player.getRandom().nextFloat() * 0.2F);
+                this.level.playSound(null, this.getBlockPos(), AMSoundRegistry.TRANSMUTE_ITEM, SoundSource.BLOCKS, 1F, 0.9F + player.getRandom().nextFloat() * 0.2F);
                 this.randomizeResults(player);
             }
             rerollPlayerUUID = null;

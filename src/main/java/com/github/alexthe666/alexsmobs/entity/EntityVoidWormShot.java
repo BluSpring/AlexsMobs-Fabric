@@ -43,13 +43,13 @@ public class EntityVoidWormShot extends Entity {
     }
 
     public EntityVoidWormShot(Level worldIn, EntityVoidWorm p_i47273_2_) {
-        this(AMEntityRegistry.VOID_WORM_SHOT.get(), worldIn);
+        this(AMEntityRegistry.VOID_WORM_SHOT, worldIn);
         this.setShooter(p_i47273_2_);
         this.setPos(p_i47273_2_.getX() - (double) (p_i47273_2_.getBbWidth() + 1.0F) * 0.35D * (double) Mth.sin(p_i47273_2_.yBodyRot * Mth.DEG_TO_RAD), p_i47273_2_.getY() + (double) 1F, p_i47273_2_.getZ() + (double) (p_i47273_2_.getBbWidth() + 1.0F) * 0.35D * (double) Mth.cos(p_i47273_2_.yBodyRot * Mth.DEG_TO_RAD));
     }
 
     public EntityVoidWormShot(Level worldIn, LivingEntity p_i47273_2_, boolean right) {
-        this(AMEntityRegistry.VOID_WORM_SHOT.get(), worldIn);
+        this(AMEntityRegistry.VOID_WORM_SHOT, worldIn);
         this.setShooter(p_i47273_2_);
         float rot = p_i47273_2_.yHeadRot + (right ? 60 : -60);
         this.setPos(p_i47273_2_.getX() - (double) (p_i47273_2_.getBbWidth()) * 0.9F * (double) Mth.sin(rot * Mth.DEG_TO_RAD), p_i47273_2_.getY() + (double) 1F, p_i47273_2_.getZ() + (double) (p_i47273_2_.getBbWidth()) * 0.9D * (double) Mth.cos(rot * Mth.DEG_TO_RAD));
@@ -57,7 +57,7 @@ public class EntityVoidWormShot extends Entity {
 
     @OnlyIn(Dist.CLIENT)
     public EntityVoidWormShot(Level worldIn, double x, double y, double z, double p_i47274_8_, double p_i47274_10_, double p_i47274_12_) {
-        this(AMEntityRegistry.VOID_WORM_SHOT.get(), worldIn);
+        this(AMEntityRegistry.VOID_WORM_SHOT, worldIn);
         this.setPos(x, y, z);
         this.setDeltaMovement(p_i47274_8_, p_i47274_10_, p_i47274_12_);
     }

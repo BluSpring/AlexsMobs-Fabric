@@ -10,7 +10,9 @@
     "MixinBrewingStandBlockEntity",
     "NoiseBasedChunkGeneratorAccessor"
   ],
-  "client": [],
+  "client": [
+    "fabric.RenderBuffersMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

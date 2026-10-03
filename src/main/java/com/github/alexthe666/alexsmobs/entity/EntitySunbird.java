@@ -97,15 +97,15 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.SUNBIRD_IDLE.get();
+        return AMSoundRegistry.SUNBIRD_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.SUNBIRD_HURT.get();
+        return AMSoundRegistry.SUNBIRD_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.SUNBIRD_HURT.get();
+        return AMSoundRegistry.SUNBIRD_HURT;
     }
 
     @Override
@@ -197,7 +197,7 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
             final double extraXMotion = -0.2F * Mth.sin((float) (Math.PI + angleMotion));
             final double extraZMotion = -0.2F * Mth.cos(angleMotion);
             final double yRandom = 0.2F + random.nextFloat() * 0.3F;
-            this.level().addParticle(AMParticleRegistry.SUNBIRD_FEATHER.get(), this.getX() + extraX, this.getY() + yRandom, this.getZ() + extraZ, extraXMotion, 0D, extraZMotion);
+            this.level().addParticle(AMParticleRegistry.SUNBIRD_FEATHER, this.getX() + extraX, this.getY() + yRandom, this.getZ() + extraZ, extraXMotion, 0D, extraZMotion);
         } else {
             if (this.tickCount % 100 == 0) {
                 if(!this.isScorching() && !getScorchingMobs().isEmpty()){

@@ -32,13 +32,13 @@ public class EntityHemolymph extends Entity {
     }
 
     public EntityHemolymph(Level worldIn, EntityWarpedMosco p_i47273_2_) {
-        this(AMEntityRegistry.HEMOLYMPH.get(), worldIn);
+        this(AMEntityRegistry.HEMOLYMPH, worldIn);
         this.setShooter(p_i47273_2_);
         this.setPos(p_i47273_2_.getX() - (double)(p_i47273_2_.getBbWidth() + 1.0F) * 0.35D * (double) Mth.sin(p_i47273_2_.yBodyRot * Mth.DEG_TO_RAD), p_i47273_2_.getEyeY() + (double)0.2F, p_i47273_2_.getZ() + (double)(p_i47273_2_.getBbWidth() + 1.0F) * 0.35D * (double)Mth.cos(p_i47273_2_.yBodyRot * Mth.DEG_TO_RAD));
     }
 
     public EntityHemolymph(Level worldIn, LivingEntity p_i47273_2_, boolean right) {
-        this(AMEntityRegistry.HEMOLYMPH.get(), worldIn);
+        this(AMEntityRegistry.HEMOLYMPH, worldIn);
         this.setShooter(p_i47273_2_);
         float rot = p_i47273_2_.yHeadRot + (right ? 60 : -60);
         this.setPos(p_i47273_2_.getX() - (double) (p_i47273_2_.getBbWidth()) * 0.5D * (double) Mth.sin(rot * Mth.DEG_TO_RAD), p_i47273_2_.getEyeY() - (double) 0.2F, p_i47273_2_.getZ() + (double) (p_i47273_2_.getBbWidth()) * 0.5D * (double) Mth.cos(rot * Mth.DEG_TO_RAD));
@@ -46,7 +46,7 @@ public class EntityHemolymph extends Entity {
 
     @OnlyIn(Dist.CLIENT)
     public EntityHemolymph(Level worldIn, double x, double y, double z, double p_i47274_8_, double p_i47274_10_, double p_i47274_12_) {
-        this(AMEntityRegistry.HEMOLYMPH.get(), worldIn);
+        this(AMEntityRegistry.HEMOLYMPH, worldIn);
         this.setPos(x, y, z);
         this.setDeltaMovement(p_i47274_8_, p_i47274_10_, p_i47274_12_);
     }
@@ -71,7 +71,7 @@ public class EntityHemolymph extends Entity {
             float r1 = (random.nextFloat() - 0.5F) * 0.5F;
             float r2 = (random.nextFloat() - 0.5F) * 0.5F;
             float r3 = (random.nextFloat() - 0.5F) * 0.5F;
-            this.level().addParticle(AMParticleRegistry.HEMOLYMPH.get(), this.getX() + r1, this.getY() + r2, this.getZ() + r3, r1 * 0.1F, r2 * 0.1F, r3 * 0.1F);
+            this.level().addParticle(AMParticleRegistry.HEMOLYMPH, this.getX() + r1, this.getY() + r2, this.getZ() + r3, r1 * 0.1F, r2 * 0.1F, r3 * 0.1F);
         }
         super.tick();
         Vec3 vector3d = this.getDeltaMovement();

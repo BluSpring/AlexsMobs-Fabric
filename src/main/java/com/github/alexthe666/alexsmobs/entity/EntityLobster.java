@@ -78,11 +78,11 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.LOBSTER_HURT.get();
+        return AMSoundRegistry.LOBSTER_HURT;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.LOBSTER_HURT.get();
+        return AMSoundRegistry.LOBSTER_HURT;
     }
 
     public boolean checkSpawnObstruction(LevelReader worldIn) {
@@ -138,7 +138,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
     @Override
     @Nonnull
     public ItemStack getBucketItemStack() {
-        ItemStack stack = new ItemStack(AMItemRegistry.LOBSTER_BUCKET.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.LOBSTER_BUCKET);
         if (this.hasCustomName()) {
             stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -192,7 +192,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         prevAttackProgress = attackProgress;
         if (this.entityData.get(ATTACK_TICK) > 0) {
             if(attackProgress == 3){
-                this.playSound(AMSoundRegistry.LOBSTER_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
+                this.playSound(AMSoundRegistry.LOBSTER_ATTACK, this.getSoundVolume(), this.getVoicePitch());
             }
             if (this.entityData.get(ATTACK_TICK) == 2 && this.getTarget() != null && this.distanceTo(this.getTarget()) < 1.3D) {
                 this.getTarget().hurt(this.damageSources().mobAttack(this), 2);

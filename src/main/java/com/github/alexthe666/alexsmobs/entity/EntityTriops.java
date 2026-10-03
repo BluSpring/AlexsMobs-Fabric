@@ -275,7 +275,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
 
     @Override
     public boolean canTargetItem(ItemStack stack) {
-        return (stack.is(AMTagRegistry.TRIOPS_BREEDABLES) || stack.is(AMItemRegistry.MOSQUITO_LARVA.get())) && !fedCarrot;
+        return (stack.is(AMTagRegistry.TRIOPS_BREEDABLES) || stack.is(AMItemRegistry.MOSQUITO_LARVA)) && !fedCarrot;
     }
 
     @Override
@@ -343,7 +343,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
 
     @Override
     public ItemStack getBucketItemStack() {
-        ItemStack stack = new ItemStack(AMItemRegistry.TRIOPS_BUCKET.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.TRIOPS_BUCKET);
         if (this.hasCustomName()) {
             stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -351,11 +351,11 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.TRIOPS_HURT.get();
+        return AMSoundRegistry.TRIOPS_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.TRIOPS_HURT.get();
+        return AMSoundRegistry.TRIOPS_HURT;
     }
 
     private class BreedGoal extends Goal {
@@ -469,7 +469,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
             EntityTriops.this.getNavigation().moveTo(eggPos.getX(), eggPos.getY(), eggPos.getZ(), 1);
             if (EntityTriops.this.distanceToSqr(Vec3.atBottomCenterOf(eggPos)) < 2.0F) {
                 EntityTriops.this.pregnant = false;
-                EntityTriops.this.level().setBlockAndUpdate(eggPos, AMBlockRegistry.TRIOPS_EGGS.get().defaultBlockState());
+                EntityTriops.this.level().setBlockAndUpdate(eggPos, AMBlockRegistry.TRIOPS_EGGS.defaultBlockState());
             }
         }
     }

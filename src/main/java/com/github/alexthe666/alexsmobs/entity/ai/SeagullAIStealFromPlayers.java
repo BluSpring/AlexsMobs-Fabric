@@ -79,7 +79,7 @@ public class SeagullAIStealFromPlayers extends Goal {
                     fleeTime = 60;
                     seagull.stealCooldown = 1500 + seagull.getRandom().nextInt(1500);
                     if(target instanceof ServerPlayer){
-                        AMAdvancementTriggerRegistry.SEAGULL_STEAL.get().trigger((ServerPlayer)target);
+                        AMAdvancementTriggerRegistry.SEAGULL_STEAL.trigger((ServerPlayer)target);
                     }
                 }else{
                     stop();

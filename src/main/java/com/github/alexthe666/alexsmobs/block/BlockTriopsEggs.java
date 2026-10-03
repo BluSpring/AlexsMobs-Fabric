@@ -24,7 +24,7 @@ public class BlockTriopsEggs extends FrogspawnBlock {
             serverLevel.destroyBlock(blockPos, false);
             int i = 2 + randomSource.nextInt(2);
             for (int j = 1; j <= i; ++j) {
-                EntityTriops tadpole = AMEntityRegistry.TRIOPS.get().create(serverLevel);
+                EntityTriops tadpole = AMEntityRegistry.TRIOPS.create(serverLevel);
                 if (tadpole != null) {
                     double d0 = (double) blockPos.getX();
                     double d1 = (double) blockPos.getZ();

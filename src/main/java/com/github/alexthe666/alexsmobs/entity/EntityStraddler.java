@@ -68,15 +68,15 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.STRADDLER_IDLE.get();
+        return AMSoundRegistry.STRADDLER_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.STRADDLER_HURT.get();
+        return AMSoundRegistry.STRADDLER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.STRADDLER_HURT.get();
+        return AMSoundRegistry.STRADDLER_HURT;
     }
 
     public static boolean canStraddlerSpawn(EntityType animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
@@ -238,7 +238,7 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
             }
         }
         if (this.getAnimation() == ANIMATION_LAUNCH && this.isAlive() && this.getAnimationTick() == 20 && this.getTarget() != null) {
-            EntityStradpole pole = AMEntityRegistry.STRADPOLE.get().create(level());
+            EntityStradpole pole = AMEntityRegistry.STRADPOLE.create(level());
             pole.setParentId(this.getUUID());
             pole.setPos(this.getX(), this.getEyeY(), this.getZ());
             final double d0 = this.getTarget().getEyeY() - (double)1.1F;

@@ -79,7 +79,7 @@ public class BlockBananaSlugSlime extends HalfTransparentBlock {
 
     protected void tryAbsorbWater(Level level, BlockPos pos) {
         if (this.removeWaterBreadthFirstSearch(level, pos)) {
-            level.playSound(null, pos, AMSoundRegistry.BANANA_SLUG_SLIME_EXPAND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.playSound(null, pos, AMSoundRegistry.BANANA_SLUG_SLIME_EXPAND, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
     }
 
@@ -99,10 +99,10 @@ public class BlockBananaSlugSlime extends HalfTransparentBlock {
                 if (state.getBlock() instanceof BucketPickup) {
                     ((BucketPickup) state.getBlock()).pickupBlock(null, level, blockpos, state);
                     if(level.getBlockState(blockpos).isAir()){
-                        level.setBlockAndUpdate(blockpos, AMBlockRegistry.CRYSTALIZED_BANANA_SLUG_MUCUS.get().defaultBlockState());
+                        level.setBlockAndUpdate(blockpos, AMBlockRegistry.CRYSTALIZED_BANANA_SLUG_MUCUS.defaultBlockState());
                     }
                 }else{
-                    level.setBlockAndUpdate(blockpos, AMBlockRegistry.CRYSTALIZED_BANANA_SLUG_MUCUS.get().defaultBlockState());
+                    level.setBlockAndUpdate(blockpos, AMBlockRegistry.CRYSTALIZED_BANANA_SLUG_MUCUS.defaultBlockState());
                 }
             }
             for (Direction direction : Direction.values()) {
@@ -130,7 +130,7 @@ public class BlockBananaSlugSlime extends HalfTransparentBlock {
                     fullBlocks++;
                     ((BucketPickup) blockstate.getBlock()).pickupBlock(null, level, blockpos1, blockstate);
                     if(level.getBlockState(blockpos).isAir()){
-                        level.setBlockAndUpdate(blockpos, AMBlockRegistry.CRYSTALIZED_BANANA_SLUG_MUCUS.get().defaultBlockState());
+                        level.setBlockAndUpdate(blockpos, AMBlockRegistry.CRYSTALIZED_BANANA_SLUG_MUCUS.defaultBlockState());
                     }
                     if (j < MAX_FLUID_SPREAD) {
                         queue.add(new Tuple<>(blockpos1, j + 1));
@@ -139,7 +139,7 @@ public class BlockBananaSlugSlime extends HalfTransparentBlock {
                     if (!fluidstate.isEmpty()) {
                         lastFluidState = fluidstate;
                     }
-                    level.setBlockAndUpdate(blockpos1, AMBlockRegistry.CRYSTALIZED_BANANA_SLUG_MUCUS.get().defaultBlockState());
+                    level.setBlockAndUpdate(blockpos1, AMBlockRegistry.CRYSTALIZED_BANANA_SLUG_MUCUS.defaultBlockState());
                     ++i;
                     if (blockstate.getFluidState().isSource()) {
                         fullBlocks++;

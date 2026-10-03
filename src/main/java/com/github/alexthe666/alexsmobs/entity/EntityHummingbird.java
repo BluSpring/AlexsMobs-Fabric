@@ -83,7 +83,7 @@ public class EntityHummingbird extends Animal {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.HUMMINGBIRD_IDLE.get();
+        return AMSoundRegistry.HUMMINGBIRD_IDLE;
     }
 
     public int getAmbientSoundInterval() {
@@ -91,11 +91,11 @@ public class EntityHummingbird extends Animal {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.HUMMINGBIRD_HURT.get();
+        return AMSoundRegistry.HUMMINGBIRD_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.HUMMINGBIRD_HURT.get();
+        return AMSoundRegistry.HUMMINGBIRD_HURT;
     }
 
 
@@ -285,7 +285,7 @@ public class EntityHummingbird extends Animal {
             sipCooldown--;
         }
         if(loopSoundTick == 0){
-            this.playSound(AMSoundRegistry.HUMMINGBIRD_LOOP.get(), this.getSoundVolume() * 0.33F, this.getVoicePitch());
+            this.playSound(AMSoundRegistry.HUMMINGBIRD_LOOP, this.getSoundVolume() * 0.33F, this.getVoicePitch());
         }
         loopSoundTick++;
         if(loopSoundTick > 27){
@@ -316,7 +316,7 @@ public class EntityHummingbird extends Animal {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        return AMEntityRegistry.HUMMINGBIRD.get().create(serverWorld);
+        return AMEntityRegistry.HUMMINGBIRD.create(serverWorld);
     }
 
     public static <T extends Mob> boolean canHummingbirdSpawn(EntityType<EntityHummingbird> hummingbird, LevelAccessor worldIn, MobSpawnType reason, BlockPos p_223317_3_, RandomSource random) {

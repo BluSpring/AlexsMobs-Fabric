@@ -46,7 +46,7 @@ public class AncientDartLootModifier implements IGlobalLootModifier {
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         if (AMConfig.addLootToChests) {
             if (context.getRandom().nextInt(1) == 0) {
-                generatedLoot.add(new ItemStack(AMItemRegistry.ANCIENT_DART.get()));
+                generatedLoot.add(new ItemStack(AMItemRegistry.ANCIENT_DART));
             }
         }
         return generatedLoot;

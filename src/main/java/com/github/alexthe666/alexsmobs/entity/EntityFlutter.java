@@ -216,15 +216,15 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.FLUTTER_IDLE.get();
+        return AMSoundRegistry.FLUTTER_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.FLUTTER_HURT.get();
+        return AMSoundRegistry.FLUTTER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.FLUTTER_HURT.get();
+        return AMSoundRegistry.FLUTTER_HURT;
     }
 
     public void tick() {
@@ -263,7 +263,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         if(tentacleProgress == 5F && !entityData.get(TENTACLING)){
             if (squishCooldown == 0 && this.isFlying()) {
                 squishCooldown = 10;
-                this.playSound(AMSoundRegistry.FLUTTER_FLAP.get(), this.getSoundVolume(), 1.5F * this.getVoicePitch());
+                this.playSound(AMSoundRegistry.FLUTTER_FLAP, this.getSoundVolume(), 1.5F * this.getVoicePitch());
             }
         }
         if (tentacleProgress > 0F && !entityData.get(TENTACLING)) {
@@ -288,7 +288,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
                 if (squishCooldown == 0 && this.isFlying()) {
                     squishCooldown = 10;
                     this.gameEvent(GameEvent.ENTITY_ACTION);
-                    this.playSound(AMSoundRegistry.FLUTTER_FLAP.get(), 3F, 1.5F * this.getVoicePitch());
+                    this.playSound(AMSoundRegistry.FLUTTER_FLAP, 3F, 1.5F * this.getVoicePitch());
                 }
                 this.randomMotionSpeed = 0.8F;
             } else {
@@ -396,7 +396,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             this.usePlayerItem(player, hand, itemstack);
             this.flowersEaten.add(BuiltInRegistries.ITEM.getKey(itemstack.getItem()).toString());
             this.gameEvent(GameEvent.ENTITY_INTERACT);
-            this.playSound(AMSoundRegistry.FLUTTER_YES.get(), this.getSoundVolume(), this.getVoicePitch());
+            this.playSound(AMSoundRegistry.FLUTTER_YES, this.getSoundVolume(), this.getVoicePitch());
             if (this.flowersEaten.size() > 3 && getRandom().nextInt(3) == 0 || this.flowersEaten.size() > 6) {
                 this.tame(player);
                 this.level().broadcastEntityEvent(this, (byte) 7);
@@ -406,7 +406,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             return InteractionResult.SUCCESS;
         } else if (!isTame() && itemstack.is(ItemTags.FLOWERS)) {
             this.gameEvent(GameEvent.ENTITY_INTERACT);
-            this.playSound(AMSoundRegistry.FLUTTER_NO.get(), this.getSoundVolume(), this.getVoicePitch());
+            this.playSound(AMSoundRegistry.FLUTTER_NO, this.getSoundVolume(), this.getVoicePitch());
             this.entityData.set(SHAKING_HEAD_TICKS, 20);
         }
         if (isTame() && itemstack.is(ItemTags.FLOWERS) && this.getHealth() < this.getMaxHealth()) {
@@ -598,7 +598,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
 
 
     protected ItemStack getFishBucket() {
-        ItemStack stack = new ItemStack(AMItemRegistry.POTTED_FLUTTER.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.POTTED_FLUTTER);
         CompoundTag platTag = new CompoundTag();
         this.addAdditionalSaveData(platTag);
         stack.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> data.update(tag -> {
@@ -613,7 +613,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob mobo) {
-        EntityFlutter baby = AMEntityRegistry.FLUTTER.get().create(level());
+        EntityFlutter baby = AMEntityRegistry.FLUTTER.create(level());
         baby.setPersistenceRequired();
         return baby;
     }

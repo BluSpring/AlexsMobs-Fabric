@@ -153,7 +153,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
     @javax.annotation.Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
-        EntityRainFrog frog = AMEntityRegistry.RAIN_FROG.get().create(p_241840_1_);
+        EntityRainFrog frog = AMEntityRegistry.RAIN_FROG.create(p_241840_1_);
         frog.setVariant(this.getVariant());
         frog.setDisturbed(true);
         return frog;
@@ -391,7 +391,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
     }
 
     protected SoundEvent getAmbientSound() {
-        return getStanceTime() > 0 ? AMSoundRegistry.RAIN_FROG_HURT.get() : AMSoundRegistry.RAIN_FROG_IDLE.get();
+        return getStanceTime() > 0 ? AMSoundRegistry.RAIN_FROG_HURT : AMSoundRegistry.RAIN_FROG_IDLE;
     }
 
     public int getAmbientSoundInterval() {
@@ -399,11 +399,11 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.RAIN_FROG_HURT.get();
+        return AMSoundRegistry.RAIN_FROG_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.RAIN_FROG_HURT.get();
+        return AMSoundRegistry.RAIN_FROG_HURT;
     }
 
 

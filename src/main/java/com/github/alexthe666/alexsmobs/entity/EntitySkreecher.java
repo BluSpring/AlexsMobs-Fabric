@@ -131,11 +131,11 @@ public class EntitySkreecher extends Monster {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.SKREECHER_HURT.get();
+        return AMSoundRegistry.SKREECHER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.SKREECHER_HURT.get();
+        return AMSoundRegistry.SKREECHER_HURT;
     }
 
     public boolean hurt(DamageSource source, float value){
@@ -223,12 +223,12 @@ public class EntitySkreecher extends Monster {
         if(this.isClapping() && this.isAlive() && clingCooldown <= 0){
             float dir = this.isClinging() ? -0.5F : 0.1F;
             if(clapTick % 8 == 0){
-                this.playSound(AMSoundRegistry.SKREECHER_CLAP.get(), this.getSoundVolume() * 3F, this.getVoicePitch());
+                this.playSound(AMSoundRegistry.SKREECHER_CLAP, this.getSoundVolume() * 3F, this.getVoicePitch());
                 this.gameEvent(GameEvent.ENTITY_ACTION);
                 angerAllNearbyWardens();
-                this.level().addParticle(AMParticleRegistry.SKULK_BOOM.get(), this.getX(), this.getEyeY(), this.getZ(), 0, dir, 0);
+                this.level().addParticle(AMParticleRegistry.SKULK_BOOM, this.getX(), this.getEyeY(), this.getZ(), 0, dir, 0);
             }else if(clapTick % 15 == 0){
-                this.playSound(AMSoundRegistry.SKREECHER_CALL.get(), this.getSoundVolume() * 4F, this.getVoicePitch());
+                this.playSound(AMSoundRegistry.SKREECHER_CALL, this.getSoundVolume() * 4F, this.getVoicePitch());
             }
             if(clapTick >= 100){
                 if(!hasAttemptedWardenSpawning && AMConfig.skreechersSummonWarden){
@@ -498,7 +498,7 @@ public class EntitySkreecher extends Monster {
         }
 
         public void start(){
-            EntitySkreecher.this.playSound(AMSoundRegistry.SKREECHER_DETECT.get(), EntitySkreecher.this.getSoundVolume() * 6F, EntitySkreecher.this.getVoicePitch());
+            EntitySkreecher.this.playSound(AMSoundRegistry.SKREECHER_DETECT, EntitySkreecher.this.getSoundVolume() * 6F, EntitySkreecher.this.getVoicePitch());
         }
 
         public void tick(){

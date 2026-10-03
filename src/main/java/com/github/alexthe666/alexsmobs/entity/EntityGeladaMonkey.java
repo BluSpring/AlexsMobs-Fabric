@@ -83,15 +83,15 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.GELADA_MONKEY_IDLE.get();
+        return AMSoundRegistry.GELADA_MONKEY_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.GELADA_MONKEY_HURT.get();
+        return AMSoundRegistry.GELADA_MONKEY_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.GELADA_MONKEY_HURT.get();
+        return AMSoundRegistry.GELADA_MONKEY_HURT;
     }
 
     protected void registerGoals() {
@@ -347,7 +347,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel lvl, AgeableMob mob) {
-        EntityGeladaMonkey baby = AMEntityRegistry.GELADA_MONKEY.get().create(lvl);
+        EntityGeladaMonkey baby = AMEntityRegistry.GELADA_MONKEY.create(lvl);
         baby.setLeader(random.nextInt(2) == 0);
         return baby;
     }

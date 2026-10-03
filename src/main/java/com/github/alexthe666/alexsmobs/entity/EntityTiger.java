@@ -172,7 +172,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
     }
 
     protected SoundEvent getAmbientSound() {
-        return isStealth() ? super.getAmbientSound() : getRemainingPersistentAngerTime() > 0 ? AMSoundRegistry.TIGER_ANGRY.get() : AMSoundRegistry.TIGER_IDLE.get();
+        return isStealth() ? super.getAmbientSound() : getRemainingPersistentAngerTime() > 0 ? AMSoundRegistry.TIGER_ANGRY : AMSoundRegistry.TIGER_IDLE;
     }
 
     public int getAmbientSoundInterval() {
@@ -180,11 +180,11 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.TIGER_HURT.get();
+        return AMSoundRegistry.TIGER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.TIGER_HURT.get();
+        return AMSoundRegistry.TIGER_HURT;
     }
 
 
@@ -424,7 +424,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
                 final double d2 = this.random.nextGaussian() * 0.1D;
                 final double d0 = this.random.nextGaussian() * 0.1D;
                 final double d1 = this.random.nextGaussian() * 0.1D;
-                this.level().addParticle(AMParticleRegistry.SHOCKED.get(), e.getX(), e.getEyeY() + e.getBbHeight() * 0.15F + (double) (this.random.nextFloat() * e.getBbHeight() * 0.15F), e.getZ(), d0, d1, d2);
+                this.level().addParticle(AMParticleRegistry.SHOCKED, e.getX(), e.getEyeY() + e.getBbHeight() * 0.15F + (double) (this.random.nextFloat() * e.getBbHeight() * 0.15F), e.getZ(), d0, d1, d2);
             }
         }
         if(this.getTarget() != null && this.getTarget().hasEffect(AMEffectRegistry.TIGERS_BLESSING)){
@@ -470,7 +470,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
         final boolean whiteOther = p_241840_2_ instanceof EntityTiger && ((EntityTiger) p_241840_2_).isWhite();
-        EntityTiger baby = AMEntityRegistry.TIGER.get().create(p_241840_1_);
+        EntityTiger baby = AMEntityRegistry.TIGER.create(p_241840_1_);
         double whiteChance = 0.1D;
         if (this.isWhite() && whiteOther) {
             whiteChance = 0.8D;

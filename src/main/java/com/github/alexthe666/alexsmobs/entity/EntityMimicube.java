@@ -250,7 +250,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
                 float f1 = this.random.nextFloat() * 0.5F + 0.5F;
                 float f2 = Mth.sin(f) * 0.5F * f1;
                 float f3 = Mth.cos(f) * 0.5F * f1;
-                this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(AMItemRegistry.MIMICREAM.get())), this.getX() + (double)f2, this.getY(), this.getZ() + (double)f3, 0.0D, 0.0D, 0.0D);
+                this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(AMItemRegistry.MIMICREAM)), this.getX() + (double)f2, this.getY(), this.getZ() + (double)f3, 0.0D, 0.0D, 0.0D);
             }
 
             this.playSound(this.getSquishSound(), this.getSoundVolume(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) / 0.8F);
@@ -335,11 +335,11 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
     }
 
     private SoundEvent getSquishSound() {
-        return AMSoundRegistry.MIMICUBE_JUMP.get();
+        return AMSoundRegistry.MIMICUBE_JUMP;
     }
 
     private SoundEvent getJumpSound() {
-        return AMSoundRegistry.MIMICUBE_JUMP.get();
+        return AMSoundRegistry.MIMICUBE_JUMP;
     }
 
     public void jumpFromGround() {
@@ -404,11 +404,11 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.MIMICUBE_HURT.get();
+        return AMSoundRegistry.MIMICUBE_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.MIMICUBE_HURT.get();
+        return AMSoundRegistry.MIMICUBE_HURT;
     }
 
 }

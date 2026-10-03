@@ -9,7 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class MessageSwingArm implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageSwingArm> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "swing_arm"));
@@ -24,8 +25,8 @@ public class MessageSwingArm implements CustomPacketPayload {
     @Override
     public Type<? extends CustomPacketPayload> type() { return TYPE; }
 
-    public static void handle(MessageSwingArm message, IPayloadContext context) {
-        context.enqueueWork(() -> {
+    public static void handle(MessageSwingArm message, ServerPlayNetworking.Context context) {
+        context.server().execute(() -> {
             Player player = context.player();
             if (player != null) {
                 ItemStack leftItem = player.getItemInHand(InteractionHand.OFF_HAND);

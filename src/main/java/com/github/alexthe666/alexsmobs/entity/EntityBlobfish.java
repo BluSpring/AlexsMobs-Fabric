@@ -237,7 +237,7 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
     @Override
     @Nonnull
     public ItemStack getBucketItemStack() {
-        ItemStack stack = new ItemStack(AMItemRegistry.BLOBFISH_BUCKET.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.BLOBFISH_BUCKET);
         if (this.hasCustomName()) {
             stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }

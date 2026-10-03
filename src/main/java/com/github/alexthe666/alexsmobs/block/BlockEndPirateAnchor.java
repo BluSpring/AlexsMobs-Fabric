@@ -196,7 +196,7 @@ public class BlockEndPirateAnchor extends BaseEntityBlock implements AMSpecialRe
 
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152180_, BlockState state, BlockEntityType<T> p_152182_) {
-        return state.getValue(PIECE) == PieceType.ANCHOR ? createTickerHelper(p_152182_, AMTileEntityRegistry.END_PIRATE_ANCHOR.get(), TileEntityEndPirateAnchor::commonTick) : null;
+        return state.getValue(PIECE) == PieceType.ANCHOR ? createTickerHelper(p_152182_, AMTileEntityRegistry.END_PIRATE_ANCHOR, TileEntityEndPirateAnchor::commonTick) : null;
     }
 
     public RenderShape getRenderShape(BlockState state) {

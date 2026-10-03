@@ -25,7 +25,7 @@ public class RecipeBisonUpgrade extends CustomRecipe {
         int fur = 0;
         for (int j = 0; j < container.size(); ++j) {
             ItemStack itemstack1 = container.getItem(j);
-            if (itemstack1.is(AMBlockRegistry.BISON_FUR_BLOCK.get().asItem())) {
+            if (itemstack1.is(AMBlockRegistry.BISON_FUR_BLOCK.asItem())) {
                 fur++;
             }
         }

@@ -78,7 +78,7 @@ public class BlockCrystalizedMucus extends TransparentBlock {
     }
 
     private static int getDistanceAt(BlockState p_54464_) {
-        if (p_54464_.is(AMBlockRegistry.BANANA_SLUG_SLIME_BLOCK.get())) {
+        if (p_54464_.is(AMBlockRegistry.BANANA_SLUG_SLIME_BLOCK)) {
             return 0;
         } else {
             return p_54464_.getBlock() instanceof BlockCrystalizedMucus ? p_54464_.getValue(DISTANCE) : 7;

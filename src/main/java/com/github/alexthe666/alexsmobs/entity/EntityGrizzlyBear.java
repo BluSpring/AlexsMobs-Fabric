@@ -129,15 +129,15 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.GRIZZLY_BEAR_IDLE.get();
+        return AMSoundRegistry.GRIZZLY_BEAR_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.GRIZZLY_BEAR_HURT.get();
+        return AMSoundRegistry.GRIZZLY_BEAR_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.GRIZZLY_BEAR_DIE.get();
+        return AMSoundRegistry.GRIZZLY_BEAR_DIE;
     }
 
     public void positionRider(Entity passenger, Entity.MoveFunction moveFunc) {
@@ -524,7 +524,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
             this.setOrderedToSit(false);
         }
         if (!this.level().isClientSide && this.isAlive() && isTame() && !this.isBaby() && --this.timeUntilNextFur <= 0) {
-            this.spawnAtLocation(AMItemRegistry.BEAR_FUR.get());
+            this.spawnAtLocation(AMItemRegistry.BEAR_FUR);
             this.timeUntilNextFur = this.random.nextInt(24000) + 24000;
         }
         if(snowTimer > 0){
@@ -661,7 +661,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob p_241840_2_) {
-        return AMEntityRegistry.GRIZZLY_BEAR.get().create(world);
+        return AMEntityRegistry.GRIZZLY_BEAR.create(world);
     }
 
     @Override

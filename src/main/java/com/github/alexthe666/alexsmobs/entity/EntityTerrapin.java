@@ -99,11 +99,11 @@ public class EntityTerrapin extends Animal implements ISemiAquatic, Bucketable {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.TERRAPIN_HURT.get();
+        return AMSoundRegistry.TERRAPIN_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.TERRAPIN_HURT.get();
+        return AMSoundRegistry.TERRAPIN_HURT;
     }
 
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
@@ -479,7 +479,7 @@ public class EntityTerrapin extends Animal implements ISemiAquatic, Bucketable {
 
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_146743_, AgeableMob p_146744_) {
-        return AMEntityRegistry.TERRAPIN.get().create(p_146743_);
+        return AMEntityRegistry.TERRAPIN.create(p_146743_);
     }
 
     @Override
@@ -532,7 +532,7 @@ public class EntityTerrapin extends Animal implements ISemiAquatic, Bucketable {
     @Override
     @Nonnull
     public ItemStack getBucketItemStack() {
-        ItemStack stack = new ItemStack(AMItemRegistry.TERRAPIN_BUCKET.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.TERRAPIN_BUCKET);
         if (this.hasCustomName()) {
             stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -657,7 +657,7 @@ public class EntityTerrapin extends Animal implements ISemiAquatic, Bucketable {
                 Level world = this.turtle.level();
                 turtle.gameEvent(GameEvent.BLOCK_PLACE);
                 world.playSound(null, blockpos, SoundEvents.TURTLE_LAY_EGG, SoundSource.BLOCKS, 0.3F, 0.9F + world.random.nextFloat() * 0.2F);
-                world.setBlock(this.blockPos.above(), AMBlockRegistry.TERRAPIN_EGG.get().defaultBlockState().setValue(BlockTerrapinEgg.EGGS, Integer.valueOf(this.turtle.random.nextInt(1) + 3)), 3);
+                world.setBlock(this.blockPos.above(), AMBlockRegistry.TERRAPIN_EGG.defaultBlockState().setValue(BlockTerrapinEgg.EGGS, Integer.valueOf(this.turtle.random.nextInt(1) + 3)), 3);
                 if(world.getBlockEntity(this.blockPos.above()) instanceof TileEntityTerrapinEgg eggTe){
                     eggTe.parent1 = new TileEntityTerrapinEgg.ParentData(turtle.getTurtleType(), turtle.getShellType(), turtle.getSkinType(), turtle.getTurtleColor(), turtle.getShellColor(), turtle.getSkinColor());
                     eggTe.parent2 = turtle.partnerData == null ? eggTe.parent1 : turtle.partnerData;

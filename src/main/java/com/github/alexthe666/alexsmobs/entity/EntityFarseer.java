@@ -138,15 +138,15 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
 
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.FARSEER_IDLE.get();
+        return AMSoundRegistry.FARSEER_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.FARSEER_HURT.get();
+        return AMSoundRegistry.FARSEER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.FARSEER_HURT.get();
+        return AMSoundRegistry.FARSEER_HURT;
     }
 
     public static boolean checkFarseerSpawnRules(EntityType<? extends Monster> animal, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
@@ -294,10 +294,10 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
             }
             if (this.getAnimation() == ANIMATION_EMERGE) {
                 if(this.level().isClientSide){
-                    this.level().addParticle(AMParticleRegistry.STATIC_SPARK.get(), this.getRandomX(0.75F), this.getRandomY(), this.getRandomZ(0.75F), (this.getRandom().nextFloat() - 0.5F) * 0.2F, this.getRandom().nextFloat() * 0.2F, (this.getRandom().nextFloat() - 0.5F) * 0.2F);
+                    this.level().addParticle(AMParticleRegistry.STATIC_SPARK, this.getRandomX(0.75F), this.getRandomY(), this.getRandomZ(0.75F), (this.getRandom().nextFloat() - 0.5F) * 0.2F, this.getRandom().nextFloat() * 0.2F, (this.getRandom().nextFloat() - 0.5F) * 0.2F);
                 }
                 if(this.getAnimationTick() == 1){
-                    this.playSound(AMSoundRegistry.FARSEER_EMERGE.get(), this.getSoundVolume(), this.getVoicePitch());
+                    this.playSound(AMSoundRegistry.FARSEER_EMERGE, this.getSoundVolume(), this.getVoicePitch());
                 }
             }
             LivingEntity target = this.getTarget();
@@ -354,7 +354,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
                         double width = d4 / (d3 * progress);
                         double d5 = (random.nextDouble() - 0.5F) * width;
                         double d6 = (random.nextDouble() - 0.5F) * width;
-                        this.level().addParticle(AMParticleRegistry.STATIC_SPARK.get(), this.getX() + d0 * d4 + d5, this.getEyeY() + d1 * d4, this.getZ() + d2 * d4 + d6, (this.getRandom().nextFloat() - 0.5F) * 0.2F, this.getRandom().nextFloat() * 0.2F, (this.getRandom().nextFloat() - 0.5F) * 0.2F);
+                        this.level().addParticle(AMParticleRegistry.STATIC_SPARK, this.getX() + d0 * d4 + d5, this.getEyeY() + d1 * d4, this.getZ() + d2 * d4 + d6, (this.getRandom().nextFloat() - 0.5F) * 0.2F, this.getRandom().nextFloat() * 0.2F, (this.getRandom().nextFloat() - 0.5F) * 0.2F);
                     }
                 }
             }
@@ -632,7 +632,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
                     EntityFarseer.this.setAngry(true);
                     EntityFarseer.this.entityData.set(LASER_ENTITY_ID, target.getId());
                     if(laserUseTime == 0){
-                        EntityFarseer.this.playSound(AMSoundRegistry.FARSEER_BEAM.get(), EntityFarseer.this.getSoundVolume(), EntityFarseer.this.getVoicePitch());
+                        EntityFarseer.this.playSound(AMSoundRegistry.FARSEER_BEAM, EntityFarseer.this.getSoundVolume(), EntityFarseer.this.getVoicePitch());
                     }
                     laserUseTime++;
                     if (laserUseTime > LASER_ATTACK_DURATION) {

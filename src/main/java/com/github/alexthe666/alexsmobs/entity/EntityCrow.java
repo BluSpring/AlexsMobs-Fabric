@@ -492,7 +492,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        return AMEntityRegistry.CROW.get().create(serverWorld);
+        return AMEntityRegistry.CROW.create(serverWorld);
     }
 
     public boolean isTargetBlocked(Vec3 target) {
@@ -506,15 +506,15 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.CROW_IDLE.get();
+        return AMSoundRegistry.CROW_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.CROW_HURT.get();
+        return AMSoundRegistry.CROW_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.CROW_HURT.get();
+        return AMSoundRegistry.CROW_HURT;
     }
 
     public Vec3 getBlockInViewAway(Vec3 fleePos, float radiusAdd) {

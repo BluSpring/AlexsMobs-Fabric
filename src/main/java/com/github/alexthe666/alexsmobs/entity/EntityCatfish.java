@@ -285,9 +285,9 @@ public class EntityCatfish extends WaterAnimal implements FlyingAnimal, Bucketab
     public ItemStack getBucketItemStack() {
         final int catfishSize = this.getCatfishSize();
         final Item item = switch (catfishSize) {
-            case 1 -> AMItemRegistry.MEDIUM_CATFISH_BUCKET.get();
-            case 2 -> AMItemRegistry.LARGE_CATFISH_BUCKET.get();
-            default -> AMItemRegistry.SMALL_CATFISH_BUCKET.get();
+            case 1 -> AMItemRegistry.MEDIUM_CATFISH_BUCKET;
+            case 2 -> AMItemRegistry.LARGE_CATFISH_BUCKET;
+            default -> AMItemRegistry.SMALL_CATFISH_BUCKET;
         };
         return new ItemStack(item);
     }

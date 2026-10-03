@@ -93,11 +93,11 @@ public class EntityVoidWorm extends Monster {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.VOID_WORM_IDLE.get();
+        return AMSoundRegistry.VOID_WORM_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.VOID_WORM_HURT.get();
+        return AMSoundRegistry.VOID_WORM_HURT;
     }
 
     @Override
@@ -106,7 +106,7 @@ public class EntityVoidWorm extends Monster {
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.VOID_WORM_HURT.get();
+        return AMSoundRegistry.VOID_WORM_HURT;
     }
 
     protected float getSoundVolume() {
@@ -138,7 +138,7 @@ public class EntityVoidWorm extends Monster {
        super.die(cause);
        if(!this.level().isClientSide && !this.isSplitter()){
            if(cause != null && cause.getEntity() instanceof ServerPlayer) {
-               AMAdvancementTriggerRegistry.VOID_WORM_SLAY_HEAD.get().trigger((ServerPlayer) cause.getEntity());
+               AMAdvancementTriggerRegistry.VOID_WORM_SLAY_HEAD.trigger((ServerPlayer) cause.getEntity());
            }
        }
     }
@@ -165,14 +165,14 @@ public class EntityVoidWorm extends Monster {
             pos = pos.above();
         }
         int radius = 2;
-        BlockState residue = AMBlockRegistry.ENDER_RESIDUE.get().defaultBlockState().setValue(BlockEnderResidue.SLOW_DECAY, true);
+        BlockState residue = AMBlockRegistry.ENDER_RESIDUE.defaultBlockState().setValue(BlockEnderResidue.SLOW_DECAY, true);
         for(int x = -radius; x <= radius; x++){
             for(int y = -radius; y <= radius; y++){
                 for(int z = -radius; z <= radius; z++){
                     double sq = x * x + y * y + z * z;
                     BlockPos pos1 = pos.offset(x, y, z);
                     BlockState state = level().getBlockState(pos1);
-                    if(sq <= radius * radius && sq >= (radius * radius) - 2.0F && (state.canBeReplaced() || state.is(AMBlockRegistry.ENDER_RESIDUE.get()))){
+                    if(sq <= radius * radius && sq >= (radius * radius) - 2.0F && (state.canBeReplaced() || state.is(AMBlockRegistry.ENDER_RESIDUE))){
                         level().setBlockAndUpdate(pos1, residue);
                     }
                 }
@@ -345,7 +345,7 @@ public class EntityVoidWorm extends Monster {
                         tail = true;
                         scale = scale * 0.85F;
                     }
-                    EntityVoidWormPart part = new EntityVoidWormPart(AMEntityRegistry.VOID_WORM_PART.get(), partParent,  1.0F + (scale * (tail ? 0.65F : 0.3F)) + (i == 0 ? 0.8F : 0), 180, i == 0 ? -0.0F : i == segments - tailstart ? -0.3F : 0);
+                    EntityVoidWormPart part = new EntityVoidWormPart(AMEntityRegistry.VOID_WORM_PART, partParent,  1.0F + (scale * (tail ? 0.65F : 0.3F)) + (i == 0 ? 0.8F : 0), 180, i == 0 ? -0.0F : i == segments - tailstart ? -0.3F : 0);
                     part.setInvulnerable(partParent.isInvulnerable());
                     part.setParent(partParent);
                     if (updatePostSummon) {
@@ -628,7 +628,7 @@ public class EntityVoidWorm extends Monster {
                 BlockHitResult result1 = (BlockHitResult) result;
                 vec = vec.add(net.minecraft.world.phys.Vec3.atLowerCornerOf(result1.getDirection().getNormal()));
             }
-            EntityVoidPortal portal = AMEntityRegistry.VOID_PORTAL.get().create(level());
+            EntityVoidPortal portal = AMEntityRegistry.VOID_PORTAL.create(level());
             portal.setPos(vec.x, vec.y, vec.z);
             Vec3 dirVec = vec.subtract(this.position());
             Direction dir = Direction.getNearest(dirVec.x, dirVec.y, dirVec.z);

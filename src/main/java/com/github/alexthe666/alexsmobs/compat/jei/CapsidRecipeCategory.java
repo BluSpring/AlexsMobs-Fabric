@@ -18,7 +18,7 @@ public class CapsidRecipeCategory  implements IRecipeCategory<CapsidRecipe> {
 
     public CapsidRecipeCategory(IGuiHelper guiHelper) {
         background = new CapsidDrawable();
-        icon = guiHelper.createDrawableItemStack(new ItemStack(AMBlockRegistry.CAPSID.get()));
+        icon = guiHelper.createDrawableItemStack(new ItemStack(AMBlockRegistry.CAPSID));
     }
 
     @Override
@@ -28,7 +28,7 @@ public class CapsidRecipeCategory  implements IRecipeCategory<CapsidRecipe> {
 
     @Override
     public Component getTitle() {
-        return AMBlockRegistry.CAPSID.get().getName().append(Component.literal(" ")).append(Component.translatable("alexsmobs.gui.capsid_transformation"));
+        return AMBlockRegistry.CAPSID.getName().append(Component.literal(" ")).append(Component.translatable("alexsmobs.gui.capsid_transformation"));
     }
 
     @Override

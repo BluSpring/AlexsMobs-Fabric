@@ -234,13 +234,13 @@ public class EntityPotoo extends Animal implements IFalconry {
             if (getEyeScale(10, 1.0F) == 0F) {
                 if (j > 40) {
                     this.openMouth(30);
-                    this.playSound(AMSoundRegistry.POTOO_CALL.get());
+                    this.playSound(AMSoundRegistry.POTOO_CALL);
                     this.gameEvent(GameEvent.ENTITY_ACTION);
                 }
             } else if (getEyeScale(10, 1.0F) < 7) {
                 if (j > 300 && j % 300 == 0 && random.nextInt(4) == 0) {
                     this.openMouth(30);
-                    this.playSound(AMSoundRegistry.POTOO_CALL.get());
+                    this.playSound(AMSoundRegistry.POTOO_CALL);
                     this.gameEvent(GameEvent.ENTITY_ACTION);
                 }
             }
@@ -252,11 +252,11 @@ public class EntityPotoo extends Animal implements IFalconry {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.POTOO_HURT.get();
+        return AMSoundRegistry.POTOO_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.POTOO_HURT.get();
+        return AMSoundRegistry.POTOO_HURT;
     }
 
     public boolean hurt(DamageSource source, float amount) {
@@ -286,9 +286,9 @@ public class EntityPotoo extends Animal implements IFalconry {
                 Entity mount = this.getVehicle();
                 if (mount instanceof Player) {
                     float yawAdd = 0;
-                    if (((Player) mount).getItemInHand(InteractionHand.MAIN_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE.get()) {
+                    if (((Player) mount).getItemInHand(InteractionHand.MAIN_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE) {
                         yawAdd = ((Player) mount).getMainArm() == HumanoidArm.LEFT ? 135 : -135;
-                    } else if (((Player) mount).getItemInHand(InteractionHand.OFF_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE.get()) {
+                    } else if (((Player) mount).getItemInHand(InteractionHand.OFF_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE) {
                         yawAdd = ((Player) mount).getMainArm() == HumanoidArm.LEFT ? -135 : 135;
                     } else {
                         this.removeVehicle();
@@ -384,7 +384,7 @@ public class EntityPotoo extends Animal implements IFalconry {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return AMEntityRegistry.POTOO.get().create(serverLevel);
+        return AMEntityRegistry.POTOO.create(serverLevel);
     }
 
     public float getEyeScale(int bufferOffset, float partialTicks) {
@@ -450,7 +450,7 @@ public class EntityPotoo extends Animal implements IFalconry {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
         InteractionResult type = super.mobInteract(player, hand);
-        if (!this.isBaby() && getRidingFalcons(player) <= 0 && (player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE.get() || player.getItemInHand(InteractionHand.OFF_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE.get())) {
+        if (!this.isBaby() && getRidingFalcons(player) <= 0 && (player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE || player.getItemInHand(InteractionHand.OFF_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE)) {
             boardingCooldown = 30;
             this.ejectPassengers();
             this.startRiding(player, true);

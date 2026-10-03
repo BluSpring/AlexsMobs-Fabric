@@ -36,7 +36,7 @@ public class EntitySquidGrapple extends Entity {
     }
 
     public EntitySquidGrapple(Level worldIn, LivingEntity player, boolean rightHand) {
-        this(AMEntityRegistry.SQUID_GRAPPLE.get(), worldIn);
+        this(AMEntityRegistry.SQUID_GRAPPLE, worldIn);
         this.setOwnerId(player.getUUID());
         float rot = player.yHeadRot + (rightHand ? 60 : -60);
         this.setPos(player.getX() - (double) (player.getBbWidth()) * 0.5D * (double) Mth.sin(rot * Mth.DEG_TO_RAD), player.getEyeY() - (double) 0.2F, player.getZ() + (double) (player.getBbWidth()) * 0.5D * (double) Mth.cos(rot * Mth.DEG_TO_RAD));

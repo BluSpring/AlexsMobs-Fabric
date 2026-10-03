@@ -91,11 +91,11 @@ public class EntityCombJelly extends WaterAnimal implements Bucketable {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.COMB_JELLY_HURT.get();
+        return AMSoundRegistry.COMB_JELLY_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.COMB_JELLY_HURT.get();
+        return AMSoundRegistry.COMB_JELLY_HURT;
     }
 
     public int getVariant() {
@@ -145,7 +145,7 @@ public class EntityCombJelly extends WaterAnimal implements Bucketable {
     @Override
     @Nonnull
     public ItemStack getBucketItemStack() {
-        ItemStack stack = new ItemStack(AMItemRegistry.COMB_JELLY_BUCKET.get());
+        ItemStack stack = new ItemStack(AMItemRegistry.COMB_JELLY_BUCKET);
         if (this.hasCustomName()) {
             stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }

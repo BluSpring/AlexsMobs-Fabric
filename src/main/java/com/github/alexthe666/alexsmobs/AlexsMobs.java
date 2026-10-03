@@ -21,21 +21,8 @@ import com.github.alexthe666.alexsmobs.world.AMMobSpawnBiomeModifier;
 import com.github.alexthe666.alexsmobs.world.AMMobSpawnStructureModifier;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.config.ModConfigEvent;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,8 +30,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.function.Supplier;
 
-@Mod(AlexsMobs.MODID)
-public class AlexsMobs {
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder;
+import net.fabricmc.loader.api.FabricLoader;
+
+public class AlexsMobs implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "alexsmobs";
     public static final String VERSION = "1.22.9";
@@ -56,40 +53,44 @@ public class AlexsMobs {
     );
     private static boolean isAprilFools = false;
     private static boolean isHalloween = false;
-    
-    public AlexsMobs(IEventBus modEventBus, ModContainer modContainer) {
-        modEventBus.addListener(this::setup);
-        modEventBus.addListener(this::setupClient);
-        modEventBus.addListener(this::onModConfigEvent);
-        modEventBus.addListener(this::setupEntityModelLayers);
-        modEventBus.addListener(this::registerPayloads);
-        NeoForge.EVENT_BUS.addListener(AMEffectRegistry::registerBrewingRecipes);
+
+    private static MinecraftServer server;
+
+    @Override
+    public void onInitialize() {
+        this.setup();
+        this.onModConfigEvent();
+        this.registerPayloads();
+        FabricBrewingRecipeRegistryBuilder.BUILD.register(AMEffectRegistry::registerBrewingRecipes);
         
         // Register all deferred registers
-        AMBlockRegistry.DEF_REG.register(modEventBus);
-        AMEntityRegistry.DEF_REG.register(modEventBus);
-        AMItemRegistry.DEF_REG.register(modEventBus);
-        AMArmorMaterial.ARMOR_MATERIALS.register(modEventBus);
-        AMTileEntityRegistry.DEF_REG.register(modEventBus);
-        AMPointOfInterestRegistry.DEF_REG.register(modEventBus);
-        AMFeatureRegistry.DEF_REG.register(modEventBus);
-        AMSoundRegistry.DEF_REG.register(modEventBus);
-        AMParticleRegistry.DEF_REG.register(modEventBus);
-        AMEffectRegistry.EFFECT_DEF_REG.register(modEventBus);
-        AMEffectRegistry.POTION_DEF_REG.register(modEventBus);
-        AMMenuRegistry.DEF_REG.register(modEventBus);
-        AMRecipeRegistry.DEF_REG.register(modEventBus);
-        AMLootRegistry.DEF_REG.register(modEventBus);
-        AMBannerRegistry.DEF_REG.register(modEventBus);
-        AMCreativeTabRegistry.DEF_REG.register(modEventBus);
-        AMAdvancementTriggerRegistry.DEF_REG.register(modEventBus);
+        AMBlockRegistry.DEF_REG.register();
+        AMEntityRegistry.DEF_REG.register();
+        AMItemRegistry.DEF_REG.register();
+        AMArmorMaterial.ARMOR_MATERIALS.register();
+        AMTileEntityRegistry.DEF_REG.register();
+        AMPointOfInterestRegistry.DEF_REG.register();
+        AMFeatureRegistry.DEF_REG.register();
+        AMSoundRegistry.DEF_REG.register();
+        AMParticleRegistry.DEF_REG.register();
+        AMEffectRegistry.EFFECT_DEF_REG.register();
+        AMEffectRegistry.POTION_DEF_REG.register();
+        AMMenuRegistry.DEF_REG.register();
+        AMRecipeRegistry.DEF_REG.register();
+        AMLootRegistry.DEF_REG.register();
+        AMBannerRegistry.DEF_REG.register();
+        AMCreativeTabRegistry.DEF_REG.register();
+        AMAdvancementTriggerRegistry.DEF_REG.register();
+
+        ServerLifecycleEvents.SERVER_STARTING.register(s -> server = s);
+        ServerLifecycleEvents.SERVER_STOPPING.register(s -> server = null);
         
         // Biome modifiers
-        AMMobSpawnBiomeModifier.BIOME_MODIFIER_SERIALIZERS.register(modEventBus);
-        AMLeafcutterAntBiomeModifier.BIOME_MODIFIER_SERIALIZERS.register(modEventBus);
+        AMMobSpawnBiomeModifier.BIOME_MODIFIER_SERIALIZERS.register();
+        AMLeafcutterAntBiomeModifier.BIOME_MODIFIER_SERIALIZERS.register();
         
         // Structure modifiers
-        AMMobSpawnStructureModifier.STRUCTURE_MODIFIER_SERIALIZERS.register(modEventBus);
+        AMMobSpawnStructureModifier.STRUCTURE_MODIFIER_SERIALIZERS.register();
         
         // Register config
         modContainer.registerConfig(ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC, "alexsmobs.toml");
@@ -112,10 +113,6 @@ public class AlexsMobs {
         return isHalloween || AMConfig.superSecretSettings;
     }
 
-    private void setupEntityModelLayers(final EntityRenderersEvent.RegisterLayerDefinitions event) {
-        AMModelLayers.register(event);
-    }
-
     private void onModConfigEvent(final ModConfigEvent event) {
         final ModConfig config = event.getConfig();
         if (config.getSpec() == ConfigHolder.COMMON_SPEC) {
@@ -124,59 +121,63 @@ public class AlexsMobs {
         BiomeConfig.init();
     }
 
-    private void registerPayloads(RegisterPayloadHandlersEvent event) {
-        final PayloadRegistrar registrar = event.registrar(MODID).versioned(VERSION).optional();
+    private void registerPayloads() {
         // Client to Server messages
-        registrar.playToServer(MessageSwingArm.TYPE, MessageSwingArm.CODEC, MessageSwingArm::handle);
-        registrar.playToServer(MessageUpdateEagleControls.TYPE, MessageUpdateEagleControls.CODEC, MessageUpdateEagleControls::handle);
+        PayloadTypeRegistry.playC2S().register(MessageSwingArm.TYPE, MessageSwingArm.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(MessageSwingArm.TYPE, MessageSwingArm::handle);
+        PayloadTypeRegistry.playC2S().register(MessageUpdateEagleControls.TYPE, MessageUpdateEagleControls.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(MessageUpdateEagleControls.TYPE, MessageUpdateEagleControls::handle);
         // Bidirectional - sent from client (when player attacks multipart) and from server (sendMSGToAll for sync)
-        registrar.playBidirectional(MessageHurtMultipart.TYPE, MessageHurtMultipart.CODEC, MessageHurtMultipart::handle);
-        registrar.playBidirectional(MessageInteractMultipart.TYPE, MessageInteractMultipart.CODEC, MessageInteractMultipart::handle);
-        registrar.playToServer(MessageTransmuteFromMenu.TYPE, MessageTransmuteFromMenu.CODEC, MessageTransmuteFromMenu::handle);
+        PayloadTypeRegistry.playC2S().register(MessageHurtMultipart.TYPE, MessageHurtMultipart.CODEC);
+        PayloadTypeRegistry.playS2C().register(MessageHurtMultipart.TYPE, MessageHurtMultipart.CODEC);
+        PayloadTypeRegistry.playC2S().register(MessageInteractMultipart.TYPE, MessageInteractMultipart.CODEC);
+        PayloadTypeRegistry.playS2C().register(MessageInteractMultipart.TYPE, MessageInteractMultipart.CODEC);
+        PayloadTypeRegistry.playC2S().register(MessageTransmuteFromMenu.TYPE, MessageTransmuteFromMenu.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(MessageTransmuteFromMenu.TYPE, MessageTransmuteFromMenu::handle);
         
         // Server to Client messages
-        registrar.playToClient(MessageCrowDismount.TYPE, MessageCrowDismount.CODEC, MessageCrowDismount::handle);
-        registrar.playToClient(MessageCrowMountPlayer.TYPE, MessageCrowMountPlayer.CODEC, MessageCrowMountPlayer::handle);
+        PayloadTypeRegistry.playS2C().register(MessageCrowDismount.TYPE, MessageCrowDismount.CODEC);
+        PayloadTypeRegistry.playS2C().register(MessageCrowMountPlayer.TYPE, MessageCrowMountPlayer.CODEC, MessageCrowMountPlayer::handle);
         // Bidirectional - sent from client (falconry glove launch) and from server (sendMSGToAll for sync)
-        registrar.playBidirectional(MessageMosquitoDismount.TYPE, MessageMosquitoDismount.CODEC, MessageMosquitoDismount::handle);
-        registrar.playToClient(MessageMosquitoMountPlayer.TYPE, MessageMosquitoMountPlayer.CODEC, MessageMosquitoMountPlayer::handle);
-        registrar.playToClient(MessageKangarooEat.TYPE, MessageKangarooEat.CODEC, MessageKangarooEat::handle);
-        registrar.playToClient(MessageKangarooInventorySync.TYPE, MessageKangarooInventorySync.CODEC, MessageKangarooInventorySync::handle);
+        PayloadTypeRegistry.playS2C().register(MessageMosquitoDismount.TYPE, MessageMosquitoDismount.CODEC, MessageMosquitoDismount::handle);
+        PayloadTypeRegistry.playC2S().register(MessageMosquitoDismount.TYPE, MessageMosquitoDismount.CODEC, MessageMosquitoDismount::handle);
+
+        PayloadTypeRegistry.playS2C().register(MessageMosquitoMountPlayer.TYPE, MessageMosquitoMountPlayer.CODEC, MessageMosquitoMountPlayer::handle);
+        PayloadTypeRegistry.playS2C().register(MessageKangarooEat.TYPE, MessageKangarooEat.CODEC, MessageKangarooEat::handle);
+        PayloadTypeRegistry.playS2C().register(MessageKangarooInventorySync.TYPE, MessageKangarooInventorySync.CODEC, MessageKangarooInventorySync::handle);
         // Client to Server - sent from client when jukebox plays near dancing mobs (e.g., rain frog rain dance)
-        registrar.playToServer(MessageStartDancing.TYPE, MessageStartDancing.CODEC, MessageStartDancing::handle);
+        PayloadTypeRegistry.playC2S().register(MessageStartDancing.TYPE, MessageStartDancing.CODEC, MessageStartDancing::handle);
         // Bidirectional - sent from client (falconry glove launch) and from server (sendMSGToAll for sync)
-        registrar.playBidirectional(MessageSyncEntityPos.TYPE, MessageSyncEntityPos.CODEC, MessageSyncEntityPos::handle);
-        registrar.playToClient(MessageSendVisualFlagFromServer.TYPE, MessageSendVisualFlagFromServer.CODEC, MessageSendVisualFlagFromServer::handle);
-        registrar.playToClient(MessageSetPupfishChunkOnClient.TYPE, MessageSetPupfishChunkOnClient.CODEC, MessageSetPupfishChunkOnClient::handle);
-        registrar.playToClient(MessageTarantulaHawkSting.TYPE, MessageTarantulaHawkSting.CODEC, MessageTarantulaHawkSting::handle);
-        registrar.playToClient(MessageMungusBiomeChange.TYPE, MessageMungusBiomeChange.CODEC, MessageMungusBiomeChange::handle);
-        registrar.playToClient(MessageUpdateCapsid.TYPE, MessageUpdateCapsid.CODEC, MessageUpdateCapsid::handle);
-        registrar.playToClient(MessageUpdateTransmutablesToDisplay.TYPE, MessageUpdateTransmutablesToDisplay.CODEC, MessageUpdateTransmutablesToDisplay::handle);
+        PayloadTypeRegistry.playC2S().register(MessageSyncEntityPos.TYPE, MessageSyncEntityPos.CODEC, MessageSyncEntityPos::handle);
+        PayloadTypeRegistry.playS2C().register(MessageSyncEntityPos.TYPE, MessageSyncEntityPos.CODEC, MessageSyncEntityPos::handle);
+        PayloadTypeRegistry.playS2C().register(MessageSendVisualFlagFromServer.TYPE, MessageSendVisualFlagFromServer.CODEC, MessageSendVisualFlagFromServer::handle);
+        PayloadTypeRegistry.playS2C().register(MessageSetPupfishChunkOnClient.TYPE, MessageSetPupfishChunkOnClient.CODEC, MessageSetPupfishChunkOnClient::handle);
+        PayloadTypeRegistry.playS2C().register(MessageTarantulaHawkSting.TYPE, MessageTarantulaHawkSting.CODEC, MessageTarantulaHawkSting::handle);
+        PayloadTypeRegistry.playS2C().register(MessageMungusBiomeChange.TYPE, MessageMungusBiomeChange.CODEC, MessageMungusBiomeChange::handle);
+        PayloadTypeRegistry.playS2C().register(MessageUpdateCapsid.TYPE, MessageUpdateCapsid.CODEC, MessageUpdateCapsid::handle);
+        PayloadTypeRegistry.playS2C().register(MessageUpdateTransmutablesToDisplay.TYPE, MessageUpdateTransmutablesToDisplay.CODEC, MessageUpdateTransmutablesToDisplay::handle);
     }
 
+    @Environment(EnvType.CLIENT)
     public static <MSG extends CustomPacketPayload> void sendMSGToServer(MSG message) {
-        PacketDistributor.sendToServer(message);
+        ClientPlayNetworking.send(message);
     }
 
     public static <MSG extends CustomPacketPayload> void sendMSGToAll(MSG message) {
-        PacketDistributor.sendToAllPlayers(message);
+        PlayerLookup.all(server).forEach(p -> ServerPlayNetworking.send(p, message));
     }
 
     public static <MSG extends CustomPacketPayload> void sendNonLocal(MSG msg, ServerPlayer player) {
-        PacketDistributor.sendToPlayer(player, msg);
+        ServerPlayNetworking.send(player, msg);
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(AMItemRegistry::init);
-        event.enqueueWork(AMItemRegistry::initDispenser);
+    private void setup() {
+        AMItemRegistry.init();
+        AMItemRegistry.initDispenser();
         AMAdvancementTriggerRegistry.init();
         AMEffectRegistry.init();
         AMRecipeRegistry.init();
         PROXY.initPathfinding();
-    }
-
-    private void setupClient(FMLClientSetupEvent event) {
-        event.enqueueWork(PROXY::clientInit);
     }
     
     public static ResourceLocation prefix(String path) {
@@ -185,9 +186,9 @@ public class AlexsMobs {
 
     // Safe dist proxy helper - uses Supplier to avoid loading client classes on dedicated server
     private static <T> T unsafeRunForDist(Supplier<Supplier<T>> clientTarget, Supplier<Supplier<T>> serverTarget) {
-        return switch (FMLEnvironment.dist) {
+        return switch (FabricLoader.getInstance().getEnvironmentType()) {
             case CLIENT -> clientTarget.get().get();
-            case DEDICATED_SERVER -> serverTarget.get().get();
+            case SERVER -> serverTarget.get().get();
         };
     }
 }

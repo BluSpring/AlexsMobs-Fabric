@@ -107,11 +107,11 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.COCKROACH_HURT.get();
+        return AMSoundRegistry.COCKROACH_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.COCKROACH_HURT.get();
+        return AMSoundRegistry.COCKROACH_HURT;
     }
 
     protected void registerGoals() {
@@ -195,14 +195,14 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
 
     public InteractionResult mobInteract(Player p_230254_1_, InteractionHand p_230254_2_) {
         ItemStack lvt_3_1_ = p_230254_1_.getItemInHand(p_230254_2_);
-       if (lvt_3_1_.getItem() == AMItemRegistry.MARACA.get() && this.isAlive() && !this.hasMaracas()) {
+       if (lvt_3_1_.getItem() == AMItemRegistry.MARACA && this.isAlive() && !this.hasMaracas()) {
             this.setMaracas(true);
             lvt_3_1_.shrink(1);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
-        } else if (lvt_3_1_.getItem() != AMItemRegistry.MARACA.get() && this.isAlive() && this.hasMaracas()) {
+        } else if (lvt_3_1_.getItem() != AMItemRegistry.MARACA && this.isAlive() && this.hasMaracas()) {
             this.setMaracas(false);
             this.setDancing(false);
-            this.spawnAtLocation(new ItemStack(AMItemRegistry.MARACA.get()));
+            this.spawnAtLocation(new ItemStack(AMItemRegistry.MARACA));
             return InteractionResult.SUCCESS;
         } else {
             return super.mobInteract(p_230254_1_, p_230254_2_);
@@ -312,7 +312,7 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
             laCucarachaTimer = 0;
         }
         if (!this.level().isClientSide && this.isAlive() && !this.isBaby() && --this.timeUntilNextEgg <= 0) {
-           ItemEntity dropped = this.spawnAtLocation(AMItemRegistry.COCKROACH_OOTHECA.get());
+           ItemEntity dropped = this.spawnAtLocation(AMItemRegistry.COCKROACH_OOTHECA);
            if(dropped != null){
                dropped.setDefaultPickUpDelay();
            }
@@ -365,7 +365,7 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        final EntityCockroach roach = AMEntityRegistry.COCKROACH.get().create(serverWorld);
+        final EntityCockroach roach = AMEntityRegistry.COCKROACH.create(serverWorld);
         roach.setBreaded(true);
         return roach;
     }
@@ -422,7 +422,7 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
 
     @Override
     public void onGetItem(ItemEntity e) {
-        if (e.getItem().getItem() == AMItemRegistry.MARACA.get()) {
+        if (e.getItem().getItem() == AMItemRegistry.MARACA) {
             this.setMaracas(true);
         } else {
             if (e.getItem().hasCraftingRemainingItem()) {

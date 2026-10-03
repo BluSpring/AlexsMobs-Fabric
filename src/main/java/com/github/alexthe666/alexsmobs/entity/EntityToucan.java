@@ -113,15 +113,15 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.TOUCAN_IDLE.get();
+        return AMSoundRegistry.TOUCAN_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.TOUCAN_HURT.get();
+        return AMSoundRegistry.TOUCAN_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.TOUCAN_HURT.get();
+        return AMSoundRegistry.TOUCAN_HURT;
     }
 
     public boolean checkSpawnObstruction(LevelReader p_29005_) {
@@ -480,7 +480,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob parent) {
-        EntityToucan toucan = AMEntityRegistry.TOUCAN.get().create(level());
+        EntityToucan toucan = AMEntityRegistry.TOUCAN.create(level());
         toucan.setVariant(this.getVariant());
         return toucan;
     }

@@ -28,7 +28,7 @@ public class LayerCockroachMaracas extends RenderLayer<EntityCockroach, ModelCoc
 
     public LayerCockroachMaracas(RenderCockroach render, EntityRendererProvider.Context renderManagerIn) {
         super(render);
-        stack = new ItemStack(AMItemRegistry.MARACA.get());
+        stack = new ItemStack(AMItemRegistry.MARACA);
         this.sombrero = new ModelSombrero(renderManagerIn.bakeLayer(AMModelLayers.SOMBRERO));
 
     }

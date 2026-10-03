@@ -54,7 +54,7 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
     private NonNullList<ItemStack> stacks = NonNullList.withSize(1, ItemStack.EMPTY);
 
     public TileEntityCapsid(BlockPos pos, BlockState state) {
-        super(AMTileEntityRegistry.CAPSID.get(), pos, state);
+        super(AMTileEntityRegistry.CAPSID, pos, state);
     }
 
     public static void commonTick(Level level, BlockPos pos, BlockState state, TileEntityCapsid entity) {
@@ -102,7 +102,7 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
                     this.setItem(0, ItemStack.EMPTY);
                     this.level.destroyBlock(this.getBlockPos(), false);
                     this.level.destroyBlock(this.getBlockPos().below(), false);
-                    EntityEnderiophage phage = AMEntityRegistry.ENDERIOPHAGE.get().create(level);
+                    EntityEnderiophage phage = AMEntityRegistry.ENDERIOPHAGE.create(level);
                     phage.setPos(this.getBlockPos().getX() + 0.5F, this.getBlockPos().getY() - 1.0F, this.getBlockPos().getZ() + 0.5F);
                     phage.setVariant(0);
                     if(!level.isClientSide){
@@ -115,7 +115,7 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
                     vibratingThisTick = true;
                     if(transformTime == 1 && (AlexsMobs.isAprilFools() || new Random().nextInt(100) == 0)){
                         fnaf = true;
-                        level.playSound(null, this.getBlockPos(), AMSoundRegistry.MOSQUITO_CAPSID_CONVERT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                        level.playSound(null, this.getBlockPos(), AMSoundRegistry.MOSQUITO_CAPSID_CONVERT, SoundSource.BLOCKS, 1.0F, 1.0F);
                     }
                     if(transformTime > (fnaf ? Math.max(160, lastRecipe.getTime()) : lastRecipe.getTime())) {
                         ItemStack current = this.getItem(0).copy();

@@ -84,15 +84,15 @@ public class EntityShoebill extends Animal implements IAnimatedEntity, ITargetsD
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.SHOEBILL_HURT.get();
+        return AMSoundRegistry.SHOEBILL_HURT;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.SHOEBILL_HURT.get();
+        return AMSoundRegistry.SHOEBILL_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.SHOEBILL_HURT.get();
+        return AMSoundRegistry.SHOEBILL_HURT;
     }
 
     public boolean isFood(ItemStack stack) {
@@ -337,7 +337,7 @@ public class EntityShoebill extends Animal implements IAnimatedEntity, ITargetsD
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        return AMEntityRegistry.SHOEBILL.get().create(serverWorld);
+        return AMEntityRegistry.SHOEBILL.create(serverWorld);
     }
 
     @Override

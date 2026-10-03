@@ -127,15 +127,15 @@ public class EntitySkunk extends Animal {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.SKUNK_IDLE.get();
+        return AMSoundRegistry.SKUNK_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.SKUNK_HURT.get();
+        return AMSoundRegistry.SKUNK_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.SKUNK_HURT.get();
+        return AMSoundRegistry.SKUNK_HURT;
     }
 
     @Override
@@ -151,7 +151,7 @@ public class EntitySkunk extends Animal {
             if(this.getSprayTime() == 0){
                 spawnLingeringCloud();
             }else if(this.getSprayTime() % 6 == 0){
-                this.playSound(AMSoundRegistry.SKUNK_SPRAY.get());
+                this.playSound(AMSoundRegistry.SKUNK_SPRAY);
             }
             this.yBodyRot = this.getYRot();
             this.setYRot(approachRotation(this.getSprayYaw(), this.getYRot() + 10, 15F));
@@ -211,7 +211,7 @@ public class EntitySkunk extends Animal {
                 final double d0 = this.random.nextGaussian() * 0.1D;
                 final double d1 = this.random.nextGaussian() * 0.1D;
                 final double d2 = this.random.nextGaussian() * 0.1D;
-                this.level().addParticle(AMParticleRegistry.SMELLY.get(), particleFrom.x, particleFrom.y, particleFrom.z, particleTo.x + d0, particleTo.y - 0.4F + d1, particleTo.z + d2);
+                this.level().addParticle(AMParticleRegistry.SMELLY, particleFrom.x, particleFrom.y, particleFrom.z, particleTo.x + d0, particleTo.y - 0.4F + d1, particleTo.z + d2);
             }
         } else {
             super.handleEntityEvent(id);
@@ -234,7 +234,7 @@ public class EntitySkunk extends Animal {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob mob) {
-        return AMEntityRegistry.SKUNK.get().create(level());
+        return AMEntityRegistry.SKUNK.create(level());
     }
 
     private class SprayGoal extends Goal {
@@ -282,8 +282,8 @@ public class EntitySkunk extends Animal {
                             dir = Direction.UP;
                         }
                         BlockState currentState = level().getBlockState(pos);
-                        BlockState sprayState = ((MultifaceBlock) AMBlockRegistry.SKUNK_SPRAY.get()).getStateForPlacement(level().getBlockState(pos), level(), pos, dir);
-                        if ((currentState.isAir() || currentState.canBeReplaced()) && sprayState != null && sprayState.is(AMBlockRegistry.SKUNK_SPRAY.get())) {
+                        BlockState sprayState = ((MultifaceBlock) AMBlockRegistry.SKUNK_SPRAY).getStateForPlacement(level().getBlockState(pos), level(), pos, dir);
+                        if ((currentState.isAir() || currentState.canBeReplaced()) && sprayState != null && sprayState.is(AMBlockRegistry.SKUNK_SPRAY)) {
                             level().setBlockAndUpdate(pos, sprayState);
                         }
                         double sprayDist = hitResult.getLocation().subtract(skunkPos).length() / maxSprayDist;
@@ -293,7 +293,7 @@ public class EntitySkunk extends Animal {
                             if (!(entity instanceof EntitySkunk)) {
                                 entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 300));
                                 if(entity instanceof ServerPlayer serverPlayer){
-                                    AMAdvancementTriggerRegistry.SKUNK_SPRAY.get().trigger(serverPlayer);
+                                    AMAdvancementTriggerRegistry.SKUNK_SPRAY.trigger(serverPlayer);
                                 }
                                 for(MobEffectInstance mobeffectinstance : collection) {
                                     entity.addEffect(new MobEffectInstance(mobeffectinstance));

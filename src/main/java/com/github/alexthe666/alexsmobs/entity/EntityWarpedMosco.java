@@ -92,15 +92,15 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.WARPED_MOSCO_IDLE.get();
+        return AMSoundRegistry.WARPED_MOSCO_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.WARPED_MOSCO_HURT.get();
+        return AMSoundRegistry.WARPED_MOSCO_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.WARPED_MOSCO_HURT.get();
+        return AMSoundRegistry.WARPED_MOSCO_HURT;
     }
 
     protected void registerGoals() {
@@ -187,7 +187,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
         }
         if (flying) {
             if (loopSoundTick == 0) {
-                this.playSound(AMSoundRegistry.MOSQUITO_LOOP.get(), this.getSoundVolume(), this.getVoicePitch() * 0.3F);
+                this.playSound(AMSoundRegistry.MOSQUITO_LOOP, this.getSoundVolume(), this.getVoicePitch() * 0.3F);
             }
             loopSoundTick++;
             if (loopSoundTick > 100) {

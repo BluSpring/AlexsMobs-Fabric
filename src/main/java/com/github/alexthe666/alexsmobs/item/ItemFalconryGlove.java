@@ -30,7 +30,7 @@ public class ItemFalconryGlove extends Item implements ILeftClick {
     }
 
     public boolean onLeftClick(ItemStack stack, LivingEntity playerIn) {
-        if(stack.getItem() == AMItemRegistry.FALCONRY_GLOVE.get()){
+        if(stack.getItem() == AMItemRegistry.FALCONRY_GLOVE){
             final float dist = 128;
             Vec3 Vector3d = playerIn.getEyePosition(1.0F);
             Vec3 Vector3d1 = playerIn.getViewVector(1.0F);

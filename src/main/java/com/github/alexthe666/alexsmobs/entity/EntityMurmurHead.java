@@ -63,7 +63,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
     }
 
     protected EntityMurmurHead(EntityMurmur parent) {
-        this(AMEntityRegistry.MURMUR_HEAD.get(), parent.level());
+        this(AMEntityRegistry.MURMUR_HEAD, parent.level());
         this.setBodyId(parent.getUUID());
         this.doSpawnPositioning(parent);
     }
@@ -260,7 +260,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
             }
         }
         if(prevLaunched && !this.isPulledIn()){
-            this.playSound(AMSoundRegistry.MURMUR_NECK.get(), 3F * this.getSoundVolume(), this.getVoicePitch());
+            this.playSound(AMSoundRegistry.MURMUR_NECK, 3F * this.getSoundVolume(), this.getVoicePitch());
         }
         prevLaunched = this.isPulledIn();
     }
@@ -339,15 +339,15 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.MURMUR_IDLE.get();
+        return AMSoundRegistry.MURMUR_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return this.getBody() == null ? AMSoundRegistry.MURMUR_HURT.get() : null;
+        return this.getBody() == null ? AMSoundRegistry.MURMUR_HURT : null;
     }
 
     protected SoundEvent getDeathSound() {
-        return this.getBody() == null ? AMSoundRegistry.MURMUR_HURT.get() : null;
+        return this.getBody() == null ? AMSoundRegistry.MURMUR_HURT : null;
     }
 
     public boolean isFlying() {
@@ -456,7 +456,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
                     Vec3 moveTo = target.getEyePosition();
                     if(time > 30){
                         if(!EntityMurmurHead.this.isAngry()){
-                            EntityMurmurHead.this.playSound(AMSoundRegistry.MURMUR_ANGER.get(), 1.5F * EntityMurmurHead.this.getSoundVolume(), EntityMurmurHead.this.getVoicePitch());
+                            EntityMurmurHead.this.playSound(AMSoundRegistry.MURMUR_ANGER, 1.5F * EntityMurmurHead.this.getSoundVolume(), EntityMurmurHead.this.getVoicePitch());
                             EntityMurmurHead.this.gameEvent(GameEvent.ENTITY_ACTION);
                         }
                         EntityMurmurHead.this.setAngry(true);
@@ -478,7 +478,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
                     }
                     EntityMurmurHead.this.lookAt(EntityAnchorArgument.Anchor.EYES, moveTo);
                     if(dist < 1.5F && EntityMurmurHead.this.hasLineOfSight(target)){
-                        EntityMurmurHead.this.playSound(AMSoundRegistry.MURMUR_ATTACK.get(), EntityMurmurHead.this.getSoundVolume(), EntityMurmurHead.this.getVoicePitch());
+                        EntityMurmurHead.this.playSound(AMSoundRegistry.MURMUR_ATTACK, EntityMurmurHead.this.getSoundVolume(), EntityMurmurHead.this.getVoicePitch());
                         biteCooldown = 5 + EntityMurmurHead.this.getRandom().nextInt(15);
                         target.hurt(EntityMurmurHead.this.damageSources().mobAttack(EntityMurmurHead.this), 5.0F);
                     }

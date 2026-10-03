@@ -154,11 +154,11 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
         return null;
     }
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.ENDERGRADE_HURT.get();
+        return AMSoundRegistry.ENDERGRADE_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.ENDERGRADE_HURT.get();
+        return AMSoundRegistry.ENDERGRADE_HURT;
     }
 
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
@@ -302,7 +302,7 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
-        return AMEntityRegistry.ENDERGRADE.get().create(p_241840_1_);
+        return AMEntityRegistry.ENDERGRADE.create(p_241840_1_);
     }
 
     protected void dropEquipment() {

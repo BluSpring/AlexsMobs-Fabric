@@ -11,15 +11,15 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.BakedModelWrapper;
-import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GhostlyPickaxeBakedModel extends BakedModelWrapper {
+import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
+
+public class GhostlyPickaxeBakedModel extends ForwardingBakedModel {
 
     public GhostlyPickaxeBakedModel(BakedModel bakedModel) {
         super(bakedModel);

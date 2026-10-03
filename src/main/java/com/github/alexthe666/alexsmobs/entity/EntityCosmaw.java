@@ -139,15 +139,15 @@ public class EntityCosmaw extends TamableAnimal implements ITargetsDroppedItems,
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.COSMAW_IDLE.get();
+        return AMSoundRegistry.COSMAW_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.COSMAW_HURT.get();
+        return AMSoundRegistry.COSMAW_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.COSMAW_HURT.get();
+        return AMSoundRegistry.COSMAW_HURT;
     }
 
     public boolean isFood(ItemStack stack) {
@@ -409,7 +409,7 @@ public class EntityCosmaw extends TamableAnimal implements ITargetsDroppedItems,
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob parent) {
-        return AMEntityRegistry.COSMAW.get().create(level());
+        return AMEntityRegistry.COSMAW.create(level());
     }
 
     private BlockPos getCosmawGround(BlockPos in) {

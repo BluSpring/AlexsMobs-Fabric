@@ -166,15 +166,15 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.KOMODO_DRAGON_IDLE.get();
+        return AMSoundRegistry.KOMODO_DRAGON_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.KOMODO_DRAGON_HURT.get();
+        return AMSoundRegistry.KOMODO_DRAGON_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.KOMODO_DRAGON_HURT.get();
+        return AMSoundRegistry.KOMODO_DRAGON_HURT;
     }
 
     public void readAdditionalSaveData(CompoundTag compound) {
@@ -210,7 +210,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
             slaughterCooldown--;
         }
         if (!this.level().isClientSide && this.isAlive() && !this.isBaby() && --this.timeUntilSpit <= 0) {
-            this.spawnAtLocation(AMItemRegistry.KOMODO_SPIT.get());
+            this.spawnAtLocation(AMItemRegistry.KOMODO_SPIT);
             this.timeUntilSpit = this.random.nextInt(12000) + 24000;
         }
         if(riderAttackCooldown > 0){
@@ -421,7 +421,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
-        return AMEntityRegistry.KOMODO_DRAGON.get().create(p_241840_1_);
+        return AMEntityRegistry.KOMODO_DRAGON.create(p_241840_1_);
     }
 
     @Override

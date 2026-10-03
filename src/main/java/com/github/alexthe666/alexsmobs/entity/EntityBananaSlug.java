@@ -72,11 +72,11 @@ public class EntityBananaSlug extends Animal {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.BANANA_SLUG_HURT.get();
+        return AMSoundRegistry.BANANA_SLUG_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.BANANA_SLUG_HURT.get();
+        return AMSoundRegistry.BANANA_SLUG_HURT;
     }
 
 
@@ -247,7 +247,7 @@ public class EntityBananaSlug extends Animal {
             }
         }
         if (!this.level().isClientSide && this.isAlive() && !this.isBaby() && --this.timeUntilSlime <= 0) {
-            this.spawnAtLocation(AMItemRegistry.BANANA_SLUG_SLIME.get());
+            this.spawnAtLocation(AMItemRegistry.BANANA_SLUG_SLIME);
             this.timeUntilSlime = this.random.nextInt(12000) + 24000;
         }
     }
@@ -311,7 +311,7 @@ public class EntityBananaSlug extends Animal {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob mob) {
-        EntityBananaSlug slug = AMEntityRegistry.BANANA_SLUG.get().create(level());
+        EntityBananaSlug slug = AMEntityRegistry.BANANA_SLUG.create(level());
         slug.setVariant(this.getVariant());
         return slug;
     }

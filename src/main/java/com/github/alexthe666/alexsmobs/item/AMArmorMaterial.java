@@ -1,6 +1,8 @@
 package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import com.github.alexthe666.alexsmobs.fabric.DeferredRegister;
+
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -8,7 +10,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -57,7 +58,7 @@ public class AMArmorMaterial {
     }
 
     private void registerMaterial() {
-        this.holder = ARMOR_MATERIALS.register(this.name, () -> {
+        this.holder = ARMOR_MATERIALS.registerHolder(this.name, () -> {
             EnumMap<ArmorItem.Type, Integer> defenseMap = Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
                 map.put(ArmorItem.Type.BOOTS, this.damageReduction[3]);
                 map.put(ArmorItem.Type.LEGGINGS, this.damageReduction[2]);

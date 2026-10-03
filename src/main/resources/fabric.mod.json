@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    "BluSpring",
+    "Alexthe668",
+    "Carro1001",
+    "Sunconure11"
+  ],
+  "contact": {
+    "sources": "https://github.com/BluSpring/AlexsMobs-Fabric"
+  },
+  "license": "${mod_license}",
+  "icon": "assets/alexsmobs/textures/item/bear_dust.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.github.alexthe666.alexsmobs.AlexsMobs"
+    ],
+    "client": [
+      "com.github.alexthe666.alexsmobs.client.AlexsMobsClient"
+    ]
+  },
+  "mixins": [
+    "alexsmobs.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "fabric-api": "*",
+    "minecraft": ">=1.21 <=1.21.1",
+    "forgeconfigapiport": ">=4.2.11",
+    "citadel": ">=2.6.0"
+  },
+  "accessWidener": "alexsmobs.accesswidener"
+}

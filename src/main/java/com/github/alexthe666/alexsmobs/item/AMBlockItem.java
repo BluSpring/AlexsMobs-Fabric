@@ -1,6 +1,8 @@
 package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
+
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -19,28 +21,19 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class AMBlockItem extends BlockItem implements CustomTabBehavior {
-
-    private final DeferredHolder<Block, Block> blockSupplier;
-
-    public AMBlockItem(DeferredHolder<Block, Block> blockSupplier, Item.Properties props) {
-        super((Block) null, props);
-        this.blockSupplier = blockSupplier;
+    public AMBlockItem(Block blockSupplier, Item.Properties props) {
+        super(blockSupplier, props);
     }
 
     @Override
-    public Block getBlock() {
-        return blockSupplier.get();
-    }
-
     public boolean canFitInsideCraftingRemainingItems() {
-        return !(blockSupplier.get() instanceof ShulkerBoxBlock);
+        return !(this.getBlock() instanceof ShulkerBoxBlock);
     }
 
     public void onDestroyed(ItemEntity p_150700_) {
-        if (this.blockSupplier.get() instanceof ShulkerBoxBlock) {
+        if (this.getBlock() instanceof ShulkerBoxBlock) {
             ItemStack itemstack = p_150700_.getItem();
             CustomData customData = itemstack.getOrDefault(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY);
             CompoundTag compoundtag = customData.copyTag();
@@ -52,27 +45,30 @@ public class AMBlockItem extends BlockItem implements CustomTabBehavior {
         }
     }
 
+    @Override
     public boolean canBeHurtBy(ItemStack stack, DamageSource damage) {
-        return super.canBeHurtBy(stack, damage) && (this != AMBlockRegistry.TRANSMUTATION_TABLE.get().asItem()
+        return super.canBeHurtBy(stack, damage) && (this != AMBlockRegistry.TRANSMUTATION_TABLE.asItem()
                 || !damage.is(DamageTypeTags.IS_EXPLOSION));
     }
 
     @Override
     public void fillItemCategory(CreativeModeTab.Output contents) {
-        if (blockSupplier.equals(AMBlockRegistry.SAND_CIRCLE)
-                || blockSupplier.equals(AMBlockRegistry.RED_SAND_CIRCLE)) {
+        if (this.getBlock().equals(AMBlockRegistry.SAND_CIRCLE)
+                || this.getBlock().equals(AMBlockRegistry.RED_SAND_CIRCLE)) {
 
         } else {
             contents.accept(this);
         }
     }
 
+    @Override
     public InteractionResult useOn(UseOnContext context) {
-        return blockSupplier.equals(AMBlockRegistry.TRIOPS_EGGS) ? InteractionResult.PASS : super.useOn(context);
+        return this.getBlock().equals(AMBlockRegistry.TRIOPS_EGGS) ? InteractionResult.PASS : super.useOn(context);
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if (blockSupplier.equals(AMBlockRegistry.TRIOPS_EGGS)) {
+        if (this.getBlock().equals(AMBlockRegistry.TRIOPS_EGGS)) {
             BlockHitResult blockhitresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
             BlockHitResult blockhitresult1 = blockhitresult.withPosition(blockhitresult.getBlockPos().above());
             InteractionResult interactionresult = super.useOn(new UseOnContext(player, hand, blockhitresult1));

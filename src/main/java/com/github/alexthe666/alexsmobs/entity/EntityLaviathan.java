@@ -151,15 +151,15 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.LAVIATHAN_IDLE.get();
+        return AMSoundRegistry.LAVIATHAN_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.LAVIATHAN_HURT.get();
+        return AMSoundRegistry.LAVIATHAN_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.LAVIATHAN_HURT.get();
+        return AMSoundRegistry.LAVIATHAN_HURT;
     }
 
     @Nullable
@@ -207,14 +207,14 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
             this.heal(10);
             return InteractionResult.SUCCESS;
         }
-        if (item == AMItemRegistry.STRADDLE_HELMET.get() && !this.hasHeadGear() && !this.isBaby()) {
+        if (item == AMItemRegistry.STRADDLE_HELMET && !this.hasHeadGear() && !this.isBaby()) {
             if (!player.isCreative()) {
                 itemstack.shrink(1);
             }
             this.setHeadGear(true);
             return InteractionResult.SUCCESS;
         }
-        if (item == AMItemRegistry.STRADDLE_SADDLE.get() && !this.hasBodyGear() && !this.isBaby()) {
+        if (item == AMItemRegistry.STRADDLE_SADDLE && !this.hasBodyGear() && !this.isBaby()) {
             if (!player.isCreative()) {
                 itemstack.shrink(1);
             }
@@ -361,12 +361,12 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         super.dropEquipment();
         if (this.hasBodyGear()) {
             if (!this.level().isClientSide) {
-                this.spawnAtLocation(AMItemRegistry.STRADDLE_SADDLE.get());
+                this.spawnAtLocation(AMItemRegistry.STRADDLE_SADDLE);
             }
         }
         if (this.hasHeadGear()) {
             if (!this.level().isClientSide) {
-                this.spawnAtLocation(AMItemRegistry.STRADDLE_HELMET.get());
+                this.spawnAtLocation(AMItemRegistry.STRADDLE_HELMET);
             }
         }
         this.setBodyGear(false);
@@ -719,7 +719,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         if (this.isVehicle() && !this.level().isClientSide && tickCount % 40 == 0 && this.getPassengers().size() > 3) {
             for (Entity entity : this.getPassengers()) {
                 if (entity instanceof ServerPlayer) {
-                    AMAdvancementTriggerRegistry.LAVIATHAN_FOUR_PASSENGERS.get().trigger((ServerPlayer) entity);
+                    AMAdvancementTriggerRegistry.LAVIATHAN_FOUR_PASSENGERS.trigger((ServerPlayer) entity);
                 }
             }
         }
@@ -1046,7 +1046,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageableEntity) {
-        return AMEntityRegistry.LAVIATHAN.get().create(serverWorld);
+        return AMEntityRegistry.LAVIATHAN.create(serverWorld);
     }
 
     static class MoveController extends MoveControl {

@@ -35,7 +35,7 @@ public class MenuTransmutationTable extends AbstractContainerMenu {
     }
 
     public MenuTransmutationTable(int id, Inventory inventory, final ContainerLevelAccess access, Player player, TileEntityTransmutationTable table) {
-        super(AMMenuRegistry.TRANSMUTATION_TABLE.get(), id);
+        super(AMMenuRegistry.TRANSMUTATION_TABLE, id);
         this.table = table;
         this.player = player;
         this.access = access;
@@ -62,7 +62,7 @@ public class MenuTransmutationTable extends AbstractContainerMenu {
     }
 
     public boolean stillValid(Player player) {
-        return stillValid(this.access, player, AMBlockRegistry.TRANSMUTATION_TABLE.get());
+        return stillValid(this.access, player, AMBlockRegistry.TRANSMUTATION_TABLE);
     }
 
     public void slotsChanged(Container container) {

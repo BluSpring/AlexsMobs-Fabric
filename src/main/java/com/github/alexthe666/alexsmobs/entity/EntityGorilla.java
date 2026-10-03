@@ -163,15 +163,15 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.GORILLA_IDLE.get();
+        return AMSoundRegistry.GORILLA_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.GORILLA_HURT.get();
+        return AMSoundRegistry.GORILLA_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.GORILLA_HURT.get();
+        return AMSoundRegistry.GORILLA_HURT;
     }
 
     public boolean doHurtTarget(Entity entityIn) {
@@ -538,7 +538,7 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
-        return AMEntityRegistry.GORILLA.get().create(p_241840_1_);
+        return AMEntityRegistry.GORILLA.create(p_241840_1_);
     }
 
     public void leaveCaravan() {

@@ -132,15 +132,15 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.ORCA_IDLE.get();
+        return AMSoundRegistry.ORCA_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.ORCA_HURT.get();
+        return AMSoundRegistry.ORCA_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.ORCA_DIE.get();
+        return AMSoundRegistry.ORCA_DIE;
     }
 
     protected void registerGoals() {
@@ -351,7 +351,7 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob p_241840_2_) {
-        return AMEntityRegistry.ORCA.get().create(serverWorld);
+        return AMEntityRegistry.ORCA.create(serverWorld);
     }
 
     public boolean shouldUseJumpAttack(LivingEntity attackTarget) {

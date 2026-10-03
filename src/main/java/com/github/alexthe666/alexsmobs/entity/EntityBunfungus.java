@@ -83,15 +83,15 @@ public class EntityBunfungus extends PathfinderMob implements IAnimatedEntity {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.BUNFUNGUS_IDLE.get();
+        return AMSoundRegistry.BUNFUNGUS_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.BUNFUNGUS_HURT.get();
+        return AMSoundRegistry.BUNFUNGUS_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.BUNFUNGUS_HURT.get();
+        return AMSoundRegistry.BUNFUNGUS_HURT;
     }
 
     public boolean removeWhenFarAway(double p_27598_) {
@@ -242,7 +242,7 @@ public class EntityBunfungus extends PathfinderMob implements IAnimatedEntity {
                     }
                 }
                 if (flag) {
-                    this.playSound(AMSoundRegistry.BUNFUNGUS_ATTACK.get(), this.getSoundVolume(), this.getVoicePitch());
+                    this.playSound(AMSoundRegistry.BUNFUNGUS_ATTACK, this.getSoundVolume(), this.getVoicePitch());
                 }
             }
             if (this.tickCount % 40 == 0) {
@@ -289,7 +289,7 @@ public class EntityBunfungus extends PathfinderMob implements IAnimatedEntity {
                     final double d1 = this.random.nextGaussian() * 0.02D;
                     final float f1 = (EntityBunfungus.MAX_TRANSFORM_TIME - this.transformsIn()) / (float)EntityBunfungus.MAX_TRANSFORM_TIME;
                     final float scale = f1 * 0.5F + 0.15F;
-                    this.level().addParticle(AMParticleRegistry.BUNFUNGUS_TRANSFORMATION.get(), this.getRandomX(scale), this.getY(this.random.nextDouble() * scale), this.getRandomZ(scale), d0, d1, d2);
+                    this.level().addParticle(AMParticleRegistry.BUNFUNGUS_TRANSFORMATION, this.getRandomX(scale), this.getY(this.random.nextDouble() * scale), this.getRandomZ(scale), d0, d1, d2);
                 }
             }
 
@@ -299,7 +299,7 @@ public class EntityBunfungus extends PathfinderMob implements IAnimatedEntity {
                 final float angle = (Maths.STARTING_ANGLE * this.yBodyRot);
                 final double extraX = radius * Mth.sin(Mth.PI + angle) + random.nextFloat() * 0.5F - 0.25F;
                 final double extraZ = radius * Mth.cos(angle) + random.nextFloat() * 0.5F - 0.25F;
-                ParticleOptions data = random.nextFloat() < 0.3F ? AMParticleRegistry.BUNFUNGUS_TRANSFORMATION.get() : AMParticleRegistry.FUNGUS_BUBBLE.get();
+                ParticleOptions data = random.nextFloat() < 0.3F ? AMParticleRegistry.BUNFUNGUS_TRANSFORMATION : AMParticleRegistry.FUNGUS_BUBBLE;
                 this.level().addParticle(data, this.getX() + extraX, this.getY() + random.nextFloat() * 0.1F, this.getZ() + extraZ, 0, d0, 0);
             }
         } else {

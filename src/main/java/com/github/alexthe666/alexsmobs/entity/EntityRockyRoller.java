@@ -105,15 +105,15 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
     }
 
     protected SoundEvent getAmbientSound() {
-        return AMSoundRegistry.ROCKY_ROLLER_IDLE.get();
+        return AMSoundRegistry.ROCKY_ROLLER_IDLE;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.ROCKY_ROLLER_HURT.get();
+        return AMSoundRegistry.ROCKY_ROLLER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.ROCKY_ROLLER_HURT.get();
+        return AMSoundRegistry.ROCKY_ROLLER_HURT;
     }
 
     public void tick() {
@@ -203,7 +203,7 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
         }
         if(flag){
             this.gameEvent(GameEvent.ENTITY_ACTION);
-            this.playSound(AMSoundRegistry.ROCKY_ROLLER_EARTHQUAKE.get(), this.getSoundVolume(), this.getVoicePitch());
+            this.playSound(AMSoundRegistry.ROCKY_ROLLER_EARTHQUAKE, this.getSoundVolume(), this.getVoicePitch());
         }
     }
 

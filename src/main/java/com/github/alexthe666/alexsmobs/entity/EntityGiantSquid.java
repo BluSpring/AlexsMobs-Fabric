@@ -142,11 +142,11 @@ public class EntityGiantSquid extends WaterAnimal {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return AMSoundRegistry.GIANT_SQUID_HURT.get();
+        return AMSoundRegistry.GIANT_SQUID_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return AMSoundRegistry.GIANT_SQUID_HURT.get();
+        return AMSoundRegistry.GIANT_SQUID_HURT;
     }
 
 
@@ -357,7 +357,7 @@ public class EntityGiantSquid extends WaterAnimal {
         }
         if (this.isHumming()) {
             if (humTick % 20 == 0) {
-                this.playSound(AMSoundRegistry.GIANT_SQUID_GAMES.get(), this.getSoundVolume(), 1);
+                this.playSound(AMSoundRegistry.GIANT_SQUID_GAMES, this.getSoundVolume(), 1);
                 humTick = 0;
             }
             humTick++;
@@ -622,7 +622,7 @@ public class EntityGiantSquid extends WaterAnimal {
             if (random.nextFloat() <= 0.3F) {
                 this.setCaptured(false);
                 if(random.nextFloat() < 0.2F){
-                    this.spawnAtLocation(AMItemRegistry.LOST_TENTACLE.get());
+                    this.spawnAtLocation(AMItemRegistry.LOST_TENTACLE);
                 }
                 return true;
             }
