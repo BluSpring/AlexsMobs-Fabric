@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class RenderEndergrade extends MobRenderer<EntityEndergrade, ModelEndergrade> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/endergrade.png");

@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.*;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class BoneSerpentNodeProcessor extends NodeEvaluator {
 

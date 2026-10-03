@@ -20,10 +20,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.OptionalInt;
 
 public class EntityEnderiophageRocket extends FireworkRocketEntity {
@@ -173,7 +173,7 @@ public class EntityEnderiophageRocket extends FireworkRocketEntity {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 17) {
             this.level().addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), this.random.nextGaussian() * 0.05D, 0.005D, this.random.nextGaussian() * 0.05D);
@@ -193,7 +193,7 @@ public class EntityEnderiophageRocket extends FireworkRocketEntity {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public ItemStack getItem() {
         return new ItemStack(AMItemRegistry.ENDERIOPHAGE_ROCKET);
     }

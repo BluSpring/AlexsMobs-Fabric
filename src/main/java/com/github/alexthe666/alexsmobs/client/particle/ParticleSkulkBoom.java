@@ -16,8 +16,8 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -117,7 +117,7 @@ public class ParticleSkulkBoom extends Particle {
         return ParticleRenderType.CUSTOM;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static class Factory implements ParticleProvider<SimpleParticleType> {
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z,
                 double xSpeed, double ySpeed, double zSpeed) {

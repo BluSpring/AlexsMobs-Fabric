@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class RenderGuster extends MobRenderer<EntityGuster, ModelGuster> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/guster.png");

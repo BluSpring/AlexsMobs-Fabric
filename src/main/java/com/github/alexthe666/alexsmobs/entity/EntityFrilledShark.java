@@ -50,11 +50,11 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 
 public class EntityFrilledShark extends WaterAnimal implements IAnimatedEntity, Bucketable {
@@ -117,7 +117,7 @@ public class EntityFrilledShark extends WaterAnimal implements IAnimatedEntity, 
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public SoundEvent getPickupSound() {
         return SoundEvents.BUCKET_FILL_FISH;
     }
@@ -183,7 +183,7 @@ public class EntityFrilledShark extends WaterAnimal implements IAnimatedEntity, 
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.FRILLED_SHARK_BUCKET);
         if (this.hasCustomName()) {
@@ -193,7 +193,7 @@ public class EntityFrilledShark extends WaterAnimal implements IAnimatedEntity, 
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NotNull ItemStack bucket) {
         if (this.hasCustomName()) {
             bucket.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -206,7 +206,7 @@ public class EntityFrilledShark extends WaterAnimal implements IAnimatedEntity, 
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NotNull CompoundTag compound) {
         Bucketable.loadDefaultDataFromBucketTag(this, compound);
         if (compound.contains("FrilledSharkData")) {
             this.readAdditionalSaveData(compound.getCompound("FrilledSharkData"));
@@ -214,8 +214,8 @@ public class EntityFrilledShark extends WaterAnimal implements IAnimatedEntity, 
     }
 
     @Override
-    @Nonnull
-    protected InteractionResult mobInteract(@Nonnull Player player, @Nonnull InteractionHand hand) {
+    @NotNull
+    protected InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
         return Bucketable.bucketMobPickup(player, hand, this).orElse(super.mobInteract(player, hand));
     }
 
@@ -329,7 +329,7 @@ public class EntityFrilledShark extends WaterAnimal implements IAnimatedEntity, 
         return true;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 68) {
             double d2 = this.random.nextGaussian() * 0.1D;

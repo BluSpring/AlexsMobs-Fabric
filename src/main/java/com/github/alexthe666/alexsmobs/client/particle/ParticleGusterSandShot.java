@@ -3,8 +3,8 @@ package com.github.alexthe666.alexsmobs.client.particle;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class ParticleGusterSandShot extends TextureSheetParticle {
 
@@ -34,7 +34,7 @@ public class ParticleGusterSandShot extends TextureSheetParticle {
         return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static class Factory implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet spriteSet;
 
@@ -49,7 +49,7 @@ public class ParticleGusterSandShot extends TextureSheetParticle {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static class FactoryRed implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet spriteSet;
 
@@ -64,7 +64,7 @@ public class ParticleGusterSandShot extends TextureSheetParticle {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static class FactorySoul implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet spriteSet;
 

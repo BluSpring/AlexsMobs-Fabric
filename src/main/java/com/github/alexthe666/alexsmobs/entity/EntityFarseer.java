@@ -42,10 +42,10 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 
 public class EntityFarseer extends Monster implements IAnimatedEntity {
@@ -367,7 +367,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id >= 40 && id <= 43) {
             int i = id - 40;

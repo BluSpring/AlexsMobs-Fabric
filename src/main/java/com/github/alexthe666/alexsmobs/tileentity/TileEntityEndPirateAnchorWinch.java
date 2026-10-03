@@ -13,8 +13,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class TileEntityEndPirateAnchorWinch extends BlockEntity {
 
@@ -137,7 +137,7 @@ public class TileEntityEndPirateAnchorWinch extends BlockEntity {
     }
 
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public AABB getRenderBoundingBox() {
         return AABB.INFINITE;
     }

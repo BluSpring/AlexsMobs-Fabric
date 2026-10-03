@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.phys.AABB;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 
 public class EntityAINearestTarget3D<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {

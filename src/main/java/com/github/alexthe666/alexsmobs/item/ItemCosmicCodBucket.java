@@ -15,7 +15,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemCosmicCodBucket extends ItemModFishBucket {
 
@@ -24,8 +24,8 @@ public class ItemCosmicCodBucket extends ItemModFishBucket {
     }
 
     @Override
-    @Nonnull
-    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, Player player, @Nonnull InteractionHand hand) {
+    @NotNull
+    public InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         BlockHitResult blockhitresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
         if (blockhitresult.getType() == HitResult.Type.MISS) {

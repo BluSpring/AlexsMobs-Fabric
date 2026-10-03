@@ -49,7 +49,7 @@ import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidType;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 
 public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedItems, IFollower, ISemiAquatic {

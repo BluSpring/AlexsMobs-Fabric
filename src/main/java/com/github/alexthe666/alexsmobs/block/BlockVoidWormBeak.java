@@ -23,7 +23,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class BlockVoidWormBeak extends BaseEntityBlock {
     public static final MapCodec<BlockVoidWormBeak> CODEC = simpleCodec(p -> new BlockVoidWormBeak());

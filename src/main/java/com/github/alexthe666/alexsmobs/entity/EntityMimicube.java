@@ -41,8 +41,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.neoforged.neoforge.common.ItemAbilities;
 
 public class EntityMimicube extends Monster implements RangedAttackMob {
@@ -187,7 +187,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         super.handleEntityEvent(id);
         switch (id) {

@@ -116,8 +116,8 @@ public class EntityBananaSlug extends Animal {
         return false; // Banana slug can breathe underwater
     }
 
-    @javax.annotation.Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @javax.annotation.Nullable SpawnGroupData spawnDataIn) {
+    @org.jetbrains.annotations.Nullable
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @org.jetbrains.annotations.Nullable SpawnGroupData spawnDataIn) {
         this.setVariant(random.nextInt(4));
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }

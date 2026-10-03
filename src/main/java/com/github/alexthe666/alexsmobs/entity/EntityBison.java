@@ -87,7 +87,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
         return AMEntityRegistry.rollSpawn(AMConfig.bisonSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @javax.annotation.Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @org.jetbrains.annotations.Nullable SpawnGroupData spawnDataIn) {
         if (spawnDataIn == null) {
             spawnDataIn = new AgeableMob.AgeableMobGroupData(0.25F);
         }
@@ -395,13 +395,13 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
     }
 
     @Override
-    public boolean isShearable(@javax.annotation.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
+    public boolean isShearable(@org.jetbrains.annotations.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         return this.readyForShearing();
     }
 
-    @javax.annotation.Nonnull
+    @org.jetbrains.annotations.NotNull
     @Override
-    public java.util.List<ItemStack> onSheared(@javax.annotation.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
+    public java.util.List<ItemStack> onSheared(@org.jetbrains.annotations.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         if (player != null) {
             level().playSound(null, this, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.0F, 1.0F);
         }

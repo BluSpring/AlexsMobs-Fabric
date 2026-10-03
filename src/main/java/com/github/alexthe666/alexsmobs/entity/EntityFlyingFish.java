@@ -40,8 +40,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -255,7 +255,7 @@ public class EntityFlyingFish extends WaterAnimal implements FlyingAnimal, Bucke
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public SoundEvent getPickupSound() {
         return SoundEvents.BUCKET_FILL_FISH;
     }
@@ -272,7 +272,7 @@ public class EntityFlyingFish extends WaterAnimal implements FlyingAnimal, Bucke
         this.setVariant(compound.getInt("Variant"));
     }
 
-    @Nonnull
+    @NotNull
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.FLYING_FISH_BUCKET);
         if (this.hasCustomName()) {
@@ -282,7 +282,7 @@ public class EntityFlyingFish extends WaterAnimal implements FlyingAnimal, Bucke
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NotNull ItemStack bucket) {
         if (this.hasCustomName()) {
             bucket.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -293,7 +293,7 @@ public class EntityFlyingFish extends WaterAnimal implements FlyingAnimal, Bucke
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NotNull CompoundTag compound) {
         Bucketable.loadDefaultDataFromBucketTag(this, compound);
         if (compound.contains("Variant")){
             this.setVariant(compound.getInt("Variant"));
@@ -315,8 +315,8 @@ public class EntityFlyingFish extends WaterAnimal implements FlyingAnimal, Bucke
     }
 
     @Override
-    @Nonnull
-    protected InteractionResult mobInteract(@Nonnull Player player, @Nonnull InteractionHand hand) {
+    @NotNull
+    protected InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
         return Bucketable.bucketMobPickup(player, hand, this).orElse(super.mobInteract(player, hand));
     }
 

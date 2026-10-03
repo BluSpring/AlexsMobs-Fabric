@@ -55,7 +55,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.fluids.FluidType;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 
 public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, ISemiAquatic {

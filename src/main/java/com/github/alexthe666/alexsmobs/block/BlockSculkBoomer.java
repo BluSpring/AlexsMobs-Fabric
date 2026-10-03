@@ -77,13 +77,13 @@ public class BlockSculkBoomer extends BaseEntityBlock {
         return new TileEntitySculkBoomer(pos, state);
     }
 
-    @javax.annotation.Nullable
+    @org.jetbrains.annotations.Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_222100_, BlockState p_222101_, BlockEntityType<T> p_222102_) {
         return createTickerHelper(p_222102_, AMTileEntityRegistry.SCULK_BOOMER, TileEntitySculkBoomer::commonTick);
     }
 
 
-    @javax.annotation.Nullable
+    @org.jetbrains.annotations.Nullable
     public <T extends BlockEntity> GameEventListener getListener(ServerLevel p_222092_, T p_222093_) {
         return p_222093_ instanceof TileEntitySculkBoomer ? (TileEntitySculkBoomer)p_222093_ : null;
     }

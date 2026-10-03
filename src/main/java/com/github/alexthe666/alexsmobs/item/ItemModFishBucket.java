@@ -42,7 +42,7 @@ public class ItemModFishBucket extends MobBucketItem {
         return this.fishTypeSupplier.get();
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
             TooltipFlag flagIn) {
         EntityType fishType = getFishType();

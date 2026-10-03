@@ -25,7 +25,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderNameTagEvent;
 import org.joml.Matrix4f;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/tiger/tiger.png");

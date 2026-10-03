@@ -64,15 +64,15 @@ import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.EntityHitResult;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ClientEvents {
 
     private static final ResourceLocation ROCKY_CHESTPLATE_TEXTURE = ResourceLocation.fromNamespaceAndPath("alexsmobs",
@@ -117,7 +117,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void onGetStarBrightness(EventGetStarBrightness event) {
         if (Minecraft.getInstance().player.hasEffect(AMEffectRegistry.POWER_DOWN)) {
             if (Minecraft.getInstance().player.getEffect(AMEffectRegistry.POWER_DOWN) != null) {
@@ -134,7 +134,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void onFogColor(ViewportEvent.ComputeFogColor event) {
         if (Minecraft.getInstance().player.hasEffect(AMEffectRegistry.POWER_DOWN)) {
             if (Minecraft.getInstance().player.getEffect(AMEffectRegistry.POWER_DOWN) != null) {
@@ -147,7 +147,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void onFogDensity(ViewportEvent.RenderFog event) {
         FogType fogType = event.getCamera().getFluidInCamera();
         if (Minecraft.getInstance().player.hasEffect(AMEffectRegistry.LAVA_VISION) && fogType == FogType.LAVA) {
@@ -174,7 +174,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void onPreRenderEntity(RenderLivingEvent.Pre event) {
         if (RockyChestplateUtil.isRockyRolling(event.getEntity())) {
             event.setCanceled(true);
@@ -242,7 +242,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void onPostRenderEntity(RenderLivingEvent.Post event) {
         if (RockyChestplateUtil.isRockyRolling(event.getEntity())) {
             return;
@@ -278,7 +278,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void onPoseHand(EventPosePlayerHand event) {
         LivingEntity player = (LivingEntity) event.getEntityIn();
         float f = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
@@ -303,7 +303,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void onRenderHand(RenderHandEvent event) {
         if (Minecraft.getInstance().getCameraEntity() instanceof IFalconry) {
             event.setCanceled(true);
@@ -388,7 +388,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void onRenderNameplate(RenderNameTagEvent event) {
         if (Minecraft.getInstance().getCameraEntity() instanceof EntityBaldEagle
                 && event.getEntity() == Minecraft.getInstance().player) {
@@ -399,7 +399,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void onRenderWorldLastEvent(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY) {
             if (!AMConfig.shadersCompat) {

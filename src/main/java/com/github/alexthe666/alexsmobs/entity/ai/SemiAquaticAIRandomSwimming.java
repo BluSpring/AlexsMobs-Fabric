@@ -11,7 +11,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class SemiAquaticAIRandomSwimming extends RandomStrollGoal {
 

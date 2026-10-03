@@ -23,10 +23,10 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityStraddleboard extends Entity implements PlayerRideableJumping {
     private static final EntityDataAccessor<ItemStack> ITEMSTACK = SynchedEntityData.defineId(EntityStraddleboard.class, EntityDataSerializers.ITEM_STACK);
@@ -406,7 +406,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         this.entityData.set(TIME_SINCE_HIT, timeSinceHit);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public float getRockingAngle(float partialTicks) {
         return Mth.lerp(partialTicks, this.prevRockingAngle, this.rockingAngle);
     }

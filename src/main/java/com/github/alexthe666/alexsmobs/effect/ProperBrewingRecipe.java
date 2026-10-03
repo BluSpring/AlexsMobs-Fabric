@@ -4,7 +4,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.brewing.BrewingRecipe;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class ProperBrewingRecipe extends BrewingRecipe {
 
@@ -21,7 +21,7 @@ public class ProperBrewingRecipe extends BrewingRecipe {
 
 
     @Override
-    public boolean isInput(@Nonnull ItemStack stack) {
+    public boolean isInput(@NotNull ItemStack stack) {
         if (stack == null) {
             return false;
         } else {

@@ -554,7 +554,7 @@ public class EntityPotoo extends Animal implements IFalconry {
             }
         }
 
-        @javax.annotation.Nullable
+        @org.jetbrains.annotations.Nullable
         protected Vec3 getPosition() {
             Vec3 vector3d = EntityPotoo.this.position();
             if (EntityPotoo.this.timeFlying < 200 || EntityPotoo.this.isOverWaterOrVoid()) {

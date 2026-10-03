@@ -697,7 +697,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             }
         }
 
-        @javax.annotation.Nullable
+        @org.jetbrains.annotations.Nullable
         protected Vec3 getPosition() {
             Vec3 vector3d = phage.position();
             if (phage.isOverWaterOrVoid()) {

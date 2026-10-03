@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class RenderTarantulaHawk extends MobRenderer<EntityTarantulaHawk, EntityModel<EntityTarantulaHawk>> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/tarantula_hawk.png");

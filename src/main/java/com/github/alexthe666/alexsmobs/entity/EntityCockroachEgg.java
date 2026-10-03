@@ -13,8 +13,8 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 public class EntityCockroachEgg extends ThrowableItemProjectile {
 
     public EntityCockroachEgg(EntityType p_i50154_1_, Level p_i50154_2_) {
@@ -29,7 +29,7 @@ public class EntityCockroachEgg extends ThrowableItemProjectile {
         super(AMEntityRegistry.COCKROACH_EGG, x, y, z, worldIn);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {

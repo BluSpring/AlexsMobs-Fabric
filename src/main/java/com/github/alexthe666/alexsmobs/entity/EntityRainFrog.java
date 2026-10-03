@@ -42,8 +42,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 import java.util.EnumSet;
 
@@ -150,7 +150,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         return stack.is(AMTagRegistry.RAIN_FROG_BREEDABLES);
     }
 
-    @javax.annotation.Nullable
+    @org.jetbrains.annotations.Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
         EntityRainFrog frog = AMEntityRegistry.RAIN_FROG.create(p_241840_1_);
@@ -273,8 +273,8 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         this.walkAnimation.update(f2, 0.4F);
     }
 
-    @javax.annotation.Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @javax.annotation.Nullable SpawnGroupData spawnDataIn) {
+    @org.jetbrains.annotations.Nullable
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @org.jetbrains.annotations.Nullable SpawnGroupData spawnDataIn) {
         this.setVariant(random.nextInt(3));
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
@@ -368,7 +368,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         weatherCooldown = time + 24000;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void setRecordPlayingNearby(BlockPos pos, boolean isPartying) {
         AlexsMobs.sendMSGToServer(new MessageStartDancing(this.getId(), isPartying, pos));
         this.setDancing(isPartying);

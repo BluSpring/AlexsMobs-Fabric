@@ -63,7 +63,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -633,7 +633,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
     }
 
     @Override
-    public boolean isShearable(@javax.annotation.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
+    public boolean isShearable(@org.jetbrains.annotations.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         return readyForShearing();
     }
 
@@ -652,9 +652,9 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         }
     }
 
-    @javax.annotation.Nonnull
+    @org.jetbrains.annotations.NotNull
     @Override
-    public java.util.List<ItemStack> onSheared(@javax.annotation.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
+    public java.util.List<ItemStack> onSheared(@org.jetbrains.annotations.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         if (player != null) {
             level().playSound(null, this, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.0F, 1.0F);
         }

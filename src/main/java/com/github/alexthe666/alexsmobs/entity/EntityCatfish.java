@@ -56,8 +56,8 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
@@ -245,7 +245,7 @@ public class EntityCatfish extends WaterAnimal implements FlyingAnimal, Bucketab
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NotNull ItemStack bucket) {
         if (this.hasCustomName()) {
             bucket.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -276,7 +276,7 @@ public class EntityCatfish extends WaterAnimal implements FlyingAnimal, Bucketab
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NotNull CompoundTag compound) {
         Bucketable.loadDefaultDataFromBucketTag(this, compound);
         readAdditionalSaveData(compound);
     }
@@ -357,8 +357,8 @@ public class EntityCatfish extends WaterAnimal implements FlyingAnimal, Bucketab
     }
 
     @Override
-    @Nonnull
-    protected InteractionResult mobInteract(@Nonnull Player player, @Nonnull InteractionHand hand) {
+    @NotNull
+    protected InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() == Items.SEA_PICKLE) {
             this.spit();

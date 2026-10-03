@@ -26,7 +26,7 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;
 

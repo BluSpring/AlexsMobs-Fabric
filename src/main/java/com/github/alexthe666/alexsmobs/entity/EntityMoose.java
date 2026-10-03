@@ -44,10 +44,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -109,7 +109,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
         this.targetSelector.addGoal(1, (new AnimalAIHurtByTargetNotBaby(this)));
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 6) {
             for (int lvt_3_1_ = 0; lvt_3_1_ < 7; ++lvt_3_1_) {

@@ -55,11 +55,11 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.neoforged.neoforge.fluids.FluidType;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFollower, ITargetsDroppedItems, ILootsChests {
@@ -472,7 +472,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 92) {
             for (int i = 0; i < 6 + random.nextInt(3); i++) {

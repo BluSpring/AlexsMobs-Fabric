@@ -5,7 +5,7 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.util.RandomPos;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class LaviathanAIRandomSwimming extends LavaAndWaterAIRandomSwimming {
 

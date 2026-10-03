@@ -45,8 +45,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidType;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -110,13 +110,13 @@ public class EntityCosmicCod extends Mob implements Bucketable {
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public SoundEvent getPickupSound() {
         return SoundEvents.BUCKET_FILL_FISH;
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.COSMIC_COD_BUCKET);
         if (this.hasCustomName()) {
@@ -126,7 +126,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NotNull ItemStack bucket) {
         if (this.hasCustomName()) {
             bucket.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -139,7 +139,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NotNull CompoundTag compound) {
         Bucketable.loadDefaultDataFromBucketTag(this, compound);
         if (compound.contains("CosmicCodData")) {
             this.readAdditionalSaveData(compound.getCompound("CosmicCodData"));
@@ -417,8 +417,8 @@ public class EntityCosmicCod extends Mob implements Bucketable {
     }
 
     @Override
-    @Nonnull
-    protected InteractionResult mobInteract(@Nonnull Player player, @Nonnull InteractionHand hand) {
+    @NotNull
+    protected InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
         final ItemStack itemstack = player.getItemInHand(hand);
         if (itemstack.getItem() == Items.BUCKET && this.isAlive()) {
             this.gameEvent(GameEvent.ENTITY_INTERACT);

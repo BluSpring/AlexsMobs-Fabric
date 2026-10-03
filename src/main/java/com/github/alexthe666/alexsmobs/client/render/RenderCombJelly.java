@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class RenderCombJelly extends MobRenderer<EntityCombJelly, ModelCombJelly> {
     private static final ResourceLocation TEXTURE_0 = ResourceLocation.parse("alexsmobs:textures/entity/comb_jelly_blue.png");

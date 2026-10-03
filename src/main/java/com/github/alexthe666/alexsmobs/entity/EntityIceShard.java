@@ -16,10 +16,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class EntityIceShard extends Entity {
@@ -37,7 +37,7 @@ public class EntityIceShard extends Entity {
         this.setPos(stalker.getRandomX(0.5F), stalker.getEyeY() + (double)0.1F, stalker.getRandomZ(0.5F));
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public EntityIceShard(Level worldIn, double x, double y, double z, double p_i47274_8_, double p_i47274_10_, double p_i47274_12_) {
         this(AMEntityRegistry.ICE_SHARD, worldIn);
         this.setPos(x, y, z);
@@ -197,7 +197,7 @@ public class EntityIceShard extends Entity {
 
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void lerpMotion(double x, double y, double z) {
         this.setDeltaMovement(x, y, z);
         if (this.xRotO == 0.0F && this.yRotO == 0.0F) {

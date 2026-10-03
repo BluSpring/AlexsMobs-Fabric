@@ -42,10 +42,10 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -335,7 +335,7 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         return this.getBoundingBox().inflate(10, 10, 10);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67) {
             AlexsMobs.PROXY.onEntityStatus(this, id);
@@ -356,7 +356,7 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         this.entityData.set(NEAREST_MUSICIAN, Optional.ofNullable(uniqueId));
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void setRecordPlayingNearby(BlockPos pos, boolean isPartying) {
         this.jukeboxPosition = pos;
         this.isJukeboxing = isPartying;
@@ -375,7 +375,7 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
     }
 
     @Override
-    public boolean isShearable(@javax.annotation.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
+    public boolean isShearable(@org.jetbrains.annotations.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         return readyForShearing();
     }
 
@@ -387,9 +387,9 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         this.setHeadless(true);
     }
 
-    @javax.annotation.Nonnull
+    @org.jetbrains.annotations.NotNull
     @Override
-    public java.util.List<ItemStack> onSheared(@javax.annotation.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
+    public java.util.List<ItemStack> onSheared(@org.jetbrains.annotations.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         if (player != null) {
             level().playSound(null, this, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.0F, 1.0F);
         }

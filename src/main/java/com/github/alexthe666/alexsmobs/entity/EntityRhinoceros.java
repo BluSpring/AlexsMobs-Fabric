@@ -293,7 +293,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
         return list;
     }
 
-    private void addTrustedUUID(@javax.annotation.Nullable UUID p_28516_) {
+    private void addTrustedUUID(@org.jetbrains.annotations.Nullable UUID p_28516_) {
         if (((Optional)this.entityData.get(DATA_TRUSTED_ID_0)).isPresent()) {
             this.entityData.set(DATA_TRUSTED_ID_1, Optional.ofNullable(p_28516_));
         } else {
@@ -497,7 +497,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
         private LivingEntity trusted;
         private int timestamp;
 
-        public DefendTrustedTargetGoal(Class<LivingEntity> entities, boolean b, @javax.annotation.Nullable boolean b2, Predicate<LivingEntity> pred) {
+        public DefendTrustedTargetGoal(Class<LivingEntity> entities, boolean b, @org.jetbrains.annotations.Nullable boolean b2, Predicate<LivingEntity> pred) {
             super(EntityRhinoceros.this, entities, 10, b, b2, pred);
         }
 

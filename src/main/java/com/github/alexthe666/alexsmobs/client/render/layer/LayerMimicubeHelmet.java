@@ -40,7 +40,7 @@ public class LayerMimicubeHelmet extends RenderLayer<EntityMimicube, ModelMimicu
     }
 
     public static ResourceLocation getArmorResource(net.minecraft.world.entity.Entity entity, ItemStack stack,
-            EquipmentSlot slot, @javax.annotation.Nullable String type) {
+            EquipmentSlot slot, @org.jetbrains.annotations.Nullable String type) {
         ArmorItem item = (ArmorItem) stack.getItem();
         ResourceLocation materialName = item.getMaterial().unwrapKey().get().location();
         String domain = materialName.getNamespace();

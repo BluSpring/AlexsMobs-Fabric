@@ -5,8 +5,8 @@ import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 public class ParticleGusterSandSpin extends TextureSheetParticle {
 
@@ -72,7 +72,7 @@ public class ParticleGusterSandSpin extends TextureSheetParticle {
         return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static class Factory implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet spriteSet;
 
@@ -87,7 +87,7 @@ public class ParticleGusterSandSpin extends TextureSheetParticle {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static class FactoryRed implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet spriteSet;
 
@@ -102,7 +102,7 @@ public class ParticleGusterSandSpin extends TextureSheetParticle {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static class FactorySoul implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet spriteSet;
 

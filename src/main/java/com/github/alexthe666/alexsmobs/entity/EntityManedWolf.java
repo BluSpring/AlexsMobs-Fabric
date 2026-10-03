@@ -46,10 +46,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -343,7 +343,7 @@ public class EntityManedWolf extends Animal implements ITargetsDroppedItems, IDa
         return AMEntityRegistry.MANED_WOLF.create(serverWorld);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void setRecordPlayingNearby(BlockPos pos, boolean isPartying) {
         AlexsMobs.sendMSGToServer(new MessageStartDancing(this.getId(), isPartying, pos));
         this.setDancing(isPartying);

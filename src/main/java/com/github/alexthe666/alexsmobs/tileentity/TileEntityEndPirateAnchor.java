@@ -8,8 +8,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class TileEntityEndPirateAnchor extends BlockEntity {
         entity.tick();
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public AABB getRenderBoundingBox() {
         return new AABB(Vec3.atLowerCornerOf(worldPosition.offset(-1, 0, -1)), Vec3.atLowerCornerOf(worldPosition.offset(1, 3, 1)));
     }

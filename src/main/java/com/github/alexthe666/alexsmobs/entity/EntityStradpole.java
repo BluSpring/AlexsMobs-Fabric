@@ -54,8 +54,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ItemAbilities;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -89,7 +89,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.STRADPOLE_BUCKET);
         if (this.hasCustomName()) {
@@ -99,7 +99,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NotNull ItemStack bucket) {
         if (this.hasCustomName()) {
             bucket.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -107,13 +107,13 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NotNull CompoundTag compound) {
         Bucketable.loadDefaultDataFromBucketTag(this, compound);
     }
 
     @Override
-    @Nonnull
-    protected InteractionResult mobInteract(@Nonnull Player player, @Nonnull InteractionHand hand) {
+    @NotNull
+    protected InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if(itemstack.is(AMTagRegistry.STRADPOLE_GROWABLES)){
             if(!player.isCreative()){
@@ -172,7 +172,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public SoundEvent getPickupSound() {
         return SoundEvents.BUCKET_FILL_FISH;
     }

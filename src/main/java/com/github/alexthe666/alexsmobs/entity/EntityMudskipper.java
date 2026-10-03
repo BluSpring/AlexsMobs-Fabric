@@ -48,7 +48,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -288,16 +288,16 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         this.entityData.set(MOUTH_TICKS, time);
     }
 
-    @javax.annotation.Nullable
+    @org.jetbrains.annotations.Nullable
     public UUID getDisplayingPartnerUUID() {
         return this.entityData.get(DISPLAYER_UUID).orElse(null);
     }
 
-    public void setDisplayingPartnerUUID(@javax.annotation.Nullable UUID uniqueId) {
+    public void setDisplayingPartnerUUID(@org.jetbrains.annotations.Nullable UUID uniqueId) {
         this.entityData.set(DISPLAYER_UUID, Optional.ofNullable(uniqueId));
     }
 
-    @javax.annotation.Nullable
+    @org.jetbrains.annotations.Nullable
     public Entity getDisplayingPartner() {
         UUID id = getDisplayingPartnerUUID();
         if (id != null && !this.level().isClientSide) {
@@ -306,7 +306,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         return null;
     }
 
-    public void setDisplayingPartner(@javax.annotation.Nullable Entity jostlingPartner) {
+    public void setDisplayingPartner(@org.jetbrains.annotations.Nullable Entity jostlingPartner) {
         if (jostlingPartner == null) {
             this.setDisplayingPartnerUUID(null);
         } else {
@@ -399,7 +399,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.MUDSKIPPER_BUCKET);
         if (this.hasCustomName()) {
@@ -409,7 +409,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NotNull ItemStack bucket) {
         Bucketable.saveDefaultDataToBucketTag(this, bucket);
         if (this.hasCustomName()) {
             bucket.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
@@ -422,7 +422,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NotNull CompoundTag compound) {
         Bucketable.loadDefaultDataFromBucketTag(this, compound);
         if (compound.contains("MudskipperData")) {
             this.readAdditionalSaveData(compound.getCompound("MudskipperData"));
@@ -430,7 +430,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public SoundEvent getPickupSound() {
         return SoundEvents.BUCKET_FILL_FISH;
     }

@@ -24,10 +24,10 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class BlockCapsid extends BaseEntityBlock {
     public static final MapCodec<BlockCapsid> CODEC = simpleCodec(p -> new BlockCapsid());
@@ -66,7 +66,7 @@ public class BlockCapsid extends BaseEntityBlock {
         return false;
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public boolean skipRendering(BlockState p_200122_1_, BlockState p_200122_2_, Direction p_200122_3_) {
         return p_200122_2_.getBlock() == this ? true : super.skipRendering(p_200122_1_, p_200122_2_, p_200122_3_);
     }

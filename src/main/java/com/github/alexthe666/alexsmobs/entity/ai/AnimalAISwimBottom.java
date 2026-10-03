@@ -9,7 +9,7 @@ import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class AnimalAISwimBottom extends RandomStrollGoal {
     public AnimalAISwimBottom(PathfinderMob p_i48937_1_, double p_i48937_2_, int p_i48937_4_) {

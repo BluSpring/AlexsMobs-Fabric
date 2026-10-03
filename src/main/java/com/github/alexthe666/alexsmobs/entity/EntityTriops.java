@@ -43,11 +43,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
@@ -149,7 +149,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public SoundEvent getPickupSound() {
         return SoundEvents.BUCKET_FILL_FISH;
     }
@@ -260,7 +260,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
         this.walkAnimation.update(f2, 0.4F);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67) {
             for (int i = 0; i < 5; i++) {
@@ -322,7 +322,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NotNull ItemStack bucket) {
         if (this.hasCustomName()) {
             bucket.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -334,7 +334,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NotNull CompoundTag compound) {
         if (compound.contains("TriopsTag")) {
             this.readAdditionalSaveData(compound.getCompound("TriopsTag"));
         }

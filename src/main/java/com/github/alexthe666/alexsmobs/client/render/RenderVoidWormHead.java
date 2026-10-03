@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class RenderVoidWormHead extends MobRenderer<EntityVoidWorm, ModelVoidWorm> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/void_worm/void_worm_head.png");
