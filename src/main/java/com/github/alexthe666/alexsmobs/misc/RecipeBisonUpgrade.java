@@ -1,9 +1,10 @@
 package com.github.alexthe666.alexsmobs.misc;
 
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
+
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
@@ -36,6 +37,8 @@ public class RecipeBisonUpgrade extends CustomRecipe {
                 CompoundTag tag = customData.copyTag();
                 boolean notFurred = !tag.getBoolean("BisonFur");
                 if (!itemstack1.isEmpty() && notFurred && itemstack1.getEquipmentSlot() == EquipmentSlot.FEET) {
+                Equipable equipable = Equipable.get(itemstack1);
+                if (!itemstack1.isEmpty() && notFurred && (itemstack1.getEquipmentSlot() == EquipmentSlot.FEET || (equipable != null && equipable.getEquipmentSlot() == EquipmentSlot.FEET))) {
                     boots = itemstack1;
                 }
             }
