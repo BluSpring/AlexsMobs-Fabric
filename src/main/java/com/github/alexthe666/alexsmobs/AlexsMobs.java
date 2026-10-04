@@ -8,6 +8,7 @@ import com.github.alexthe666.alexsmobs.attachment.AMAttachmentRegistry;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.client.model.layered.AMModelLayers;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
+import com.github.alexthe666.alexsmobs.component.AMDataComponentRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.config.BiomeConfig;
 import com.github.alexthe666.alexsmobs.config.ConfigHolder;
@@ -74,6 +75,7 @@ public class AlexsMobs {
         AMBlockRegistry.DEF_REG.register(modEventBus);
         AMEntityRegistry.DEF_REG.register(modEventBus);
         AMItemRegistry.DEF_REG.register(modEventBus);
+        AMDataComponentRegistry.DEF_REG.register(modEventBus);
         AMArmorMaterial.ARMOR_MATERIALS.register(modEventBus);
         AMTileEntityRegistry.DEF_REG.register(modEventBus);
         AMPointOfInterestRegistry.DEF_REG.register(modEventBus);

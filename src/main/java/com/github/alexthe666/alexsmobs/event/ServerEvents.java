@@ -59,7 +59,6 @@ import org.antlr.v4.runtime.misc.Triple;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetExperiencePacket;
@@ -112,7 +111,6 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ChunkPos;
@@ -859,8 +857,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onTooltip(ItemTooltipEvent event) {
-        CompoundTag tag = event.getItemStack().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (tag.contains("BisonFur") && tag.getBoolean("BisonFur")) {
+        if (event.getItemStack().has(AMDataComponentRegistry.BISON_FUR)) {
             event.getToolTip()
                     .add(Component.translatable("item.alexsmobs.insulated_with_fur").withStyle(ChatFormatting.AQUA));
         }
