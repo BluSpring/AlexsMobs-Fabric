@@ -57,7 +57,7 @@ public class TileEntityTransmutationTable  extends BlockEntity {
             // In 1.21, use reloadableRegistries().getLootTable() with a ResourceKey
             ResourceKey<LootTable> lootKey = ResourceKey.create(Registries.LOOT_TABLE, loc);
             LootTable loottable = player.level().getServer().reloadableRegistries().getLootTable(lootKey);
-            List<ItemStack> loots = loottable.getRandomItems((new LootParams.Builder((ServerLevel) player.level())).withParameter(LootContextParams.THIS_ENTITY, player).create(LootContextParamSets.EMPTY));
+            List<ItemStack> loots = loottable.getRandomItems((new LootParams.Builder((ServerLevel) player.level())).withParameter(LootContextParams.THIS_ENTITY, player).create(LootContextParamSets.PIGLIN_BARTER));
             return loots.isEmpty() ? ItemStack.EMPTY : loots.get(0);
         }
     }
