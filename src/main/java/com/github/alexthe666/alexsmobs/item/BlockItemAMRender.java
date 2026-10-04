@@ -10,9 +10,4 @@ public class BlockItemAMRender extends AMBlockItem {
     public BlockItemAMRender(Block blockSupplier, Properties props) {
         super(blockSupplier, props);
     }
-
-    @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
-        consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getISTERProperties());
-    }
 }

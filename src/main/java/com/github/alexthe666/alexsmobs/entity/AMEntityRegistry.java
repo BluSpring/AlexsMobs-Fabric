@@ -146,11 +146,6 @@ public class AMEntityRegistry {
     private static <T extends Entity> EntityType<T> registerEntity(EntityType.Builder<T> builder, String entityName) {
         return builder.build(entityName);
     }
-    
-    static {
-        registerSpawnPlacements();
-        initializeAttributes();
-    }
 
     public static void registerSpawnPlacements() {
         // Custom spawn placement type for leaves - using ON_GROUND as base with custom spawn rules

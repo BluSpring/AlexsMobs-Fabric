@@ -9,7 +9,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -26,11 +25,6 @@ public class ItemTabIcon extends ItemInventoryOnly {
     public static String getCustomDisplayEntityString(ItemStack stack) {
         return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()
                 .getString("DisplayEntityType");
-    }
-
-    @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
-        consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getISTERProperties());
     }
 
     @Nullable

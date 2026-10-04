@@ -28,11 +28,10 @@
     "alexsmobs.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.19.5",
-    "fabric-api": "*",
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": ">=${fabric_version}",
     "minecraft": ">=1.21 <=1.21.1",
-    "forgeconfigapiport": ">=4.2.11",
-    "citadel": ">=2.6.0"
+    "citadel": ">=2.7.1"
   },
   "accessWidener": "alexsmobs.accesswidener"
 }

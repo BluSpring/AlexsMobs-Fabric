@@ -1,7 +1,9 @@
 package com.github.alexthe666.alexsmobs.client;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.client.model.layered.AMModelLayers;
+import com.github.alexthe666.alexsmobs.client.render.AMItemstackRenderer;
 import com.github.alexthe666.alexsmobs.client.render.item.CustomArmorRenderProperties;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.message.MessageCrowDismount;
@@ -30,6 +32,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 
 public class AlexsMobsClient implements ClientModInitializer {
@@ -50,6 +53,19 @@ public class AlexsMobsClient implements ClientModInitializer {
             }
         }, AMItemRegistry.TARANTULA_HAWK_ELYTRA, AMItemRegistry.ROADDRUNNER_BOOTS, AMItemRegistry.MOOSE_HEADGEAR, AMItemRegistry.FRONTIER_CAP, AMItemRegistry.FEDORA, AMItemRegistry.SPIKED_TURTLE_SHELL,
             AMItemRegistry.SOMBRERO, AMItemRegistry.FROSTSTALKER_HELMET, AMItemRegistry.ROCKY_CHESTPLATE, AMItemRegistry.FLYING_FISH_BOOTS, AMItemRegistry.NOVELTY_HAT, AMItemRegistry.UNSETTLING_KIMONO);
+
+        BuiltinItemRendererRegistry.INSTANCE.register(AMItemRegistry.SHIELD_OF_THE_DEEP, AMItemstackRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(AMItemRegistry.MYSTERIOUS_WORM, AMItemstackRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(AMItemRegistry.FALCONRY_GLOVE, AMItemstackRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(AMItemRegistry.VINE_LASSO, AMItemstackRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(AMItemRegistry.SKELEWAG_SWORD, AMItemstackRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(AMBlockRegistry.TRANSMUTATION_TABLE, AMItemstackRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(AMItemRegistry.SHATTERED_DIMENSIONAL_CARVER, AMItemstackRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(AMItemRegistry.STINK_RAY, AMItemstackRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(AMBlockRegistry.END_PIRATE_ANCHOR, AMItemstackRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(AMBlockRegistry.END_PIRATE_ANCHOR_WINCH, AMItemstackRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(AMBlockRegistry.END_PIRATE_SHIP_WHEEL, AMItemstackRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(AMItemRegistry.TAB_ICON, AMItemstackRenderer.INSTANCE);
 
         registerPayloads();
     }

@@ -42,7 +42,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AMItemstackRenderer extends BlockEntityWithoutLevelRenderer {
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
+
+public class AMItemstackRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
+    public static final AMItemstackRenderer INSTANCE = new AMItemstackRenderer();
 
     public static int ticksExisted = 0;
     private static final ModelShieldOfTheDeep SHIELD_OF_THE_DEEP_MODEL = new ModelShieldOfTheDeep();
@@ -72,10 +75,6 @@ public class AMItemstackRenderer extends BlockEntityWithoutLevelRenderer {
 
     private final Map<String, Entity> renderedEntites = new HashMap<>();
     private final List<EntityType> blockedRenderEntities = new ArrayList<>();
-
-    public AMItemstackRenderer() {
-        super(null, null);
-    }
 
     public static void incrementTick() {
         ticksExisted++;
@@ -180,8 +179,8 @@ public class AMItemstackRenderer extends BlockEntityWithoutLevelRenderer {
     }
 
     @Override
-    public void renderByItem(ItemStack itemStackIn, ItemDisplayContext transformType, PoseStack matrixStackIn,
-            MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(ItemStack itemStackIn, ItemDisplayContext transformType, PoseStack matrixStackIn,
+                             MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         int tick;
         if (Minecraft.getInstance().player == null || Minecraft.getInstance().isPaused()) {
             tick = ticksExisted;

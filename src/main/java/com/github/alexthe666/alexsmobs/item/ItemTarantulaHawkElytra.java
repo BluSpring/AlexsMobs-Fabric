@@ -7,6 +7,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
@@ -16,19 +17,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import io.github.fabricators_of_create.porting_lib.item.extensions.ArmorTextureItem;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import org.jetbrains.annotations.Nullable;
 
-public class ItemTarantulaHawkElytra extends ArmorItem implements ArmorTextureItem {
+import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents;
+import net.fabricmc.fabric.api.entity.event.v1.FabricElytraItem;
+
+public class ItemTarantulaHawkElytra extends ArmorItem implements ArmorTextureItem, FabricElytraItem {
 
     public ItemTarantulaHawkElytra(Item.Properties props, Holder<ArmorMaterial> mat) {
         super(mat, Type.CHESTPLATE, props);
-    }
-
-    @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
-        consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getArmorRenderProperties());
     }
 
     public static boolean isUsable(ItemStack stack) {
@@ -40,16 +38,16 @@ public class ItemTarantulaHawkElytra extends ArmorItem implements ArmorTextureIt
     }
 
     @Override
-    public boolean canElytraFly(ItemStack stack, net.minecraft.world.entity.LivingEntity entity) {
+    public boolean useCustomElytra(LivingEntity entity, ItemStack stack, boolean tickElytra) {
         return ElytraItem.isFlyEnabled(stack);
     }
 
     @Override
-    public boolean elytraFlightTick(ItemStack stack, net.minecraft.world.entity.LivingEntity entity, int flightTicks) {
+    public void doVanillaElytraTick(LivingEntity entity, ItemStack stack) {
+        int flightTicks = entity.getFallFlyingTicks();
         if (!entity.level().isClientSide && (flightTicks + 1) % 20 == 0) {
-            stack.hurtAndBreak(1, entity, net.minecraft.world.entity.EquipmentSlot.CHEST);
+            stack.hurtAndBreak(1, entity, EquipmentSlot.CHEST);
         }
-        return true;
     }
 
     public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {

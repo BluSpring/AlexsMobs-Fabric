@@ -1,60 +1,41 @@
 package com.github.alexthe666.alexsmobs.misc;
 
+import static io.github.fabricators_of_create.porting_lib.loot.IGlobalLootModifier.LOOT_CONDITIONS_CODEC;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.fabricators_of_create.porting_lib.loot.IGlobalLootModifier;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
-public class PigshoesLootModifier implements IGlobalLootModifier {
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 
-    public static final MapCodec<PigshoesLootModifier> CODEC =
-            RecordCodecBuilder.mapCodec(inst ->
-                    inst.group(
-                                    LOOT_CONDITIONS_CODEC.fieldOf("conditions").forGetter(lm -> lm.conditions)
-                            )
-                            .apply(inst, PigshoesLootModifier::new));
-
-    private final LootItemCondition[] conditions;
-
-    private final Predicate<LootContext> orConditions;
-
-    public PigshoesLootModifier(LootItemCondition[] conditionsIn) {
-        this.conditions = conditionsIn;
-        this.orConditions = (context) -> {
-            for (LootItemCondition condition : conditionsIn) {
-                if (condition.test(context)) return true;
+public class PigshoesLootModifier {
+    public static void apply() {
+        LootTableEvents.MODIFY.register((key, tableBuilder, source, registries) -> {
+            if (key == BuiltInLootTables.PIGLIN_BARTERING) {
+                if (AMConfig.addLootToChests) {
+                    tableBuilder.withPool(LootPool.lootPool()
+                        .setRolls(UniformGenerator.between(0f, (float) AMConfig.tusklinShoesBarteringChance))
+                        .add(
+                            LootItem.lootTableItem(AMItemRegistry.PIGSHOES)
+                        )
+                    );
+                }
             }
-            return false;
-        };
-    }
-
-
-    @NotNull
-    @Override
-    public ObjectArrayList<ItemStack> apply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        return this.orConditions.test(context) ? this.doApply(generatedLoot, context) : generatedLoot;
-    }
-
-    protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        if (AMConfig.addLootToChests) {
-            if (context.getRandom().nextFloat() <= AMConfig.tusklinShoesBarteringChance) {
-                generatedLoot.add(new ItemStack(AMItemRegistry.PIGSHOES));
-            }
-        }
-        return generatedLoot;
-    }
-
-    @Override
-    public MapCodec<? extends IGlobalLootModifier> codec() {
-        return CODEC;
+        });
     }
 }

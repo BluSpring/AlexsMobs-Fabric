@@ -4,6 +4,11 @@ import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityTendonSegment;
 import com.github.alexthe666.alexsmobs.entity.util.TendonWhipUtil;
+import io.github.fabricators_of_create.porting_lib.item.extensions.ReequipAnimationItem;
+import io.github.fabricators_of_create.porting_lib.tool.ItemAbilities;
+import io.github.fabricators_of_create.porting_lib.tool.ItemAbility;
+import io.github.fabricators_of_create.porting_lib.tool.addons.ItemAbilityItem;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -23,13 +28,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.common.ItemAbility;
 
-public class ItemTendonWhip extends SwordItem implements ILeftClick {
+public class ItemTendonWhip extends SwordItem implements ILeftClick, ReequipAnimationItem, ItemAbilityItem {
 
     public ItemTendonWhip(Item.Properties props) {
-        super(Tiers.IRON, props.attributes(createTendonAttributes()));
+        super(Tiers.IRON, props.attributes(createTendonAttributes()).durability(450));
     }
 
     private static ItemAttributeModifiers createTendonAttributes() {
@@ -106,16 +109,14 @@ public class ItemTendonWhip extends SwordItem implements ILeftClick {
         return false;
     }
 
+    @Override
     public boolean canPerformAction(ItemStack stack, ItemAbility ItemAbility) {
-        return ItemAbility != ItemAbilities.SWORD_SWEEP && super.canPerformAction(stack, ItemAbility);
+        return ItemAbility != ItemAbilities.SWORD_SWEEP && ItemAbilityItem.super.canPerformAction(stack, ItemAbility);
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return !ItemStack.isSameItem(oldStack, newStack);
-    }
-
-    public int getMaxDamage(ItemStack stack) {
-        return 450;
     }
 
     public boolean isValidRepairItem(ItemStack pickaxe, ItemStack stack) {

@@ -1,7 +1,6 @@
 package com.github.alexthe666.alexsmobs;
 
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
-import com.github.alexthe666.alexsmobs.client.model.layered.AMModelLayers;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.component.AMDataComponentRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
@@ -17,14 +16,13 @@ import com.github.alexthe666.alexsmobs.message.*;
 import com.github.alexthe666.alexsmobs.misc.*;
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.world.AMFeatureRegistry;
-import com.github.alexthe666.alexsmobs.world.AMLeafcutterAntBiomeModifier;
-import com.github.alexthe666.alexsmobs.world.AMMobSpawnBiomeModifier;
-import com.github.alexthe666.alexsmobs.world.AMMobSpawnStructureModifier;
+
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
+import com.github.alexthe666.alexsmobs.world.AMWorldRegistry;
 import io.github.fabricators_of_create.porting_lib.config.ConfigRegistry;
 import io.github.fabricators_of_create.porting_lib.config.ModConfig;
 import io.github.fabricators_of_create.porting_lib.config.ModConfigEvent;
@@ -73,6 +71,8 @@ public class AlexsMobs implements ModInitializer {
         // Register all deferred registers
         AMBlockRegistry.DEF_REG.register();
         AMEntityRegistry.DEF_REG.register();
+        AMEntityRegistry.registerSpawnPlacements();
+        AMEntityRegistry.initializeAttributes();
         AMDataComponentRegistry.DEF_REG.register();
         AMItemRegistry.DEF_REG.register();
         AMArmorMaterial.ARMOR_MATERIALS.register();
@@ -85,20 +85,15 @@ public class AlexsMobs implements ModInitializer {
         AMEffectRegistry.POTION_DEF_REG.register();
         AMMenuRegistry.DEF_REG.register();
         AMRecipeRegistry.DEF_REG.register();
-        AMLootRegistry.DEF_REG.register();
-        AMBannerRegistry.DEF_REG.register();
+        AMLootRegistry.register();
         AMCreativeTabRegistry.DEF_REG.register();
         AMAdvancementTriggerRegistry.DEF_REG.register();
 
         ServerLifecycleEvents.SERVER_STARTING.register(s -> server = s);
         ServerLifecycleEvents.SERVER_STOPPING.register(s -> server = null);
         
-        // Biome modifiers
-        AMMobSpawnBiomeModifier.BIOME_MODIFIER_SERIALIZERS.register();
-        AMLeafcutterAntBiomeModifier.BIOME_MODIFIER_SERIALIZERS.register();
-        
-        // Structure modifiers
-        AMMobSpawnStructureModifier.STRUCTURE_MODIFIER_SERIALIZERS.register();
+        // Biome & structure modifiers
+        AMWorldRegistry.setup();
         
         // Register config
         ConfigRegistry.registerConfig(MODID, ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC, "alexsmobs.toml");

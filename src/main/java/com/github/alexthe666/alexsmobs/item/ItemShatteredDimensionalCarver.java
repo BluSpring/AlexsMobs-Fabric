@@ -6,17 +6,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 public class ItemShatteredDimensionalCarver extends ItemDimensionalCarver {
 
     public ItemShatteredDimensionalCarver(Properties props) {
         super(props);
-    }
-
-    @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
-        consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getISTERProperties());
     }
 
     @Override

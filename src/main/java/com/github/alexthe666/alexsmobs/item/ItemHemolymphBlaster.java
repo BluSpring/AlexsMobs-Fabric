@@ -1,6 +1,8 @@
 package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.entity.EntityHemolymph;
+import io.github.fabricators_of_create.porting_lib.item.extensions.ReequipAnimationItem;
+
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -18,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Predicate;
 
-public class ItemHemolymphBlaster extends Item {
+public class ItemHemolymphBlaster extends Item implements ReequipAnimationItem {
 
     public static final Predicate<ItemStack> HEMOLYMPH = (stack) -> {
         return stack.getItem() == AMItemRegistry.HEMOLYMPH_SAC;
@@ -76,10 +78,12 @@ public class ItemHemolymphBlaster extends Item {
         return ItemStack.EMPTY;
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return !ItemStack.isSameItem(oldStack, newStack);
     }
 
+    @Override
     public void onUseTick(Level worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
         if(isUsable(stack)) {
             int usedTicks = getUseDuration(stack, livingEntityIn) - count;

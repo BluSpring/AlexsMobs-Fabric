@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 @Mixin(LivingEntityRenderer.class)
@@ -77,9 +78,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity> extends 
         }
     }
 
-    @SuppressWarnings("InvalidInjectorMethodSignature")
     @WrapOperation(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/EntityModel;setupAnim(Lnet/minecraft/world/entity/Entity;FFFFF)V"))
-    private void setupFarseerModelAnims(EntityModel<T> instance, T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, Operation<Void> original) {
+    private void setupFarseerModelAnims(EntityModel<T> instance, Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, Operation<Void> original) {
         original.call(instance, entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 
         if (entity instanceof EntityFarseer farseer && (Object) this instanceof RenderFarseer renderFarseer) {

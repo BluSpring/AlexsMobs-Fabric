@@ -2,6 +2,9 @@ package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityVoidPortal;
+import io.github.fabricators_of_create.porting_lib.item.extensions.ReequipAnimationItem;
+import io.github.fabricators_of_create.porting_lib.item.extensions.XpRepairItem;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -27,12 +30,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class ItemDimensionalCarver extends Item {
+public class ItemDimensionalCarver extends Item implements ReequipAnimationItem, XpRepairItem {
 
     public static final int MAX_TIME = 200;
 
     public ItemDimensionalCarver(Item.Properties props) {
-        super(props);
+        super(props.stacksTo(1));
     }
 
     // Helper methods for 1.21 DataComponents NBT replacement
@@ -100,6 +103,7 @@ public class ItemDimensionalCarver extends Item {
         return 200;
     }
 
+    @Override
     public float getXpRepairRatio(ItemStack stack) {
         return 100F;
     }
@@ -181,6 +185,7 @@ public class ItemDimensionalCarver extends Item {
 
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return !ItemStack.isSameItem(oldStack, newStack);
     }

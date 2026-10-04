@@ -17,13 +17,13 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.neoforged.neoforge.common.NeoForgeMod;
 
+import io.github.fabricators_of_create.porting_lib.attributes.PortingLibAttributes;
+import io.github.fabricators_of_create.porting_lib.item.extensions.ArmorTextureItem;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
-public class ItemModArmor extends ArmorItem {
+public class ItemModArmor extends ArmorItem implements ArmorTextureItem {
     private Multimap<Holder<Attribute>, AttributeModifier> attributeMapCroc;
     private Multimap<Holder<Attribute>, AttributeModifier> attributeMapMoose;
     private Multimap<Holder<Attribute>, AttributeModifier> attributeMapFlyingFish;
@@ -34,12 +34,6 @@ public class ItemModArmor extends ArmorItem {
         super(armorMaterial.getHolder(), slot, new Item.Properties().durability(armorMaterial.getDurabilityForType(slot)));
         this.amMaterial = armorMaterial;
     }
-
-    @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
-        consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getArmorRenderProperties());
-    }
-
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
@@ -81,7 +75,7 @@ public class ItemModArmor extends ArmorItem {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "armor_croc_" + type.getName());
         builder.put(Attributes.ARMOR, new AttributeModifier(id, materialIn.getDefenseForType(this.type), AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(id, materialIn.getToughness(), AttributeModifier.Operation.ADD_VALUE));
-        builder.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(id, 1.0, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(PortingLibAttributes.SWIM_SPEED, new AttributeModifier(id, 1.0, AttributeModifier.Operation.ADD_VALUE));
         float knockbackResistance = materialIn.getKnockbackResistance();
         if (knockbackResistance > 0) {
             builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(id, knockbackResistance, AttributeModifier.Operation.ADD_VALUE));
@@ -94,7 +88,7 @@ public class ItemModArmor extends ArmorItem {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "armor_flyingfish_" + type.getName());
         builder.put(Attributes.ARMOR, new AttributeModifier(id, materialIn.getDefenseForType(this.type), AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(id, materialIn.getToughness(), AttributeModifier.Operation.ADD_VALUE));
-        builder.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(id, 0.5, AttributeModifier.Operation.ADD_VALUE));
+        builder.put(PortingLibAttributes.SWIM_SPEED, new AttributeModifier(id, 0.5, AttributeModifier.Operation.ADD_VALUE));
         attributeMapFlyingFish = builder.build();
     }
 
@@ -181,7 +175,7 @@ public class ItemModArmor extends ArmorItem {
         } else if (this.amMaterial == AMItemRegistry.KIMONO_MATERIAL) {
             return ResourceLocation.parse("alexsmobs:textures/armor/unsettling_kimono.png");
         }
-        return super.getArmorTexture(stack, entity, slot, layer, innerModel);
+        return ArmorTextureItem.super.getArmorTexture(stack, entity, slot, layer, innerModel);
     }
 }
 

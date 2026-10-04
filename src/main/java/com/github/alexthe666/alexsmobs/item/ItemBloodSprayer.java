@@ -1,6 +1,8 @@
 package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.entity.EntityMosquitoSpit;
+import io.github.fabricators_of_create.porting_lib.item.extensions.ReequipAnimationItem;
+
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -18,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Predicate;
 
-public class ItemBloodSprayer extends Item {
+public class ItemBloodSprayer extends Item implements ReequipAnimationItem {
 
     public static final Predicate<ItemStack> IS_BLOOD = (stack) -> {
         return stack.getItem() == AMItemRegistry.BLOOD_SAC;
@@ -72,6 +74,7 @@ public class ItemBloodSprayer extends Item {
         return ItemStack.EMPTY;
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return !ItemStack.isSameItem(oldStack, newStack);
     }

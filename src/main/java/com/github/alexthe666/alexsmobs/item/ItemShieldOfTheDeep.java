@@ -41,9 +41,4 @@ public class ItemShieldOfTheDeep extends Item implements ItemAbilityItem {
     public boolean isValidRepairItem(ItemStack p_82789_1_, ItemStack p_82789_2_) {
         return AMItemRegistry.SERRATED_SHARK_TOOTH == p_82789_2_.getItem() || super.isValidRepairItem(p_82789_1_, p_82789_2_);
     }
-
-    @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
-        consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getISTERProperties());
-    }
 }

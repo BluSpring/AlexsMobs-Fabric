@@ -143,6 +143,8 @@ public class ServerEvents {
         AddReloadListenersEvent.EVENT.register(ServerEvents::onAddReloadListener);
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> onLivingDeath(damageSource));
         ItemTooltipCallback.EVENT.register((stack, tooltipContext, tooltipType, lines) -> onTooltip(stack, lines));
+        LivingDamageEvent.DAMAGE.register(ServerEvents::onLivingDamageEvent);
+        ServerEntityEvents.ENTITY_LOAD.register(ServerEvents::onEntityAdded);
     }
 
     public static void onServerTick(ServerLevel serverWorld) {
@@ -538,21 +540,19 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
-    public static void onEntityFinalizeSpawn(FinalizeSpawnEvent event) {
-        final var entity = event.getEntity();
+    public static void onEntityFinalizeSpawn(Entity entity, LevelAccessor level) {
         if (entity instanceof WanderingTrader trader && AMConfig.elephantTraderSpawnChance > 0) {
-            Biome biome = event.getLevel().getBiome(entity.blockPosition()).value();
+            Biome biome = level.getBiome(entity.blockPosition()).value();
             if (RAND.nextFloat() <= AMConfig.elephantTraderSpawnChance
-                    && (!AMConfig.limitElephantTraderBiomes || biome.getBaseTemperature() >= 1.0F)) {
+                && (!AMConfig.limitElephantTraderBiomes || biome.getBaseTemperature() >= 1.0F)) {
                 ChunkPos chunkPos = new ChunkPos(trader.blockPosition());
-                if (event.getLevel().getChunkSource().getChunkNow(chunkPos.x, chunkPos.z) != null) {
+                if (level.getChunkSource().getChunkNow(chunkPos.x, chunkPos.z) != null) {
                     EntityElephant elephant = AMEntityRegistry.ELEPHANT.create(trader.level());
                     elephant.copyPosition(trader);
                     if (elephant.canSpawnWithTraderHere()) {
                         elephant.setTrader(true);
                         elephant.setChested(true);
-                        if (!event.getLevel().isClientSide()) {
+                        if (!level.isClientSide()) {
                             trader.level().addFreshEntity(elephant);
                             trader.startRiding(elephant, true);
                         }
@@ -561,6 +561,9 @@ public class ServerEvents {
                 }
             }
         }
+    }
+
+    public static void onEntityAdded(Entity entity, Level level) {
         try {
             if (AMConfig.spidersAttackFlies && entity instanceof final Spider spider) {
                 spider.targetSelector.addGoal(4,
@@ -816,8 +819,7 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
-    public static void onLivingAttack(LivingIncomingDamageEvent event) {
+    public static void onLivingAttack(LivingDamageEvent event) {
         if (!event.getEntity().getUseItem().isEmpty() && event.getSource() != null
                 && event.getSource().getEntity() != null) {
             if (event.getEntity().getUseItem().getItem() == AMItemRegistry.SHIELD_OF_THE_DEEP) {

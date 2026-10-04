@@ -5,71 +5,80 @@ import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.fabricators_of_create.porting_lib.loot.IGlobalLootModifier;
+import io.github.fabricators_of_create.porting_lib.tool.ItemAbilities;
+import io.github.fabricators_of_create.porting_lib.tool.loot.CanItemPerformAbility;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
+import net.minecraft.advancements.critereon.EnchantmentPredicate;
+import net.minecraft.advancements.critereon.ItemEnchantmentsPredicate;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.ItemSubPredicates;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
+import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
+import net.minecraft.world.level.storage.loot.predicates.EnchantmentActiveCheck;
+import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.EnchantmentLevelProvider;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.function.Predicate;
 
-public class BananaLootModifier implements IGlobalLootModifier {
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 
-    public static final MapCodec<BananaLootModifier> CODEC =
-            RecordCodecBuilder.mapCodec(inst ->
-                    inst.group(
-                                    LOOT_CONDITIONS_CODEC.fieldOf("conditions").forGetter(lm -> lm.conditions)
+public class BananaLootModifier {
+    public static void apply() {
+        LootTableEvents.MODIFY.register((key, tableBuilder, source, registries) -> {
+            if (key == Blocks.JUNGLE_LEAVES.getLootTable()) {
+                if (AMConfig.bananasDropFromLeaves) {
+                    tableBuilder.withPool(LootPool.lootPool()
+                        .when(AllOfCondition.allOf(
+                            InvertedLootItemCondition.invert(
+                                // none of these should match
+                                AnyOfCondition.anyOf(
+                                    MatchTool.toolMatches(
+                                        ItemPredicate.Builder.item()
+                                            .withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(
+                                                List.of(new EnchantmentPredicate(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), MinMaxBounds.Ints.atLeast(1)))
+                                            ))
+                                    ),
+                                    MatchTool.toolMatches(
+                                        ItemPredicate.Builder.item()
+                                            .of(Items.SHEARS)
+                                    ),
+                                    InvertedLootItemCondition.invert(
+                                        CanItemPerformAbility.canItemPerformAbility(ItemAbilities.SHEARS_HARVEST)
+                                    )
+                                )
                             )
-                            .apply(inst, BananaLootModifier::new));
-
-    private final LootItemCondition[] conditions;
-
-    private final Predicate<LootContext> orConditions;
-
-    public BananaLootModifier(LootItemCondition[] conditionsIn) {
-        this.conditions = conditionsIn;
-        this.orConditions = (context) -> {
-            for (LootItemCondition condition : conditionsIn) {
-                if (condition.test(context)) return true;
-            }
-            return false;
-        };
-    }
-
-    @NotNull
-    @Override
-    public ObjectArrayList<ItemStack> apply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-        return this.orConditions.test(context) ? this.doApply(generatedLoot, context) : generatedLoot;
-    }
-
-    protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context){
-        if (AMConfig.bananasDropFromLeaves){
-            ItemStack ctxTool = context.getParamOrNull(LootContextParams.TOOL);
-            RandomSource random = context.getRandom();
-            if(ctxTool != null){
-                int silkTouch = ctxTool.getEnchantmentLevel(context.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH));
-                if(silkTouch > 0 || ctxTool.getItem() instanceof ShearsItem){
-                    return generatedLoot;
+                        ))
+                        .setRolls(UniformGenerator.between(0f, AMConfig.bananaChance - Mth.floor(AMConfig.bananaChance * 0.1f)))
+                        .add(
+                            LootItem.lootTableItem(AMItemRegistry.BANANA)
+                        )
+                    );
                 }
             }
-            int bonusLevel = ctxTool != null ? ctxTool.getEnchantmentLevel(context.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE)) : 0;
-            int bananaStep = (int)Math.floor(AMConfig.bananaChance * 0.1F);
-            int bananaRarity = AMConfig.bananaChance - (bonusLevel * bananaStep);
-            if (bananaRarity < 1 || random.nextInt(bananaRarity) == 0) {
-                generatedLoot.add(new ItemStack(AMItemRegistry.BANANA));
-            }
-        }
-        return generatedLoot;
-    }
-
-    @Override
-    public MapCodec<? extends IGlobalLootModifier> codec() {
-        return CODEC;
+        });
     }
 }

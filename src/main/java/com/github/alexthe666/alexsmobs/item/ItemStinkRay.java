@@ -3,6 +3,8 @@ package com.github.alexthe666.alexsmobs.item;
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityFart;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import io.github.fabricators_of_create.porting_lib.item.extensions.ReequipAnimationItem;
+
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -20,7 +22,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Predicate;
 
-public class ItemStinkRay extends Item {
+public class ItemStinkRay extends Item implements ReequipAnimationItem {
 
     public static final Predicate<ItemStack> IS_FART_BOTTLE = (stack) -> {
         return stack.getItem() == AMItemRegistry.STINK_BOTTLE;
@@ -118,13 +120,8 @@ public class ItemStinkRay extends Item {
         return ItemStack.EMPTY;
     }
 
-
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return !ItemStack.isSameItem(oldStack, newStack);
-    }
-
-    @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
-        consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getISTERProperties());
     }
 }

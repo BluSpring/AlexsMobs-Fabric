@@ -50,11 +50,6 @@ public class ItemSkelewagSword extends SwordItem implements ItemAbilityItem {
         return 72000;
     }
 
-    @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
-        consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getISTERProperties());
-    }
-
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack lvt_4_1_ = player.getItemInHand(hand);
         player.startUsingItem(hand);

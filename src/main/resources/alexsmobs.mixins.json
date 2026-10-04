@@ -10,8 +10,10 @@
     "MixinBlock",
     "MixinBrewingStandBlockEntity",
     "NoiseBasedChunkGeneratorAccessor",
+    "fabric.AbstractVillagerMixin",
     "fabric.ItemStackMixin",
     "fabric.PlayerMixin",
+    "fabric.StructureMixin",
     "fabric.event.MobMixin"
   ],
   "client": [

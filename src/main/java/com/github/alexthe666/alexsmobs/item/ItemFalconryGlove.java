@@ -12,7 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
@@ -22,11 +21,6 @@ public class ItemFalconryGlove extends Item implements ILeftClick {
 
     public ItemFalconryGlove(Properties properties) {
         super(properties);
-    }
-
-    @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
-        consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getISTERProperties());
     }
 
     public boolean onLeftClick(ItemStack stack, LivingEntity playerIn) {
