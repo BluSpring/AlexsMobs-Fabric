@@ -36,6 +36,8 @@ public class RecipeBisonUpgrade extends CustomRecipe {
                 CompoundTag tag = customData.copyTag();
                 boolean notFurred = !tag.getBoolean("BisonFur");
                 if (!itemstack1.isEmpty() && notFurred && itemstack1.getEquipmentSlot() == EquipmentSlot.FEET) {
+                Equipable equipable = Equipable.get(itemstack1);
+                if (!itemstack1.isEmpty() && notFurred && (itemstack1.getEquipmentSlot() == EquipmentSlot.FEET || (equipable != null && equipable.getEquipmentSlot() == EquipmentSlot.FEET))) {
                     boots = itemstack1;
                 }
             }
