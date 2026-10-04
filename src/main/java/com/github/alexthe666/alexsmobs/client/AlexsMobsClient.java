@@ -23,7 +23,9 @@ import com.github.alexthe666.alexsmobs.message.MessageUpdateCapsid;
 import com.github.alexthe666.alexsmobs.message.MessageUpdateTransmutablesToDisplay;
 import io.github.fabricators_of_create.porting_lib.item.client.ItemClientHooks;
 import io.github.fabricators_of_create.porting_lib.item.extensions.ArmorTextureItem;
+import io.github.fabricators_of_create.porting_lib.util.client.ClientHooks;
 
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
@@ -46,6 +48,8 @@ public class AlexsMobsClient implements ClientModInitializer {
             if (stack.getItem() instanceof ArmorItem armorItem) {
                 var material = armorItem.getMaterial().value();
                 for (ArmorMaterial.Layer layer : material.layers()) {
+                    ClientHooks.setPartVisibility(model, slot);
+                    ((HumanoidModel) contextModel).copyPropertiesTo(model);
                     boolean inner = slot == EquipmentSlot.LEGS;
                     ResourceLocation texture = ItemClientHooks.getArmorTexture(entity, stack, layer, inner, slot);
                     ArmorRenderer.renderPart(matrices, vertexConsumers, light, stack, model, texture);
