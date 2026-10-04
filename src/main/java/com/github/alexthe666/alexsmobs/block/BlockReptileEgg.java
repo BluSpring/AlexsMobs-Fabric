@@ -3,6 +3,7 @@ package com.github.alexthe666.alexsmobs.block;
 import com.github.alexthe666.alexsmobs.entity.EntityCaiman;
 import com.github.alexthe666.alexsmobs.entity.EntityCrocodile;
 import com.github.alexthe666.alexsmobs.entity.EntityPlatypus;
+import com.github.alexthe666.alexsmobs.fabric.EventHooks;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import org.jetbrains.annotations.Nullable;
 

@@ -49,13 +49,15 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.neoforged.neoforge.common.Tags;
 
+import io.github.fabricators_of_create.porting_lib.blocks.extensions.CustomSoundTypeBlock;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 
 public class EntityUnderminer extends PathfinderMob {
 
@@ -418,7 +420,7 @@ public class EntityUnderminer extends PathfinderMob {
         if(lastGivenStack != null){
             return lastGivenStack.getItem() == state.getBlock().asItem();
         }
-        return state.is(Tags.Blocks.ORES);
+        return state.is(ConventionalBlockTags.ORES);
     }
 
     public void aiStep() {
@@ -438,8 +440,8 @@ public class EntityUnderminer extends PathfinderMob {
     private BlockPos getObscuringBlockOf(BlockPos target) {
         Vec3 eyes = new Vec3(this.getX(), this.getEyeY(), this.getZ());
         HitResult hitResult = this.level().clip(new ClipContext(eyes, Vec3.atCenterOf(target), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-        if (hitResult instanceof BlockHitResult && !((BlockHitResult) hitResult).getBlockPos().equals(target)) {
-            BlockPos pos = ((BlockHitResult) hitResult).getBlockPos();
+        if (hitResult instanceof BlockHitResult blockHitResult && !blockHitResult.getBlockPos().equals(target)) {
+            BlockPos pos = blockHitResult.getBlockPos();
             return pos.distSqr(target) > 4 ? null : pos;
         }
         return null;
@@ -546,7 +548,11 @@ public class EntityUnderminer extends PathfinderMob {
                         EntityUnderminer.this.setXRot((float) (Mth.atan2(d3, f) * (double) Mth.RAD_TO_DEG) + (float) Math.sin(EntityUnderminer.this.tickCount * 0.1F));
                         EntityUnderminer.this.entityData.set(VISUALLY_MINING, true);
                         if (mineTime % 10 == 0) {
-                            SoundType soundType = minePretendStartState.getBlock().getSoundType(minePretendStartState, EntityUnderminer.this.level(), minePretendPos, EntityUnderminer.this);
+                            SoundType soundType;
+                            if (minePretendStartState.getBlock() instanceof CustomSoundTypeBlock soundTypeBlock)
+                                soundType = soundTypeBlock.getSoundType(minePretendStartState, EntityUnderminer.this.level(), minePretendPos, EntityUnderminer.this);
+                            else
+                                soundType = minePretendStartState.getBlock().defaultBlockState().getSoundType();
                             EntityUnderminer.this.playSound(soundType.getHitSound());
                         }
                     }

@@ -2,7 +2,7 @@ package com.github.alexthe666.alexsmobs.config;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.google.common.collect.Lists;
-import net.neoforged.fml.config.ModConfig;
+import io.github.fabricators_of_create.porting_lib.config.ModConfig;
 
 import java.util.List;
 

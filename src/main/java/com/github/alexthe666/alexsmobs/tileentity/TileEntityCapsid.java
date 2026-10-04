@@ -7,8 +7,12 @@ import com.github.alexthe666.alexsmobs.entity.EntityEnderiophage;
 import com.github.alexthe666.alexsmobs.message.MessageUpdateCapsid;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.CapsidRecipe;
+import io.github.fabricators_of_create.porting_lib.blocks.extensions.CustomDataPacketHandlingBlockEntity;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -33,13 +37,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 
 import java.util.Random;
 
-public class TileEntityCapsid extends BaseContainerBlockEntity implements WorldlyContainer {
+public class TileEntityCapsid extends BaseContainerBlockEntity implements WorldlyContainer, CustomDataPacketHandlingBlockEntity {
     private static final int[] slotsTop = new int[]{0};
     public int ticksExisted;
     public float prevFloatUpProgress;
@@ -70,11 +75,15 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
             BlockEntity up = level.getBlockEntity(this.worldPosition.above());
             if (up instanceof Container) {
                 if (floatUpProgress >= 1) {
-                    IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, this.worldPosition.above(), Direction.DOWN);
-                    if (handler != null) {
-                        if (ItemHandlerHelper.insertItem(handler, this.getItem(0), true).isEmpty()) {
-                            ItemHandlerHelper.insertItem(handler, this.getItem(0).copy(), false);
-                            this.setItem(0, ItemStack.EMPTY);
+                    Storage<ItemVariant> storage = ItemStorage.SIDED.find(level, this.worldPosition.above(), Direction.DOWN);
+
+                    if (storage != null) {
+                        try (Transaction transaction = TransferUtil.getTransaction()) {
+                            ItemStack stack = this.getItem(0);
+                            if (storage.insert(ItemVariant.of(stack), stack.getCount(), transaction) >= stack.getCount()) {
+                                this.setItem(0, ItemStack.EMPTY);
+                                transaction.commit();
+                            }
                         }
                     }
                     yawTarget = 0F;
@@ -282,7 +291,7 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, net.minecraft.core.HolderLookup.Provider registries) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
         if (packet != null && packet.getTag() != null) {
             this.stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
             ContainerHelper.loadAllItems(packet.getTag(), this.stacks, registries);

@@ -23,6 +23,7 @@ import com.github.alexthe666.alexsmobs.client.sound.SoundLaCucaracha;
 import com.github.alexthe666.alexsmobs.client.sound.SoundWormBoss;
 import com.github.alexthe666.alexsmobs.entity.*;
 import com.github.alexthe666.alexsmobs.entity.util.RainbowUtil;
+import com.github.alexthe666.alexsmobs.fabric.AddedToLevelListenerEntity;
 import com.github.alexthe666.alexsmobs.inventory.AMMenuRegistry;
 import com.github.alexthe666.alexsmobs.item.*;
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
@@ -56,10 +57,12 @@ import java.util.function.Consumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 
 @Environment(EnvType.CLIENT)
 public class ClientProxy extends CommonProxy {
@@ -98,6 +101,8 @@ public class ClientProxy extends CommonProxy {
     }
 
     public void init() {
+        super.init();
+
         ClientProxy.onBakingCompleted();
         ClientProxy.onItemColors();
         ClientProxy.onBlockColors();
@@ -295,6 +300,11 @@ public class ClientProxy extends CommonProxy {
         BlockEntityRenderers.register(AMTileEntityRegistry.END_PIRATE_SHIP_WHEEL, RenderEndPirateShipWheel::new);
         BlockEntityRenderers.register(AMTileEntityRegistry.END_PIRATE_FLAG, RenderEndPirateFlag::new);
         // MenuScreens.register handled via RegisterMenuScreensEvent
+
+        ClientEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+            if (entity instanceof AddedToLevelListenerEntity e)
+                e.onAddedToLevel();
+        });
     }
 
     public static void onRegisterRenderBuffers(final Consumer<RenderType> registrar) {

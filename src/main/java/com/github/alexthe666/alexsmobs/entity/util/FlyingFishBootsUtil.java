@@ -1,5 +1,6 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
+import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
@@ -13,7 +14,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
+
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class FlyingFishBootsUtil {
 
@@ -26,9 +29,15 @@ public class FlyingFishBootsUtil {
 
         CitadelEntityData.setCitadelTag(entity, lassoedTag);
         if (!entity.level().isClientSide) {
-            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new PropertiesMessage("CitadelPatreonConfig", lassoedTag, entity.getId()));
+            var packet = new PropertiesMessage("CitadelPatreonConfig", lassoedTag, entity.getId());
+            for (ServerPlayer p : PlayerLookup.tracking(entity)) {
+                ServerPlayNetworking.send(p, packet);
+            }
+
+            if (entity instanceof ServerPlayer p)
+                ServerPlayNetworking.send(p, packet);
         } else {
-            PacketDistributor.sendToServer(new PropertiesMessage("CitadelPatreonConfig", lassoedTag, entity.getId()));
+            AlexsMobs.sendMSGToServer(new PropertiesMessage("CitadelPatreonConfig", lassoedTag, entity.getId()));
         }
     }
 

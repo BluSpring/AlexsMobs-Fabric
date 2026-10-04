@@ -47,7 +47,7 @@ public class AMWorldData extends SavedData {
             if(fromMap == null){
                 DimensionDataStorage storage = overworld.getDataStorage();
                 AMWorldData data = storage.computeIfAbsent(
-                    new SavedData.Factory<>(AMWorldData::new, AMWorldData::load),
+                    new SavedData.Factory<>(AMWorldData::new, AMWorldData::load, null),
                     IDENTIFIER
                 );
                 if (data != null) {
@@ -175,7 +175,7 @@ public class AMWorldData extends SavedData {
     }
 
     public int getWaterHeight(NoiseBasedChunkGenerator generator, RandomState rand, int x, int z, LevelHeightAccessor level) {
-        if(generator instanceof NoiseBasedChunkGeneratorAccessor accessor){
+        if((Object) generator instanceof NoiseBasedChunkGeneratorAccessor accessor){
             return accessor.invokeIterateNoiseColumn(level, rand, x, z, null, (state) -> !state.isAir()).orElse(level.getMinBuildHeight());
         }
         return level.getMinBuildHeight();

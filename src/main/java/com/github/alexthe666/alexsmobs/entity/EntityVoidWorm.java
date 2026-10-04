@@ -8,6 +8,7 @@ import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
 import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
 import com.github.alexthe666.alexsmobs.entity.ai.FlightMoveController;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
+import com.github.alexthe666.alexsmobs.fabric.EventHooks;
 import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
@@ -59,6 +60,8 @@ import net.minecraft.world.phys.Vec3;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import io.github.fabricators_of_create.porting_lib.entity.EntityHooks;
+import io.github.fabricators_of_create.porting_lib.util.PortingHooks;
 import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
@@ -422,7 +425,7 @@ public class EntityVoidWorm extends Monster {
             Collection<ItemEntity> drops = captureDrops(null);
 
             // In 1.21, onLivingDrops takes 4 params: (entity, source, drops, recentlyHit)
-            if (!net.neoforged.neoforge.common.CommonHooks.onLivingDrops(this, source, drops, lastHurtByPlayerTime > 0)){
+            if (!EntityHooks.onLivingDrops(this, source, drops, lastHurtByPlayerTime > 0)){
                 if(!drops.isEmpty()){
                     this.placeDropsSafely(drops);
                 }
@@ -658,7 +661,7 @@ public class EntityVoidWorm extends Monster {
             return;
         }
         boolean flag = false;
-        if (!this.level().isClientSide && this.blockBreakCounter == 0 && net.neoforged.neoforge.event.EventHooks.canEntityGrief(level(), this)) {
+        if (!this.level().isClientSide && this.blockBreakCounter == 0 && EventHooks.canEntityGrief(level(), this)) {
             for (int a = (int) Math.round(this.getBoundingBox().minX); a <= (int) Math.round(this.getBoundingBox().maxX); a++) {
                 for (int b = (int) Math.round(this.getBoundingBox().minY) - 1; (b <= (int) Math.round(this.getBoundingBox().maxY) + 1) && (b <= 127); b++) {
                     for (int c = (int) Math.round(this.getBoundingBox().minZ); c <= (int) Math.round(this.getBoundingBox().maxZ); c++) {

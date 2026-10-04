@@ -113,7 +113,7 @@ public class BlockLeafcutterAnthill extends BaseEntityBlock {
         super.playerDestroy(worldIn, player, pos, state, te, stack);
         if (!worldIn.isClientSide && te instanceof TileEntityLeafcutterAnthill) {
             TileEntityLeafcutterAnthill beehivetileentity = (TileEntityLeafcutterAnthill) te;
-            if (stack.getEnchantmentLevel(worldIn.holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH)) == 0) {
+            if (stack.getEnchantments().getLevel(worldIn.holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH)) == 0) {
                 beehivetileentity.angerAnts(player, state, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
                 worldIn.updateNeighbourForOutputSignal(pos, this);
                 this.angerNearbyAnts(worldIn, pos);

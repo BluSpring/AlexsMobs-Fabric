@@ -3,6 +3,7 @@ package com.github.alexthe666.alexsmobs.event;
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
+import com.github.alexthe666.alexsmobs.component.AMDataComponentRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import com.github.alexthe666.alexsmobs.effect.EffectClinging;
@@ -23,8 +24,25 @@ import com.github.alexthe666.alexsmobs.world.AMWorldData;
 import com.github.alexthe666.alexsmobs.world.BeachedCachalotWhaleSpawner;
 import com.github.alexthe666.alexsmobs.mixin.AbstractArrowAccessor;
 import com.github.alexthe666.alexsmobs.mixin.NoiseBasedChunkGeneratorAccessor;
+import io.github.fabricators_of_create.porting_lib.client_events.event.client.ComputeFovModifierEvent;
+import io.github.fabricators_of_create.porting_lib.entity.events.EntityEvents;
+import io.github.fabricators_of_create.porting_lib.entity.events.EntityStruckByLightningEvent;
+import io.github.fabricators_of_create.porting_lib.entity.events.ProjectileImpactEvent;
+import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingChangeTargetEvent;
+import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingDamageEvent;
+import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingDeathEvent;
+import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingDropsEvent;
+import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingEntityUseItemEvent;
+import io.github.fabricators_of_create.porting_lib.entity.events.player.AttackEntityEvent;
+import io.github.fabricators_of_create.porting_lib.entity.events.player.PlayerEvents;
+import io.github.fabricators_of_create.porting_lib.entity.events.player.PlayerInteractEvent;
+import io.github.fabricators_of_create.porting_lib.entity.events.tick.EntityTickEvent;
+import io.github.fabricators_of_create.porting_lib.resources.events.AddReloadListenersEvent;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
+import org.apache.commons.lang3.tuple.Triple;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -78,30 +96,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.*;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.ComputeFovModifierEvent;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
-import net.neoforged.neoforge.event.entity.EntityEvent;
-import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
-import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
-import net.neoforged.neoforge.event.entity.living.*;
-import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
-import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.event.tick.EntityTickEvent;
-import net.neoforged.neoforge.event.tick.LevelTickEvent;
-import net.neoforged.neoforge.event.village.VillagerTradesEvent;
-import net.neoforged.neoforge.event.village.WandererTradesEvent;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-import org.antlr.v4.runtime.misc.Triple;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-@EventBusSubscriber(modid = AlexsMobs.MODID)
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
+import net.fabricmc.fabric.api.util.TriState;
+
 public class ServerEvents {
 
     public static final UUID ALEX_UUID = UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c");
@@ -115,9 +121,32 @@ public class ServerEvents {
     private static final Map<ServerLevel, BeachedCachalotWhaleSpawner> BEACHED_CACHALOT_WHALE_SPAWNER_MAP = new HashMap<>();
     public static final ObjectList<Triple<ServerPlayer, ServerLevel, BlockPos>> teleportPlayers = new ObjectArrayList<>();
 
-    @SubscribeEvent
-    public static void onServerTick(LevelTickEvent.Post tick) {
-        if (!tick.getLevel().isClientSide && tick.getLevel() instanceof ServerLevel serverWorld) {
+    static {
+        ServerTickEvents.END_WORLD_TICK.register(ServerEvents::onServerTick);
+        LivingEntityUseItemEvent.Finish.EVENT.register(ServerEvents::onItemUseLast);
+        EntityEvents.Size.EVENT.register(ServerEvents::onEntityResize);
+        PlayerEvents.PlayerLoggedInEvent.EVENT.register(ServerEvents::onPlayerLoggedIn);
+        PlayerInteractEvent.LeftClickEmpty.EVENT.register(ServerEvents::onPlayerLeftClick);
+        EntityStruckByLightningEvent.EVENT.register(ServerEvents::onStruckByLightning);
+        ProjectileImpactEvent.EVENT.register(ServerEvents::onProjectileHit);
+        onTradeSetup();
+        PlayerInteractEvent.RightClickItem.EVENT.register(ServerEvents::onUseItem);
+        PlayerInteractEvent.EntityInteract.EVENT.register(ServerEvents::onInteractWithEntity);
+        PlayerInteractEvent.RightClickEmpty.EVENT.register(ServerEvents::onUseItemAir);
+        PlayerInteractEvent.RightClickBlock.EVENT.register(ServerEvents::onUseItemOnBlock);
+        LivingDropsEvent.EVENT.register(ServerEvents::onEntityDrops);
+        AttackEntityEvent.EVENT.register(ServerEvents::onPlayerAttackEntityEvent);
+        LivingDamageEvent.DAMAGE.register(ServerEvents::onLivingDamageEvent);
+        LivingChangeTargetEvent.EVENT.register(ServerEvents::onLivingSetTargetEvent);
+        EntityTickEvent.Post.EVENT.register(ServerEvents::onLivingUpdateEvent);
+        ComputeFovModifierEvent.EVENT.register(ServerEvents::onFOVUpdate);
+        AddReloadListenersEvent.EVENT.register(ServerEvents::onAddReloadListener);
+        ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> onLivingDeath(damageSource));
+        ItemTooltipCallback.EVENT.register((stack, tooltipContext, tooltipType, lines) -> onTooltip(stack, lines));
+    }
+
+    public static void onServerTick(ServerLevel serverWorld) {
+        if (true) {
             BEACHED_CACHALOT_WHALE_SPAWNER_MAP.computeIfAbsent(serverWorld,
                     k -> new BeachedCachalotWhaleSpawner(serverWorld));
             BeachedCachalotWhaleSpawner spawner = BEACHED_CACHALOT_WHALE_SPAWNER_MAP.get(serverWorld);
@@ -125,9 +154,9 @@ public class ServerEvents {
 
             if (!teleportPlayers.isEmpty()) {
                 for (final var triple : teleportPlayers) {
-                    ServerPlayer player = triple.a;
-                    ServerLevel endpointWorld = triple.b;
-                    BlockPos endpoint = triple.c;
+                    ServerPlayer player = triple.getLeft();
+                    ServerLevel endpointWorld = triple.getMiddle();
+                    BlockPos endpoint = triple.getRight();
                     final int heightFromMap = endpointWorld.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                             endpoint.getX(), endpoint.getZ());
                     endpoint = new BlockPos(endpoint.getX(), Math.max(heightFromMap, endpoint.getY()), endpoint.getZ());
@@ -143,7 +172,7 @@ public class ServerEvents {
                 teleportPlayers.clear();
             }
         }
-        AMWorldData data = AMWorldData.get(tick.getLevel());
+        AMWorldData data = AMWorldData.get(serverWorld);
         if (data != null) {
             data.tickPupfish();
         }
@@ -168,7 +197,6 @@ public class ServerEvents {
 
     private static final Random RAND = new Random();
 
-    @SubscribeEvent
     public static void onItemUseLast(LivingEntityUseItemEvent.Finish event) {
         if (event.getItem().getItem() == Items.CHORUS_FRUIT && RAND.nextInt(3) == 0
                 && event.getEntity().hasEffect(AMEffectRegistry.ENDER_FLU)) {
@@ -176,8 +204,7 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
-    public static void onEntityResize(EntityEvent.Size event) {
+    public static void onEntityResize(EntityEvents.Size event) {
         if (event.getEntity() instanceof Player entity) {
             final var potions = entity.getActiveEffectsMap();
             if (event.getEntity().level() != null && potions != null && !potions.isEmpty()
@@ -193,11 +220,10 @@ public class ServerEvents {
 
     }
 
-    @SubscribeEvent
-    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+    public static void onPlayerLoggedIn(PlayerEvents.PlayerLoggedInEvent event) {
         if (AMConfig.giveBookOnStartup) {
-            CompoundTag playerData = event.getEntity().getPersistentData();
-            CompoundTag data = playerData.getCompound(Player.PERSISTED_NBT_TAG);
+            CompoundTag data = event.getEntity().getCustomData();
+//            CompoundTag data = playerData.getCompound(Player.PERSISTED_NBT_TAG);
             if (data != null && !data.getBoolean("alexsmobs_has_book")) {
                 ItemHandlerHelper.giveItemToPlayer(event.getEntity(),
                         new ItemStack(AMItemRegistry.ANIMAL_DICTIONARY));
@@ -211,12 +237,11 @@ public class ServerEvents {
                             new ItemStack(AMItemRegistry.NOVELTY_HAT));
                 }
                 data.putBoolean("alexsmobs_has_book", true);
-                playerData.put(Player.PERSISTED_NBT_TAG, data);
+//                playerData.put(Player.PERSISTED_NBT_TAG, data);
             }
         }
     }
 
-    @SubscribeEvent
     public static void onPlayerLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
         boolean flag = false;
         ItemStack leftItem = event.getEntity().getOffhandItem();
@@ -234,7 +259,6 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
     public static void onStruckByLightning(EntityStruckByLightningEvent event) {
         if (event.getEntity().getType() == EntityType.SQUID && !event.getEntity().level().isClientSide) {
             ServerLevel level = (ServerLevel) event.getEntity().level();
@@ -255,7 +279,6 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
     public static void onProjectileHit(ProjectileImpactEvent event) {
         if (event.getRayTraceResult() instanceof EntityHitResult hitResult
                 && hitResult.getEntity() instanceof EntityEmu emu && !event.getEntity().level().isClientSide) {
@@ -303,53 +326,49 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
-    public static void onEntityDespawnAttempt(MobDespawnEvent event) {
-        if (event.getEntity().hasEffect(AMEffectRegistry.DEBILITATING_STING)
-                && event.getEntity().getEffect(AMEffectRegistry.DEBILITATING_STING) != null
-                && event.getEntity().getEffect(AMEffectRegistry.DEBILITATING_STING).getAmplifier() > 0) {
-            event.setResult(MobDespawnEvent.Result.DENY);
+    public static TriState onEntityDespawnAttempt(LivingEntity entity) {
+        if (entity.hasEffect(AMEffectRegistry.DEBILITATING_STING)
+                && entity.getEffect(AMEffectRegistry.DEBILITATING_STING) != null
+                && entity.getEffect(AMEffectRegistry.DEBILITATING_STING).getAmplifier() > 0) {
+            return TriState.FALSE;
         }
+
+        return TriState.DEFAULT;
     }
 
-    @SubscribeEvent
-    public static void onTradeSetup(VillagerTradesEvent event) {
-        if (event.getType() == VillagerProfession.FISHERMAN) {
-            VillagerTrades.ItemListing ambergrisTrade = new EmeraldsForItemsTrade(AMItemRegistry.AMBERGRIS, 20, 3,
-                    4);
-            final var list = event.getTrades().get(2);
-            list.add(ambergrisTrade);
-            event.getTrades().put(2, list);
-        }
-    }
+    public static void onTradeSetup() {
+        TradeOfferHelper.registerVillagerOffers(VillagerProfession.FISHERMAN, 2, list -> {
+            list.add(new EmeraldsForItemsTrade(AMItemRegistry.AMBERGRIS, 20, 3,
+                4));
+        });
 
-    @SubscribeEvent
-    public static void onWanderingTradeSetup(WandererTradesEvent event) {
         if (AMConfig.wanderingTraderOffers) {
-            List<VillagerTrades.ItemListing> genericTrades = event.getGenericTrades();
-            List<VillagerTrades.ItemListing> rareTrades = event.getRareTrades();
-            genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.ANIMAL_DICTIONARY, 4, 1, 2, 1));
-            genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.ACACIA_BLOSSOM, 3, 2, 2, 1));
-            if (AMConfig.cockroachSpawnWeight > 0) {
-                genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.COCKROACH_OOTHECA, 2, 1, 2, 1));
-            }
-            if (AMConfig.blobfishSpawnWeight > 0) {
-                genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.BLOBFISH_BUCKET, 4, 1, 3, 1));
-            }
-            if (AMConfig.crocodileSpawnWeight > 0) {
-                genericTrades.add(new ItemsForEmeraldsTrade(AMBlockRegistry.CROCODILE_EGG.asItem(), 6, 1, 2, 1));
-            }
-            genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.BEAR_FUR, 1, 1, 2, 1));
-            genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.CROCODILE_SCUTE, 5, 1, 2, 1));
-            genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.ROADRUNNER_FEATHER, 1, 2, 2, 2));
-            genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.MOSQUITO_LARVA, 1, 3, 5, 1));
-            rareTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.SOMBRERO, 20, 1, 1, 1));
-            rareTrades.add(new ItemsForEmeraldsTrade(AMBlockRegistry.BANANA_PEEL, 1, 2, 1, 1));
-            rareTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.BLOOD_SAC, 5, 2, 3, 1));
+            TradeOfferHelper.registerWanderingTraderOffers(1, genericTrades -> {
+                genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.ANIMAL_DICTIONARY, 4, 1, 2, 1));
+                genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.ACACIA_BLOSSOM, 3, 2, 2, 1));
+                if (AMConfig.cockroachSpawnWeight > 0) {
+                    genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.COCKROACH_OOTHECA, 2, 1, 2, 1));
+                }
+                if (AMConfig.blobfishSpawnWeight > 0) {
+                    genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.BLOBFISH_BUCKET, 4, 1, 3, 1));
+                }
+                if (AMConfig.crocodileSpawnWeight > 0) {
+                    genericTrades.add(new ItemsForEmeraldsTrade(AMBlockRegistry.CROCODILE_EGG.asItem(), 6, 1, 2, 1));
+                }
+                genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.BEAR_FUR, 1, 1, 2, 1));
+                genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.CROCODILE_SCUTE, 5, 1, 2, 1));
+                genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.ROADRUNNER_FEATHER, 1, 2, 2, 2));
+                genericTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.MOSQUITO_LARVA, 1, 3, 5, 1));
+            });
+
+            TradeOfferHelper.registerWanderingTraderOffers(2, rareTrades -> {
+                rareTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.SOMBRERO, 20, 1, 1, 1));
+                rareTrades.add(new ItemsForEmeraldsTrade(AMBlockRegistry.BANANA_PEEL, 1, 2, 1, 1));
+                rareTrades.add(new ItemsForEmeraldsTrade(AMItemRegistry.BLOOD_SAC, 5, 2, 3, 1));
+            });
         }
     }
 
-    @SubscribeEvent
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
         final var player = event.getEntity();
         if (event.getItemStack().getItem() == Items.WHEAT && player.getVehicle() instanceof EntityElephant elephant) {
@@ -384,7 +403,6 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
     public static void onInteractWithEntity(PlayerInteractEvent.EntityInteract event) {
         if (event.getTarget() instanceof LivingEntity living) {
             if (!event.getEntity().isShiftKeyDown() && VineLassoUtil.hasLassoData(living)) {
@@ -453,7 +471,6 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
     public static void onUseItemAir(PlayerInteractEvent.RightClickEmpty event) {
         ItemStack stack = event.getEntity().getItemInHand(event.getHand());
         if (stack.isEmpty()) {
@@ -472,7 +489,6 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
     public static void onUseItemOnBlock(PlayerInteractEvent.RightClickBlock event) {
         if (AlexsMobs.isAprilFools() && event.getItemStack().is(Items.STICK)
                 && !event.getEntity().getCooldowns().isOnCooldown(Items.STICK)) {
@@ -497,7 +513,6 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
     public static void onEntityDrops(LivingDropsEvent event) {
         if (VineLassoUtil.hasLassoData(event.getEntity())) {
             VineLassoUtil.lassoTo(null, event.getEntity());
@@ -576,7 +591,6 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
     public static void onPlayerAttackEntityEvent(AttackEntityEvent event) {
         if (event.getTarget() instanceof LivingEntity living) {
             if (event.getEntity().getItemBySlot(EquipmentSlot.HEAD).getItem() == AMItemRegistry.MOOSE_HEADGEAR) {
@@ -600,21 +614,20 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
-    public static void onLivingDamageEvent(LivingDamageEvent.Pre event) {
+    public static void onLivingDamageEvent(LivingDamageEvent event) {
         if (event.getSource().getEntity() instanceof final LivingEntity attacker) {
-            if (event.getOriginalDamage() > 0 && attacker.hasEffect(AMEffectRegistry.SOULSTEAL)
+            if (event.getAmount() > 0 && attacker.hasEffect(AMEffectRegistry.SOULSTEAL)
                     && attacker.getEffect(AMEffectRegistry.SOULSTEAL) != null) {
                 final int level = attacker.getEffect(AMEffectRegistry.SOULSTEAL).getAmplifier() + 1;
                 if (attacker.getHealth() < attacker.getMaxHealth()
                         && ThreadLocalRandom.current().nextFloat() < (0.25F + (level * 0.25F))) {
-                    attacker.heal(Math.min(event.getOriginalDamage() / 2F * level, 2 + 2 * level));
+                    attacker.heal(Math.min(event.getAmount() / 2F * level, 2 + 2 * level));
                 }
             }
 
             if (event.getEntity() instanceof final Player player) {
                 if (attacker instanceof final EntityMimicOctopus octupus && octupus.isOwnedBy(player)) {
-                    event.setNewDamage(0);
+                    event.setAmount(0);
                     return;
                 }
                 if (player.getItemBySlot(EquipmentSlot.HEAD).getItem() == AMItemRegistry.SPIKED_TURTLE_SHELL) {
@@ -645,25 +658,24 @@ public class ServerEvents {
                 && event.getEntity().getItemBySlot(EquipmentSlot.LEGS).getItem() == AMItemRegistry.EMU_LEGGINGS) {
             if (event.getSource().is(DamageTypeTags.IS_PROJECTILE)
                     && event.getEntity().getRandom().nextFloat() < AMConfig.emuPantsDodgeChance) {
-                event.setNewDamage(0);
+                event.setAmount(0);
             }
         }
     }
 
-    @SubscribeEvent
     public static void onLivingSetTargetEvent(LivingChangeTargetEvent event) {
-        if (event.getNewAboutToBeSetTarget() != null && event.getEntity() instanceof Mob mob) {
+        if (event.getNewTarget() != null && event.getEntity() instanceof Mob mob) {
             if (mob.getType().is(net.minecraft.tags.EntityTypeTags.ARTHROPOD)) {
-                if (event.getNewAboutToBeSetTarget().hasEffect(AMEffectRegistry.BUG_PHEROMONES)
-                        && event.getEntity().getLastHurtByMob() != event.getNewAboutToBeSetTarget()) {
+                if (event.getNewTarget().hasEffect(AMEffectRegistry.BUG_PHEROMONES)
+                        && event.getEntity().getLastHurtByMob() != event.getNewTarget()) {
                     event.setCanceled(true);
                     return;
                 }
             }
             if (mob.getType().is(net.minecraft.tags.EntityTypeTags.UNDEAD)
                     && !mob.getType().is(AMTagRegistry.IGNORES_KIMONO)) {
-                if (event.getNewAboutToBeSetTarget().getItemBySlot(EquipmentSlot.CHEST).is(AMItemRegistry.UNSETTLING_KIMONO)
-                        && event.getEntity().getLastHurtByMob() != event.getNewAboutToBeSetTarget()) {
+                if (event.getNewTarget().getItemBySlot(EquipmentSlot.CHEST).is(AMItemRegistry.UNSETTLING_KIMONO)
+                        && event.getEntity().getLastHurtByMob() != event.getNewTarget()) {
                     event.setCanceled(true);
                     return;
                 }
@@ -671,7 +683,6 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
     public static void onLivingUpdateEvent(EntityTickEvent.Post event) {
         if (!(event.getEntity() instanceof LivingEntity living))
             return;
@@ -692,7 +703,6 @@ public class ServerEvents {
                     }
                     if (player.tickCount % 25 == 0
                             && (player.getItemBySlot(EquipmentSlot.FEET).getItem() != AMItemRegistry.ROADDRUNNER_BOOTS
-                                    .get()
                                     || !sand)
                             && attributes.hasModifier(SAND_SPEED_MODIFIER)) {
                         attributes.removeModifier(SAND_SPEED_MODIFIER);
@@ -719,8 +729,7 @@ public class ServerEvents {
         }
         final ItemStack boots = entity.getItemBySlot(EquipmentSlot.FEET);
         if (!boots.isEmpty() && boots.has(DataComponents.CUSTOM_DATA)
-                && boots.get(DataComponents.CUSTOM_DATA).contains("BisonFur")
-                && boots.get(DataComponents.CUSTOM_DATA).copyTag().getBoolean("BisonFur")) {
+                && boots.has(AMDataComponentRegistry.BISON_FUR)) {
             BlockPos posBelow = new BlockPos((int) event.getEntity().getX(),
                     (int) (entity.getBoundingBox().minY - 0.1F), (int) entity.getZ());
             if (entity.level().getBlockState(posBelow).is(Blocks.POWDER_SNOW)) {
@@ -800,7 +809,6 @@ public class ServerEvents {
         return entered;
     }
 
-    @SubscribeEvent
     public static void onFOVUpdate(ComputeFovModifierEvent event) {
         if (event.getPlayer().hasEffect(AMEffectRegistry.FEAR)
                 || event.getPlayer().hasEffect(AMEffectRegistry.POWER_DOWN)) {
@@ -837,26 +845,21 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
-    public static void onTooltip(ItemTooltipEvent event) {
-        CompoundTag tag = event.getItemStack().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        if (tag.contains("BisonFur") && tag.getBoolean("BisonFur")) {
-            event.getToolTip()
-                    .add(Component.translatable("item.alexsmobs.insulated_with_fur").withStyle(ChatFormatting.AQUA));
+    public static void onTooltip(ItemStack stack, List<Component> tooltip) {
+        if (stack.has(AMDataComponentRegistry.BISON_FUR)) {
+            tooltip.add(Component.translatable("item.alexsmobs.insulated_with_fur").withStyle(ChatFormatting.AQUA));
         }
     }
 
-    @SubscribeEvent
-    public static void onAddReloadListener(AddReloadListenerEvent event) {
+    public static void onAddReloadListener(AddReloadListenersEvent event) {
         AlexsMobs.LOGGER.info("Adding datapack listener capsid_recipes");
         event.addListener(AlexsMobs.PROXY.getCapsidRecipeManager());
     }
 
     // Bald Eagle kill challenge - TamableAnimal gives kill credit to owner, not the pet
     // so we use LivingDeathEvent to detect kills by launched eagles
-    @SubscribeEvent
-    public static void onLivingDeath(LivingDeathEvent event) {
-        if (event.getSource() != null && event.getSource().getEntity() instanceof EntityBaldEagle eagle) {
+    public static void onLivingDeath(DamageSource source) {
+        if (source != null && source.getEntity() instanceof EntityBaldEagle eagle) {
             if (eagle.isLaunched() && eagle.hasCap() && eagle.isTame() && eagle.getOwner() instanceof ServerPlayer serverPlayer) {
                 if (eagle.distanceTo(serverPlayer) >= 100) {
                     AMAdvancementTriggerRegistry.BALD_EAGLE_CHALLENGE.trigger(serverPlayer);

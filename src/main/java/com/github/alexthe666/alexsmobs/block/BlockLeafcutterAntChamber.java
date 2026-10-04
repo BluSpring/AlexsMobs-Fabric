@@ -102,7 +102,7 @@ public class BlockLeafcutterAntChamber extends Block {
         }
         if(!world.isClientSide){
             PoiManager pointofinterestmanager = ((ServerLevel) world).getPoiManager();
-            Stream<BlockPos> stream = pointofinterestmanager.findAll((poiTypeHolder -> poiTypeHolder.is(AMPointOfInterestRegistry.LEAFCUTTER_ANT_HILL.getKey())), Predicates.alwaysTrue(), pos, 50, PoiManager.Occupancy.ANY);
+            Stream<BlockPos> stream = pointofinterestmanager.findAll((poiTypeHolder -> poiTypeHolder.is(AMPointOfInterestRegistry.LEAFCUTTER_ANT_HILL.port_lib$getKey())), Predicates.alwaysTrue(), pos, 50, PoiManager.Occupancy.ANY);
             List<BlockPos> listOfHives = stream.collect(Collectors.toList());
             for (BlockPos pos2 : listOfHives) {
                 if(world.getBlockEntity(pos2) instanceof TileEntityLeafcutterAnthill){

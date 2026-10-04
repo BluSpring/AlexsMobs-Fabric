@@ -28,7 +28,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.neoforged.neoforge.fluids.FluidType;
 
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
@@ -221,10 +220,10 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
         }
     }
 
-    @Override
-    public boolean canDrownInFluidType(FluidType type) {
-        return false; // Anaconda part can breathe underwater
-    }
+//    @Override
+//    public boolean canDrownInFluidType(FluidType type) {
+//        return false; // Anaconda part can breathe underwater
+//    }
 
     public boolean isPushedByFluid() {
         return false;

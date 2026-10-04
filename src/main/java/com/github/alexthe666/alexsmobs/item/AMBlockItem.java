@@ -1,6 +1,7 @@
 package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
+import com.github.alexthe666.alexsmobs.fabric.CustomHurtHandlingItem;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -22,15 +23,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class AMBlockItem extends BlockItem implements CustomTabBehavior {
+public class AMBlockItem extends BlockItem implements CustomTabBehavior, CustomHurtHandlingItem {
     public AMBlockItem(Block blockSupplier, Item.Properties props) {
         super(blockSupplier, props);
     }
 
-    @Override
-    public boolean canFitInsideCraftingRemainingItems() {
-        return !(this.getBlock() instanceof ShulkerBoxBlock);
-    }
+//    public boolean canFitInsideCraftingRemainingItems() {
+//        return !(this.getBlock() instanceof ShulkerBoxBlock);
+//    }
 
     public void onDestroyed(ItemEntity p_150700_) {
         if (this.getBlock() instanceof ShulkerBoxBlock) {
@@ -47,7 +47,7 @@ public class AMBlockItem extends BlockItem implements CustomTabBehavior {
 
     @Override
     public boolean canBeHurtBy(ItemStack stack, DamageSource damage) {
-        return super.canBeHurtBy(stack, damage) && (this != AMBlockRegistry.TRANSMUTATION_TABLE.asItem()
+        return /*super.canBeHurtBy(stack, damage) &&*/ (this != AMBlockRegistry.TRANSMUTATION_TABLE.asItem()
                 || !damage.is(DamageTypeTags.IS_EXPLOSION));
     }
 

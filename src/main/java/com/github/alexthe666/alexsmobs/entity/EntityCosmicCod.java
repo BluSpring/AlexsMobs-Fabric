@@ -43,8 +43,8 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.fluids.FluidType;
 
+import io.github.fabricators_of_create.porting_lib.entity.EntityHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
@@ -260,10 +260,10 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         return true;
     }
 
-    @Override
-    public boolean canDrownInFluidType(FluidType type) {
-        return false; // Cosmic cod can breathe in all fluids (space fish)
-    }
+//    @Override
+//    public boolean canDrownInFluidType(FluidType type) {
+//        return false; // Cosmic cod can breathe in all fluids (space fish)
+//    }
 
     public boolean isPushedByWater() {
         return false;
@@ -320,7 +320,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         final boolean flag = blockstate.isAir();
         if (flag && !blockstate.getFluidState().is(FluidTags.WATER)) {
             this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
-            net.neoforged.neoforge.event.entity.EntityTeleportEvent.EnderEntity event = net.neoforged.neoforge.event.EventHooks.onEnderTeleport(this, x, y, z);
+            var event = EntityHooks.onEnderTeleport(this, x, y, z);
             if (event.isCanceled()) return false;
             level().broadcastEntityEvent(this, (byte) 46);
             this.teleportTo(event.getTargetX(), event.getTargetY(), event.getTargetZ());

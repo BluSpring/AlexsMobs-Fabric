@@ -1,15 +1,19 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
+import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityTendonSegment;
 import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.UUID;
+
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class TendonWhipUtil {
 
@@ -18,10 +22,16 @@ public class TendonWhipUtil {
 
     private static void sync(LivingEntity enchanted, CompoundTag tag) {
         CitadelEntityData.setCitadelTag(enchanted, tag);
+        var packet = new PropertiesMessage("CitadelTagUpdate", tag, enchanted.getId());
         if (!enchanted.level().isClientSide) {
-            PacketDistributor.sendToPlayersTrackingEntityAndSelf(enchanted, new PropertiesMessage("CitadelTagUpdate", tag, enchanted.getId()));
+            for (ServerPlayer p : PlayerLookup.tracking(enchanted)) {
+                ServerPlayNetworking.send(p, packet);
+            }
+
+            if (enchanted instanceof ServerPlayer p)
+                ServerPlayNetworking.send(p, packet);
         } else {
-            PacketDistributor.sendToServer(new PropertiesMessage("CitadelTagUpdate", tag, enchanted.getId()));
+            AlexsMobs.sendMSGToServer(packet);
         }
     }
 

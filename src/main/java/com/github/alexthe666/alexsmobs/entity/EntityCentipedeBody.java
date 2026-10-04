@@ -24,7 +24,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.neoforged.neoforge.fluids.FluidType;
 
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
@@ -295,10 +294,10 @@ public class EntityCentipedeBody extends Mob implements IHurtableMultipart {
         }
     }
 
-    @Override
-    public boolean canDrownInFluidType(FluidType type) {
-        return false; // Centipede body part can breathe in all fluids
-    }
+//    @Override
+//    public boolean canDrownInFluidType(FluidType type) {
+//        return false; // Centipede body part can breathe in all fluids
+//    }
 
     public float getBackOffset() {
         return 0.5F;

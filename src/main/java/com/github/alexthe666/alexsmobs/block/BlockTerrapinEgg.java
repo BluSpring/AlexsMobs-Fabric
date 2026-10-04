@@ -2,6 +2,7 @@ package com.github.alexthe666.alexsmobs.block;
 
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityTerrapin;
+import com.github.alexthe666.alexsmobs.fabric.EventHooks;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityTerrapinEgg;
 import com.mojang.serialization.MapCodec;
@@ -182,7 +183,7 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
             if (!(trampler instanceof LivingEntity)) {
                 return false;
             } else {
-                return trampler instanceof Player || net.neoforged.neoforge.event.EventHooks.canEntityGrief(worldIn, trampler);
+                return trampler instanceof Player || EventHooks.canEntityGrief(worldIn, trampler);
             }
         } else {
             return false;
@@ -195,7 +196,7 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
         boolean silkTouch = false;
         if(pickaxe != null){
             Level level = builder.getLevel();
-            silkTouch = pickaxe.getEnchantmentLevel(level.holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH)) > 0;
+            silkTouch = pickaxe.getEnchantments().getLevel(level.holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH)) > 0;
         }
         if (silkTouch && blockentity instanceof TileEntityTerrapinEgg) {
             ItemStack stack = new ItemStack(AMBlockRegistry.TERRAPIN_EGG);

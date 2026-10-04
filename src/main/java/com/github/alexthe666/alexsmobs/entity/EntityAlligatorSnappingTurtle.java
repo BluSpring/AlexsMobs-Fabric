@@ -41,13 +41,13 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.fluids.FluidType;
 
+import io.github.fabricators_of_create.porting_lib.entity.extensions.IShearable;
 import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.function.Predicate;
 
-public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquatic, Shearable, net.neoforged.neoforge.common.IShearable {
+public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquatic, Shearable, IShearable {
 
     public static final Predicate<LivingEntity> TARGET_PRED = (animal) -> {
         return !(animal instanceof EntityAlligatorSnappingTurtle) && !(animal instanceof ArmorStand) && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(animal) && animal.isAlive();
@@ -337,10 +337,10 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
         return 10;
     }
 
-    @Override
-    public boolean canDrownInFluidType(FluidType type) {
-        return false; // Alligator Snapping Turtle can breathe underwater
-    }
+//    @Override
+//    public boolean canDrownInFluidType(FluidType type) {
+//        return false; // Alligator Snapping Turtle can breathe underwater
+//    }
 
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         return worldIn.getFluidState(pos.below()).isEmpty() && worldIn.getFluidState(pos).is(FluidTags.WATER) ? 10.0F : super.getWalkTargetValue(pos, worldIn);

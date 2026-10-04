@@ -209,7 +209,7 @@ public class AMItemRegistry {
 
     public static final Item STINK_RAY = DEF_REG.register("stink_ray", () -> new ItemStinkRay(new Item.Properties().durability(5)));
     public static final Item BANANA_SLUG_SLIME = DEF_REG.register("banana_slug_slime", () -> new Item(new Item.Properties()));
-    public static final Item MOSQUITO_REPELLENT_STEW = DEF_REG.register("mosquito_repellent_stew", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).alwaysEdible().saturationModifier(0.3F).effect(() -> new MobEffectInstance(AMEffectRegistry.MOSQUITO_REPELLENT, 24000), 1.0F).usingConvertsTo(Items.BOWL).build()).stacksTo(1)));
+    public static final Item MOSQUITO_REPELLENT_STEW = DEF_REG.register("mosquito_repellent_stew", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).alwaysEdible().saturationModifier(0.3F).effect(new MobEffectInstance(AMEffectRegistry.MOSQUITO_REPELLENT, 24000), 1.0F).usingConvertsTo(Items.BOWL).build()).stacksTo(1)));
     public static final Item TRIOPS_BUCKET = DEF_REG.register("triops_bucket", () -> new ItemModFishBucket(AMEntityRegistry.TRIOPS, Fluids.WATER, new Item.Properties()));
 
     // Music discs - in 1.21+, use jukeboxPlayable component in item properties

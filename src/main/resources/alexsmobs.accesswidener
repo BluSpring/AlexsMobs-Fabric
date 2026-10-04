@@ -1,0 +1,12 @@
+classTweaker v2 named
+accessible method net/minecraft/world/entity/Entity getEncodeId ()Ljava/lang/String;
+
+accessible field  net/minecraft/client/renderer/block/BlockRenderDispatcher liquidBlockRenderer Lnet/minecraft/client/renderer/block/LiquidBlockRenderer;
+mutable field  net/minecraft/client/renderer/block/BlockRenderDispatcher liquidBlockRenderer Lnet/minecraft/client/renderer/block/LiquidBlockRenderer;
+
+accessible field net/minecraft/client/renderer/entity/LivingEntityRenderer model Lnet/minecraft/client/model/EntityModel;
+mutable field net/minecraft/client/renderer/entity/LivingEntityRenderer model Lnet/minecraft/client/model/EntityModel;
+
+accessible field net/minecraft/world/entity/Mob goalSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
+accessible field net/minecraft/world/entity/Mob targetSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
+accessible method net/minecraft/client/renderer/GameRenderer loadEffect (Lnet/minecraft/resources/ResourceLocation;)V

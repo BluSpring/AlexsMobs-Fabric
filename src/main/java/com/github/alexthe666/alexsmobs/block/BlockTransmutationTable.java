@@ -35,9 +35,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import io.github.fabricators_of_create.porting_lib.blocks.extensions.PlayerDestroyBlock;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockTransmutationTable extends BaseEntityBlock implements AMSpecialRenderBlock {
+public class BlockTransmutationTable extends BaseEntityBlock implements AMSpecialRenderBlock, PlayerDestroyBlock {
     public static final MapCodec<BlockTransmutationTable> CODEC = simpleCodec(p -> new BlockTransmutationTable());
 
     @Override
@@ -119,7 +120,7 @@ public class BlockTransmutationTable extends BaseEntityBlock implements AMSpecia
         if(AMConfig.transmutingTableExplodes){
             level.explode(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 3F, false, Level.ExplosionInteraction.BLOCK);
         }
-        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+        return PlayerDestroyBlock.super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
     }
 }
 

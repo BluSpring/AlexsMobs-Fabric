@@ -5,6 +5,7 @@ import com.github.alexthe666.alexsmobs.block.BlockLeafcutterAntChamber;
 import com.github.alexthe666.alexsmobs.block.BlockLeafcutterAnthill;
 import com.github.alexthe666.alexsmobs.entity.EntityAnteater;
 import com.github.alexthe666.alexsmobs.entity.EntityLeafcutterAnt;
+import com.github.alexthe666.alexsmobs.fabric.EventHooks;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityLeafcutterAnthill;
@@ -134,7 +135,7 @@ public class AnteaterAIRaidNest extends MoveToBlockGoal {
     }
 
     private void breakHiveEffect(){
-        if (net.neoforged.neoforge.event.EventHooks.canEntityGrief(anteater.level(), anteater)) {
+        if (EventHooks.canEntityGrief(anteater.level(), anteater)) {
             BlockState blockstate = anteater.level().getBlockState(this.blockPos);
             if (blockstate.is(AMBlockRegistry.LEAFCUTTER_ANTHILL)) {
                 if (anteater.level().getBlockEntity(this.blockPos) instanceof TileEntityLeafcutterAnthill) {
@@ -154,7 +155,7 @@ public class AnteaterAIRaidNest extends MoveToBlockGoal {
     }
 
     private void eatHive() {
-        if (net.neoforged.neoforge.event.EventHooks.canEntityGrief(anteater.level(), anteater)) {
+        if (EventHooks.canEntityGrief(anteater.level(), anteater)) {
             BlockState blockstate = anteater.level().getBlockState(this.blockPos);
             if (blockstate.is(AMBlockRegistry.LEAFCUTTER_ANTHILL)) {
                 if (anteater.level().getBlockEntity(this.blockPos) instanceof TileEntityLeafcutterAnthill) {

@@ -12,6 +12,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -27,10 +28,12 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.function.Consumer;
 
+import io.github.fabricators_of_create.porting_lib.item.DamageableItem;
+
 public class ItemGhostlyPickaxe extends PickaxeItem {
 
     public ItemGhostlyPickaxe(Properties props) {
-        super(Tiers.IRON, props);
+        super(Tiers.IRON, props.customDamage(ItemGhostlyPickaxe::damageItem).durability(700));
     }
 
     public static boolean shouldStoreInGhost(LivingEntity player, ItemStack stack){
@@ -166,7 +169,7 @@ public class ItemGhostlyPickaxe extends PickaxeItem {
         }
     }
 
-    private void dropAllContents(Level level, Vec3 vec3, ItemStack pickaxe){
+    private static void dropAllContents(Level level, Vec3 vec3, ItemStack pickaxe){
         CustomData customData = pickaxe.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
         CompoundTag compoundtag = customData.copyTag();
         if (compoundtag != null && compoundtag.contains("Items", 9)) {
@@ -202,20 +205,20 @@ public class ItemGhostlyPickaxe extends PickaxeItem {
         }
     }
 
+    @Override
     public void onDestroyed(ItemEntity itemEntity) {
         dropAllContents(itemEntity.level(), itemEntity.position(), itemEntity.getItem());
     }
 
-    @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<Item> onBroken) {
-        int i = super.damageItem(stack, amount, entity, onBroken);
+    public static int damageItem(ItemStack stack, int i, LivingEntity entity, EquipmentSlot slot, Runnable onBroken) {
         if(i + stack.getDamageValue() >= stack.getMaxDamage() && entity != null){
             dropAllContents(entity.level(), entity.position(), stack);
         }
         return i;
     }
 
-    public int getMaxDamage(ItemStack stack) {
-        return 700;
-    }
+//    @Override
+//    public int getMaxDamage(ItemStack stack) {
+//        return 700;
+//    }
 }

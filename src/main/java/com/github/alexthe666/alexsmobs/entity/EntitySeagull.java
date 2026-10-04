@@ -352,8 +352,8 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
                 this.heal(4);
                 this.gameEvent(GameEvent.EAT);
                 this.playSound(SoundEvents.GENERIC_EAT, this.getSoundVolume(), this.getVoicePitch());
-                if (this.getMainHandItem().hasCraftingRemainingItem()) {
-                    this.spawnAtLocation(this.getMainHandItem().getCraftingRemainingItem());
+                if (this.getMainHandItem().getRecipeRemainder() != null) {
+                    this.spawnAtLocation(this.getMainHandItem().getRecipeRemainder());
                 }
                 eatItemEffect(this.getMainHandItem());
                 this.getMainHandItem().shrink(1);

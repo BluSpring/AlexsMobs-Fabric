@@ -56,10 +56,12 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
@@ -342,8 +344,8 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
                         this.level().broadcastEntityEvent(this, (byte) 6);
                     }
                 }
-                if (this.getMainHandItem().hasCraftingRemainingItem()) {
-                    this.spawnAtLocation(this.getMainHandItem().getCraftingRemainingItem());
+                if (this.getMainHandItem().getRecipeRemainder() != null) {
+                    this.spawnAtLocation(this.getMainHandItem().getRecipeRemainder());
                 }
                 this.getMainHandItem().shrink(1);
             }
@@ -1009,19 +1011,15 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         AIDepositChests() {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
             this.theNearestAttackableTargetSorter = new AIDepositChests.Sorter(EntityCrow.this);
-            this.targetEntitySelector = new Predicate<ItemFrame>() {
-                @Override
-                public boolean apply(@Nullable ItemFrame e) {
-                    BlockPos hangingPosition = e.getPos().relative(e.getDirection().getOpposite());
-                    BlockEntity entity = e.level().getBlockEntity(hangingPosition);
-                    if(entity != null){
-                        IItemHandler handler = e.level().getCapability(Capabilities.ItemHandler.BLOCK, hangingPosition, e.getDirection().getOpposite());
-                        if(handler != null){
-                            return ItemStack.isSameItem(e.getItem(), EntityCrow.this.getMainHandItem());
-                        }
+            this.targetEntitySelector = e -> {
+                BlockPos hangingPosition = e.getPos().relative(e.getDirection().getOpposite());
+                BlockEntity entity = e.level().getBlockEntity(hangingPosition);
+                if(entity != null){
+                    if(ItemStorage.SIDED.find(e.level(), hangingPosition, e.getDirection().getOpposite()) != null){
+                        return ItemStack.isSameItem(e.getItem(), EntityCrow.this.getMainHandItem());
                     }
-                    return false;
                 }
+                return false;
             };
         }
 
@@ -1088,20 +1086,24 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
                         final BlockPos hangingPosition = targetEntity.getPos().relative(targetEntity.getDirection().getOpposite());
                         final BlockEntity entity = targetEntity.level().getBlockEntity(hangingPosition);
                         final Direction deposit = targetEntity.getDirection();
-                        final IItemHandler handler = targetEntity.level().getCapability(Capabilities.ItemHandler.BLOCK, hangingPosition, deposit);
+                        final Storage<ItemVariant> handler = ItemStorage.SIDED.find(targetEntity.level(), hangingPosition, deposit);
                         if(handler != null && cooldown == 0) {
                             ItemStack duplicate = EntityCrow.this.getItemInHand(InteractionHand.MAIN_HAND).copy();
-                            ItemStack insertSimulate = ItemHandlerHelper.insertItem(handler, duplicate, true);
-                            if (!insertSimulate.equals(duplicate)) {
-                                ItemStack shrunkenStack = ItemHandlerHelper.insertItem(handler, duplicate, false);
-                                if(shrunkenStack.isEmpty()){
-                                    EntityCrow.this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-                                }else{
-                                    EntityCrow.this.setItemInHand(InteractionHand.MAIN_HAND, shrunkenStack);
+                            try (Transaction transaction = TransferUtil.getTransaction()) {
+                                long inserted = handler.insert(ItemVariant.of(duplicate), duplicate.getCount(), transaction);
+
+                                if (inserted != 0) {
+                                    if (inserted >= duplicate.getCount()) {
+                                        EntityCrow.this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+                                    } else {
+                                        EntityCrow.this.setItemInHand(InteractionHand.MAIN_HAND, duplicate.copyWithCount(duplicate.getCount() - TransferUtil.truncateLong(inserted)));
+                                    }
+
+                                    EntityCrow.this.peck();
+                                    transaction.commit();
+                                } else {
+                                    cooldown = 20;
                                 }
-                                EntityCrow.this.peck();
-                            }else{
-                                cooldown = 20;
                             }
                         }
                     }catch (Exception e){

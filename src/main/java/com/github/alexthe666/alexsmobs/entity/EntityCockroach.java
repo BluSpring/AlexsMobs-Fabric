@@ -45,12 +45,13 @@ import net.minecraft.world.phys.Vec3;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import io.github.fabricators_of_create.porting_lib.entity.extensions.IShearable;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class EntityCockroach extends Animal implements Shearable, net.neoforged.neoforge.common.IShearable, ITargetsDroppedItems {
+public class EntityCockroach extends Animal implements Shearable, IShearable, ITargetsDroppedItems {
 
     public static final ResourceKey<LootTable> MARACA_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("alexsmobs", "entities/cockroach_maracas"));
     public static final ResourceKey<LootTable> MARACA_HEADLESS_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("alexsmobs", "entities/cockroach_maracas_headless"));
@@ -425,8 +426,8 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         if (e.getItem().getItem() == AMItemRegistry.MARACA) {
             this.setMaracas(true);
         } else {
-            if (e.getItem().hasCraftingRemainingItem()) {
-                this.spawnAtLocation(e.getItem().getCraftingRemainingItem().copy());
+            if (e.getItem().getRecipeRemainder() != null) {
+                this.spawnAtLocation(e.getItem().getRecipeRemainder().copy());
             }
             this.heal(5);
             if (e.getItem().is(AMTagRegistry.COCKROACH_FOODSTUFFS)) {

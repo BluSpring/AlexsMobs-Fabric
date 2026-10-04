@@ -1,5 +1,6 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
+import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.item.ItemRainbowJelly;
 import com.github.alexthe666.alexsmobs.misc.AMSimplexNoise;
@@ -7,12 +8,15 @@ import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.awt.*;
 import java.util.Locale;
+
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class RainbowUtil {
 
@@ -22,10 +26,16 @@ public class RainbowUtil {
         CompoundTag tag = CitadelEntityData.getOrCreateCitadelTag(fabulous);
         tag.putInt(RAINBOW_TYPE, type);
         CitadelEntityData.setCitadelTag(fabulous, tag);
+        var packet = new PropertiesMessage("CitadelPatreonConfig", tag, fabulous.getId());
         if (!fabulous.level().isClientSide) {
-            PacketDistributor.sendToPlayersTrackingEntityAndSelf(fabulous, new PropertiesMessage("CitadelPatreonConfig", tag, fabulous.getId()));
+            for (ServerPlayer p : PlayerLookup.tracking(fabulous)) {
+                ServerPlayNetworking.send(p, packet);
+            }
+
+            if (fabulous instanceof ServerPlayer p)
+                ServerPlayNetworking.send(p, packet);
         } else {
-            PacketDistributor.sendToServer(new PropertiesMessage("CitadelPatreonConfig", tag, fabulous.getId()));
+            AlexsMobs.sendMSGToServer(new PropertiesMessage("CitadelPatreonConfig", tag, fabulous.getId()));
         }
     }
 

@@ -3,6 +3,7 @@ package com.github.alexthe666.alexsmobs.entity;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.*;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
+import com.github.alexthe666.alexsmobs.fabric.EventHooks;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
@@ -22,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -62,9 +64,9 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.fluids.FluidType;
 
+import io.github.fabricators_of_create.porting_lib.entity.MultiPartEntity;
+import io.github.fabricators_of_create.porting_lib.entity.PartEntity;
 import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 import java.util.List;
@@ -73,7 +75,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic {
+public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic, MultiPartEntity {
 
     private static final EntityDataAccessor<Boolean> OBSIDIAN = SynchedEntityData.defineId(EntityLaviathan.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> HEAD_HEIGHT = SynchedEntityData.defineId(EntityLaviathan.class, EntityDataSerializers.FLOAT);
@@ -409,13 +411,13 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
     }
 
-    @Override
-    public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
-        return true;
-    }
+//    @Override
+//    public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
+//        return true;
+//    }
 
     protected float getBlockSpeedFactor() {
-        return shouldSwim() || false /* onSoulSpeedBlock removed */ ? 1.0F : super.getBlockSpeedFactor();
+        return shouldSwim() || this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).is(BlockTags.SOUL_SPEED_BLOCKS) ? 1.0F : super.getBlockSpeedFactor();
     }
 
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
@@ -473,10 +475,10 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         return (float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED));
     }
 
-    @Override
-    public double getFluidMotionScale(FluidType type) {
-        return type == NeoForgeMod.WATER_TYPE.value() || type == NeoForgeMod.LAVA_TYPE.value() ? 1.0F : super.getFluidMotionScale(type);
-    }
+//    @Override // TODO Fabric
+//    public double getFluidMotionScale(FluidType type) {
+//        return type == NeoForgeMod.WATER_TYPE.value() || type == NeoForgeMod.LAVA_TYPE.value() ? 1.0F : super.getFluidMotionScale(type);
+//    }
 
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
@@ -534,10 +536,10 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         return 4;
     }
 
-    @Override
-    public boolean canDrownInFluidType(FluidType type) {
-        return false; // Laviathan can breathe in all fluids (lava creature)
-    }
+//    @Override
+//    public boolean canDrownInFluidType(FluidType type) {
+//        return false; // Laviathan can breathe in all fluids (lava creature)
+//    }
 
     public boolean isPushedByFluid() {
         return false;
@@ -739,7 +741,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
             return;
         }
         boolean flag = false;
-        if (!this.level().isClientSide && this.isVehicle() && this.blockBreakCounter == 0 && net.neoforged.neoforge.event.EventHooks.canEntityGrief(level(), this)) {
+        if (!this.level().isClientSide && this.isVehicle() && this.blockBreakCounter == 0 && EventHooks.canEntityGrief(level(), this)) {
             for (int a = (int) Math.round(this.getBoundingBox().minX); a <= (int) Math.round(this.getBoundingBox().maxX); a++) {
                 for (int b = (int) Math.round(this.getBoundingBox().minY) - 1; (b <= (int) Math.round(this.getBoundingBox().maxY) + 1) && (b <= 127); b++) {
                     for (int c = (int) Math.round(this.getBoundingBox().minZ); c <= (int) Math.round(this.getBoundingBox().maxZ); c++) {
@@ -978,7 +980,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
     }
 
     @Override
-    public net.neoforged.neoforge.entity.PartEntity<?>[] getParts() {
+    public PartEntity<?>[] getParts() {
         return this.allParts;
     }
 

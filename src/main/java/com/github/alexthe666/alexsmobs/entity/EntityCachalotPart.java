@@ -17,8 +17,8 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.entity.PartEntity;
 
+import io.github.fabricators_of_create.porting_lib.entity.PartEntity;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
 

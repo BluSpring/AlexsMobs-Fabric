@@ -5,9 +5,10 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.Tags;
 
 import java.util.EnumSet;
+
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 
 public class JerboaAIBeg extends Goal {
     private static final TargetingConditions ENTITY_PREDICATE = TargetingConditions.forNonCombat().range(32D);
@@ -42,7 +43,7 @@ public class JerboaAIBeg extends Goal {
     }
 
     private boolean isFood(ItemStack stack) {
-        return stack.is(Tags.Items.SEEDS) || jerboa.isFood(stack);
+        return stack.is(ConventionalItemTags.SEEDS) || jerboa.isFood(stack);
     }
 
 

@@ -25,8 +25,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.neoforged.neoforge.common.ItemAbilities;
 
+import io.github.fabricators_of_create.porting_lib.tool.ItemAbilities;
 import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
@@ -129,8 +129,7 @@ public class EntityVoidWormShot extends Entity {
         Entity entity = this.getShooter();
         if (entity instanceof LivingEntity && !(p_213868_1_.getEntity() instanceof EntityVoidWorm || p_213868_1_.getEntity() instanceof EntityVoidWormPart)) {
             final boolean b = wormAttack(p_213868_1_.getEntity(), damageSources().mobProjectile(this, (LivingEntity) entity), (float) (AMConfig.voidWormDamageModifier * 4F));
-            if(b && p_213868_1_.getEntity() instanceof Player){
-                Player player = ((Player)p_213868_1_.getEntity());
+            if(b && p_213868_1_.getEntity() instanceof Player player){
                 if(player.getUseItem().canPerformAction(ItemAbilities.SHIELD_BLOCK)){
                     // disableShield() takes no parameters in 1.21
                     player.disableShield();

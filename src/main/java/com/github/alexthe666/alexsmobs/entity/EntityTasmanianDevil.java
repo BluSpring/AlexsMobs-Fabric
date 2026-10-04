@@ -6,6 +6,8 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -152,7 +154,7 @@ public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITa
     }
 
     public boolean isFood(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) && stack.getFoodProperties(this) != null && !stack.is(AMTagRegistry.TASMANIAN_DEVIL_HOWLING_FOODS);
+        return stack.has(DataComponents.FOOD) && stack.get(DataComponents.FOOD) != null && !stack.is(AMTagRegistry.TASMANIAN_DEVIL_HOWLING_FOODS);
     }
 
     public void tick(){
@@ -240,7 +242,7 @@ public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITa
         if (itemstack.is(AMTagRegistry.TASMANIAN_DEVIL_HOWLING_FOODS) && this.getAnimation() != ANIMATION_HOWL) {
             this.gameEvent(GameEvent.EAT);
             this.playSound(SoundEvents.FOX_EAT, this.getSoundVolume(), this.getVoicePitch());
-            this.spawnAtLocation(item.getCraftingRemainingItem(itemstack));
+            this.spawnAtLocation(itemstack.getRecipeRemainder());
             if (!player.isCreative()) {
                 itemstack.shrink(1);
             }
@@ -296,7 +298,7 @@ public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITa
 
     @Override
     public boolean canTargetItem(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) && stack.getFoodProperties(this) != null || stack.getItem() == Items.BONE;
+        return stack.has(DataComponents.FOOD) && stack.get(DataComponents.FOOD) != null || stack.getItem() == Items.BONE;
     }
 
     @Override

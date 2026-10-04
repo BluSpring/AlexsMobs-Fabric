@@ -41,7 +41,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.fluids.FluidType;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -220,10 +219,10 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
 
     }
 
-    @Override
-    public boolean canDrownInFluidType(FluidType type) {
-        return false;
-    }
+//    @Override
+//    public boolean canDrownInFluidType(FluidType type) {
+//        return false;
+//    }
 
     public int getVariant() {
         return this.entityData.get(VARIANT);

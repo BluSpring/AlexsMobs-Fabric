@@ -14,6 +14,7 @@ import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -25,6 +26,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
@@ -52,9 +54,8 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.fluids.FluidType;
 
+import io.github.fabricators_of_create.porting_lib.tool.ItemAbilities;
 import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 
@@ -479,10 +480,10 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         return source.is(DamageTypes.DROWN) || source.is(DamageTypes.IN_WALL)  || super.isInvulnerableTo(source);
     }
 
-    @Override
-    public boolean canDrownInFluidType(FluidType type) {
-        return false; // Crocodile can breathe underwater
-    }
+//    @Override
+//    public boolean canDrownInFluidType(FluidType type) {
+//        return false; // Crocodile can breathe underwater
+//    }
 
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         return super.getWalkTargetValue(pos, worldIn);
@@ -599,13 +600,14 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         return AMEntityRegistry.CROCODILE.create(p_241840_1_);
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         final ItemStack itemstack = player.getItemInHand(hand);
         final Item item = itemstack.getItem();
         if (item == Items.NAME_TAG) {
             return super.mobInteract(player, hand);
         }
-        if (isTame() && itemstack.has(net.minecraft.core.component.DataComponents.FOOD) && itemstack.getFoodProperties(this) != null && true /* isMeat removed */ && this.getHealth() < this.getMaxHealth()) {
+        if (isTame() && itemstack.has(DataComponents.FOOD) && itemstack.get(DataComponents.FOOD) != null && itemstack.is(ItemTags.MEAT) && this.getHealth() < this.getMaxHealth()) {
             this.usePlayerItem(player, hand, itemstack);
             this.heal(10);
             this.gameEvent(GameEvent.EAT);

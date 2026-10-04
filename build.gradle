@@ -22,6 +22,9 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven { url = "https://maven.parchmentmc.org" }
+    maven { url = "https://mvn.devos.one/snapshots" }
+    maven { url = "https://jitpack.io" }
 }
 
 base {
@@ -29,6 +32,10 @@ base {
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+loom {
+    accessWidenerPath = file("src/main/resources/alexsmobs.accesswidener")
+}
 
 fabricApi {
     configureDataGeneration {
@@ -55,6 +62,12 @@ dependencies {
     modCompileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
     modCompileOnly "mezz.jei:jei-${minecraft_version}-fabric-api:${jei_version}"
     modRuntimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
+
+    def portingLibModules = ["attributes", "base", "blocks", "brewing", "chunk_loading", "client_events", "common", "config", "core", "data", "entity", "fluids", "gametest", "gui_utils", "item_abilities", "items", "level_events", "loot", "milk", "mixin_extensions", "model_data", "model_loader", "models", "obj_loader", "recipe_book_categories", "registry", "render_types", "resources", "tags", "transfer"]
+
+    for (def module in portingLibModules) {
+        include(modImplementation("io.github.fabricators_of_create.Porting-Lib:${module}:${porting_lib_version}"))
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {

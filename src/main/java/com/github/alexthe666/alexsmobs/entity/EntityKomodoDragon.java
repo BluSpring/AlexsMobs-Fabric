@@ -9,6 +9,7 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -17,6 +18,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
@@ -46,6 +48,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
 
+import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingKnockBackEvent;
 import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.UUID;
@@ -426,7 +429,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
 
     @Override
     public boolean canTargetItem(ItemStack stack) {
-        return stack.is(AMTagRegistry.KOMODO_DRAGON_TAMEABLES) || stack.getFoodProperties(this) != null && true /* isMeat removed */;
+        return stack.is(AMTagRegistry.KOMODO_DRAGON_TAMEABLES) || stack.get(DataComponents.FOOD) != null && stack.is(ItemTags.MEAT);
     }
 
     public boolean isSaddled() {
@@ -484,8 +487,8 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
     }
 
     private void applyKnockbackFromMoose(float strength, double ratioX, double ratioZ) {
-        net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent event = new net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent(this, strength, ratioX, ratioZ);
-        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(event);
+        LivingKnockBackEvent event = new LivingKnockBackEvent(this, strength, ratioX, ratioZ);
+        event.sendEvent();
         if (event.isCanceled()) return;
         strength = event.getStrength();
         ratioX = event.getRatioX();

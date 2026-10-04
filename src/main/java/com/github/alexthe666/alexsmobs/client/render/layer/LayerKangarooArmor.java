@@ -4,6 +4,7 @@ import com.github.alexthe666.alexsmobs.client.model.ModelKangaroo;
 import com.github.alexthe666.alexsmobs.client.render.AMColorUtil;
 import com.github.alexthe666.alexsmobs.client.render.RenderKangaroo;
 import com.github.alexthe666.alexsmobs.entity.EntityKangaroo;
+import com.github.alexthe666.alexsmobs.fabric.FabricHooks;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -25,9 +26,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
+
+import io.github.fabricators_of_create.porting_lib.item.extensions.EquipmentItem;
 import org.joml.Quaternionf;
 
 import java.util.Map;
@@ -85,8 +89,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
                 matrixStackIn.pushPose();
                 ItemStack itemstack = roo.getItemBySlot(EquipmentSlot.HEAD);
                 if (itemstack.getItem() instanceof ArmorItem) {
-                    ArmorItem armoritem = (ArmorItem) itemstack.getItem();
-                    if (itemstack.canEquip(EquipmentSlot.HEAD, roo)) {
+                    if (FabricHooks.canEquip(itemstack, EquipmentSlot.HEAD, roo)) {
                         HumanoidModel a = defaultBipedModel;
                         a = getArmorModelHook(roo, itemstack, EquipmentSlot.HEAD, a);
                         final boolean notAVanillaModel = a != defaultBipedModel;

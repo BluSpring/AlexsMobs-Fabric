@@ -1,5 +1,6 @@
 package com.github.alexthe666.alexsmobs.block;
 
+import com.github.alexthe666.alexsmobs.fabric.FabricHooks;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
@@ -18,11 +19,15 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import io.github.fabricators_of_create.porting_lib.blocks.extensions.CustomSlimeBlock;
+import io.github.fabricators_of_create.porting_lib.blocks.extensions.StickToBlock;
+import io.github.fabricators_of_create.porting_lib.blocks.extensions.StickyBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Queue;
 
-public class BlockBananaSlugSlime extends HalfTransparentBlock {
+public class BlockBananaSlugSlime extends HalfTransparentBlock implements StickyBlock, StickToBlock, CustomSlimeBlock {
 
     protected static final VoxelShape SHAPE = Block.box(1.0D, 1.0D, 1.0D, 15.0D, 15.0D, 15.0D);
     private static final int MAXIMUM_BLOCKS_DRAINED = 64;
@@ -62,7 +67,7 @@ public class BlockBananaSlugSlime extends HalfTransparentBlock {
 
     @Override
     public boolean canStickTo(BlockState state, @NotNull BlockState other) {
-        return !other.isStickyBlock() || other.getBlock() == this;
+        return !FabricHooks.isStickyBlock(other) || other.getBlock() == this;
     }
 
     public void onPlace(BlockState p_56811_, Level p_56812_, BlockPos p_56813_, BlockState p_56814_, boolean p_56815_) {

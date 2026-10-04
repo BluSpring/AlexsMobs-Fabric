@@ -3,6 +3,8 @@ package com.github.alexthe666.alexsmobs.tileentity;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.block.BlockEndPirateAnchor;
 import com.github.alexthe666.alexsmobs.block.BlockEndPirateAnchorWinch;
+import io.github.fabricators_of_create.porting_lib.blocks.extensions.CustomRenderBoundingBoxBlockEntity;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -16,7 +18,7 @@ import net.minecraft.world.phys.AABB;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-public class TileEntityEndPirateAnchorWinch extends BlockEntity {
+public class TileEntityEndPirateAnchorWinch extends BlockEntity implements CustomRenderBoundingBoxBlockEntity {
 
     public float clientRoll;
     public int windCounter = 0;
@@ -138,8 +140,9 @@ public class TileEntityEndPirateAnchorWinch extends BlockEntity {
 
 
     @Environment(EnvType.CLIENT)
+    @Override
     public AABB getRenderBoundingBox() {
-        return AABB.INFINITE;
+        return CustomRenderBoundingBoxBlockEntity.INFINITE_EXTENT_AABB;
     }
 
     public boolean checkAndBreakAnchor(BlockPos down) {

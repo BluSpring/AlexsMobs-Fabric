@@ -13,6 +13,7 @@ import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.server.entity.collision.ICustomCollisions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -527,7 +528,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
 
     @Override
     public boolean canTargetItem(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) && stack.getFoodProperties(this) != null && stack.getItem() != Items.ROTTEN_FLESH;
+        return stack.has(DataComponents.FOOD) && stack.get(DataComponents.FOOD) != null && stack.getItem() != Items.ROTTEN_FLESH;
     }
 
     public double getMaxDistToItem() {
@@ -538,7 +539,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
     public void onGetItem(ItemEntity e) {
         this.dontSitFlag = false;
         ItemStack stack = e.getItem();
-        if (stack.has(net.minecraft.core.component.DataComponents.FOOD) && stack.getFoodProperties(this) != null && stack.getItem() != Items.ROTTEN_FLESH) {
+        if (stack.has(DataComponents.FOOD) && stack.get(DataComponents.FOOD) != null && stack.getItem() != Items.ROTTEN_FLESH) {
             this.gameEvent(GameEvent.EAT);
             this.playSound(SoundEvents.CAT_EAT, this.getVoicePitch(), this.getSoundVolume());
             this.heal(5);

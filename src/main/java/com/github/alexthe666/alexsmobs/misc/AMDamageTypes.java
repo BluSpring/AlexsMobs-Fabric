@@ -28,9 +28,9 @@ public class AMDamageTypes {
     private static class DamageSourceRandomMessages extends DamageSource {
 
 
-        public DamageSourceRandomMessages(Holder<DamageType> damageTypeHolder, @Nullable Entity entity1, @Nullable Entity entity2, @Nullable Vec3 from) {
+        /*public DamageSourceRandomMessages(Holder<DamageType> damageTypeHolder, @Nullable Entity entity1, @Nullable Entity entity2, @Nullable Vec3 from) {
             super(damageTypeHolder, entity1, entity2, from);
-        }
+        }*/
 
         public DamageSourceRandomMessages(Holder<DamageType> damageTypeHolder, @Nullable Entity entity1, @Nullable Entity entity2) {
             super(damageTypeHolder, entity1, entity2);

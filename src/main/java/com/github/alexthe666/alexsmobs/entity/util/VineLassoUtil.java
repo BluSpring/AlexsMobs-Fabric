@@ -4,14 +4,17 @@ import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
+
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class VineLassoUtil {
 
@@ -36,7 +39,14 @@ public class VineLassoUtil {
         lassoedTag.putBoolean(LASSO_PACKET, true);
         CitadelEntityData.setCitadelTag(lassoed, lassoedTag);
         if(!lassoed.level().isClientSide){
-            PacketDistributor.sendToPlayersTrackingEntityAndSelf(lassoed, new PropertiesMessage("CitadelPatreonConfig", lassoedTag, lassoed.getId()));
+            var packet = new PropertiesMessage("CitadelPatreonConfig", lassoedTag, lassoed.getId());
+
+            for (ServerPlayer p : PlayerLookup.tracking(lassoed)) {
+                ServerPlayNetworking.send(p, packet);
+            }
+
+            if (lassoed instanceof ServerPlayer p)
+                ServerPlayNetworking.send(p, packet);
         }
     }
 
@@ -84,7 +94,14 @@ public class VineLassoUtil {
             if (tag.contains(LASSO_PACKET) || tag.getBoolean(LASSO_REMOVED)) {
                 tag.putBoolean(LASSO_PACKET, false);
                 CitadelEntityData.setCitadelTag(lassoed, tag);
-                PacketDistributor.sendToPlayersTrackingEntityAndSelf(lassoed, new PropertiesMessage("CitadelPatreonConfig", tag, lassoed.getId()));
+                var packet = new PropertiesMessage("CitadelPatreonConfig", tag, lassoed.getId());
+
+                for (ServerPlayer p : PlayerLookup.tracking(lassoed)) {
+                    ServerPlayNetworking.send(p, packet);
+                }
+
+                if (lassoed instanceof ServerPlayer p)
+                    ServerPlayNetworking.send(p, packet);
             }
         }
         Entity lassoedOwner = VineLassoUtil.getLassoedTo(lassoed);

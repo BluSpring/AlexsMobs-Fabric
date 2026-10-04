@@ -1,6 +1,7 @@
 package com.github.alexthe666.alexsmobs;
 
 import com.github.alexthe666.alexsmobs.config.AMConfig;
+import com.github.alexthe666.alexsmobs.fabric.AddedToLevelListenerEntity;
 import com.github.alexthe666.alexsmobs.misc.CapsidRecipeManager;
 import com.github.alexthe666.citadel.server.entity.pathfinding.raycoms.PathfindingConstants;
 import net.minecraft.world.entity.Entity;
@@ -8,11 +9,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+
 public class CommonProxy {
 
     private CapsidRecipeManager capsidRecipeManager;
 
     public void init() {
+        ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+            if (entity instanceof AddedToLevelListenerEntity e)
+                e.onAddedToLevel();
+        });
     }
 
     public void clientInit() {

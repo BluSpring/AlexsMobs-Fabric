@@ -1,6 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity;
 
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import io.github.fabricators_of_create.porting_lib.entity.EntityHooks;
+import io.github.fabricators_of_create.porting_lib.tool.ItemAbilities;
+
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -15,7 +18,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.ItemAbilities;
+
 public class EntitySharkToothArrow extends Arrow {
 
     public EntitySharkToothArrow(EntityType type, Level worldIn) {
@@ -36,7 +39,7 @@ public class EntitySharkToothArrow extends Arrow {
     }
 
     protected void damageShield(Player player, float damage) {
-        if (damage >= 3.0F && player.getUseItem().getItem().canPerformAction(player.getUseItem(), ItemAbilities.SHIELD_BLOCK)) {
+        if (damage >= 3.0F && player.getUseItem().canPerformAction(ItemAbilities.SHIELD_BLOCK)) {
             ItemStack copyBeforeUse = player.getUseItem().copy();
             int i = 1 + Mth.floor(damage);
             InteractionHand hand = player.getUsedItemHand();
@@ -44,7 +47,7 @@ public class EntitySharkToothArrow extends Arrow {
             player.getUseItem().hurtAndBreak(i, player, slot);
 
             if (player.getUseItem().isEmpty()) {
-                net.neoforged.neoforge.event.EventHooks.onPlayerDestroyItem(player, copyBeforeUse, hand);
+                EntityHooks.onPlayerDestroyItem(player, copyBeforeUse, hand);
 
                 if (hand == net.minecraft.world.InteractionHand.MAIN_HAND) {
                     player.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);

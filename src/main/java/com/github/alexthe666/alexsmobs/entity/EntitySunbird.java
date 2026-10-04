@@ -4,6 +4,7 @@ import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
+import com.github.alexthe666.alexsmobs.fabric.FabricHooks;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMPointOfInterestRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
@@ -162,15 +163,11 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
             this.setDeltaMovement(this.getDeltaMovement().scale(0.5D));
         } else {
             BlockPos ground = AMBlockPos.fromCoords(this.getX(), this.getY() - 1.0D, this.getZ());
-            float f = 0.91F;
-            if (this.onGround()) {
-                f = this.level().getBlockState(ground).getFriction(this.level(), ground, this) * 0.91F;
-            }
 
             //float f1 = 0.16277137F / (f * f * f);
-            f = 0.91F;
+            float f = 0.91F;
             if (this.onGround()) {
-                f = this.level().getBlockState(ground).getFriction(this.level(), ground, this) * 0.91F;
+                f = FabricHooks.getFriction(this.level().getBlockState(ground), this.level(), ground, this) * 0.91F;
             }
             this.calculateEntityAnimation(true);
 
@@ -318,7 +315,7 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
 
     private List<BlockPos> getNearbyBeacons(BlockPos blockpos, ServerLevel world, int range) {
         PoiManager pointofinterestmanager = world.getPoiManager();
-        Stream<BlockPos> stream = pointofinterestmanager.findAll((poiTypeHolder -> poiTypeHolder.is(AMPointOfInterestRegistry.BEACON.getKey())), Predicates.alwaysTrue(), blockpos, range, PoiManager.Occupancy.ANY);
+        Stream<BlockPos> stream = pointofinterestmanager.findAll((poiTypeHolder -> poiTypeHolder.is(AMPointOfInterestRegistry.BEACON.port_lib$getKey())), Predicates.alwaysTrue(), blockpos, range, PoiManager.Occupancy.ANY);
         return stream.collect(Collectors.toList());
     }
 

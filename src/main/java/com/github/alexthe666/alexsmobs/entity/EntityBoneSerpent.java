@@ -36,7 +36,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.fluids.FluidType;
 
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
@@ -306,10 +305,10 @@ public class EntityBoneSerpent extends Monster {
         }
     }
 
-    @Override
-    public boolean canDrownInFluidType(FluidType type) {
-        return false; // Bone serpent can breathe in all fluids (lava creature)
-    }
+//    @Override
+//    public boolean canDrownInFluidType(FluidType type) {
+//        return false; // Bone serpent can breathe in all fluids (lava creature)
+//    }
 
     static class BoneSerpentMoveController extends MoveControl {
         private final EntityBoneSerpent dolphin;

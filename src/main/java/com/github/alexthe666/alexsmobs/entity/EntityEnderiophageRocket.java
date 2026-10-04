@@ -23,6 +23,7 @@ import net.minecraft.world.phys.Vec3;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import io.github.fabricators_of_create.porting_lib.entity.EntityHooks;
 import org.jetbrains.annotations.Nullable;
 import java.util.OptionalInt;
 
@@ -146,7 +147,7 @@ public class EntityEnderiophageRocket extends FireworkRocketEntity {
             
             // Move the rocket
             HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
-            if (hitresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, hitresult)) {
+            if (hitresult.getType() != HitResult.Type.MISS && !EntityHooks.onProjectileImpact(this, hitresult)) {
                 this.hitTargetOrDeflectSelf(hitresult);
             }
             

@@ -395,7 +395,7 @@ public class TileEntityLeafcutterAnthill extends BlockEntity {
             if (beehiveTileEntity$ant.entityData.contains("id")) {
                 compoundnbt.putString("id", beehiveTileEntity$ant.entityData.getString("id"));
             } else {
-                compoundnbt.putString("id", AMEntityRegistry.LEAFCUTTER_ANT.getId().toString());
+                compoundnbt.putString("id", AMEntityRegistry.LEAFCUTTER_ANT.builtInRegistryHolder().key().location().toString());
             }
             compoundnbt.put("EntityData", beehiveTileEntity$ant.entityData);
             compoundnbt.putInt("TicksInHive", beehiveTileEntity$ant.ticksInHive);

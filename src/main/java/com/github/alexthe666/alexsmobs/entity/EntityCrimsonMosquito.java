@@ -599,7 +599,7 @@ public class EntityCrimsonMosquito extends Monster {
         Item item = itemstack.getItem();
         InteractionResult type = super.mobInteract(player, hand);
         if (item == AMItemRegistry.WARPED_MIXTURE && !this.isSick()) {
-            this.spawnAtLocation(item.getCraftingRemainingItem(itemstack));
+            this.spawnAtLocation(itemstack.getRecipeRemainder());
             if (!player.isCreative()) {
                 itemstack.shrink(1);
             }

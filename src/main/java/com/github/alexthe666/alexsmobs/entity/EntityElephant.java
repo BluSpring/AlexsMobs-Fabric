@@ -66,12 +66,13 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.Tags;
 
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 
 public class EntityElephant extends TamableAnimal implements ITargetsDroppedItems, IAnimatedEntity {
 
@@ -555,7 +556,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
             }
             this.setColor(null);
             return InteractionResult.SUCCESS;
-        } else if (owner && !this.isChested() && stack.is(Tags.Items.CHESTS_WOODEN)) {
+        } else if (owner && !this.isChested() && stack.is(ConventionalItemTags.WOODEN_CHESTS)) {
             this.setChested(true);
             this.gameEvent(GameEvent.ENTITY_INTERACT);
             this.playSound(SoundEvents.DONKEY_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);

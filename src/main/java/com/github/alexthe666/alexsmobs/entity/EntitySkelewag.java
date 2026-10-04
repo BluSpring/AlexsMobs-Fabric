@@ -38,7 +38,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.fluids.FluidType;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -214,10 +213,10 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
         }
     }
 
-    @Override
-    public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
-        return true;
-    }
+//    @Override // TODO Fabric
+//    public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
+//        return true;
+//    }
 
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
@@ -235,10 +234,10 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
-    @Override
-    public boolean canDrownInFluidType(FluidType type) {
-        return false; // Skelewag can breathe underwater
-    }
+//    @Override
+//    public boolean canDrownInFluidType(FluidType type) {
+//        return false; // Skelewag can breathe underwater
+//    }
 
     @Override
     public int getAnimationTick() {

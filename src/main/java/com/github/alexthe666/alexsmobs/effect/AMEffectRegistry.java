@@ -69,7 +69,7 @@ public class AMEffectRegistry {
         builder.addMix(Potions.STRENGTH, AMItemRegistry.BEAR_FUR, KNOCKBACK_RESISTANCE_POTION);
         builder.addMix(KNOCKBACK_RESISTANCE_POTION, Items.REDSTONE, LONG_KNOCKBACK_RESISTANCE_POTION);
         builder.addMix(KNOCKBACK_RESISTANCE_POTION, Items.GLOWSTONE_DUST, STRONG_KNOCKBACK_RESISTANCE_POTION);
-        builder.registerRecipes(new ProperBrewingRecipe(Ingredient.of(AMItemRegistry.KOMODO_SPIT_BOTTLE), Ingredient.of(AMItemRegistry.RATTLESNAKE_RATTLE), new ItemStack(AMItemRegistry.POISON_BOTTLE)));
+        builder.addRecipe(new ProperBrewingRecipe(Ingredient.of(AMItemRegistry.KOMODO_SPIT_BOTTLE), Ingredient.of(AMItemRegistry.RATTLESNAKE_RATTLE), new ItemStack(AMItemRegistry.POISON_BOTTLE)));
         builder.addRecipe(new ProperBrewingRecipe(Ingredient.of(createPotion(Potions.POISON)), Ingredient.of(AMItemRegistry.RATTLESNAKE_RATTLE), new ItemStack(AMItemRegistry.POISON_BOTTLE)));
         builder.addRecipe(new ProperBrewingRecipe(Ingredient.of(AMItemRegistry.KOMODO_SPIT_BOTTLE), Ingredient.of(AMItemRegistry.CENTIPEDE_LEG), new ItemStack(AMItemRegistry.POISON_BOTTLE)));
         builder.addRecipe(new ProperBrewingRecipe(Ingredient.of(AMItemRegistry.POISON_BOTTLE), Ingredient.of(AMItemRegistry.CENTIPEDE_LEG), createPotion(POISON_RESISTANCE_POTION)));

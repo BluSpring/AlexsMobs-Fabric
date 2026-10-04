@@ -25,9 +25,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.entity.PartEntity;
-import org.antlr.v4.runtime.misc.Triple;
 
+import io.github.fabricators_of_create.porting_lib.entity.MultiPartEntity;
+import io.github.fabricators_of_create.porting_lib.entity.PartEntity;
+import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +119,7 @@ public class EntityVoidPortal extends Entity {
             if (this.getDestination() != null && this.getLifespan() > 20 && tickCount > 20) {
                 BlockPos offsetPos = this.getDestination().relative(this.getAttachmentFacing().getOpposite(), 2);
                 for (Entity e : entities) {
-                    if(e.isOnPortalCooldown() || e.isShiftKeyDown() || e instanceof EntityVoidPortal || e.getParts() != null || e instanceof PartEntity<?> || e.getType().is(AMTagRegistry.VOID_PORTAL_IGNORES)){
+                    if(e.isOnPortalCooldown() || e.isShiftKeyDown() || e instanceof EntityVoidPortal || (e instanceof MultiPartEntity multiPartEntity && multiPartEntity.getParts() != null) || e instanceof PartEntity<?> || e.getType().is(AMTagRegistry.VOID_PORTAL_IGNORES)){
                         continue;
                     }
                     if (e instanceof EntityVoidWormPart) {
@@ -164,8 +165,8 @@ public class EntityVoidPortal extends Entity {
     }
 
     private void teleportEntityFromDimension(Entity entity, ServerLevel endpointWorld, BlockPos endpoint, boolean b) {
-        if (entity instanceof ServerPlayer) {
-            ServerEvents.teleportPlayers.add(new Triple<>((ServerPlayer)entity, endpointWorld, endpoint));
+        if (entity instanceof ServerPlayer p) {
+            ServerEvents.teleportPlayers.add(Triple.of(p, endpointWorld, endpoint));
             if(this.getSisterId() == null){
                 createAndSetSister(endpointWorld, Direction.DOWN);
             }

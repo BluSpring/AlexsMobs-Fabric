@@ -17,7 +17,9 @@ import org.apache.logging.log4j.Level;
 import java.util.List;
 import java.util.Map;
 
-public class CapsidRecipeManager extends SimpleJsonResourceReloadListener {
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+
+public class CapsidRecipeManager extends SimpleJsonResourceReloadListener implements IdentifiableResourceReloadListener {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(CapsidRecipe.class, new CapsidRecipe.Deserializer()).create();
     private static final RandomSource RANDOM = RandomSource.create();
 
@@ -62,5 +64,10 @@ public class CapsidRecipeManager extends SimpleJsonResourceReloadListener {
     @Override
     public String getName() {
         return "CapsidRecipeManager";
+    }
+
+    @Override
+    public ResourceLocation getFabricId() {
+        return ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "capsid_recipe_manager");
     }
 }

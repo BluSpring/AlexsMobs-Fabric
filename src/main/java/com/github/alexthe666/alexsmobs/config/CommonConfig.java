@@ -1,7 +1,7 @@
 package com.github.alexthe666.alexsmobs.config;
 
 import com.google.common.collect.Lists;
-import net.neoforged.neoforge.common.ModConfigSpec;
+import io.github.fabricators_of_create.porting_lib.config.ModConfigSpec;
 
 import java.util.List;
 

@@ -4,6 +4,8 @@ import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityCatfish;
 import com.github.alexthe666.alexsmobs.entity.EntityLobster;
 import com.github.alexthe666.alexsmobs.entity.util.TerrapinTypes;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -29,17 +31,19 @@ import net.minecraft.world.level.material.Fluid;
 import java.util.List;
 import java.util.function.Supplier;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 public class ItemModFishBucket extends MobBucketItem {
+    private final EntityType<?> fishType;
 
-    private final Supplier<? extends EntityType<?>> fishTypeSupplier;
-
-    public ItemModFishBucket(Supplier<? extends EntityType<?>> fishTypeIn, Fluid fluid, Item.Properties builder) {
-        super(fishTypeIn.get(), fluid, SoundEvents.BUCKET_EMPTY_FISH, builder.stacksTo(1));
-        this.fishTypeSupplier = fishTypeIn;
+    public ItemModFishBucket(EntityType<?> fishTypeIn, Fluid fluid, Item.Properties builder) {
+        super(fishTypeIn, fluid, SoundEvents.BUCKET_EMPTY_FISH, builder.stacksTo(1));
+        this.fishType = fishTypeIn;
     }
 
     public EntityType<?> getFishType() {
-        return this.fishTypeSupplier.get();
+        return this.fishType;
     }
 
     @Environment(EnvType.CLIENT)

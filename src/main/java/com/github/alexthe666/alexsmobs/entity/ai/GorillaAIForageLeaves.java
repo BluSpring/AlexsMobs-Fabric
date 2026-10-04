@@ -1,6 +1,7 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
 import com.github.alexthe666.alexsmobs.entity.EntityGorilla;
+import com.github.alexthe666.alexsmobs.fabric.EventHooks;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
@@ -81,7 +82,7 @@ public class GorillaAIForageLeaves extends MoveToBlockGoal {
     }
 
     private void breakLeaves() {
-        if (net.neoforged.neoforge.event.EventHooks.canEntityGrief(gorilla.level(), gorilla)) {
+        if (EventHooks.canEntityGrief(gorilla.level(), gorilla)) {
             BlockState blockstate = gorilla.level().getBlockState(this.blockPos);
             if (blockstate.is(AMTagRegistry.GORILLA_BREAKABLES)) {
                 gorilla.level().destroyBlock(blockPos, false);

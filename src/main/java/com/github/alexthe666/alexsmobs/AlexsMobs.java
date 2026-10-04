@@ -3,6 +3,7 @@ package com.github.alexthe666.alexsmobs;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.client.model.layered.AMModelLayers;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
+import com.github.alexthe666.alexsmobs.component.AMDataComponentRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.config.BiomeConfig;
 import com.github.alexthe666.alexsmobs.config.ConfigHolder;
@@ -23,6 +24,10 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+
+import io.github.fabricators_of_create.porting_lib.config.ConfigRegistry;
+import io.github.fabricators_of_create.porting_lib.config.ModConfig;
+import io.github.fabricators_of_create.porting_lib.config.ModConfigEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -59,13 +64,16 @@ public class AlexsMobs implements ModInitializer {
     @Override
     public void onInitialize() {
         this.setup();
-        this.onModConfigEvent();
+        new ServerEvents();
+        ModConfigEvent.Loading.EVENT.register(this::onModConfigEvent);
+        ModConfigEvent.Reloading.EVENT.register(this::onModConfigEvent);
         this.registerPayloads();
         FabricBrewingRecipeRegistryBuilder.BUILD.register(AMEffectRegistry::registerBrewingRecipes);
         
         // Register all deferred registers
         AMBlockRegistry.DEF_REG.register();
         AMEntityRegistry.DEF_REG.register();
+        AMDataComponentRegistry.DEF_REG.register();
         AMItemRegistry.DEF_REG.register();
         AMArmorMaterial.ARMOR_MATERIALS.register();
         AMTileEntityRegistry.DEF_REG.register();
@@ -93,7 +101,7 @@ public class AlexsMobs implements ModInitializer {
         AMMobSpawnStructureModifier.STRUCTURE_MODIFIER_SERIALIZERS.register();
         
         // Register config
-        modContainer.registerConfig(ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC, "alexsmobs.toml");
+        ConfigRegistry.registerConfig(MODID, ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC, "alexsmobs.toml");
         
         PROXY.init();
         // ServerEvents is already registered via @EventBusSubscriber annotation

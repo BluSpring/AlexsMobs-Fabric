@@ -8,7 +8,10 @@
     "AbstractArrowAccessor",
     "MixinBlock",
     "MixinBrewingStandBlockEntity",
-    "NoiseBasedChunkGeneratorAccessor"
+    "NoiseBasedChunkGeneratorAccessor",
+    "fabric.ItemStackMixin",
+    "fabric.PlayerMixin",
+    "fabric.event.MobMixin"
   ],
   "client": [
     "fabric.RenderBuffersMixin"

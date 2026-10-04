@@ -47,6 +47,7 @@ import net.minecraft.world.phys.Vec3;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingKnockBackEvent;
 import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.UUID;
@@ -363,8 +364,8 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
     }
 
     private void applyKnockbackFromMoose(float strength, double ratioX, double ratioZ) {
-        net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent event = new net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent(this, strength, ratioX, ratioZ);
-        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(event);
+        LivingKnockBackEvent event = new LivingKnockBackEvent(this, strength, ratioX, ratioZ);
+        event.sendEvent();
         if (event.isCanceled()) return;
         strength = event.getStrength();
         ratioX = event.getRatioX();

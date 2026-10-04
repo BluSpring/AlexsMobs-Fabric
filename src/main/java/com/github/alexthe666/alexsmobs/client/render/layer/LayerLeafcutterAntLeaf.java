@@ -17,6 +17,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+
 public class LayerLeafcutterAntLeaf extends RenderLayer<EntityLeafcutterAnt, AdvancedEntityModel<EntityLeafcutterAnt>> {
 
     private static final ResourceLocation TEXTURE_0 = ResourceLocation
@@ -42,7 +44,7 @@ public class LayerLeafcutterAntLeaf extends RenderLayer<EntityLeafcutterAnt, Adv
                 default -> TEXTURE_0;
             };
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(res));
-            int leafColor = Minecraft.getInstance().getItemColors().getColor(new ItemStack(Items.JUNGLE_LEAVES), 0);
+            int leafColor = ColorProviderRegistry.ITEM.get(Items.JUNGLE_LEAVES).getColor(new ItemStack(Items.JUNGLE_LEAVES), 0);
             if (entitylivingbaseIn.getHarvestedPos() != null && entitylivingbaseIn.getHarvestedState() != null) {
                 leafColor = OctopusColorRegistry.getBlockColor(entitylivingbaseIn.getHarvestedState());
             }

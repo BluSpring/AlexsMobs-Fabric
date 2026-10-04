@@ -1,7 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
 import com.github.alexthe666.alexsmobs.entity.EntityMantisShrimp;
+import com.github.alexthe666.alexsmobs.fabric.EventHooks;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+import io.github.fabricators_of_create.porting_lib.entity.EntityHooks;
+import io.github.fabricators_of_create.porting_lib.util.PortingHooks;
+
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -140,7 +144,7 @@ public class MantisShrimpAIBreakBlocks extends Goal {
     private void breakBlock() {
         if (shouldMoveTo(mantisShrimp.level(), destinationBlock)) {
             BlockState state = mantisShrimp.level().getBlockState(destinationBlock);
-            if(!mantisShrimp.level().isEmptyBlock(destinationBlock) && net.neoforged.neoforge.common.CommonHooks.canEntityDestroy(mantisShrimp.level(), destinationBlock, mantisShrimp) && state.getDestroySpeed(mantisShrimp.level(), destinationBlock) >= 0){
+            if(!mantisShrimp.level().isEmptyBlock(destinationBlock) && EventHooks.canEntityDestroy(mantisShrimp.level(), destinationBlock, mantisShrimp) && state.getDestroySpeed(mantisShrimp.level(), destinationBlock) >= 0){
                 mantisShrimp.level().destroyBlock(destinationBlock, true);
             }
         }

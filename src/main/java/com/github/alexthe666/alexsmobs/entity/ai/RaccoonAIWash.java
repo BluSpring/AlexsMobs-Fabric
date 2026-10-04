@@ -81,8 +81,8 @@ public class RaccoonAIWash extends Goal {
                         raccoon.onEatItem();
                     }
                     this.raccoon.postWashItem(raccoon.getMainHandItem());
-                    if(this.raccoon.getMainHandItem().hasCraftingRemainingItem()){
-                        this.raccoon.spawnAtLocation(this.raccoon.getMainHandItem().getCraftingRemainingItem());
+                    if(this.raccoon.getMainHandItem().getRecipeRemainder() != null){
+                        this.raccoon.spawnAtLocation(this.raccoon.getMainHandItem().getRecipeRemainder());
                     }
                     this.raccoon.getMainHandItem().shrink(1);
                     // Reset timer to 0 after consuming item to prevent immediate re-wash

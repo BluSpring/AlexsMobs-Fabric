@@ -26,6 +26,7 @@ public class RecipeMimicreamRepair extends CustomRecipe {
     /**
      * Used to check if a recipe matches current crafting inventory
      */
+    @Override
     public boolean matches(CraftingInput inv, Level worldIn) {
         if (!AMConfig.mimicreamRepair) {
             return false;
@@ -57,6 +58,7 @@ public class RecipeMimicreamRepair extends CustomRecipe {
     /**
      * Returns an Item that is the result of this recipe
      */
+    @Override
     public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registries) {
         ItemStack damageableStack = ItemStack.EMPTY;
         int mimicreamCount = 0;
@@ -96,13 +98,14 @@ public class RecipeMimicreamRepair extends CustomRecipe {
         }
     }
 
-    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
-        NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput inv) {
+        NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.size(), ItemStack.EMPTY);
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inv.getItem(i);
-            if (itemstack.hasCraftingRemainingItem()) {
-                nonnulllist.set(i, itemstack.getCraftingRemainingItem());
+            if (itemstack.getRecipeRemainder() != null) {
+                nonnulllist.set(i, itemstack.getRecipeRemainder());
             } else if (itemstack.isDamageableItem()) {
                 ItemStack itemstack1 = itemstack.copy();
                 itemstack1.setCount(1);
@@ -114,13 +117,15 @@ public class RecipeMimicreamRepair extends CustomRecipe {
         return nonnulllist;
     }
 
+    @Override
     public RecipeSerializer<?> getSerializer() {
-        return AMRecipeRegistry.MIMICREAM_RECIPE.get();
+        return AMRecipeRegistry.MIMICREAM_RECIPE;
     }
 
     /**
      * Used to determine if this recipe can fit in a grid of the given width/height
      */
+    @Override
     public boolean canCraftInDimensions(int width, int height) {
         return width >= 3 && height >= 3;
     }

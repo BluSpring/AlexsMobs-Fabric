@@ -438,8 +438,8 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
                            this.level().broadcastEntityEvent(this, (byte)6);
                        }
                     }
-                    if(stack.hasCraftingRemainingItem()){
-                        this.spawnAtLocation(stack.getCraftingRemainingItem());
+                    if(stack.getRecipeRemainder() != null){
+                        this.spawnAtLocation(stack.getRecipeRemainder());
                     }
                     stack.shrink(1);
                 }

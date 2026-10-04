@@ -1,6 +1,7 @@
 package com.github.alexthe666.alexsmobs.entity;
 
 import com.github.alexthe666.alexsmobs.entity.util.TendonWhipUtil;
+import com.github.alexthe666.alexsmobs.fabric.FabricHooks;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import net.minecraft.nbt.CompoundTag;
@@ -156,8 +157,7 @@ public class EntityTendonSegment  extends Entity {
     }
 
     private double getDamageForItem(ItemStack itemStack) {
-        // getAttributeModifiers API changed in 1.21 - now returns ItemAttributeModifiers
-        var modifiers = itemStack.getAttributeModifiers();
+        var modifiers = FabricHooks.getAttributeModifiers(itemStack);
         if (!modifiers.modifiers().isEmpty()) {
             double d = 0;
             for (var entry : modifiers.modifiers()) {
