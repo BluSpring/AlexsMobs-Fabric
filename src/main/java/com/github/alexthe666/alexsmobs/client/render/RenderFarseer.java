@@ -162,7 +162,7 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
 
     }
 
-    public void renderFarseerModel(PoseStack matrixStackIn, MultiBufferSource source, VertexConsumer consumer,
+    public void renderFarseerModel(PoseStack matrixStackIn, MultiBufferSource source, RenderType renderType,
             float partialTicks, int packedLightIn, int overlayColors, float alphaIn, EntityFarseer entityIn) {
         // In 1.21, merged vertex consumers with different formats can cause issues
         // Render using just the textures without the static overlay effect
@@ -179,7 +179,7 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
             SCARS_MODEL.renderToBuffer(matrixStackIn, staticyScars, packedLightIn, overlayColors,
                     AMColorUtil.packColor(1.0F, 1.0F, 1.0F, 0.3F));
         }
-        this.model.renderToBuffer(matrixStackIn, consumer, packedLightIn, overlayColors,
+        this.model.renderToBuffer(matrixStackIn, source.getBuffer(renderType), packedLightIn, overlayColors,
                 AMColorUtil.packColor(1.0F, 1.0F, 1.0F, alphaIn));
 
         matrixStackIn.pushPose();

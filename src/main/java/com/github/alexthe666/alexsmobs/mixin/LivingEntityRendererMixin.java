@@ -7,9 +7,12 @@ import com.github.alexthe666.alexsmobs.client.render.RenderUnderminer;
 import com.github.alexthe666.alexsmobs.entity.EntityFarseer;
 import com.github.alexthe666.alexsmobs.entity.EntityTiger;
 import com.github.alexthe666.alexsmobs.entity.EntityUnderminer;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -22,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -87,13 +91,19 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity> extends 
         }
     }
 
+    @ModifyExpressionValue(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;getRenderType(Lnet/minecraft/world/entity/LivingEntity;ZZZ)Lnet/minecraft/client/renderer/RenderType;"))
+    private RenderType storeRenderType(RenderType original, @Share("renderType") LocalRef<RenderType> renderTypeRef) {
+        renderTypeRef.set(original);
+        return original;
+    }
+
     @WrapOperation(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/EntityModel;renderToBuffer(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V"))
-    private void useAlternativeRenderPathForFarseer(EntityModel instance, PoseStack poseStack, VertexConsumer vertexConsumer, int light, int overlay, int color, Operation<Void> original, @Local(argsOnly = true) T entity, @Local(argsOnly = true, ordinal = 1) float partialTicks, @Local(argsOnly = true) MultiBufferSource buffers) {
-        if (entity instanceof EntityFarseer farseer && (Object) this instanceof RenderFarseer renderFarseer) {
+    private void useAlternativeRenderPathForFarseer(EntityModel instance, PoseStack poseStack, VertexConsumer vertexConsumer, int light, int overlay, int color, Operation<Void> original, @Local(argsOnly = true) T entity, @Local(argsOnly = true, ordinal = 1) float partialTicks, @Local(argsOnly = true) MultiBufferSource buffers, @Share("renderType") LocalRef<RenderType> renderType) {
+        if (entity instanceof EntityFarseer farseer && (Object) this instanceof RenderFarseer renderFarseer && renderType.get() != null) {
             float portalLevel = farseer.getFarseerOpacity(partialTicks);
             this.shadowRadius = 0.9F * portalLevel;
 
-            renderFarseer.renderFarseerModel(poseStack, buffers, vertexConsumer, partialTicks, light, overlay, color != -1 ? 0.15F : Mth.clamp(portalLevel, 0, 1), farseer);
+            renderFarseer.renderFarseerModel(poseStack, buffers, renderType.get(), partialTicks, light, overlay, color != -1 ? 0.15F : Mth.clamp(portalLevel, 0, 1), farseer);
         } else {
             original.call(instance, poseStack, vertexConsumer, light, overlay, color);
         }
