@@ -5,6 +5,7 @@ import com.github.alexthe666.alexsmobs.entity.ai.AdvancedPathNavigateNoTeleport;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHurtByTargetNotBaby;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIPanicBaby;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
+import com.github.alexthe666.alexsmobs.fabric.EventHooks;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
@@ -49,13 +50,14 @@ import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
+
+import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingKnockBackEvent;
+import io.github.fabricators_of_create.porting_lib.entity.extensions.IShearable;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
-public class EntityBison extends Animal implements IAnimatedEntity, Shearable, net.neoforged.neoforge.common.IShearable {
+public class EntityBison extends Animal implements IAnimatedEntity, Shearable, IShearable {
 
     public static final Animation ANIMATION_PREPARE_CHARGE = Animation.create(40);
     public static final Animation ANIMATION_EAT = Animation.create(35);
@@ -348,7 +350,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
             return;
         }
         boolean flag = false;
-        if (!this.level().isClientSide && this.blockBreakCounter == 0 && net.neoforged.neoforge.event.EventHooks.canEntityGrief(level(), this)) {
+        if (!this.level().isClientSide && this.blockBreakCounter == 0 && EventHooks.canEntityGrief(level(), this)) {
             for (int a = (int) Math.round(this.getBoundingBox().minX); a <= (int) Math.round(this.getBoundingBox().maxX); a++) {
                 for (int b = (int) Math.round(this.getBoundingBox().minY) - 1; (b <= (int) Math.round(this.getBoundingBox().maxY) + 1) && (b <= 127); b++) {
                     for (int c = (int) Math.round(this.getBoundingBox().minZ); c <= (int) Math.round(this.getBoundingBox().maxZ); c++) {
@@ -450,8 +452,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
 
     private void applyKnockbackFromBuffalo(float strength, double ratioX, double ratioZ) {
         LivingKnockBackEvent event = new LivingKnockBackEvent(this, strength, ratioX, ratioZ);
-        NeoForge.EVENT_BUS.post(event);
-        if (event.isCanceled()) return;
+        if (event.post()) return;
         strength = event.getStrength();
         ratioX = event.getRatioX();
         ratioZ = event.getRatioZ();

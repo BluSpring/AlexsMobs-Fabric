@@ -10,7 +10,10 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 public class MessageMosquitoMountPlayer implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageMosquitoMountPlayer> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "mosquito_mount_player"));
@@ -38,9 +41,10 @@ public class MessageMosquitoMountPlayer implements CustomPacketPayload {
     @Override
     public Type<? extends CustomPacketPayload> type() { return TYPE; }
 
-    public static void handle(MessageMosquitoMountPlayer message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            Player player = context.player();
+    @Environment(EnvType.CLIENT)
+    public static void handle(MessageMosquitoMountPlayer message, ClientPlayNetworking.Context context) {
+        Player player = context.player();
+        context.client().execute(() -> {
             if (player != null && player.level() != null) {
                 Entity entity = player.level().getEntity(message.rider);
                 Entity mountEntity = player.level().getEntity(message.mount);

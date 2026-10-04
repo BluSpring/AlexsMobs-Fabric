@@ -3,6 +3,8 @@ package com.github.alexthe666.alexsmobs.message;
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.EntityMungus;
+import com.github.alexthe666.alexsmobs.mixin.LevelChunkSectionAccessor;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
@@ -20,10 +22,12 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
-import net.neoforged.fml.util.ObfuscationReflectionHelper;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.lang.reflect.Field;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 public class MessageMungusBiomeChange implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageMungusBiomeChange> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "mungus_biome_change"));
@@ -57,9 +61,10 @@ public class MessageMungusBiomeChange implements CustomPacketPayload {
     @Override
     public Type<? extends CustomPacketPayload> type() { return TYPE; }
 
-    public static void handle(MessageMungusBiomeChange message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            Player player = context.player();
+    @Environment(EnvType.CLIENT)
+    public static void handle(MessageMungusBiomeChange message, ClientPlayNetworking.Context context) {
+        Player player = context.player();
+        context.client().execute(() -> {
             if (player != null && player.level() != null) {
                 Entity entity = player.level().getEntity(message.mungusID);
                 Registry<Biome> registry = player.level().registryAccess().registryOrThrow(Registries.BIOME);
@@ -84,9 +89,7 @@ public class MessageMungusBiomeChange implements CustomPacketPayload {
                                 }
                             }
                             try {
-                                Field biomesField = ObfuscationReflectionHelper.findField(LevelChunkSection.class, "biomes");
-                                biomesField.setAccessible(true);
-                                biomesField.set(section, container);
+                                ((LevelChunkSectionAccessor) section).setBiomes(container);
                             } catch (Exception e) {
                                 // Fallback: log error
                                 e.printStackTrace();

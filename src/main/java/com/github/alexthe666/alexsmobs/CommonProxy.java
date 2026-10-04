@@ -62,14 +62,6 @@ public class CommonProxy {
 
     public void resetVoidPortalCreation(Player player){}
 
-    public Object getISTERProperties() {
-        return null;
-    }
-
-    public Object getArmorRenderProperties() {
-        return null;
-    }
-
     public void spawnSpecialParticle(int i) {
     }
 

@@ -137,33 +137,38 @@ public class AlexsMobs implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(MessageUpdateEagleControls.TYPE, MessageUpdateEagleControls::handle);
         // Bidirectional - sent from client (when player attacks multipart) and from server (sendMSGToAll for sync)
         PayloadTypeRegistry.playC2S().register(MessageHurtMultipart.TYPE, MessageHurtMultipart.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(MessageHurtMultipart.TYPE, MessageHurtMultipart::handle);
         PayloadTypeRegistry.playS2C().register(MessageHurtMultipart.TYPE, MessageHurtMultipart.CODEC);
         PayloadTypeRegistry.playC2S().register(MessageInteractMultipart.TYPE, MessageInteractMultipart.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(MessageInteractMultipart.TYPE, MessageInteractMultipart::handle);
         PayloadTypeRegistry.playS2C().register(MessageInteractMultipart.TYPE, MessageInteractMultipart.CODEC);
         PayloadTypeRegistry.playC2S().register(MessageTransmuteFromMenu.TYPE, MessageTransmuteFromMenu.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(MessageTransmuteFromMenu.TYPE, MessageTransmuteFromMenu::handle);
         
         // Server to Client messages
         PayloadTypeRegistry.playS2C().register(MessageCrowDismount.TYPE, MessageCrowDismount.CODEC);
-        PayloadTypeRegistry.playS2C().register(MessageCrowMountPlayer.TYPE, MessageCrowMountPlayer.CODEC, MessageCrowMountPlayer::handle);
+        PayloadTypeRegistry.playS2C().register(MessageCrowMountPlayer.TYPE, MessageCrowMountPlayer.CODEC);
         // Bidirectional - sent from client (falconry glove launch) and from server (sendMSGToAll for sync)
-        PayloadTypeRegistry.playS2C().register(MessageMosquitoDismount.TYPE, MessageMosquitoDismount.CODEC, MessageMosquitoDismount::handle);
-        PayloadTypeRegistry.playC2S().register(MessageMosquitoDismount.TYPE, MessageMosquitoDismount.CODEC, MessageMosquitoDismount::handle);
+        PayloadTypeRegistry.playS2C().register(MessageMosquitoDismount.TYPE, MessageMosquitoDismount.CODEC);
+        PayloadTypeRegistry.playC2S().register(MessageMosquitoDismount.TYPE, MessageMosquitoDismount.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(MessageMosquitoDismount.TYPE, MessageMosquitoDismount::handle);
 
-        PayloadTypeRegistry.playS2C().register(MessageMosquitoMountPlayer.TYPE, MessageMosquitoMountPlayer.CODEC, MessageMosquitoMountPlayer::handle);
-        PayloadTypeRegistry.playS2C().register(MessageKangarooEat.TYPE, MessageKangarooEat.CODEC, MessageKangarooEat::handle);
-        PayloadTypeRegistry.playS2C().register(MessageKangarooInventorySync.TYPE, MessageKangarooInventorySync.CODEC, MessageKangarooInventorySync::handle);
+        PayloadTypeRegistry.playS2C().register(MessageMosquitoMountPlayer.TYPE, MessageMosquitoMountPlayer.CODEC);
+        PayloadTypeRegistry.playS2C().register(MessageKangarooEat.TYPE, MessageKangarooEat.CODEC);
+        PayloadTypeRegistry.playS2C().register(MessageKangarooInventorySync.TYPE, MessageKangarooInventorySync.CODEC);
         // Client to Server - sent from client when jukebox plays near dancing mobs (e.g., rain frog rain dance)
-        PayloadTypeRegistry.playC2S().register(MessageStartDancing.TYPE, MessageStartDancing.CODEC, MessageStartDancing::handle);
+        PayloadTypeRegistry.playC2S().register(MessageStartDancing.TYPE, MessageStartDancing.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(MessageStartDancing.TYPE, MessageStartDancing::handle);
         // Bidirectional - sent from client (falconry glove launch) and from server (sendMSGToAll for sync)
-        PayloadTypeRegistry.playC2S().register(MessageSyncEntityPos.TYPE, MessageSyncEntityPos.CODEC, MessageSyncEntityPos::handle);
-        PayloadTypeRegistry.playS2C().register(MessageSyncEntityPos.TYPE, MessageSyncEntityPos.CODEC, MessageSyncEntityPos::handle);
-        PayloadTypeRegistry.playS2C().register(MessageSendVisualFlagFromServer.TYPE, MessageSendVisualFlagFromServer.CODEC, MessageSendVisualFlagFromServer::handle);
-        PayloadTypeRegistry.playS2C().register(MessageSetPupfishChunkOnClient.TYPE, MessageSetPupfishChunkOnClient.CODEC, MessageSetPupfishChunkOnClient::handle);
-        PayloadTypeRegistry.playS2C().register(MessageTarantulaHawkSting.TYPE, MessageTarantulaHawkSting.CODEC, MessageTarantulaHawkSting::handle);
-        PayloadTypeRegistry.playS2C().register(MessageMungusBiomeChange.TYPE, MessageMungusBiomeChange.CODEC, MessageMungusBiomeChange::handle);
-        PayloadTypeRegistry.playS2C().register(MessageUpdateCapsid.TYPE, MessageUpdateCapsid.CODEC, MessageUpdateCapsid::handle);
-        PayloadTypeRegistry.playS2C().register(MessageUpdateTransmutablesToDisplay.TYPE, MessageUpdateTransmutablesToDisplay.CODEC, MessageUpdateTransmutablesToDisplay::handle);
+        PayloadTypeRegistry.playC2S().register(MessageSyncEntityPos.TYPE, MessageSyncEntityPos.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(MessageSyncEntityPos.TYPE, MessageSyncEntityPos::handle);
+        PayloadTypeRegistry.playS2C().register(MessageSyncEntityPos.TYPE, MessageSyncEntityPos.CODEC);
+        PayloadTypeRegistry.playS2C().register(MessageSendVisualFlagFromServer.TYPE, MessageSendVisualFlagFromServer.CODEC);
+        PayloadTypeRegistry.playS2C().register(MessageSetPupfishChunkOnClient.TYPE, MessageSetPupfishChunkOnClient.CODEC);
+        PayloadTypeRegistry.playS2C().register(MessageTarantulaHawkSting.TYPE, MessageTarantulaHawkSting.CODEC);
+        PayloadTypeRegistry.playS2C().register(MessageMungusBiomeChange.TYPE, MessageMungusBiomeChange.CODEC);
+        PayloadTypeRegistry.playS2C().register(MessageUpdateCapsid.TYPE, MessageUpdateCapsid.CODEC);
+        PayloadTypeRegistry.playS2C().register(MessageUpdateTransmutablesToDisplay.TYPE, MessageUpdateTransmutablesToDisplay.CODEC);
     }
 
     @Environment(EnvType.CLIENT)

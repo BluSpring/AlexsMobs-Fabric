@@ -6,6 +6,7 @@
   "refmap": "alexsmobs.refmap.json",
   "mixins": [
     "AbstractArrowAccessor",
+    "LevelChunkSectionAccessor",
     "MixinBlock",
     "MixinBrewingStandBlockEntity",
     "NoiseBasedChunkGeneratorAccessor",
@@ -14,7 +15,9 @@
     "fabric.event.MobMixin"
   ],
   "client": [
-    "fabric.RenderBuffersMixin"
+    "LivingEntityRendererMixin",
+    "fabric.RenderBuffersMixin",
+    "fabric.event.EntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

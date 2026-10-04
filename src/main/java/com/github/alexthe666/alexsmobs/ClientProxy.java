@@ -7,7 +7,6 @@ import com.github.alexthe666.alexsmobs.client.gui.GUIAnimalDictionary;
 import com.github.alexthe666.alexsmobs.client.gui.GUITransmutationTable;
 import com.github.alexthe666.alexsmobs.client.particle.*;
 import com.github.alexthe666.alexsmobs.client.render.*;
-import com.github.alexthe666.alexsmobs.client.render.item.AMItemRenderProperties;
 import com.github.alexthe666.alexsmobs.client.render.item.CustomArmorRenderProperties;
 import com.github.alexthe666.alexsmobs.client.render.item.GhostlyPickaxeBakedModel;
 import com.github.alexthe666.alexsmobs.client.render.tile.RenderCapsid;
@@ -32,12 +31,10 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -45,7 +42,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.material.Fluids;
 
@@ -62,7 +58,6 @@ import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 
 @Environment(EnvType.CLIENT)
 public class ClientProxy extends CommonProxy {
@@ -475,16 +470,6 @@ public class ClientProxy extends CommonProxy {
 
     public void resetVoidPortalCreation(Player player) {
 
-    }
-
-    @Override
-    public Object getISTERProperties() {
-        return new AMItemRenderProperties();
-    }
-
-    @Override
-    public Object getArmorRenderProperties() {
-        return new CustomArmorRenderProperties();
     }
 
     public void spawnSpecialParticle(int type) {

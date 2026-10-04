@@ -9,7 +9,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class MessageStartDancing implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageStartDancing> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "start_dancing"));
@@ -40,17 +41,17 @@ public class MessageStartDancing implements CustomPacketPayload {
     @Override
     public Type<? extends CustomPacketPayload> type() { return TYPE; }
 
-    public static void handle(MessageStartDancing message, IPayloadContext context) {
-        context.enqueueWork(() -> {
+    public static void handle(MessageStartDancing message, ServerPlayNetworking.Context context) {
+        context.server().execute(() -> {
             Player player = context.player();
             if (player != null && player.level() != null) {
                 Entity entity = player.level().getEntity(message.entityID);
-                if (entity instanceof IDancingMob) {
-                    ((IDancingMob) entity).setDancing(message.dance);
+                if (entity instanceof IDancingMob dancingMob) {
+                    dancingMob.setDancing(message.dance);
                     if (message.dance) {
-                        ((IDancingMob) entity).setJukeboxPos(message.jukeBox);
+                        dancingMob.setJukeboxPos(message.jukeBox);
                     } else {
-                        ((IDancingMob) entity).setJukeboxPos(null);
+                        dancingMob.setJukeboxPos(null);
                     }
                 }
             }

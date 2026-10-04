@@ -16,8 +16,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
+import net.fabricmc.fabric.api.renderer.v1.Renderer;
+import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
+import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 
 public class GhostlyPickaxeBakedModel extends ForwardingBakedModel {
 
@@ -26,47 +30,19 @@ public class GhostlyPickaxeBakedModel extends ForwardingBakedModel {
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
-        return transformQuads(super.getQuads(state, side, rand));
+    public void emitItemQuads(ItemStack stack, Supplier<RandomSource> randomSupplier, RenderContext context) {
+        context.pushTransform(quad -> {
+            for (int i = 0; i < 4; i++) {
+                quad.lightmap(i, 0x00F000F0);
+            }
+            return true;
+        });
+        super.emitItemQuads(stack, randomSupplier, context);
+        context.popTransform();
     }
 
     @Override
-    public List<RenderType> getRenderTypes(ItemStack itemStack, boolean fabulous) {
-        return List.of(AMRenderTypes.getGhostPickaxe(TextureAtlas.LOCATION_BLOCKS));
-    }
-
-    @Override
-    public BakedModel applyTransform(ItemDisplayContext cameraTransformType, PoseStack poseStack, boolean applyLeftHandTransform) {
-        this.getTransforms().getTransform(cameraTransformType).apply(applyLeftHandTransform, poseStack);
-        return this;
-    }
-
-    @Override
-    public List<BakedQuad> getQuads(@org.jetbrains.annotations.Nullable BlockState state, @org.jetbrains.annotations.Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @Nullable RenderType renderType) {
-        return transformQuads(originalModel.getQuads(state, side, rand, extraData, renderType));
-    }
-
-    private static List<BakedQuad> transformQuads(List<BakedQuad> oldQuads) {
-        List<BakedQuad> quads = new ArrayList<>();
-        for(BakedQuad quad : oldQuads){
-            quads.add(setFullbright(quad));
-        }
-        return quads;
-    }
-
-    private static BakedQuad setFullbright(BakedQuad quad) {
-        int[] vertexData = quad.getVertices().clone();
-        int step = vertexData.length / 4;
-
-        vertexData[6] = 0x00F000F0;
-        vertexData[6 + step] = 0x00F000F0;
-        vertexData[6 + 2 * step] = 0x00F000F0;
-        vertexData[6 + 3 * step] = 0x00F000F0;
-        return new BakedQuad(vertexData, quad.getTintIndex(), quad.getDirection(), quad.getSprite(), quad.isShade());
-    }
-
-    @Override
-    public List<BakedModel> getRenderPasses(ItemStack itemStack, boolean fabulous) {
-        return List.of(this);
+    public boolean isVanillaAdapter() {
+        return false;
     }
 }

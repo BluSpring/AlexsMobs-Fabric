@@ -7,7 +7,10 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 public class MessageSendVisualFlagFromServer implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageSendVisualFlagFromServer> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "send_visual_flag"));
@@ -35,9 +38,10 @@ public class MessageSendVisualFlagFromServer implements CustomPacketPayload {
     @Override
     public Type<? extends CustomPacketPayload> type() { return TYPE; }
 
-    public static void handle(MessageSendVisualFlagFromServer message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            Player player = context.player();
+    @Environment(EnvType.CLIENT)
+    public static void handle(MessageSendVisualFlagFromServer message, ClientPlayNetworking.Context context) {
+        Player player = context.player();
+        context.client().execute(() -> {
             if (player != null && player.level() != null) {
                 Entity entity = player.level().getEntity(message.entityID);
                 AlexsMobs.PROXY.processVisualFlag(entity, message.flag);

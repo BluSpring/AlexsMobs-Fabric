@@ -56,7 +56,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_api_version"
 
     // Citadel dependency - use local Citadel jar from sibling project
-    modImplementation files('../Citadel/build/libs/citadel-1.21.1-2.7.0.jar')
+    implementation(project(path: ":Citadel", configuration: "namedElements"))
     
     // JEI for 1.21.1 (optional, for recipe viewing)
     modCompileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"

@@ -77,6 +77,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.util.TriState;
 
 @Environment(EnvType.CLIENT)
 public class ClientEvents {
@@ -90,7 +91,6 @@ public class ClientEvents {
     public long lastStaticTick = -1;
     public static int renderStaticScreenFor = 0;
 
-    @SubscribeEvent
     public void onOutlineEntityColor(EventGetOutlineColor event) {
         if (event.getEntityIn() instanceof Enemy && AlexsMobs.PROXY.getSingingBlueJayId() != -1) {
             Entity entity = event.getEntityIn().level().getEntity(AlexsMobs.PROXY.getSingingBlueJayId());
@@ -122,7 +122,6 @@ public class ClientEvents {
         }
     }
 
-    @SubscribeEvent
     @Environment(EnvType.CLIENT)
     public void onGetStarBrightness(EventGetStarBrightness event) {
         if (Minecraft.getInstance().player.hasEffect(AMEffectRegistry.POWER_DOWN)) {
@@ -149,6 +148,9 @@ public class ClientEvents {
         ClientTickEvents.START_CLIENT_TICK.register(client -> clientTick());
         ViewportEvent.ComputeCameraAngles.EVENT.register(this::onCameraSetup);
         RenderGuiLayerCallback.POST.register(this::onPostGameOverlay);
+        EventGetStarBrightness.EVENT.register(this::onGetStarBrightness);
+        EventGetOutlineColor.EVENT.register(this::onOutlineEntityColor);
+        EventPosePlayerHand.EVENT.register(this::onPoseHand);
     }
 
     @Environment(EnvType.CLIENT)
@@ -190,7 +192,7 @@ public class ClientEvents {
     }
 
     @Environment(EnvType.CLIENT)
-    public boolean onPreRenderEntity(LivingEntity entity, LivingEntityRenderer<?, ?> livingRenderer, float partialTick, PoseStack poseStack, MultiBufferSource buffers, int light) {
+    public boolean onPreRenderEntity(LivingEntity entity, LivingEntityRenderer livingRenderer, float partialTick, PoseStack poseStack, MultiBufferSource buffers, int light) {
         if (RockyChestplateUtil.isRockyRolling(entity)) {
             poseStack.pushPose();
             float limbSwing = entity.walkAnimation.position()
@@ -200,7 +202,7 @@ public class ClientEvents {
                     + (entity.yBodyRot - entity.yBodyRotO) * partialTick;
             float roll = entity.walkDistO
                     + (entity.walkDist - entity.walkDistO) * partialTick;
-            VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(event.getMultiBufferSource(),
+            VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(buffers,
                     RenderType.armorCutoutNoCull(ROCKY_CHESTPLATE_TEXTURE),
                     entity.getItemBySlot(EquipmentSlot.CHEST).hasFoil());
             poseStack.translate(0.0D,
@@ -288,7 +290,6 @@ public class ClientEvents {
         }
     }
 
-    @SubscribeEvent
     @Environment(EnvType.CLIENT)
     public void onPoseHand(EventPosePlayerHand event) {
         LivingEntity player = (LivingEntity) event.getEntityIn();
@@ -396,15 +397,16 @@ public class ClientEvents {
         }
     }
 
-    @SubscribeEvent
     @Environment(EnvType.CLIENT)
-    public void onRenderNameplate(RenderNameTagEvent event) {
+    public static TriState onRenderNameplate(Entity entity) {
         if (Minecraft.getInstance().getCameraEntity() instanceof EntityBaldEagle
-                && event.getEntity() == Minecraft.getInstance().player) {
+                && entity == Minecraft.getInstance().player) {
             if (Minecraft.getInstance().hasSingleplayerServer()) {
-                event.setCanRender(net.neoforged.neoforge.common.util.TriState.FALSE);
+                return TriState.FALSE;
             }
         }
+
+        return TriState.DEFAULT;
     }
 
     @Environment(EnvType.CLIENT)

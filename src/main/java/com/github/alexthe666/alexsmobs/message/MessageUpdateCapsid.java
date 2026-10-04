@@ -9,7 +9,10 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 public class MessageUpdateCapsid implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageUpdateCapsid> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "update_capsid"));
@@ -37,9 +40,10 @@ public class MessageUpdateCapsid implements CustomPacketPayload {
     @Override
     public Type<? extends CustomPacketPayload> type() { return TYPE; }
 
-    public static void handle(MessageUpdateCapsid message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            Player player = context.player();
+    @Environment(EnvType.CLIENT)
+    public static void handle(MessageUpdateCapsid message, ClientPlayNetworking.Context context) {
+        Player player = context.player();
+        context.client().execute(() -> {
             if (player != null && player.level() != null) {
                 BlockPos pos = BlockPos.of(message.blockPos);
                 if (player.level().getBlockEntity(pos) instanceof TileEntityCapsid podium) {

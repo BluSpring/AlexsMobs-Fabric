@@ -7,9 +7,14 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.thread.BlockableEventLoop;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class MessageSyncEntityPos implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageSyncEntityPos> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "sync_entity_pos"));
@@ -43,9 +48,17 @@ public class MessageSyncEntityPos implements CustomPacketPayload {
     @Override
     public Type<? extends CustomPacketPayload> type() { return TYPE; }
 
-    public static void handle(MessageSyncEntityPos message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            Player player = context.player();
+    public static void handle(MessageSyncEntityPos message, ServerPlayNetworking.Context context) {
+        handle(message, context.server(), context.player());
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static void handle(MessageSyncEntityPos message, ClientPlayNetworking.Context context) {
+        handle(message, context.client(), context.player());
+    }
+
+    public static void handle(MessageSyncEntityPos message, BlockableEventLoop<?> context, Player player) {
+        context.execute(() -> {
             if (player != null && player.level() != null) {
                 Entity entity = player.level().getEntity(message.eagleId);
                 if (entity instanceof IFalconry || entity instanceof EntityStraddleboard) {

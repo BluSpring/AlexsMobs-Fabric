@@ -14,11 +14,13 @@ import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+
+import io.github.fabricators_of_create.porting_lib.item.extensions.ArmorTextureItem;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import org.jetbrains.annotations.Nullable;
 
-public class ItemTarantulaHawkElytra extends ArmorItem {
+public class ItemTarantulaHawkElytra extends ArmorItem implements ArmorTextureItem {
 
     public ItemTarantulaHawkElytra(Item.Properties props, Holder<ArmorMaterial> mat) {
         super(mat, Type.CHESTPLATE, props);

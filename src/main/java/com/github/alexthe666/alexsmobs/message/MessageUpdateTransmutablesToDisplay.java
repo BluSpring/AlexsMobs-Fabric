@@ -7,7 +7,10 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 public class MessageUpdateTransmutablesToDisplay implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MessageUpdateTransmutablesToDisplay> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "update_transmutables_display"));
@@ -41,9 +44,10 @@ public class MessageUpdateTransmutablesToDisplay implements CustomPacketPayload 
     @Override
     public Type<? extends CustomPacketPayload> type() { return TYPE; }
 
-    public static void handle(MessageUpdateTransmutablesToDisplay message, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            Player player = context.player();
+    @Environment(EnvType.CLIENT)
+    public static void handle(MessageUpdateTransmutablesToDisplay message, ClientPlayNetworking.Context context) {
+        Player player = context.player();
+        context.client().execute(() -> {
             if (player != null && player.getId() == message.playerId) {
                 AlexsMobs.PROXY.setDisplayTransmuteResult(0, message.stack1);
                 AlexsMobs.PROXY.setDisplayTransmuteResult(1, message.stack2);

@@ -6,4 +6,6 @@ pluginManagement {
     }
 }
 
+include("Citadel")
+
 rootProject.name = 'alexsmobs'
