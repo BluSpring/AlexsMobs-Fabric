@@ -6,7 +6,7 @@ plugins {
     id 'fabric-loom' version '1.17-SNAPSHOT'
 }
 
-version = '1.22.9'
+version = project.mod_version
 group = 'com.github.alexthe667'
 
 repositories {
