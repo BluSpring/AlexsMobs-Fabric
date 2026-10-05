@@ -39,10 +39,10 @@ public class RenderCapsid<T extends TileEntityCapsid> implements BlockEntityRend
         return i;
     }
 
-    @Override
-    public AABB getRenderBoundingBox(T blockEntity) {
-        return blockEntity.getRenderBoundingBox();
-    }
+//    @Override
+//    public AABB getRenderBoundingBox(T blockEntity) {
+//        return blockEntity.getRenderBoundingBox();
+//    }
 
     @Override
     public void render(T entity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {

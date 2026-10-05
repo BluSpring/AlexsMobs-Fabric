@@ -408,7 +408,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
     @Override
     public void onAddedToLevel() {
         // onAddedToWorld removed in 1.21;
-        super.onAddedToLevel();
+//        super.onAddedToLevel();
         updateClientInventory();
     }
 

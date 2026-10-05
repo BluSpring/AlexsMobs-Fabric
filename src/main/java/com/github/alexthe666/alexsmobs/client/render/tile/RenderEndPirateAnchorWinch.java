@@ -25,10 +25,10 @@ public class RenderEndPirateAnchorWinch<T extends TileEntityEndPirateAnchorWinch
     public RenderEndPirateAnchorWinch(Context rendererDispatcherIn) {
     }
 
-    @Override
-    public AABB getRenderBoundingBox(T blockEntity) {
-        return blockEntity.getRenderBoundingBox();
-    }
+//    @Override
+//    public AABB getRenderBoundingBox(T blockEntity) {
+//        return blockEntity.getRenderBoundingBox();
+//    }
 
     @Override
     public void render(T tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn,
