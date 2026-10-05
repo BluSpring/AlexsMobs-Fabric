@@ -895,7 +895,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic,
         return (float) (l + 1);
     }
 
-    public boolean causeFallDamage(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 

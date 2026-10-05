@@ -117,7 +117,7 @@ public class EntityBoneSerpent extends Monster {
         return false;
     }
 
-    public boolean canBeLeashed(Player player) {
+    public boolean canBeLeashed() {
         return true;
     }
 

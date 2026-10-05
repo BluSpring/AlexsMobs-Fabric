@@ -7,6 +7,7 @@
   "mixins": [
     "AbstractArrowAccessor",
     "LevelChunkSectionAccessor",
+    "LivingEntityAccessor",
     "MixinBlock",
     "MixinBrewingStandBlockEntity",
     "NoiseBasedChunkGeneratorAccessor",
