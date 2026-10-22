@@ -77,6 +77,8 @@ processResources {
     inputs.property "fabric_version", project.fabric_api_version
     filteringCharset "UTF-8"
 
+    exclude("data/neoforge/**/*", "data/alexsmobs/neoforge/**/*", "data/alexsmobs/loot_modifiers/*")
+
     filesMatching("fabric.mod.json") {
         expand "mod_version": project.version,
                 "minecraft_version": project.minecraft_version,
