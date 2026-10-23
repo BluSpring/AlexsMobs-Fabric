@@ -50,8 +50,6 @@ public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
     protected void scale(EntityTiger entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
-    // TODO Fabric: PR the rendering improvements upstream
-
     @Nullable
     @Override
     protected RenderType getRenderType(EntityTiger tiger, boolean b0, boolean b1, boolean b2) {
