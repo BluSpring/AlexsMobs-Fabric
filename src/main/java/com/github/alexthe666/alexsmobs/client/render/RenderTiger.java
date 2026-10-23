@@ -6,6 +6,12 @@ import com.github.alexthe666.alexsmobs.entity.EntityTiger;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.neoforged.neoforge.client.event.RenderLivingEvent;
+import net.neoforged.neoforge.client.event.RenderNameTagEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -22,10 +28,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.event.RenderNameTagEvent;
-import org.joml.Matrix4f;
-
-import javax.annotation.Nullable;
 
 public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/tiger/tiger.png");
@@ -45,13 +47,15 @@ public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
         this.addLayer(new LayerTigerEyes(this));
     }
 
+    @Override
     protected void scale(EntityTiger entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     public void render(EntityTiger entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
-            MultiBufferSource bufferIn, int packedLightIn) {
-        if (net.neoforged.neoforge.common.NeoForge.EVENT_BUS
-                .post(new net.neoforged.neoforge.client.event.RenderLivingEvent.Pre<EntityTiger, ModelTiger>(entityIn,
+                       MultiBufferSource bufferIn, int packedLightIn) {
+        if (NeoForge.EVENT_BUS
+                .post(new RenderLivingEvent.Pre<EntityTiger, ModelTiger>(entityIn,
                         this, partialTicks, matrixStackIn, bufferIn, packedLightIn)).isCanceled())
             return;
         matrixStackIn.pushPose();
@@ -64,8 +68,7 @@ public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
         float f = Mth.rotLerp(partialTicks, entityIn.yBodyRotO, entityIn.yBodyRot);
         float f1 = Mth.rotLerp(partialTicks, entityIn.yHeadRotO, entityIn.yHeadRot);
         float f2 = f1 - f;
-        if (shouldSit && entityIn.getVehicle() instanceof LivingEntity) {
-            LivingEntity livingentity = (LivingEntity) entityIn.getVehicle();
+        if (shouldSit && entityIn.getVehicle() instanceof LivingEntity livingentity) {
             f = Mth.rotLerp(partialTicks, livingentity.yBodyRotO, livingentity.yBodyRot);
             f2 = f1 - f;
             float f3 = Mth.wrapDegrees(f2);
@@ -145,14 +148,14 @@ public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
         }
         RenderNameTagEvent renderNameplateEvent = new RenderNameTagEvent(entityIn, entityIn.getDisplayName(), this,
                 matrixStackIn, bufferIn, packedLightIn, partialTicks);
-        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(renderNameplateEvent);
+        NeoForge.EVENT_BUS.post(renderNameplateEvent);
         if (renderNameplateEvent.canRender().isTrue()
                 || (renderNameplateEvent.canRender().isDefault()
                         && this.shouldShowName(entityIn))) {
             this.renderNameTag(entityIn, renderNameplateEvent.getContent(), matrixStackIn, bufferIn, packedLightIn, partialTicks);
         }
-        net.neoforged.neoforge.common.NeoForge.EVENT_BUS
-                .post(new net.neoforged.neoforge.client.event.RenderLivingEvent.Post<EntityTiger, ModelTiger>(entityIn,
+        NeoForge.EVENT_BUS
+                .post(new RenderLivingEvent.Post<EntityTiger, ModelTiger>(entityIn,
                         this, partialTicks, matrixStackIn, bufferIn, packedLightIn));
     }
 
@@ -164,9 +167,9 @@ public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
         Vec3 vec31 = tiger.getLeashOffset(p_115463_);
         double d1 = Math.cos(d0) * vec31.z + Math.sin(d0) * vec31.x;
         double d2 = Math.sin(d0) * vec31.z - Math.cos(d0) * vec31.x;
-        double d3 = Mth.lerp((double) p_115463_, tiger.xo, tiger.getX()) + d1;
-        double d4 = Mth.lerp((double) p_115463_, tiger.yo, tiger.getY()) + vec31.y;
-        double d5 = Mth.lerp((double) p_115463_, tiger.zo, tiger.getZ()) + d2;
+        double d3 = Mth.lerp(p_115463_, tiger.xo, tiger.getX()) + d1;
+        double d4 = Mth.lerp(p_115463_, tiger.yo, tiger.getY()) + vec31.y;
+        double d5 = Mth.lerp(p_115463_, tiger.zo, tiger.getZ()) + d2;
         p_115464_.translate(d1, vec31.y, d2);
         float f = (float) (vec3.x - d3);
         float f1 = (float) (vec3.y - d4);
@@ -195,6 +198,7 @@ public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
         p_115464_.popPose();
     }
 
+    @Override
     protected int getBlockLightLevel(EntityTiger p_114496_, BlockPos p_114497_) {
         return p_114496_.isOnFire() ? 15 : p_114496_.level().getBrightness(LightLayer.BLOCK, p_114497_);
     }
@@ -234,6 +238,7 @@ public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityTiger entity) {
         if (entity.isSleeping()) {
             return entity.isWhite() ? TEXTURE_SLEEPING_WHITE : TEXTURE_SLEEPING;

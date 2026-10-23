@@ -1,17 +1,36 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
+import com.github.alexthe666.alexsmobs.entity.ai.CrowAICircleCrops;
+import com.github.alexthe666.alexsmobs.entity.ai.CrowAIFollowOwner;
+import com.github.alexthe666.alexsmobs.entity.ai.CrowAIMelee;
+import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
+import com.github.alexthe666.alexsmobs.entity.ai.FlightMoveController;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.message.MessageCrowDismount;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.base.Predicate;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -28,11 +47,23 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
@@ -54,14 +85,6 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
 
@@ -101,6 +124,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.ATTACK_DAMAGE, 1.0D).add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -124,6 +148,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
     }
 
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.crowSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -132,6 +157,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         return isBrightEnoughToSpawn(worldIn, pos);
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -161,17 +187,21 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     public boolean canTrample(BlockState state, BlockPos pos, float fallDistance) {
         return false;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -196,6 +226,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     public void rideTick() {
         final Entity entity = this.getVehicle();
         if (this.isPassenger() && !entity.isAlive()) {
@@ -237,10 +268,12 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         return crowCount;
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.CROW_BREEDABLES) && this.isTame();
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         final ItemStack itemstack = player.getItemInHand(hand);
         final InteractionResult type = super.mobInteract(player, hand);
@@ -275,6 +308,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
     }
 
 
+    @Override
     public void tick() {
         super.tick();
         this.prevAttackProgress = attackProgress;
@@ -391,6 +425,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67) {
@@ -412,6 +447,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Flying", this.isFlying());
@@ -424,6 +460,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isSitting()) {
             if (this.getNavigation().getPath() != null) {
@@ -437,6 +474,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         super.travel(vec3d);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFlying(compound.getBoolean("Flying"));
@@ -447,10 +485,14 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
+    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
 
+    @Override
+    @Override
     public void setFlying(boolean flying) {
         if(flying && isBaby()){
             return;
@@ -470,6 +512,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, sit);
     }
@@ -501,18 +544,22 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         return this.level().clip(new ClipContext(Vector3d, target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() != HitResult.Type.MISS;
     }
 
+    @Override
     public int getAmbientSoundInterval() {
         return 60;
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.CROW_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.CROW_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.CROW_HURT.get();
     }
@@ -583,6 +630,8 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
         return !level().getFluidState(position).isEmpty();
     }
 
+    @Override
+    @Override
     public void peck() {
         this.entityData.set(ATTACK_TICK, 7);
     }
@@ -593,9 +642,11 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
     }
 
     private boolean isCrowEdible(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) || stack.is(AMTagRegistry.CROW_FOODSTUFFS);
+        return stack.has(DataComponents.FOOD) || stack.is(AMTagRegistry.CROW_FOODSTUFFS);
     }
 
+    @Override
+    @Override
     public double getMaxDistToItem() {
         return 1.0D;
     }
@@ -669,6 +720,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void tick() {
             if (flightTarget) {
                 crow.getMoveControl().setWantedPosition(x, y, z, 1F);
@@ -705,6 +757,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             if (crow.aiItemFlag || crow.isSitting() || EntityCrow.this.getCommand() == 1) {
                 return false;
@@ -716,6 +769,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void start() {
             if (flightTarget) {
                 crow.setFlying(true);
@@ -725,6 +779,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void stop() {
             this.crow.getNavigation().stop();
             super.stop();
@@ -796,6 +851,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
             return targetEntity != null && !EntityCrow.this.isTame();
         }
 
+        @Override
         public void stop() {
             flightTarget = null;
             this.targetEntity = null;
@@ -840,6 +896,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
 
 
         public record Sorter(Entity theEntity) implements Comparator<Entity> {
+            @Override
             public int compare(Entity p_compare_1_, Entity p_compare_2_) {
                 final double d0 = this.theEntity.distanceToSqr(p_compare_1_);
                 final double d1 = this.theEntity.distanceToSqr(p_compare_2_);
@@ -860,6 +917,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
             verticalSearchRange = 1;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return destinationBlock != null && isPumpkin(EntityCrow.this.level(), destinationBlock.mutable()) && isCloseToPumpkin(16);
         }
@@ -882,6 +940,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void start() {
             EntityCrow.this.fleePumpkinFlag = 200;
             final Vec3 vec = EntityCrow.this.getBlockInViewAway(Vec3.atCenterOf(destinationBlock), 10);
@@ -892,6 +951,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void tick() {
             if (this.isCloseToPumpkin(16)) {
                 EntityCrow.this.fleePumpkinFlag = 200;
@@ -908,6 +968,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void stop() {
             flightTarget = null;
         }
@@ -948,15 +1009,18 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
             this.executionChance = 1;
         }
 
+        @Override
         public void stop() {
             super.stop();
             ((EntityCrow) mob).aiItemFlag = false;
         }
 
+        @Override
         public boolean canUse() {
             return super.canUse()  &&  !((EntityCrow) mob).isSitting() && (mob.getTarget() == null || !mob.getTarget().isAlive());
         }
 
+        @Override
         public boolean canContinueToUse() {
             return super.canContinueToUse() && !((EntityCrow) mob).isSitting() &&  (mob.getTarget() == null || !mob.getTarget().isAlive());
         }
@@ -1061,6 +1125,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
             return targetEntity != null && EntityCrow.this.getCommand() == 3 && !EntityCrow.this.getMainHandItem().isEmpty();
         }
 
+        @Override
         public void stop() {
             flightTarget = null;
             this.targetEntity = null;
@@ -1123,6 +1188,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
 
 
         public record Sorter(Entity theEntity) implements Comparator<Entity> {
+            @Override
             public int compare(Entity p_compare_1_, Entity p_compare_2_) {
                 final double d0 = this.theEntity.distanceToSqr(p_compare_1_);
                 final double d1 = this.theEntity.distanceToSqr(p_compare_2_);

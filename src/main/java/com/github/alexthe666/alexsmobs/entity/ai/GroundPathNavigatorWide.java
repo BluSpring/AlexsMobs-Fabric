@@ -18,6 +18,7 @@ public class GroundPathNavigatorWide extends GroundPathNavigation {
         this.distancemodifier = distancemodifier;
     }
 
+    @Override
     protected void followThePath() {
         Vec3 vector3d = this.getTempMobPos();
         this.maxDistanceToWaypoint = this.mob.getBbWidth() * distancemodifier;

@@ -83,6 +83,7 @@ public class ModelRattlesnake extends AdvancedEntityModel<EntityRattlesnake> {
 
     }
 
+    @Override
     public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.young) {
             float f = 1.75F;
@@ -121,11 +122,7 @@ public class ModelRattlesnake extends AdvancedEntityModel<EntityRattlesnake> {
         progressRotationPrev(neck1, curlProgress, Maths.rad(-20), Maths.rad(60), 0, 5F);
         progressRotationPrev(neck2, curlProgress, Maths.rad(-20), Maths.rad(60), 0, 5F);
         progressRotationPrev(head, curlProgress, Maths.rad(20), Maths.rad(-30), Maths.rad(10), 5F);
-        if (entity.randomToungeTick > 0) {
-            tongue.showModel = true;
-        }else{
-			tongue.showModel = false;
-		}
+        tongue.showModel = entity.randomToungeTick > 0;
         this.walk(tongue, 1, 0.5F, false, 1F, 0f, ageInTicks, 1);
         if (entity.isRattling()) {
             progressRotationPrev(tail2, curlProgress, Maths.rad(70), Maths.rad(-60), 0, 5F);

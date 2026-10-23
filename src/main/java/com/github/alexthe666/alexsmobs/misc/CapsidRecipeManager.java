@@ -27,6 +27,7 @@ public class CapsidRecipeManager extends SimpleJsonResourceReloadListener {
         super(GSON, "capsid_recipes");
     }
 
+    @Override
     protected void apply(Map<ResourceLocation, JsonElement> jsonMap, ResourceManager resourceManager, ProfilerFiller profile) {
         this.capsidRecipes.clear();
         ImmutableMap.Builder<ResourceLocation, CapsidRecipe> builder = ImmutableMap.builder();

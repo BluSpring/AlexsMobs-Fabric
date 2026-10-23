@@ -14,9 +14,11 @@ public class RenderShoebill extends MobRenderer<EntityShoebill, ModelShoebill> {
         super(renderManagerIn, new ModelShoebill(), 0.3F);
     }
 
+    @Override
     protected void scale(EntityShoebill entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityShoebill entity) {
         return TEXTURE;
     }

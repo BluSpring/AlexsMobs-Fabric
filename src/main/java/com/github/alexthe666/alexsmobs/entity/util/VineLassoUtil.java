@@ -1,17 +1,18 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
+import java.util.UUID;
+
 import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
+import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.PacketDistributor;
-
-import javax.annotation.Nullable;
-import java.util.UUID;
 
 public class VineLassoUtil {
 
@@ -91,8 +92,7 @@ public class VineLassoUtil {
         if (lassoedOwner != null) {
             double distance = lassoed.distanceTo(lassoedOwner);
 
-            if (lassoed instanceof Mob) {
-                Mob mob = (Mob) lassoed;
+            if (lassoed instanceof Mob mob) {
                 if (distance > 3.0F) {
                     mob.getNavigation().moveTo(lassoedOwner, 1.0F);
                 } else {
@@ -100,9 +100,9 @@ public class VineLassoUtil {
                 }
             }
             if (distance > 10) {
-                double d0 = (lassoedOwner.getX() - lassoed.getX()) / (double)distance;
-                double d1 = (lassoedOwner.getY() - lassoed.getY()) / (double)distance;
-                double d2 = (lassoedOwner.getZ() - lassoed.getZ()) / (double)distance;
+                double d0 = (lassoedOwner.getX() - lassoed.getX()) / distance;
+                double d1 = (lassoedOwner.getY() - lassoed.getY()) / distance;
+                double d2 = (lassoedOwner.getZ() - lassoed.getZ()) / distance;
                 double yd = Math.copySign(d1 * d1 * 0.4D, d1);
                 if(lassoed instanceof Player){
                     yd = 0;

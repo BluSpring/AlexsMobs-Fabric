@@ -1,8 +1,22 @@
 package com.github.alexthe666.alexsmobs.entity;
 
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Stream;
+
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHerdPanic;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeaveWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AquaticMoveController;
+import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
+import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
+import com.github.alexthe666.alexsmobs.entity.ai.SealAIBask;
+import com.github.alexthe666.alexsmobs.entity.ai.SealAIDiveForItems;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticPathNavigator;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -19,11 +33,23 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.BreathAirGoal;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -41,11 +67,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Stream;
 
 public class EntitySeal extends Animal implements ISemiAquatic, IHerdPanic, ITargetsDroppedItems {
 
@@ -77,14 +98,17 @@ public class EntitySeal extends Animal implements ISemiAquatic, IHerdPanic, ITar
         switchNavigator(false);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.SEAL_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.SEAL_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.SEAL_HURT.get();
     }
@@ -104,6 +128,7 @@ public class EntitySeal extends Animal implements ISemiAquatic, IHerdPanic, ITar
         }
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SealAIBask(this));
         this.goalSelector.addGoal(1, new BreathAirGoal(this));
@@ -134,6 +159,7 @@ public class EntitySeal extends Animal implements ISemiAquatic, IHerdPanic, ITar
         }
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         final boolean prev = super.hurt(source, amount);
         if (prev) {
@@ -166,6 +192,7 @@ public class EntitySeal extends Animal implements ISemiAquatic, IHerdPanic, ITar
         return s != null && s.toLowerCase().contains("he was");
     }
 
+    @Override
     public void calculateEntityAnimation(boolean flying) {
         float f1 = (float) Mth.length(this.getX() - this.xo, 0, this.getZ() - this.zo);
         float f2 = Math.min(f1 * (isInWater() ? 4.0F : 48.0F), 1.0F);
@@ -180,6 +207,7 @@ public class EntitySeal extends Animal implements ISemiAquatic, IHerdPanic, ITar
         this.entityData.set(SWIM_ANGLE, progress);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevBaskProgress = baskProgress;
@@ -319,22 +347,27 @@ public class EntitySeal extends Animal implements ISemiAquatic, IHerdPanic, ITar
         this.entityData.set(ARCTIC, arctic);
     }
 
+    @Override
     public int getMaxAirSupply() {
         return 4800;
     }
 
+    @Override
     protected int increaseAirSupply(int currentAir) {
         return this.getMaxAirSupply();
     }
 
+    @Override
     public int getMaxHeadXRot() {
         return 1;
     }
 
+    @Override
     public int getMaxHeadYRot() {
         return 1;
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType
             reason, @Nullable SpawnGroupData data) {
@@ -352,6 +385,7 @@ public class EntitySeal extends Animal implements ISemiAquatic, IHerdPanic, ITar
         return super.finalizeSpawn(worldIn, difficultyIn, reason, data);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Arctic", this.isArctic());
@@ -365,6 +399,7 @@ public class EntitySeal extends Animal implements ISemiAquatic, IHerdPanic, ITar
         }
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setArctic(compound.getBoolean("Arctic"));
@@ -382,6 +417,7 @@ public class EntitySeal extends Animal implements ISemiAquatic, IHerdPanic, ITar
         return worldIn.getBiome(position).is(AMTagRegistry.SPAWNS_WHITE_SEALS);
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -400,6 +436,7 @@ public class EntitySeal extends Animal implements ISemiAquatic, IHerdPanic, ITar
 
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.SEAL_BREEDABLES);
     }

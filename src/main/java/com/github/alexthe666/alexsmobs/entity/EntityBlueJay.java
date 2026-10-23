@@ -1,14 +1,30 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.BlueJayAIMelee;
+import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
+import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
+import com.github.alexthe666.alexsmobs.entity.ai.FlightMoveController;
+import com.github.alexthe666.alexsmobs.entity.ai.FlyingAITempt;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.base.Predicate;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -24,11 +40,21 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
@@ -49,11 +75,6 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
 
@@ -100,6 +121,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         switchNavigator(false);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -122,6 +144,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return isBrightEnoughToSpawn(worldIn, pos);
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader reader) {
         if (reader.isUnobstructed(this) && !reader.containsAnyLiquid(this.getBoundingBox())) {
             BlockPos blockpos = this.blockPosition();
@@ -131,18 +154,22 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return false;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.blueJaySpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.BLUE_JAY_BREEDABLES);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -171,6 +198,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         }
     }
 
+    @Override
     public void tick(){
         super.tick();
         this.prevCrestAmount = crestAmount;
@@ -330,6 +358,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return source.is(DamageTypes.IN_WALL)  || super.isInvulnerableTo(source);
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if(this.isInWater() && this.getDeltaMovement().y > 0F){
             this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.5D, 1.0D));
@@ -348,6 +377,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return position;
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if(this.getRaccoonUUID() != null){
             if(entityIn instanceof EntityRaccoon && this.getRaccoonUUID().equals(entityIn.getUUID())) {
@@ -408,14 +438,17 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return null;
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.BLUE_JAY_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.BLUE_JAY_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.BLUE_JAY_HURT.get();
     }
@@ -429,10 +462,14 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.ATTACK_DAMAGE, 1.0D).add(Attributes.MOVEMENT_SPEED, 0.25F);
     }
 
+    @Override
+    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
 
+    @Override
+    @Override
     public void setFlying(boolean flying) {
         if (flying && this.isBaby()) {
             flying = false;
@@ -440,6 +477,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         this.entityData.set(FLYING, flying);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFlying(compound.getBoolean("Flying"));
@@ -452,6 +490,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Flying", this.isFlying());
@@ -488,16 +527,16 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         this.entityData.set(CREST_TARGET, crestTarget);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public UUID getLastFeederUUID() {
         return this.entityData.get(LAST_FEEDER_UUID).orElse(null);
     }
 
-    public void setLastFeederUUID(@javax.annotation.Nullable UUID uniqueId) {
+    public void setLastFeederUUID(@Nullable UUID uniqueId) {
         this.entityData.set(LAST_FEEDER_UUID, Optional.ofNullable(uniqueId));
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public Entity getLastFeeder() {
         UUID id = getLastFeederUUID();
         if (id != null && !this.level().isClientSide) {
@@ -506,7 +545,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return null;
     }
 
-    public void setLastFeeder(@javax.annotation.Nullable Entity feeder) {
+    public void setLastFeeder(@Nullable Entity feeder) {
         if (feeder == null) {
             this.setLastFeederUUID(null);
         } else {
@@ -514,16 +553,16 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         }
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public UUID getRaccoonUUID() {
         return this.entityData.get(RACCOON_UUID).orElse(null);
     }
 
-    public void setRaccoonUUID(@javax.annotation.Nullable UUID uniqueId) {
+    public void setRaccoonUUID(@Nullable UUID uniqueId) {
         this.entityData.set(RACCOON_UUID, Optional.ofNullable(uniqueId));
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public Entity getRaccoon() {
         UUID id = getRaccoonUUID();
         if (id != null && !this.level().isClientSide) {
@@ -532,7 +571,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return null;
     }
 
-    public void setRaccoon(@javax.annotation.Nullable Entity feeder) {
+    public void setRaccoon(@Nullable Entity feeder) {
         if (feeder == null) {
             this.setRaccoonUUID(null);
         } else {
@@ -558,9 +597,11 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
 
     @Override
     public boolean canTargetItem(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) || stack.is(AMTagRegistry.BLUE_JAY_FOODSTUFFS);
+        return stack.has(DataComponents.FOOD) || stack.is(AMTagRegistry.BLUE_JAY_FOODSTUFFS);
     }
 
+    @Override
+    @Override
     public double getMaxDistToItem() {
         return 1.0D;
     }
@@ -582,6 +623,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         }
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -604,10 +646,13 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return type;
     }
 
+    @Override
+    @Override
     public void peck() {
         this.entityData.set(ATTACK_TICK, 7);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67 || id == 68) {
@@ -653,6 +698,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             }
         }
 
+        @Override
         public void tick() {
             if (flightTarget) {
                 EntityBlueJay.this.getMoveControl().setWantedPosition(this.x, this.y, this.z, 1F);
@@ -667,7 +713,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             }
         }
 
-        @javax.annotation.Nullable
+        @Nullable
         protected Vec3 getPosition() {
             Vec3 vector3d = EntityBlueJay.this.position();
 
@@ -685,6 +731,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             if (flightTarget) {
                 return EntityBlueJay.this.isFlying() && EntityBlueJay.this.distanceToSqr(x, y, z) > 5F;
@@ -693,6 +740,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             }
         }
 
+        @Override
         public void start() {
             if (flightTarget) {
                 EntityBlueJay.this.setFlying(true);
@@ -702,6 +750,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             }
         }
 
+        @Override
         public void stop() {
             EntityBlueJay.this.getNavigation().stop();
             x = 0;
@@ -726,7 +775,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             this.theNearestAttackableTargetSorter = new AIScatter.Sorter(EntityBlueJay.this);
             this.targetEntitySelector = new Predicate<Entity>() {
                 @Override
-                public boolean apply(@javax.annotation.Nullable Entity e) {
+                public boolean apply(@Nullable Entity e) {
                     return e.isAlive() && e.getType().is(AMTagRegistry.SCATTERS_CROWS) || e instanceof Player && !((Player) e).isCreative();
                 }
             };
@@ -763,6 +812,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             return targetEntity != null;
         }
 
+        @Override
         public void stop() {
             flightTarget = null;
             this.targetEntity = null;
@@ -807,6 +857,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
 
 
         public record Sorter(Entity theEntity) implements Comparator<Entity> {
+            @Override
             public int compare(Entity p_compare_1_, Entity p_compare_2_) {
                 final double d0 = this.theEntity.distanceToSqr(p_compare_1_);
                 final double d1 = this.theEntity.distanceToSqr(p_compare_2_);
@@ -826,15 +877,18 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             this.executionChance = 1;
         }
 
+        @Override
         public void stop() {
             super.stop();
             ((EntityBlueJay) mob).aiItemFlag = false;
         }
 
+        @Override
         public boolean canUse() {
             return super.canUse() && (mob.getTarget() == null || !mob.getTarget().isAlive());
         }
 
+        @Override
         public boolean canContinueToUse() {
             return super.canContinueToUse() && (mob.getTarget() == null || !mob.getTarget().isAlive());
         }
@@ -905,11 +959,13 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             return false;
         }
 
+        @Override
         public boolean canContinueToUse(){
             LivingEntity target = EntityBlueJay.this.getTarget();
             return following != null && following.isAlive() && (target == null || !target.isAlive()) && (following instanceof EntityRaccoon || EntityBlueJay.this.getFeedTime() > 0) && !EntityBlueJay.this.isPassenger();
         }
 
+        @Override
         public void tick() {
             double dist = EntityBlueJay.this.distanceTo(this.following);
             if (dist > 6 || EntityBlueJay.this.isFlying()) {

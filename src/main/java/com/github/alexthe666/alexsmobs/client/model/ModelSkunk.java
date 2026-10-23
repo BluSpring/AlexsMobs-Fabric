@@ -130,12 +130,12 @@ public class ModelSkunk extends AdvancedEntityModel<EntitySkunk> {
         float rightLegS = (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
         this.rightArm.rotationPointY += 3 * leftLegS;
         this.leftArm.rotationPointY += 3 * rightLegS;
-        this.rightArm.rotationPointZ += 1F * leftLegS;
-        this.leftArm.rotationPointZ += 1F * rightLegS;
+        this.rightArm.rotationPointZ += leftLegS;
+        this.leftArm.rotationPointZ += rightLegS;
         this.leftLeg.rotationPointY += 3 * leftLegS;
         this.rightLeg.rotationPointY += 3 * rightLegS;
-        this.leftLeg.rotationPointZ += 1F * leftLegS;
-        this.rightLeg.rotationPointZ += 1F * rightLegS;
+        this.leftLeg.rotationPointZ += leftLegS;
+        this.rightLeg.rotationPointZ += rightLegS;
     }
 
     @Override
@@ -149,6 +149,7 @@ public class ModelSkunk extends AdvancedEntityModel<EntitySkunk> {
         AdvancedModelBox.rotateAngleZ = z;
     }
 
+    @Override
     public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.young) {
             this.head.setScale(1.5F, 1.5F, 1.5F);

@@ -4,14 +4,17 @@ import com.github.alexthe666.alexsmobs.entity.EntityMudBall;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 public class RenderMudBall extends EntityRenderer<EntityMudBall> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/mud_ball.png");
@@ -20,8 +23,9 @@ public class RenderMudBall extends EntityRenderer<EntityMudBall> {
         super(p_173962_);
     }
 
+    @Override
     public void render(EntityMudBall entityMudBall, float f, float f2, PoseStack p_114083_, MultiBufferSource p_114084_,
-            int p_114085_) {
+                       int p_114085_) {
         p_114083_.pushPose();
         p_114083_.scale(0.7F, 0.7F, 0.7F);
         p_114083_.mulPose(this.entityRenderDispatcher.cameraOrientation());
@@ -40,15 +44,16 @@ public class RenderMudBall extends EntityRenderer<EntityMudBall> {
 
     private static void vertex(VertexConsumer p_114090_, Matrix4f p_114091_, Matrix3f p_114092_, int p_114093_,
             float p_114094_, int p_114095_, int p_114096_, int p_114097_) {
-        org.joml.Vector3f normal = new org.joml.Vector3f(0.0F, 1.0F, 0.0F);
+        Vector3f normal = new Vector3f(0.0F, 1.0F, 0.0F);
         normal.mul(p_114092_);
-        org.joml.Vector4f pos = new org.joml.Vector4f(p_114094_ - 0.5F, (float) p_114095_ - 0.25F, 0.0F, 1.0F);
+        Vector4f pos = new Vector4f(p_114094_ - 0.5F, (float) p_114095_ - 0.25F, 0.0F, 1.0F);
         pos.mul(p_114091_);
         p_114090_.addVertex(pos.x, pos.y, pos.z).setColor(255, 255, 255, 255)
                 .setUv((float) p_114096_, (float) p_114097_).setOverlay(OverlayTexture.NO_OVERLAY).setLight(p_114093_)
                 .setNormal(normal.x, normal.y, normal.z);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityMudBall mudball) {
         return TEXTURE;
     }

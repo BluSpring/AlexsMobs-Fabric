@@ -23,10 +23,12 @@ public class RenderMoose extends MobRenderer<EntityMoose, ModelMoose> {
         this.addLayer(new LayerSnow());
     }
 
+    @Override
     protected void scale(EntityMoose entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityMoose entity) {
         return entity.isAntlered() && !entity.isBaby() ? TEXTURE_ANTLERED : TEXTURE;
     }
@@ -38,6 +40,7 @@ public class RenderMoose extends MobRenderer<EntityMoose, ModelMoose> {
             super(RenderMoose.this);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityMoose entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if (entitylivingbaseIn.isSnowy()) {
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(entitylivingbaseIn.isAntlered() && !entitylivingbaseIn.isBaby() ? TEXTURE_SNOWY_ANTLERED : TEXTURE_SNOWY));

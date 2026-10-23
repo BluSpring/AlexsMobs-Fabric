@@ -1,15 +1,16 @@
 package com.github.alexthe666.alexsmobs.misc;
 
+import java.util.Random;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class TransmutationData {
     private final Object2DoubleMap<ItemStack> itemstackData = new Object2DoubleOpenHashMap<>();

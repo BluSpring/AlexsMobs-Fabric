@@ -25,6 +25,7 @@ public class LayerElephantOverlays extends RenderLayer<EntityElephant, ModelElep
         super(renderElephant);
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityElephant elephant, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if(elephant.isChested()){
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutout(TEXTURE_CHEST));
@@ -39,7 +40,7 @@ public class LayerElephantOverlays extends RenderLayer<EntityElephant, ModelElep
                 lvt_12_3_ = TRADER_TEXTURE;
             }
 
-            ((ModelElephant) this.getParentModel()).copyPropertiesTo(this.model);
+            this.getParentModel().copyPropertiesTo(this.model);
             this.model.setupAnim(elephant, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             VertexConsumer lvt_13_1_ = bufferIn.getBuffer(RenderType.entityCutoutNoCull(lvt_12_3_));
             this.model.renderToBuffer(matrixStackIn, lvt_13_1_, packedLightIn, OverlayTexture.NO_OVERLAY, -1);

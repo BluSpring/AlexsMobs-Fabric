@@ -1,9 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.List;
+
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.animal.Animal;
-
-import java.util.List;
 
 public class AnimalAIRideParent extends Goal {
     private final Animal childAnimal;
@@ -16,6 +16,7 @@ public class AnimalAIRideParent extends Goal {
         this.moveSpeed = speed;
     }
 
+    @Override
     public boolean canUse() {
         if (this.childAnimal.getAge() >= 0 || this.childAnimal.isPassenger()) {
             return false;
@@ -48,6 +49,7 @@ public class AnimalAIRideParent extends Goal {
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
+    @Override
     public boolean canContinueToUse() {
         if (this.childAnimal.getAge() >= 0) {
             return false;
@@ -62,6 +64,7 @@ public class AnimalAIRideParent extends Goal {
     /**
      * Execute a one shot task or start executing a continuous task
      */
+    @Override
     public void start() {
         this.delayCounter = 0;
     }
@@ -69,6 +72,7 @@ public class AnimalAIRideParent extends Goal {
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
+    @Override
     public void stop() {
         this.parentAnimal = null;
     }
@@ -76,6 +80,7 @@ public class AnimalAIRideParent extends Goal {
     /**
      * Keep ticking a continuous task that has already been started
      */
+    @Override
     public void tick() {
         if (--this.delayCounter <= 0) {
             this.delayCounter = 10;

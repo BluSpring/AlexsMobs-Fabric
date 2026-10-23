@@ -38,21 +38,23 @@ public class RenderCentipedeHead extends MobRenderer<EntityCentipedeHead, Advanc
             if (f > 1.0F) {
                 f = 1.0F;
             }
-            stack.translate(0, f * 1F, 0);
+            stack.translate(0, f, 0);
             stack.mulPose(Axis.ZP.rotationDegrees(f * this.getFlipDegrees(entity)));
         } else if (entity.hasCustomName()) {
             String s = ChatFormatting.stripFormatting(entity.getName().getString());
             if (("Dinnerbone".equals(s) || "Grumm".equals(s))) {
-                stack.translate(0.0D, (double) (entity.getBbHeight() + 0.1F), 0.0D);
+                stack.translate(0.0D, entity.getBbHeight() + 0.1F, 0.0D);
                 stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
             }
         }
     }
 
+    @Override
     protected float getFlipDegrees(EntityCentipedeHead centipede) {
         return 180.0F;
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityCentipedeHead entity) {
         return TEXTURE;
     }

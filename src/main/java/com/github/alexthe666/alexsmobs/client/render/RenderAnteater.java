@@ -20,6 +20,7 @@ public class RenderAnteater extends MobRenderer<EntityAnteater, ModelAnteater> {
         this.addLayer(new LayerAnteaterBaby(this));
     }
 
+    @Override
     public boolean shouldRender(EntityAnteater anteater, Frustum p_225626_2_, double p_225626_3_, double p_225626_5_, double p_225626_7_) {
         if(anteater.isBaby() && anteater.isPassenger() && anteater.getVehicle() instanceof EntityAnteater){
             return false;
@@ -27,10 +28,12 @@ public class RenderAnteater extends MobRenderer<EntityAnteater, ModelAnteater> {
         return super.shouldRender(anteater, p_225626_2_, p_225626_3_, p_225626_5_, p_225626_7_);
     }
 
+    @Override
     protected void scale(EntityAnteater entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityAnteater entity) {
         return entity.isPeter() ? TEXTURE_PETER : TEXTURE;
     }

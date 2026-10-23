@@ -248,6 +248,7 @@ public class ModelWarpedToad extends AdvancedEntityModel<EntityWarpedToad> {
 
     }
 
+    @Override
     public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.young) {
             matrixStackIn.pushPose();

@@ -24,10 +24,12 @@ public class VoidWormMetadataSection {
         private Serializer() {
         }
 
+        @Override
         public VoidWormMetadataSection fromJson(JsonObject json) {
             return new VoidWormMetadataSection(GsonHelper.getAsBoolean(json, "end_portal_texture"));
         }
 
+        @Override
         public String getMetadataSectionName() {
             return "void_worm";
         }

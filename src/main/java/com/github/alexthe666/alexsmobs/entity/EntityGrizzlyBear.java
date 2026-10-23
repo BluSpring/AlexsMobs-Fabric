@@ -57,7 +57,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -107,14 +107,17 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 55.0D).add(Attributes.ATTACK_DAMAGE, 8.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.6F).add(Attributes.MOVEMENT_SPEED, 0.25F).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
+    @Override
     public EntityDimensions getDefaultDimensions(Pose poseIn) {
         return isStanding() ? STANDING_SIZE.scale(this.getScale()) : super.getDefaultDimensions(poseIn);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.grizzlyBearSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -128,18 +131,22 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         }
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.GRIZZLY_BEAR_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.GRIZZLY_BEAR_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.GRIZZLY_BEAR_DIE.get();
     }
 
+    @Override
     public void positionRider(Entity passenger, Entity.MoveFunction moveFunc) {
         if (this.hasPassenger(passenger)) {
             float sitAdd = -0.065F * this.sitProgress;
@@ -161,32 +168,39 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         return (double)this.getBbHeight() - 0.3D + (double)(0.12F * Mth.cos(f1 * 0.7F) * 0.7F * f) + sitAdd + standAdd;
     }
 
+    @Override
     public void playAmbientSound() {
         if(!isFreddy()){
             super.playAmbientSound();
         }
     }
 
+    @Override
     protected float getWaterSlowDown() {
         return isVehicle() ? 0.9F : 0.98F;
     }
 
+    @Override
     public void startPersistentAngerTimer() {
         this.setRemainingPersistentAngerTime(angerLogic.sample(this.random));
     }
 
+    @Override
     public int getRemainingPersistentAngerTime() {
         return this.angerTime;
     }
 
+    @Override
     public void setRemainingPersistentAngerTime(int time) {
         this.angerTime = time;
     }
 
+    @Override
     public UUID getPersistentAngerTarget() {
         return this.angerTarget;
     }
 
+    @Override
     public void setPersistentAngerTarget(@Nullable UUID target) {
         this.angerTarget = target;
     }
@@ -196,6 +210,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         return source.getMsgId() != null && source.getMsgId().equals("sting") || source.is(DamageTypes.IN_WALL) ||super.isInvulnerableTo(source);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -218,11 +233,12 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         this.targetSelector.addGoal(4, new CreatureAITargetItems(this, false));
         this.targetSelector.addGoal(5, new EntityGrizzlyBear.AttackPlayerGoal());
         this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isAngryAt));
-        this.targetSelector.addGoal(7, new NonTameRandomTargetGoal<>(this, Fox.class, false, (Predicate<LivingEntity>)null));
-        this.targetSelector.addGoal(8, new NonTameRandomTargetGoal<>(this, Wolf.class, false, (Predicate<LivingEntity>)null));
+        this.targetSelector.addGoal(7, new NonTameRandomTargetGoal<>(this, Fox.class, false, null));
+        this.targetSelector.addGoal(8, new NonTameRandomTargetGoal<>(this, Wolf.class, false, null));
         this.targetSelector.addGoal(7, new ResetUniversalAngerTargetGoal<>(this, false));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Honeyed", this.isHoneyed());
@@ -235,6 +251,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         compound.putInt("BearCommand", this.getCommand());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setHoneyed(compound.getBoolean("Honeyed"));
@@ -247,12 +264,14 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         this.timeUntilNextFur = compound.getInt("FurTime");
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         Item item = stack.getItem();
         return isTame() && stack.is(AMTagRegistry.GRIZZLY_BREEDABLES);
     }
 
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67) {
@@ -268,14 +287,14 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
     @Override
     public LivingEntity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof Player) {
-                Player player = (Player) passenger;
+            if (passenger instanceof Player player) {
                 return player;
             }
         }
         return null;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -325,6 +344,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         return type;
     }
 
+    @Override
     protected Vec3 getRiddenInput(Player player, Vec3 deltaIn) {
         if (player.zza != 0) {
             float f = player.zza < 0.0F ? 0.5F : 1.0F;
@@ -334,6 +354,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         }
         return Vec3.ZERO;
     }
+    @Override
     protected void tickRidden(Player player, Vec3 vec3) {
         super.tickRidden(player, vec3);
         if(player.zza != 0 || player.xxa != 0){
@@ -345,10 +366,12 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         }
     }
 
+    @Override
     protected float getRiddenSpeed(Player rider) {
         return (float)(this.getAttributeValue(Attributes.MOVEMENT_SPEED));
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (!this.shouldMove()) {
             if (this.getNavigation().getPath() != null) {
@@ -359,6 +382,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         super.travel(vec3d);
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (this.isBaby() || this.getEyeHeight() > this.getBbHeight()) {
@@ -476,8 +500,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
             this.getNavigation().stop();
         }
         LivingEntity attackTarget = this.getTarget();
-        if(this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player){
-            Player rider = (Player)this.getControllingPassenger();
+        if(this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player rider){
             if(rider.getLastHurtMob() != null && this.distanceTo(rider.getLastHurtMob()) < this.getBbWidth() + 3F && !this.isAlliedTo(rider.getLastHurtMob())){
                 UUID preyUUID = rider.getLastHurtMob().getUUID();
                 if (!this.getUUID().equals(preyUUID)) {
@@ -564,6 +587,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         }
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -581,6 +605,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         return super.isAlliedTo(entityIn);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, Boolean.valueOf(sit));
     }
@@ -701,6 +726,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         return !isSitting();
     }
 
+    @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         if (spawnDataIn == null) {
             spawnDataIn = new AgeableMob.AgeableMobGroupData(1.0F);
@@ -709,10 +735,14 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
+    @Override
+    @Override
     public boolean canTargetItem(ItemStack stack) {
         return stack.is(AMTagRegistry.GRIZZLY_FOODSTUFFS);
     }
 
+    @Override
+    @Override
     public void onGetItem(ItemEntity targetEntity) {
         ItemStack duplicate = targetEntity.getItem().copy();
         duplicate.setCount(1);
@@ -750,6 +780,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         /**
          * Execute a one shot task or start executing a continuous task
          */
+        @Override
         public void start() {
             super.start();
             if (EntityGrizzlyBear.this.isBaby()) {
@@ -759,6 +790,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
 
         }
 
+        @Override
         protected void alertOther(Mob mobIn, LivingEntity targetIn) {
             if (mobIn instanceof EntityGrizzlyBear && !mobIn.isBaby()) {
                 super.alertOther(mobIn, targetIn);
@@ -772,6 +804,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
             super(EntityGrizzlyBear.this, 1.25D, true);
         }
 
+        @Override
         protected void checkAndPerformAttack(LivingEntity enemy) {
             this.checkAndPerformAttack(enemy, this.mob.distanceToSqr(enemy));
         }
@@ -785,6 +818,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
             }
         }
 
+        @Override
         public void stop() {
             EntityGrizzlyBear.this.setStanding(false);
             super.stop();
@@ -800,6 +834,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
             super(EntityGrizzlyBear.this, Player.class, 3, true, true, null);
         }
 
+        @Override
         public boolean canUse() {
             if (EntityGrizzlyBear.this.isBaby() || EntityGrizzlyBear.this.getAprilFoolsFlag() >= 1 || EntityGrizzlyBear.this.isHoneyed()) {
                 return false;
@@ -808,6 +843,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
             }
         }
 
+        @Override
         protected double getFollowDistance() {
             return 5.0D;
         }
@@ -818,6 +854,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
             super(EntityGrizzlyBear.this, 2.0D);
         }
 
+        @Override
         public boolean canUse() {
             return (EntityGrizzlyBear.this.isBaby() || EntityGrizzlyBear.this.isOnFire()) && super.canUse();
         }

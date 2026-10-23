@@ -19,6 +19,7 @@ public class LayerMantisShrimpItem extends RenderLayer<EntityMantisShrimp, Model
         super(render);
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityMantisShrimp entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack itemstack = entitylivingbaseIn.getItemBySlot(EquipmentSlot.MAINHAND);
         matrixStackIn.pushPose();

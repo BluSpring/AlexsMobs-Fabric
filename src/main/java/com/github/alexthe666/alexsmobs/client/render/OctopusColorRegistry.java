@@ -1,23 +1,24 @@
 package com.github.alexthe666.alexsmobs.client.render;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
 @OnlyIn(Dist.CLIENT)
 public class OctopusColorRegistry {
 
     public static final BlockState FALLBACK_BLOCK = Blocks.SAND.defaultBlockState();
-    public static Object2IntMap<String> TEXTURES_TO_COLOR = new Object2IntOpenHashMap<>();;
+    public static Object2IntMap<String> TEXTURES_TO_COLOR = new Object2IntOpenHashMap<>();
 
     public static int getBlockColor(BlockState stack) {
         String blockName = stack.toString();

@@ -23,6 +23,7 @@ public class BunfungusAIBeg extends Goal {
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
+    @Override
     public boolean canUse() {
         if (this.delayTemptCounter > 0) {
             --this.delayTemptCounter;
@@ -43,14 +44,17 @@ public class BunfungusAIBeg extends Goal {
     }
 
 
+    @Override
     public boolean canContinueToUse() {
         return this.jerboa.getMainHandItem().isEmpty() && this.canUse();
     }
 
+    @Override
     public void start() {
         this.isRunning = true;
     }
 
+    @Override
     public void stop() {
         this.closestPlayer = null;
         this.jerboa.getNavigation().stop();
@@ -59,6 +63,7 @@ public class BunfungusAIBeg extends Goal {
         this.isRunning = false;
     }
 
+    @Override
     public void tick() {
         this.jerboa.setSleeping(false);
         this.jerboa.getLookControl().setLookAt(this.closestPlayer, (float)(this.jerboa.getMaxHeadYRot() + 20), (float)this.jerboa.getMaxHeadXRot());

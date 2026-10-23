@@ -1,11 +1,15 @@
 package com.github.alexthe666.alexsmobs.block;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityEndPirateDoor;
 import com.mojang.serialization.MapCodec;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -15,23 +19,31 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
 
 public class BlockEndPirateDoor extends BaseEntityBlock {
     public static final MapCodec<BlockEndPirateDoor> CODEC = simpleCodec(p -> new BlockEndPirateDoor());
@@ -57,18 +69,20 @@ public class BlockEndPirateDoor extends BaseEntityBlock {
         return CODEC;
     }
 
+    @Override
     public VoxelShape getShape(BlockState p_52807_, BlockGetter p_52808_, BlockPos p_52809_, CollisionContext p_52810_) {
         Direction direction = p_52807_.getValue(HORIZONTAL_FACING);
         boolean flag = !p_52807_.getValue(OPEN);
         boolean flag1 = p_52807_.getValue(HINGE) == DoorHingeSide.RIGHT;
         return switch (direction) {
-            default -> flag ? EAST_AABB : (flag1 ? NORTH_AABB : SOUTH_AABB);
             case SOUTH -> flag ? SOUTH_AABB : (flag1 ? EAST_AABB : WEST_AABB);
             case WEST -> flag ? WEST_AABB : (flag1 ? SOUTH_AABB : NORTH_AABB);
             case NORTH -> flag ? NORTH_AABB : (flag1 ? WEST_AABB : EAST_AABB);
+            default -> flag ? EAST_AABB : (flag1 ? NORTH_AABB : SOUTH_AABB);
         };
     }
 
+    @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState state2, LevelAccessor level, BlockPos pos, BlockPos p_52801_) {
         if(state.getValue(SEGMENT) == 0){
             return !state.canSurvive(level, pos) || !level.getBlockState(pos.above()).is(this) || !level.getBlockState(pos.above(2)).is(this) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, state2, level, pos, p_52801_);
@@ -77,18 +91,22 @@ public class BlockEndPirateDoor extends BaseEntityBlock {
         return !state.canSurvive(level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, state2, level, pos, p_52801_);
     }
 
+    @Override
     public BlockState rotate(BlockState p_185499_1_, Rotation p_185499_2_) {
-        return (BlockState)p_185499_1_.setValue(HORIZONTAL_FACING, p_185499_2_.rotate((Direction)p_185499_1_.getValue(HORIZONTAL_FACING)));
+        return p_185499_1_.setValue(HORIZONTAL_FACING, p_185499_2_.rotate(p_185499_1_.getValue(HORIZONTAL_FACING)));
     }
 
+    @Override
     public BlockState mirror(BlockState state, Mirror mir) {
-        return state.rotate(mir.getRotation((Direction)state.getValue(HORIZONTAL_FACING)));
+        return state.rotate(mir.getRotation(state.getValue(HORIZONTAL_FACING)));
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(SEGMENT, HORIZONTAL_FACING, OPEN, HINGE, POWERED);
     }
 
+    @Override
     public RenderShape getRenderShape(BlockState state) {
         return state.getValue(SEGMENT) == 0 ? RenderShape.ENTITYBLOCK_ANIMATED : RenderShape.INVISIBLE;
     }
@@ -99,6 +117,7 @@ public class BlockEndPirateDoor extends BaseEntityBlock {
         return state.getValue(SEGMENT) == 0 ? new TileEntityEndPirateDoor(pos, state) : null;
     }
 
+    @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos p_52780_, boolean p_52781_) {
 
         boolean flag = level.hasNeighborSignal(pos);
@@ -161,6 +180,7 @@ public class BlockEndPirateDoor extends BaseEntityBlock {
         return null;
     }
 
+    @Override
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext p_52739_) {
         BlockPos blockpos = p_52739_.getClickedPos();
@@ -173,6 +193,7 @@ public class BlockEndPirateDoor extends BaseEntityBlock {
         }
     }
 
+    @Override
     public void setPlacedBy(Level p_52749_, BlockPos p_52750_, BlockState p_52751_, LivingEntity p_52752_, ItemStack p_52753_) {
         p_52749_.setBlock(p_52750_.above(), p_52751_.setValue(SEGMENT, 1), 3);
         p_52749_.setBlock(p_52750_.above(2), p_52751_.setValue(SEGMENT, 2), 3);
@@ -213,6 +234,7 @@ public class BlockEndPirateDoor extends BaseEntityBlock {
     }
 
 
+    @Override
     public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         return switch (state.getValue(SEGMENT)) {
             case 0 -> world.getBlockState(pos.below()).isFaceSturdy(world, pos.below(), Direction.UP);
@@ -223,11 +245,13 @@ public class BlockEndPirateDoor extends BaseEntityBlock {
     }
 
 
+    @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152180_, BlockState state, BlockEntityType<T> p_152182_) {
         return state.getValue(SEGMENT) == 0 ? createTickerHelper(p_152182_, AMTileEntityRegistry.END_PIRATE_DOOR.get(), TileEntityEndPirateDoor::commonTick) : null;
     }
 
+    @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return state.getValue(SEGMENT) == 0? super.getDrops(state, builder) : Collections.emptyList();
     }

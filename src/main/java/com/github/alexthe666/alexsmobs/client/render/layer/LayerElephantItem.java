@@ -18,6 +18,7 @@ public class LayerElephantItem extends RenderLayer<EntityElephant, ModelElephant
         super(render);
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityElephant entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack itemstack = entitylivingbaseIn.getMainHandItem();
         matrixStackIn.pushPose();

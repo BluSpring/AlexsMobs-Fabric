@@ -23,6 +23,7 @@ public class RenderWarpedMosco extends MobRenderer<EntityWarpedMosco, ModelWarpe
         this.addLayer(new WarpedMoscoGlowLayer(this));
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityWarpedMosco entity) {
         return TEXTURE;
     }
@@ -33,9 +34,10 @@ public class RenderWarpedMosco extends MobRenderer<EntityWarpedMosco, ModelWarpe
             super(p_i50928_1_);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntityWarpedMosco entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntityWarpedMosco entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(AMRenderTypes.getEyesFlickering(TEXTURE_EYES, 0));
             float alpha = 0.5F + (Mth.cos(ageInTicks * 0.2F) + 1F) * 0.2F;
             this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, 240,

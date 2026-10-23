@@ -25,6 +25,7 @@ public class RenderCatfish extends MobRenderer<EntityCatfish, EntityModel<Entity
         super(renderManagerIn, new ModelCatfishSmall(), 0.5F);
     }
 
+    @Override
     protected void scale(EntityCatfish entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         if (entitylivingbaseIn.getCatfishSize() == 2) {
             model = modelLarge;
@@ -35,6 +36,7 @@ public class RenderCatfish extends MobRenderer<EntityCatfish, EntityModel<Entity
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityCatfish entity) {
         if(entity.getCatfishSize() == 2){
             return entity.isSpitting() ? TEXTURE_SPIT_LARGE : TEXTURE_LARGE;

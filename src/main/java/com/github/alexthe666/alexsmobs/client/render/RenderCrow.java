@@ -16,10 +16,12 @@ public class RenderCrow extends MobRenderer<EntityCrow, ModelCrow> {
         this.addLayer(new LayerCrowItem(this));
     }
 
+    @Override
     protected void scale(EntityCrow entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityCrow entity) {
         return TEXTURE;
     }

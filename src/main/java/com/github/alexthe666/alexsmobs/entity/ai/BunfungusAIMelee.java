@@ -30,6 +30,7 @@ public class BunfungusAIMelee extends Goal {
         return false;
     }
 
+    @Override
     public void tick(){
         if(jumpCooldown > 0){
             jumpCooldown--;

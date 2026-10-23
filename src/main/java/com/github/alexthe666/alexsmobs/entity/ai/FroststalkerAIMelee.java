@@ -1,16 +1,17 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityFroststalker;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
 
 public class FroststalkerAIMelee extends Goal {
 
@@ -40,12 +41,14 @@ public class FroststalkerAIMelee extends Goal {
         return false;
     }
 
+    @Override
     public boolean canContinueToUse() {
         LivingEntity target = froststalker.getTarget();
         return target != null && !froststalker.isValidLeader(target);
     }
 
     
+    @Override
     public void start() {
         willJump = froststalker.getRandom().nextInt(2) == 0;
         hasJumped = false;
@@ -57,6 +60,7 @@ public class FroststalkerAIMelee extends Goal {
         this.froststalker.frostJump();
     }
 
+    @Override
     public void tick() {
         froststalker.setBipedal(true);
         froststalker.standFor(20);
@@ -141,6 +145,7 @@ public class FroststalkerAIMelee extends Goal {
         return null;
     }
 
+    @Override
     public void stop() {
         froststalker.setTackling(false);
     }

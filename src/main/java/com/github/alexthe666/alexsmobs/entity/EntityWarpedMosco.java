@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
 import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
@@ -12,6 +14,9 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import net.neoforged.neoforge.event.EventHooks;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -48,9 +53,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
 
 public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
 
@@ -91,18 +93,22 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
         };
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.WARPED_MOSCO_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.WARPED_MOSCO_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.WARPED_MOSCO_HURT.get();
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -134,10 +140,12 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
         builder.define(HAND_SIDE, true);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -158,6 +166,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
         this.entityData.set(HAND_SIDE, right);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevFlyRightProgress = flyRightProgress;
@@ -203,7 +212,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
             this.setNoGravity(false);
         }
         // getMobGriefingEvent renamed in 1.21 - use canEntityGrief
-        if (this.horizontalCollision && net.neoforged.neoforge.event.EventHooks.canEntityGrief(this.level(), this)) {
+        if (this.horizontalCollision && EventHooks.canEntityGrief(this.level(), this)) {
             boolean flag = false;
             AABB axisalignedbb = this.getBoundingBox().inflate(0.2D);
             for (BlockPos blockpos : BlockPos.betweenClosed(Mth.floor(axisalignedbb.minX), Mth.floor(axisalignedbb.minY), Mth.floor(axisalignedbb.minZ), Mth.floor(axisalignedbb.maxX), Mth.floor(axisalignedbb.maxY), Mth.floor(axisalignedbb.maxZ))) {
@@ -375,6 +384,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
         return !level().getFluidState(position).isEmpty();
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if ((this.getAnimation() == ANIMATION_SUCK || this.getAnimation() == ANIMATION_SLAM) && this.getAnimationTick() > 8) {
             if (this.getNavigation().getPath() != null) {
@@ -387,6 +397,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
         super.travel(travelVector);
     }
 
+    @Override
     public void positionRider(Entity passenger, Entity.MoveFunction moveFunc) {
         super.positionRider(passenger, moveFunc);
         if (hasPassenger(passenger)) {
@@ -414,10 +425,12 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
         return true;
     }
 
+    @Override
     public boolean shouldRiderSit() {
         return false;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.warpedMoscoSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -481,6 +494,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
             }
         }
 
+        @Override
         public void tick() {
             if (flightTarget) {
                 mosco.getMoveControl().setWantedPosition(x, y, z, 1F);
@@ -514,6 +528,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             if (flightTarget) {
                 return mosco.isFlying() && mosco.distanceToSqr(x, y, z) > 20F && !mosco.horizontalCollision;
@@ -522,6 +537,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
             }
         }
 
+        @Override
         public void start() {
             if (flightTarget) {
                 mosco.setFlying(true);
@@ -531,6 +547,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
             }
         }
 
+        @Override
         public void stop() {
             this.mosco.getNavigation().stop();
             super.stop();
@@ -546,10 +563,12 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
         public AttackGoal() {
         }
 
+        @Override
         public boolean canUse() {
             return EntityWarpedMosco.this.getTarget() != null;
         }
 
+        @Override
         public void tick() {
             if (dashCooldown > 0) {
                 dashCooldown--;
@@ -627,6 +646,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
             return EntityWarpedMosco.this.blockPosition();
         }
 
+        @Override
         public void stop() {
             upTicks = 0;
             dashCooldown = 0;

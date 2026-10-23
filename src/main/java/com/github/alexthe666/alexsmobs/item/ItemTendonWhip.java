@@ -4,6 +4,9 @@ import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityTendonSegment;
 import com.github.alexthe666.alexsmobs.entity.util.TendonWhipUtil;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -23,8 +26,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.common.ItemAbility;
 
 public class ItemTendonWhip extends SwordItem implements ILeftClick {
 
@@ -46,6 +47,7 @@ public class ItemTendonWhip extends SwordItem implements ILeftClick {
         return false;
     }
 
+    @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity entity, LivingEntity player) {
         launchTendonsAt(stack, player, entity);
         return super.hurtEnemy(stack, entity, player);
@@ -55,6 +57,8 @@ public class ItemTendonWhip extends SwordItem implements ILeftClick {
         return player.getAttackStrengthScale(0.5F) > 0.9F;
     }
 
+    @Override
+    @Override
     public boolean onLeftClick(ItemStack stack, LivingEntity playerIn){
         if(stack.is(AMItemRegistry.TENDON_WHIP.get()) && (!(playerIn instanceof Player) || isCharged((Player)playerIn, stack))){
             Level worldIn = playerIn.level();
@@ -106,18 +110,22 @@ public class ItemTendonWhip extends SwordItem implements ILeftClick {
         return false;
     }
 
+    @Override
     public boolean canPerformAction(ItemStack stack, ItemAbility ItemAbility) {
         return ItemAbility != ItemAbilities.SWORD_SWEEP && super.canPerformAction(stack, ItemAbility);
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return !ItemStack.isSameItem(oldStack, newStack);
     }
 
+    @Override
     public int getMaxDamage(ItemStack stack) {
         return 450;
     }
 
+    @Override
     public boolean isValidRepairItem(ItemStack pickaxe, ItemStack stack) {
         return stack.is(AMItemRegistry.ELASTIC_TENDON.get());
     }

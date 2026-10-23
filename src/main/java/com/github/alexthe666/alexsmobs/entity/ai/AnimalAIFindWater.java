@@ -1,13 +1,14 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.ISemiAquatic;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
-
-import java.util.EnumSet;
 
 public class AnimalAIFindWater extends Goal {
     private final PathfinderMob creature;
@@ -19,6 +20,7 @@ public class AnimalAIFindWater extends Goal {
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
+    @Override
     public boolean canUse() {
         if (this.creature.onGround() && !this.creature.level().getFluidState(this.creature.blockPosition()).is(FluidTags.WATER)) {
             if (this.creature instanceof ISemiAquatic && ((ISemiAquatic) this.creature).shouldEnterWater() && (this.creature.getTarget() != null || this.creature.getRandom().nextInt(executionChance) == 0)) {
@@ -29,18 +31,21 @@ public class AnimalAIFindWater extends Goal {
         return false;
     }
 
+    @Override
     public void start() {
         if (targetPos != null) {
             this.creature.getNavigation().moveTo(targetPos.getX(), targetPos.getY(), targetPos.getZ(), 1D);
         }
     }
 
+    @Override
     public void tick() {
         if (targetPos != null) {
             this.creature.getNavigation().moveTo(targetPos.getX(), targetPos.getY(), targetPos.getZ(), 1D);
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         if (this.creature instanceof ISemiAquatic && !((ISemiAquatic) this.creature).shouldEnterWater()) {
             this.creature.getNavigation().stop();

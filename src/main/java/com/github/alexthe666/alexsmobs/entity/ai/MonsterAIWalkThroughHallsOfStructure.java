@@ -1,6 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -12,10 +17,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MonsterAIWalkThroughHallsOfStructure extends RandomStrollGoal {
 
@@ -31,6 +32,7 @@ public class MonsterAIWalkThroughHallsOfStructure extends RandomStrollGoal {
         this.maximumDistance = 32;
     }
 
+    @Override
     public boolean canUse() {
         if(errorCooldown > 0){
             errorCooldown--;
@@ -38,6 +40,7 @@ public class MonsterAIWalkThroughHallsOfStructure extends RandomStrollGoal {
         return super.canUse();
     }
 
+    @Override
     public void tick(){
         super.tick();
         if(errorCooldown > 0){
@@ -45,6 +48,7 @@ public class MonsterAIWalkThroughHallsOfStructure extends RandomStrollGoal {
         }
     }
 
+    @Override
     @Nullable
     protected Vec3 getPosition() {
         StructureStart start = getNearestStructure(mob.blockPosition());

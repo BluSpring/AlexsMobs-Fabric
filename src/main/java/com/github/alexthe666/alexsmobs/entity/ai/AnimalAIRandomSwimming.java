@@ -1,6 +1,8 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.PathfinderMob;
@@ -8,8 +10,6 @@ import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
 
 public class AnimalAIRandomSwimming extends RandomStrollGoal {
     private final int xzSpread;
@@ -35,6 +35,7 @@ public class AnimalAIRandomSwimming extends RandomStrollGoal {
         this.submerged = submerged;
     }
 
+    @Override
     public boolean canUse() {
         if (this.mob.isVehicle()|| mob.getTarget() != null || !this.mob.isInWater() && !this.mob.isInLava()) {
             return false;
@@ -57,6 +58,7 @@ public class AnimalAIRandomSwimming extends RandomStrollGoal {
         }
     }
 
+    @Override
     @Nullable
     protected Vec3 getPosition() {
         if(this.mob.hasRestriction() && this.mob.distanceToSqr(Vec3.atCenterOf(this.mob.getRestrictCenter())) > this.mob.getRestrictRadius() * this.mob.getRestrictRadius()){

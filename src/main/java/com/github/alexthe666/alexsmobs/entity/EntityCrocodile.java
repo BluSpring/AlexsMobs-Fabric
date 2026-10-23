@@ -1,9 +1,19 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.block.BlockReptileEgg;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHurtByTargetNotBaby;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeaveWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AquaticMoveController;
+import com.github.alexthe666.alexsmobs.entity.ai.CrocodileAIMelee;
+import com.github.alexthe666.alexsmobs.entity.ai.CrocodileAIRandomSwimming;
+import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
+import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticPathNavigator;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
@@ -11,9 +21,14 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.fluids.FluidType;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -33,11 +48,25 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreathAirGoal;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -48,15 +77,14 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.fluids.FluidType;
-
-import javax.annotation.Nullable;
-import java.util.function.Predicate;
 
 public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, ISemiAquatic {
 
@@ -107,18 +135,22 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D).add(Attributes.FOLLOW_RANGE, 15).add(Attributes.ARMOR, 8.0D).add(Attributes.ATTACK_DAMAGE, 10.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.4F).add(Attributes.MOVEMENT_SPEED, 0.25F);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.crocSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 2;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
 
+    @Override
     protected void ageBoundaryReached() {
         super.ageBoundaryReached();
         if (!this.isBaby() && this.level().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
@@ -126,6 +158,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         }
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setDesert(this.isBiomeDesert(worldIn, this.blockPosition()));
@@ -136,19 +169,23 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         return worldIn.getBiome(position).is(AMTagRegistry.SPAWNS_DESERT_CROCODILES);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return isBaby() ? AMSoundRegistry.CROCODILE_BABY.get() : AMSoundRegistry.CROCODILE_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.CROCODILE_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.CROCODILE_HURT.get();
     }
 
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("CrocodileSitting", this.isSitting());
@@ -161,6 +198,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         compound.putBoolean("HasEgg", this.hasEgg());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setOrderedToSit(compound.getBoolean("CrocodileSitting"));
@@ -212,6 +250,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         this.entityData.set(CLIMBING, b0);
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevGroundProgress = groundProgress;
@@ -387,6 +426,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         }
     }
 
+    @Override
     protected boolean isImmobile() {
         return super.isImmobile() || this.getStunTicks() > 0;
     }
@@ -396,10 +436,12 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         return true;
     }
 
+    @Override
     public boolean shouldRiderSit() {
         return false;
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -417,6 +459,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         return super.isAlliedTo(entityIn);
     }
 
+    @Override
     public void positionRider(Entity passenger, Entity.MoveFunction moveFunc) {
         if (!this.getPassengers().isEmpty()) {
             this.yBodyRot = Mth.wrapDegrees(this.getYRot() - 180F);
@@ -434,23 +477,28 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         }
     }
 
+    @Override
     @Nullable
     public LivingEntity getControllingPassenger() {
         return null;
     }
 
+    @Override
     public boolean onClimbable() {
         return isInWater() && this.isBesideClimbableBlock();
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION && this.getPassengers().isEmpty() && this.getStunTicks() == 0) {
             this.setAnimation(ANIMATION_LUNGE);
@@ -458,6 +506,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         return true;
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if(isSitting()){
             super.travel(Vec3.ZERO);
@@ -484,11 +533,13 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         return false; // Crocodile can breathe underwater
     }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         return super.getWalkTargetValue(pos, worldIn);
 
     }
 
+    @Override
     public boolean shouldLeaveWater() {
         if (!this.getPassengers().isEmpty()) {
             return false;
@@ -513,6 +564,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, Boolean.valueOf(sit));
     }
@@ -549,6 +601,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         this.entityData.set(STUN_TICKS, stun);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(1, new MateGoal(this, 1.0D));
@@ -564,22 +617,26 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(4, new EntityAINearestTarget3D(this, Player.class, 80, false, true, null) {
+            @Override
             public boolean canUse() {
                 return !isBaby() && !isTame() && level().getDifficulty() != Difficulty.PEACEFUL && super.canUse();
             }
         });
         this.targetSelector.addGoal(5, new EntityAINearestTarget3D(this, LivingEntity.class, 180, false, true, AMEntityRegistry.buildPredicateFromTag(AMTagRegistry.CROCODILE_TARGETS)) {
+            @Override
             public boolean canUse() {
                 return !isBaby() && !isTame() && super.canUse();
             }
         });
         this.targetSelector.addGoal(6, new EntityAINearestTarget3D(this, Monster.class, 180, false, true, NOT_CREEPER) {
+            @Override
             public boolean canUse() {
                 return !isBaby() && isTame() && super.canUse();
             }
         });
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -599,13 +656,15 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         return AMEntityRegistry.CROCODILE.get().create(p_241840_1_);
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         final ItemStack itemstack = player.getItemInHand(hand);
         final Item item = itemstack.getItem();
         if (item == Items.NAME_TAG) {
             return super.mobInteract(player, hand);
         }
-        if (isTame() && itemstack.has(net.minecraft.core.component.DataComponents.FOOD) && itemstack.getFoodProperties(this) != null && true /* isMeat removed */ && this.getHealth() < this.getMaxHealth()) {
+        /* isMeat removed */
+        if (isTame() && itemstack.has(DataComponents.FOOD) && itemstack.getFoodProperties(this) != null && this.getHealth() < this.getMaxHealth()) {
             this.usePlayerItem(player, hand, itemstack);
             this.heal(10);
             this.gameEvent(GameEvent.EAT);
@@ -627,12 +686,14 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         return type;
     }
 
+    @Override
     public void setTarget(@Nullable LivingEntity entitylivingbaseIn) {
         if (!this.isBaby()) {
             super.setTarget(entitylivingbaseIn);
         }
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.CROCODILE_BREEDABLES);
     }
@@ -683,10 +744,12 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
             this.crocodile = crocodile;
         }
 
+        @Override
         public boolean canUse() {
             return super.canUse() && !this.crocodile.hasEgg();
         }
 
+        @Override
         protected void breed() {
             ServerPlayer serverplayerentity = this.animal.getLoveCause();
             if (serverplayerentity == null && this.partner.getLoveCause() != null) {
@@ -721,22 +784,27 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
             this.turtle = turtle;
         }
 
+        @Override
         public void stop() {
             digTime = 0;
         }
 
+        @Override
         public boolean canUse() {
             return this.turtle.hasEgg() && super.canUse();
         }
 
+        @Override
         public boolean canContinueToUse() {
             return super.canContinueToUse() && this.turtle.hasEgg();
         }
 
+        @Override
         public double acceptedDistance() {
             return turtle.getBbWidth() + 0.5D;
         }
 
+        @Override
         public void tick() {
             super.tick();
             turtle.setOrderedToSit(false);
@@ -754,6 +822,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
 
         }
 
+        @Override
         protected boolean isValidTarget(LevelReader worldIn, BlockPos pos) {
             return worldIn.isEmptyBlock(pos.above()) && BlockReptileEgg.isProperHabitat(worldIn, pos);
         }

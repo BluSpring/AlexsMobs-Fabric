@@ -9,6 +9,9 @@ import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import net.neoforged.neoforge.fluids.FluidType;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -21,7 +24,12 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -38,9 +46,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.fluids.FluidType;
-
-import javax.annotation.Nullable;
 
 public class EntitySkelewag extends Monster implements IAnimatedEntity {
 
@@ -60,10 +65,12 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
         this.setPathfindingMalus(PathType.WATER_BORDER, 0.0F);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new SemiAquaticPathNavigator(this, worldIn);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.skelewagSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -76,22 +83,27 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
         }
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.SKELEWAG_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.SKELEWAG_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.SKELEWAG_HURT.get();
     }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader level) {
         return level().getFluidState(pos).is(FluidTags.WATER) ? 10.0F + level.getLightLevelDependentMagicValue(pos) - 0.5F : super.getWalkTargetValue(pos, level());
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new TryFindWaterGoal(this));
         this.goalSelector.addGoal(2, new AttackGoal(this));
@@ -112,10 +124,12 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
         return Monster.createMonsterAttributes().add(Attributes.ATTACK_DAMAGE, 3.0D).add(Attributes.MOVEMENT_SPEED, 0.45D).add(Attributes.MAX_HEALTH, 20.0D);
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 1;
     }
 
+    @Override
     public void tick(){
         super.tick();
         this.prevOnLandProgress = onLandProgress;
@@ -174,24 +188,29 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
         this.entityData.set(VARIANT, Integer.valueOf(command));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -205,6 +224,7 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
         }
     }
 
+    @Override
     public void positionRider(Entity passenger, Entity.MoveFunction moveFunc) {
         if (this.hasPassenger(passenger)) {
             passenger.setYBodyRot(this.yBodyRot);
@@ -219,6 +239,7 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
         return true;
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setVariant(this.getRandom().nextFloat() < 0.3F ? 1 : 0);
@@ -278,6 +299,7 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
             return this.fish.getTarget() != null;
         }
 
+        @Override
         public void tick(){
             LivingEntity target = this.fish.getTarget();
             if(target != null){
@@ -293,6 +315,7 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
             }
         }
 
+        @Override
         public void stop(){
             isCharging = false;
         }

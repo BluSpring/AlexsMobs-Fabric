@@ -14,21 +14,25 @@ public class KomodoDragonAIBreed extends BreedGoal {
         this.komodo = entityKomodoDragon;
     }
 
+    @Override
     public boolean canUse(){
         boolean prev = super.canUse();
         withPartner = prev;
         return withPartner || animal.isInLove();
     }
 
+    @Override
     public boolean canContinueToUse() {
         return withPartner ? super.canContinueToUse() : selfBreedTime < 60;
     }
 
+    @Override
     public void stop() {
         super.stop();
         selfBreedTime = 0;
     }
 
+    @Override
     public void tick() {
         if(withPartner){
             super.tick();
@@ -41,6 +45,7 @@ public class KomodoDragonAIBreed extends BreedGoal {
         }
     }
 
+    @Override
     protected void breed() {
         for(int i = 0; i < 2 + this.animal.getRandom().nextInt(2); i++){
             this.animal.spawnChildFromBreeding((ServerLevel)this.level, this.partner);

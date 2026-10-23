@@ -26,6 +26,7 @@ public class LayerAnteaterTongueItem extends RenderLayer<EntityAnteater, ModelAn
         super(render);
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityAnteater anteater, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack itemstack = anteater.getMainHandItem();
         if(!itemstack.isEmpty() || anteater.hasAntOnTongue()){

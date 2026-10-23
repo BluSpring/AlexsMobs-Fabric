@@ -17,11 +17,13 @@ public class RenderOrca extends MobRenderer<EntityOrca, ModelOrca> {
         super(renderManagerIn, new ModelOrca(), 1.0F);
     }
 
+    @Override
     protected void scale(EntityOrca entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(1.3F, 1.3F, 1.3F);
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityOrca entity) {
         return switch (entity.getVariant()) {
             case 0 -> TEXTURE_NE;

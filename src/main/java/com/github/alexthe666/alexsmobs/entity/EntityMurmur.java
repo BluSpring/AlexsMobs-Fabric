@@ -1,10 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeaveWater;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -15,7 +20,11 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -26,10 +35,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.UUID;
 
 public class EntityMurmur extends Monster implements ISemiAquatic {
 
@@ -47,6 +52,7 @@ public class EntityMurmur extends Monster implements ISemiAquatic {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D).add(Attributes.FOLLOW_RANGE, 48.0D).add(Attributes.ATTACK_DAMAGE, 3.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.3F).add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new AnimalAILeaveWater(this));
@@ -55,14 +61,17 @@ public class EntityMurmur extends Monster implements ISemiAquatic {
     }
 
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.MURMUR_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.MURMUR_HURT.get();
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
@@ -70,16 +79,19 @@ public class EntityMurmur extends Monster implements ISemiAquatic {
         return reason == MobSpawnType.SPAWNER || !iServerWorld.canSeeSky(pos) && (pos.getY() <= AMConfig.murmurSpawnHeight || iServerWorld.getBiome(pos).is(AMTagRegistry.SPAWNS_MURMURS_IGNORE_HEIGHT)) && checkMonsterSpawnRules(entityType, iServerWorld, reason, pos, random);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.murmurSpawnRolls, this.getRandom(), spawnReasonIn) && super.checkSpawnRules(worldIn, spawnReasonIn);
     }
 
+    @Override
     public boolean isAlliedTo(Entity entity) {
         return this.getHeadUUID() != null && entity.getUUID().equals(this.getHeadUUID()) || super.isAlliedTo(entity);
     }
 
     // getStandingEyeHeight removed in 1.21 - eye height now defined in EntityDimensions
 
+    @Override
     protected float getWaterSlowDown() {
         return 0.9F;
     }
@@ -114,6 +126,7 @@ public class EntityMurmur extends Monster implements ISemiAquatic {
         return this.renderFakeHead;
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (this.renderFakeHead) this.renderFakeHead = false;
@@ -173,6 +186,7 @@ public class EntityMurmur extends Monster implements ISemiAquatic {
         return 5;
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.hasUUID("HeadUUID")) {
@@ -181,6 +195,7 @@ public class EntityMurmur extends Monster implements ISemiAquatic {
     }
 
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.getHeadUUID() != null) {

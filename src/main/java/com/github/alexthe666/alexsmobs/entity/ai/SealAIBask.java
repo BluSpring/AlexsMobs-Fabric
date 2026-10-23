@@ -1,9 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
-import com.github.alexthe666.alexsmobs.entity.EntitySeal;
-import net.minecraft.world.entity.ai.goal.Goal;
-
 import java.util.EnumSet;
+
+import com.github.alexthe666.alexsmobs.entity.EntitySeal;
+
+import net.minecraft.world.entity.ai.goal.Goal;
 
 public class SealAIBask extends Goal {
     private final EntitySeal seal;
@@ -13,10 +14,12 @@ public class SealAIBask extends Goal {
         this.setFlags(EnumSet.of(Flag.JUMP, Flag.MOVE));
     }
 
+    @Override
     public boolean canContinueToUse() {
         return this.seal.isBasking() && !this.seal.isInWaterOrBubble();
     }
 
+    @Override
     public boolean canUse() {
         if (this.seal.isInWaterOrBubble()) {
             return false;
@@ -25,10 +28,12 @@ public class SealAIBask extends Goal {
         }
     }
 
+    @Override
     public void tick() {
         this.seal.getNavigation().stop();
     }
 
+    @Override
     public void stop() {
         this.seal.setBasking(false);
     }

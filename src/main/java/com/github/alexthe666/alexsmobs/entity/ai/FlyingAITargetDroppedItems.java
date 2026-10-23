@@ -10,15 +10,18 @@ public class FlyingAITargetDroppedItems extends CreatureAITargetItems {
         this.executionChance = 1;
     }
 
+    @Override
     public void stop() {
         super.stop();
         hunter.setItemFlag(false);
     }
 
+    @Override
     public boolean canUse() {
         return super.canUse() && (mob.getTarget() == null || !mob.getTarget().isAlive());
     }
 
+    @Override
     public boolean canContinueToUse() {
         return super.canContinueToUse() && (mob.getTarget() == null || !mob.getTarget().isAlive());
     }

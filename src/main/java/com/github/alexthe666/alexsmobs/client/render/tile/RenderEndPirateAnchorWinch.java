@@ -99,10 +99,12 @@ public class RenderEndPirateAnchorWinch<T extends TileEntityEndPirateAnchorWinch
         }
     }
 
+    @Override
     public boolean shouldRenderOffScreen(T entity) {
         return true;
     }
 
+    @Override
     public int getViewDistance() {
         return 256;
     }

@@ -1,10 +1,15 @@
 package com.github.alexthe666.alexsmobs.client.particle;
 
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.core.particles.SimpleParticleType;
 
 public class ParticleTeethGlint extends TextureSheetParticle {
 
@@ -25,21 +30,25 @@ public class ParticleTeethGlint extends TextureSheetParticle {
         this.setAlpha(1F - (this.age / (float)this.lifetime) * 0.5F);
     }
 
+    @Override
     public int getLightColor(float p_189214_1_) {
         int lvt_2_1_ = super.getLightColor(p_189214_1_);
         int lvt_4_1_ = lvt_2_1_ >> 16 & 255;
         return 240 | lvt_4_1_ << 16;
     }
 
+    @Override
     public ParticleRenderType getRenderType() {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
+    @Override
     public void move(double p_187110_1_, double p_187110_3_, double p_187110_5_) {
         this.setBoundingBox(this.getBoundingBox().move(p_187110_1_, p_187110_3_, p_187110_5_));
         this.setLocationFromBoundingbox();
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.oRoll = this.roll;
@@ -66,6 +75,7 @@ public class ParticleTeethGlint extends TextureSheetParticle {
             this.spriteSet = p_i50522_1_;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType p_199234_1_, ClientLevel p_199234_2_, double p_199234_3_, double p_199234_5_, double p_199234_7_, double p_199234_9_, double p_199234_11_, double p_199234_13_) {
             ParticleTeethGlint lvt_15_1_ = new ParticleTeethGlint(p_199234_2_, p_199234_3_, p_199234_5_, p_199234_7_, p_199234_9_, p_199234_11_, p_199234_13_);
             lvt_15_1_.pickSprite(this.spriteSet);

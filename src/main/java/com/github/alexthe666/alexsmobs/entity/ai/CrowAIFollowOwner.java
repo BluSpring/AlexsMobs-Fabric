@@ -1,10 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityCrow;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.message.MessageCrowMountPlayer;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,8 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
 
 public class CrowAIFollowOwner extends Goal {
     private final EntityCrow crow;
@@ -47,6 +48,7 @@ public class CrowAIFollowOwner extends Goal {
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
+    @Override
     public boolean canUse() {
         LivingEntity lvt_1_1_ = this.crow.getOwner();
         if (lvt_1_1_ == null) {
@@ -65,6 +67,7 @@ public class CrowAIFollowOwner extends Goal {
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         if (this.crow.isSitting()) {
             return false;
@@ -73,6 +76,7 @@ public class CrowAIFollowOwner extends Goal {
         }
     }
 
+    @Override
     public void start() {
         this.timeToRecalcPath = 0;
         this.oldWaterCost = this.crow.getPathfindingMalus(PathType.WATER);
@@ -84,6 +88,7 @@ public class CrowAIFollowOwner extends Goal {
         circleDistance = 1F + crow.getRandom().nextFloat() * 2F;
     }
 
+    @Override
     public void stop() {
         this.owner = null;
         this.navigator.stop();
@@ -91,6 +96,7 @@ public class CrowAIFollowOwner extends Goal {
         this.crow.setPathfindingMalus(PathType.WATER, this.oldWaterCost);
     }
 
+    @Override
     public void tick() {
         this.crow.getLookControl().setLookAt(this.owner, 10.0F, (float) this.crow.getMaxHeadXRot());
         if (!this.crow.isLeashed() && !this.crow.isPassenger()) {

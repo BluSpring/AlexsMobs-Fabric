@@ -17,6 +17,7 @@ public class RenderCosmicCod extends MobRenderer<EntityCosmicCod, EntityModel<En
         this.addLayer(new LayerBasicGlow<>(this, TEXTURE_EYES));
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityCosmicCod entity) {
         return TEXTURE;
     }

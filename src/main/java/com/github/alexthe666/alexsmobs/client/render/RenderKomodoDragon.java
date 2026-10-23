@@ -21,9 +21,11 @@ public class RenderKomodoDragon extends MobRenderer<EntityKomodoDragon, ModelKom
         this.addLayer(new LayerSaddle(this));
     }
 
+    @Override
     protected void scale(EntityKomodoDragon entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityKomodoDragon entity) {
         return TEXTURE;
     }
@@ -37,6 +39,7 @@ public class RenderKomodoDragon extends MobRenderer<EntityKomodoDragon, ModelKom
             super(render);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityKomodoDragon entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if(entitylivingbaseIn.isMaid()){
                 VertexConsumer maid = bufferIn.getBuffer(AMRenderTypes.entityCutoutNoCull(TEXTURE_MAID));

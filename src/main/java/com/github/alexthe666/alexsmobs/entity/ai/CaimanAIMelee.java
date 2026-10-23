@@ -24,11 +24,13 @@ public class CaimanAIMelee extends Goal {
         return target != null && target.isAlive();
     }
 
+    @Override
     public void stop(){
         caiman.setHeldMobId(-1);
         grabTime = 0;
     }
 
+    @Override
     public void tick() {
         if(grabTime < 0){
             grabTime++;

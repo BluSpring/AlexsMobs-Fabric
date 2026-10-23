@@ -22,10 +22,12 @@ public class RenderStraddler extends MobRenderer<EntityStraddler, ModelStraddler
         this.addLayer(new StradpoleLayer(this));
     }
 
+    @Override
     protected void scale(EntityStraddler entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(1.2F, 1.2F, 1.2F);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityStraddler entity) {
         return TEXTURE;
     }
@@ -36,9 +38,10 @@ public class RenderStraddler extends MobRenderer<EntityStraddler, ModelStraddler
             super(p_i50928_1_);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntityStraddler straddler, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
-                float netHeadYaw, float headPitch) {
+                           EntityStraddler straddler, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
+                           float netHeadYaw, float headPitch) {
             int t = straddler.getAnimationTick();
             if (straddler.getAnimation() == EntityStraddler.ANIMATION_LAUNCH && t < 20 && t > 6) {
                 matrixStackIn.pushPose();

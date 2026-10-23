@@ -1,14 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
-import com.github.alexthe666.alexsmobs.entity.EntityMoose;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.level.Level;
-
-import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+
+import com.github.alexthe666.alexsmobs.entity.EntityMoose;
+import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.level.Level;
 
 public class MooseAIJostle extends Goal {
 
@@ -48,6 +49,7 @@ public class MooseAIJostle extends Goal {
         return false;
     }
 
+    @Override
     public void start(){
         this.moose.jostleTimer = 0;
         this.angle = 0;
@@ -59,6 +61,7 @@ public class MooseAIJostle extends Goal {
         this.targetMoose.jostleDirection = dir;
     }
 
+    @Override
     public void stop() {
         this.moose.setJostling(false);
         this.moose.setJostlingPartner(null);
@@ -74,6 +77,7 @@ public class MooseAIJostle extends Goal {
 
     }
 
+    @Override
     public void tick() {
         if(targetMoose != null){
             this.moose.lookAt(targetMoose, 360, 180);

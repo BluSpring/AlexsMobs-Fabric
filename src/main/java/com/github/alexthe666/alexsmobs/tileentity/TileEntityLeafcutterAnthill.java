@@ -1,11 +1,20 @@
 package com.github.alexthe666.alexsmobs.tileentity;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.block.BlockLeafcutterAntChamber;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityLeafcutterAnt;
 import com.google.common.collect.Lists;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -24,10 +33,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.function.Function;
 
 public class TileEntityLeafcutterAnthill extends BlockEntity {
     private static final Direction[] DIRECTIONS_UP = new Direction[]{Direction.UP, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
@@ -91,8 +96,7 @@ public class TileEntityLeafcutterAnthill extends BlockEntity {
         List<Entity> list = this.tryReleaseAnt(p_226963_2_, p_226963_3_);
         if (p_226963_1_ != null) {
             for (Entity entity : list) {
-                if (entity instanceof EntityLeafcutterAnt) {
-                    EntityLeafcutterAnt entityLeafcutterAnt = (EntityLeafcutterAnt) entity;
+                if (entity instanceof EntityLeafcutterAnt entityLeafcutterAnt) {
                     if (p_226963_1_.position().distanceToSqr(entity.position()) <= 16.0D) {
                         entityLeafcutterAnt.setTarget(p_226963_1_);
                     }
@@ -107,8 +111,7 @@ public class TileEntityLeafcutterAnthill extends BlockEntity {
         List<Entity> list = this.tryReleaseAntAnteater(p_226963_2_, p_226963_3_);
         if (p_226963_1_ != null) {
             for (Entity entity : list) {
-                if (entity instanceof EntityLeafcutterAnt) {
-                    EntityLeafcutterAnt entityLeafcutterAnt = (EntityLeafcutterAnt) entity;
+                if (entity instanceof EntityLeafcutterAnt entityLeafcutterAnt) {
                     if (p_226963_1_.position().distanceToSqr(entity.position()) <= 16.0D) {
                         entityLeafcutterAnt.setTarget(p_226963_1_);
                     }
@@ -152,8 +155,7 @@ public class TileEntityLeafcutterAnthill extends BlockEntity {
             });
             if (entity != null) {
 
-                if (entity instanceof EntityLeafcutterAnt) {
-                    EntityLeafcutterAnt entityLeafcutterAnt = (EntityLeafcutterAnt) entity;
+                if (entity instanceof EntityLeafcutterAnt entityLeafcutterAnt) {
                     entityLeafcutterAnt.setLeaf(false);
                     if (p_235651_4_ == BeehiveBlockEntity.BeeReleaseStatus.HONEY_DELIVERED) {
 
@@ -167,7 +169,7 @@ public class TileEntityLeafcutterAnthill extends BlockEntity {
                     double d1 = (double) blockpos.getY() + 1.0D;
                     double d2 = (double) blockpos.getZ() + 0.5D;
                     entity.moveTo(d0, d1, d2, entity.getYRot(), entity.getXRot());
-                    if (((EntityLeafcutterAnt) entity).isQueen()) {
+                    if (entityLeafcutterAnt.isQueen()) {
                         entityLeafcutterAnt.setStayOutOfHiveCountdown(400);
                     }
                 }
@@ -242,6 +244,7 @@ public class TileEntityLeafcutterAnthill extends BlockEntity {
         return this.ants.size();
     }
 
+    @Override
     public void setChanged() {
         if (this.isNearFire()) {
             this.angerAnts(null, this.level.getBlockState(this.getBlockPos()), BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);

@@ -54,7 +54,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
@@ -95,6 +95,7 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         this.setPathfindingMalus(PathType.LEAVES, 0.0F);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new AdvancedPathNavigateNoTeleport(this, worldIn, false);
     }
@@ -112,23 +113,28 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         return (blockstate.is(AMTagRegistry.GORILLA_SPAWNS) || blockstate.is(Blocks.AIR)) && worldIn.getRawBrightness(p_223317_3_, 0) > 8;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.gorillaSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         Item item = stack.getItem();
         return isTame() && stack.is(AMTagRegistry.GORILLA_BREEDABLES);
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 8;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -142,6 +148,7 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         }
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -162,18 +169,22 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.GORILLA_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.GORILLA_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.GORILLA_HURT.get();
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             this.setAnimation(ANIMATION_ATTACK);
@@ -181,6 +192,7 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         return true;
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isSitting()) {
             if (this.getNavigation().getPath() != null) {
@@ -191,10 +203,10 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         super.travel(vec3d);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
-        if (spawnDataIn instanceof AgeableMob.AgeableMobGroupData) {
-            AgeableMob.AgeableMobGroupData lvt_6_1_ = (AgeableMob.AgeableMobGroupData) spawnDataIn;
+        if (spawnDataIn instanceof AgeableMobGroupData lvt_6_1_) {
             if (lvt_6_1_.getGroupSize() == 0) {
                 this.setSilverback(true);
             }
@@ -225,15 +237,16 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         return gorilla;
     }
 
+    @Override
     public EntityDimensions getDefaultDimensions(Pose poseIn) {
         return isSilverback() && !isBaby() ? SILVERBACK_SIZE.scale(this.getScale()) : super.getDefaultDimensions(poseIn);
     }
 
+    @Override
     public void positionRider(Entity passenger, Entity.MoveFunction moveFunc) {
         if (this.hasPassenger(passenger)) {
             this.setOrderedToSit(false);
-            if (passenger instanceof EntityGorilla) {
-                EntityGorilla babyGorilla = (EntityGorilla) passenger;
+            if (passenger instanceof EntityGorilla babyGorilla) {
                 babyGorilla.setStanding(this.isStanding());
                 babyGorilla.setOrderedToSit(this.isSitting());
                 babyGorilla.yBodyRot = this.yBodyRot;
@@ -282,6 +295,7 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, sit);
     }
@@ -294,6 +308,7 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         this.entityData.set(EATING, eating);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Silverback", this.isSilverback());
@@ -302,6 +317,7 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         compound.putBoolean("ForcedToSit", this.forcedSit);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setSilverback(compound.getBoolean("Silverback"));
@@ -310,6 +326,7 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         this.forcedSit = compound.getBoolean("ForcedToSit");
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -357,6 +374,7 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         }
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && this.canTargetItem(this.getItemInHand(InteractionHand.MAIN_HAND))) {
@@ -429,11 +447,10 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
                 standProgress--;
         }
 
-        if (this.isPassenger() && this.getVehicle() instanceof EntityGorilla) {
+        if (this.isPassenger() && this.getVehicle() instanceof EntityGorilla mount) {
             if(!this.isBaby()){
                 this.removeVehicle();
             }else{
-                EntityGorilla mount = (EntityGorilla) this.getVehicle();
                 this.setYRot( mount.yBodyRot);
                 this.yHeadRot = mount.yBodyRot;
                 this.yBodyRot = mount.yBodyRot;
@@ -488,15 +505,18 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     @Nullable
     public LivingEntity getControllingPassenger() {
         return null;
     }
 
+    @Override
     public PathNavigation getNavigation() {
         return this.navigation;
     }
 
+    @Override
     @Nullable
     public Entity getControlledVehicle() {
         return this.getVehicle() instanceof EntityGorilla ? null : super.getControlledVehicle();
@@ -512,6 +532,8 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
         animationTick = i;
     }
 
+    @Override
+    @Override
     public boolean canTargetItem(ItemStack stack) {
         return stack.is(AMTagRegistry.GORILLA_FOODSTUFFS);
     }
@@ -586,11 +608,13 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
             super(entityGorilla, v);
         }
 
+        @Override
         public boolean canUse() {
             this.interval = EntityGorilla.this.isSilverback() ? 10 : 120;
             return super.canUse();
         }
 
+        @Override
         @Nullable
         protected Vec3 getPosition() {
             return LandRandomPos.getPos(this.mob, EntityGorilla.this.isSilverback() ? 25 : 10, 7);

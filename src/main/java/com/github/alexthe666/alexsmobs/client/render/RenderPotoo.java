@@ -25,6 +25,7 @@ public class RenderPotoo extends MobRenderer<EntityPotoo, ModelPotoo> {
         super(renderManagerIn, new ModelPotoo(), 0.35F);
     }
 
+    @Override
     public boolean shouldRender(EntityPotoo bird, Frustum p_225626_2_, double p_225626_3_, double p_225626_5_, double p_225626_7_) {
         if( bird.isPassenger() && bird.getVehicle() instanceof Player && Minecraft.getInstance().player == bird.getVehicle() && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON){
             return false;
@@ -32,10 +33,10 @@ public class RenderPotoo extends MobRenderer<EntityPotoo, ModelPotoo> {
         return super.shouldRender(bird, p_225626_2_, p_225626_3_, p_225626_5_, p_225626_7_);
     }
 
+    @Override
     protected void scale(EntityPotoo eagle, PoseStack matrixStackIn, float partialTickTime) {
         if(eagle.isPassenger() && eagle.getVehicle() != null) {
-            if (eagle.getVehicle() instanceof Player) {
-                Player mount = (Player)eagle.getVehicle();
+            if (eagle.getVehicle() instanceof Player mount) {
                 boolean leftHand = false;
                 if(mount.getItemInHand(InteractionHand.MAIN_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE.get()){
                     leftHand = mount.getMainArm() == HumanoidArm.LEFT;
@@ -65,6 +66,7 @@ public class RenderPotoo extends MobRenderer<EntityPotoo, ModelPotoo> {
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityPotoo entity) {
         return TEXTURE;
     }

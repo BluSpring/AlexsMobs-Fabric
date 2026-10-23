@@ -3,6 +3,8 @@ package com.github.alexthe666.alexsmobs.entity.ai;
 import com.github.alexthe666.alexsmobs.entity.EntityCrow;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -20,10 +22,12 @@ public class CrowAIMelee extends Goal {
         this.crow = crow;
     }
 
+    @Override
     public boolean canUse(){
         return crow.getTarget() != null && !crow.isSitting() && crow.getCommand() != 3;
     }
 
+    @Override
     public void start() {
         clockwise = crow.getRandom().nextBoolean();
         yLevel = crow.getRandom().nextInt(2);
@@ -32,6 +36,7 @@ public class CrowAIMelee extends Goal {
         circleDistance = 1F + crow.getRandom().nextFloat() * 3F;
     }
 
+    @Override
     public void stop() {
         clockwise = crow.getRandom().nextBoolean();
         yLevel = crow.getRandom().nextInt(2);
@@ -43,6 +48,7 @@ public class CrowAIMelee extends Goal {
         }
     }
 
+    @Override
     public void tick() {
         LivingEntity target = crow.getTarget();
         if(target != null){
@@ -50,7 +56,7 @@ public class CrowAIMelee extends Goal {
                 crow.getMoveControl().setWantedPosition(target.getX(), target.getY() + target.getEyeHeight() / 2F, target.getZ(), 1.3F);
                 if(crow.distanceTo(target) < 2){
                     crow.peck();
-                    if(target.getType().is(net.minecraft.tags.EntityTypeTags.UNDEAD)){
+                    if(target.getType().is(EntityTypeTags.UNDEAD)){
                         target.hurt(target.damageSources().generic(), 4);
                     }else{
                         target.hurt(target.damageSources().generic(), 1);

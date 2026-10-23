@@ -6,6 +6,11 @@ import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -18,8 +23,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 public class RenderMimicOctopus extends MobRenderer<EntityMimicOctopus, ModelMimicOctopus> {
     private static final ResourceLocation TEXTURE = ResourceLocation
@@ -48,17 +51,18 @@ public class RenderMimicOctopus extends MobRenderer<EntityMimicOctopus, ModelMim
     private static void vertex(VertexConsumer p_229108_0_, Matrix4f p_229108_1_, Matrix3f p_229108_2_,
             float p_229108_3_, float p_229108_4_, float p_229108_5_, int p_229108_6_, int p_229108_7_, int p_229108_8_,
             float p_229108_9_, float p_229108_10_) {
-        org.joml.Vector3f normal = new org.joml.Vector3f(0.0F, 1.0F, 0.0F);
+        Vector3f normal = new Vector3f(0.0F, 1.0F, 0.0F);
         normal.mul(p_229108_2_);
-        org.joml.Vector4f pos = new org.joml.Vector4f(p_229108_3_, p_229108_4_, p_229108_5_, 1.0F);
+        Vector4f pos = new Vector4f(p_229108_3_, p_229108_4_, p_229108_5_, 1.0F);
         pos.mul(p_229108_1_);
         p_229108_0_.addVertex(pos.x, pos.y, pos.z)
                 .setColor(p_229108_6_, p_229108_7_, p_229108_8_, 255).setUv(p_229108_9_, p_229108_10_)
                 .setOverlay(OverlayTexture.NO_OVERLAY).setLight(15728880).setNormal(normal.x, normal.y, normal.z);
     }
 
+    @Override
     public void render(EntityMimicOctopus entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
-            MultiBufferSource bufferIn, int packedLightIn) {
+                       MultiBufferSource bufferIn, int packedLightIn) {
         LivingEntity livingentity = entityIn.getGuardianLaser();
         if (livingentity != null) {
             float f = entityIn.getLaserAttackAnimationScale(partialTicks);
@@ -131,13 +135,15 @@ public class RenderMimicOctopus extends MobRenderer<EntityMimicOctopus, ModelMim
 
     }
 
+    @Override
     protected void scale(EntityMimicOctopus octo, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.translate(0, -0.02F, 0);
         matrixStackIn.scale(0.9F * octo.getScale(), 0.9F * octo.getScale(), 0.9F * octo.getScale());
     }
 
+    @Override
     public boolean shouldRender(EntityMimicOctopus livingEntityIn, Frustum camera, double camX, double camY,
-            double camZ) {
+                                double camZ) {
         if (super.shouldRender(livingEntityIn, camera, camX, camY, camZ)) {
             return true;
         } else {
@@ -162,6 +168,7 @@ public class RenderMimicOctopus extends MobRenderer<EntityMimicOctopus, ModelMim
         return new Vec3(d0, d1, d2);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityMimicOctopus entity) {
         return TEXTURE;
     }
@@ -172,9 +179,10 @@ public class RenderMimicOctopus extends MobRenderer<EntityMimicOctopus, ModelMim
             super(render);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource buffer, int packedLightIn,
-                EntityMimicOctopus entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntityMimicOctopus entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             float transProgress = entitylivingbaseIn.prevTransProgress
                     + (entitylivingbaseIn.transProgress - entitylivingbaseIn.prevTransProgress) * partialTicks;
             float colorProgress = (entitylivingbaseIn.prevColorShiftProgress

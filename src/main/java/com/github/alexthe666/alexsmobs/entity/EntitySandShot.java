@@ -1,6 +1,12 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -22,11 +28,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.UUID;
 
 public class EntitySandShot extends Entity {
     private UUID ownerUUID;
@@ -78,6 +79,7 @@ public class EntitySandShot extends Entity {
         this.entityData.set(VARIANT, Integer.valueOf(variant));
     }
 
+    @Override
     public void tick() {
         if (!this.leftOwner) {
             this.leftOwner = this.checkLeftOwner();
@@ -152,6 +154,7 @@ public class EntitySandShot extends Entity {
         }
     }
 
+    @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         if (this.ownerUUID != null) {
             compound.putUUID("Owner", this.ownerUUID);
@@ -166,6 +169,7 @@ public class EntitySandShot extends Entity {
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
+    @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         if (compound.hasUUID("Owner")) {
             this.ownerUUID = compound.getUUID("Owner");
@@ -221,6 +225,7 @@ public class EntitySandShot extends Entity {
 
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void lerpMotion(double x, double y, double z) {
         this.setDeltaMovement(x, y, z);

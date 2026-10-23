@@ -1,16 +1,17 @@
 package com.github.alexthe666.alexsmobs.client.render;
 
+import static net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;
+
 import com.github.alexthe666.alexsmobs.client.model.ModelFrilledShark;
 import com.github.alexthe666.alexsmobs.entity.EntityFrilledShark;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
-
-import static net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;
 
 public class RenderFrilledShark extends MobRenderer<EntityFrilledShark, ModelFrilledShark> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/frilled_shark.png");
@@ -24,10 +25,12 @@ public class RenderFrilledShark extends MobRenderer<EntityFrilledShark, ModelFri
         this.addLayer(new TeethLayer(this));
     }
 
+    @Override
     protected void scale(EntityFrilledShark entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.85F, 0.85F, 0.85F);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityFrilledShark entity) {
         return entity.isKaiju() ? (entity.isDepressurized() ? TEXTURE_KAIJU_DEPRESSURIZED : TEXTURE_KAIJU) : (entity.isDepressurized() ? TEXTURE_DEPRESSURIZED : TEXTURE);
     }
@@ -39,6 +42,7 @@ public class RenderFrilledShark extends MobRenderer<EntityFrilledShark, ModelFri
             super(render);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource buffer, int packedLightIn, EntityFrilledShark entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             VertexConsumer glintBuilder = buffer.getBuffer(AMRenderTypes.getEyesFlickering(TEXTURE_TEETH, 240));
             this.getParentModel().renderToBuffer(matrixStackIn, glintBuilder, 240, NO_OVERLAY, -1);

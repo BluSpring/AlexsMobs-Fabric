@@ -1,5 +1,12 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.block.BlockEnderResidue;
@@ -12,6 +19,12 @@ import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.event.EventHooks;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -35,7 +48,11 @@ import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -45,7 +62,11 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -56,11 +77,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 public class EntityVoidWorm extends Monster {
 
@@ -92,10 +108,12 @@ public class EntityVoidWorm extends Monster {
         this.moveControl = new FlightMoveController(this, 1F, false, true);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.VOID_WORM_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.VOID_WORM_HURT.get();
     }
@@ -105,14 +123,17 @@ public class EntityVoidWorm extends Monster {
         return false;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.VOID_WORM_HURT.get();
     }
 
+    @Override
     protected float getSoundVolume() {
         return isSilent() ? 0 : 5;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.voidWormSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -125,15 +146,18 @@ public class EntityVoidWorm extends Monster {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, AMConfig.voidWormMaxHealth).add(Attributes.ARMOR, 4.0D).add(Attributes.FOLLOW_RANGE, 256.0D).add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.ATTACK_DAMAGE, 5).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
+    @Override
     @Nullable
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return this.isSplitter() ? SPLITTER_LOOT : super.getDefaultLootTable();
     }
 
+    @Override
     public void kill() {
         this.remove(RemovalReason.DISCARDED);
     }
 
+    @Override
     public void die(DamageSource cause) {
        super.die(cause);
        if(!this.level().isClientSide && !this.isSplitter()){
@@ -155,6 +179,7 @@ public class EntityVoidWorm extends Monster {
     }
 
     // dropAllDeathLoot has different signature in 1.21 - takes ServerLevel and DamageSource
+    @Override
     protected void dropAllDeathLoot(ServerLevel level, DamageSource source) {
 
     }
@@ -201,6 +226,7 @@ public class EntityVoidWorm extends Monster {
         return false;
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new EntityVoidWorm.AIEnterPortal());
@@ -210,10 +236,12 @@ public class EntityVoidWorm extends Monster {
         this.targetSelector.addGoal(2, new EntityAINearestTarget3D(this, EnderDragon.class, 10, false, true, null));
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new DirectPathNavigator(this, level());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.hasUUID("ChildUUID")) {
@@ -230,15 +258,18 @@ public class EntityVoidWorm extends Monster {
 
     }
 
+    @Override
     public void setCustomName(@Nullable Component name) {
         super.setCustomName(name);
         this.bossInfo.setName(this.getDisplayName());
     }
 
+    @Override
     public boolean isNoGravity() {
         return true;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.getChildId() != null) {
@@ -259,14 +290,17 @@ public class EntityVoidWorm extends Monster {
         return null;
     }
 
+    @Override
     public boolean canBeLeashed() {
         return true;
     }
 
+    @Override
     protected int getBaseExperienceReward(){
         return this.isSplitter() ? 8 : 50;
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevWormAngle = this.getWormAngle();
@@ -396,6 +430,7 @@ public class EntityVoidWorm extends Monster {
         }
     }
 
+    @Override
     protected void tickDeath() {
         ++this.deathTime;
         if (this.deathTime == (this.isSplitter() ? 20 : 80) && !this.level().isClientSide()) {
@@ -403,13 +438,13 @@ public class EntityVoidWorm extends Monster {
             Entity entity = source.getEntity();
 
             // In 1.21, getLootingLevel is removed from CommonHooks, use EnchantmentHelper directly if needed
-            this.captureDrops(new java.util.ArrayList<>());
+            this.captureDrops(new ArrayList<>());
 
             final boolean flag = this.lastHurtByPlayerTime > 0;
             if (this.shouldDropLoot() && this.level().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 this.dropFromLootTable(source, flag);
                 // dropCustomDeathLoot takes ServerLevel in 1.21
-                if (this.level() instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+                if (this.level() instanceof ServerLevel serverLevel) {
                     this.dropCustomDeathLoot(serverLevel, source, flag);
                 }
             }
@@ -422,7 +457,7 @@ public class EntityVoidWorm extends Monster {
             Collection<ItemEntity> drops = captureDrops(null);
 
             // In 1.21, onLivingDrops takes 4 params: (entity, source, drops, recentlyHit)
-            if (!net.neoforged.neoforge.common.CommonHooks.onLivingDrops(this, source, drops, lastHurtByPlayerTime > 0)){
+            if (!CommonHooks.onLivingDrops(this, source, drops, lastHurtByPlayerTime > 0)){
                 if(!drops.isEmpty()){
                     this.placeDropsSafely(drops);
                 }
@@ -432,11 +467,13 @@ public class EntityVoidWorm extends Monster {
         }
     }
 
+    @Override
     public void startSeenByPlayer(ServerPlayer player) {
         super.startSeenByPlayer(player);
         this.bossInfo.addPlayer(player);
     }
 
+    @Override
     public void stopSeenByPlayer(ServerPlayer player) {
         super.stopSeenByPlayer(player);
         this.bossInfo.removePlayer(player);
@@ -484,6 +521,7 @@ public class EntityVoidWorm extends Monster {
         }
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType
             reason, @Nullable SpawnGroupData spawnDataIn) {
@@ -576,6 +614,7 @@ public class EntityVoidWorm extends Monster {
         this.entityData.set(SEGMENT_COUNT, command);
     }
 
+    @Override
     public void pushEntities() {
         List<Entity> entities = this.level().getEntities(this, this.getBoundingBox().expandTowards(0.20000000298023224D, 0.0D, 0.20000000298023224D));
         entities.stream().filter(entity -> !(entity instanceof EntityVoidWormPart) && entity.isPushable()).forEach(entity -> entity.push(this));
@@ -624,9 +663,8 @@ public class EntityVoidWorm extends Monster {
             Vec3 Vector3d = new Vec3(this.getX(), this.getEyeY(), this.getZ());
             HitResult result = this.level().clip(new ClipContext(Vector3d, from, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
             Vec3 vec = result.getLocation() != null ? result.getLocation() : this.position();
-            if (result instanceof BlockHitResult) {
-                BlockHitResult result1 = (BlockHitResult) result;
-                vec = vec.add(net.minecraft.world.phys.Vec3.atLowerCornerOf(result1.getDirection().getNormal()));
+            if (result instanceof BlockHitResult result1) {
+                vec = vec.add(Vec3.atLowerCornerOf(result1.getDirection().getNormal()));
             }
             EntityVoidPortal portal = AMEntityRegistry.VOID_PORTAL.get().create(level());
             portal.setPos(vec.x, vec.y, vec.z);
@@ -648,6 +686,7 @@ public class EntityVoidWorm extends Monster {
         stillTicks = 0;
     }
 
+    @Override
     public boolean isPushable() {
         return false;
     }
@@ -658,7 +697,7 @@ public class EntityVoidWorm extends Monster {
             return;
         }
         boolean flag = false;
-        if (!this.level().isClientSide && this.blockBreakCounter == 0 && net.neoforged.neoforge.event.EventHooks.canEntityGrief(level(), this)) {
+        if (!this.level().isClientSide && this.blockBreakCounter == 0 && EventHooks.canEntityGrief(level(), this)) {
             for (int a = (int) Math.round(this.getBoundingBox().minX); a <= (int) Math.round(this.getBoundingBox().maxX); a++) {
                 for (int b = (int) Math.round(this.getBoundingBox().minY) - 1; (b <= (int) Math.round(this.getBoundingBox().maxY) + 1) && (b <= 127); b++) {
                     for (int c = (int) Math.round(this.getBoundingBox().minZ); c <= (int) Math.round(this.getBoundingBox().maxZ); c++) {
@@ -744,6 +783,7 @@ public class EntityVoidWorm extends Monster {
         return position;
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         return super.isAlliedTo(entityIn) || this.getSplitFromUUID() != null && this.getSplitFromUUID().equals(entityIn.getUUID()) ||
                 entityIn instanceof EntityVoidWorm && ((EntityVoidWorm) entityIn).getSplitFromUUID() != null && ((EntityVoidWorm) entityIn).getSplitFromUUID().equals(entityIn.getUUID());
@@ -813,6 +853,7 @@ public class EntityVoidWorm extends Monster {
             }
         }
 
+        @Override
         public void tick() {
             voidWorm.getMoveControl().setWantedPosition(x, y, z, 1F);
         }
@@ -823,14 +864,17 @@ public class EntityVoidWorm extends Monster {
             return voidWorm.getBlockInViewAway(vector3d, 1);
         }
 
+        @Override
         public boolean canContinueToUse() {
             return voidWorm.distanceToSqr(x, y, z) > 20F && this.voidWorm.portalTarget == null && !voidWorm.horizontalCollision && (voidWorm.getTarget() == null || !voidWorm.getTarget().isAlive());
         }
 
+        @Override
         public void start() {
             voidWorm.getMoveControl().setWantedPosition(x, y, z, 1F);
         }
 
+        @Override
         public void stop() {
             this.voidWorm.getNavigation().stop();
             super.stop();
@@ -854,16 +898,19 @@ public class EntityVoidWorm extends Monster {
             return EntityVoidWorm.this.getTarget() != null && EntityVoidWorm.this.getTarget().isAlive();
         }
 
+        @Override
         public void stop() {
             mode = AttackMode.CIRCLE;
             modeTicks = 0;
         }
 
+        @Override
         public void start() {
             mode = AttackMode.CIRCLE;
             maxCircleTime = 60 + random.nextInt(200);
         }
 
+        @Override
         public void tick() {
             LivingEntity target = EntityVoidWorm.this.getTarget();
             boolean flag = false;
@@ -950,6 +997,7 @@ public class EntityVoidWorm extends Monster {
             return EntityVoidWorm.this.portalTarget != null;
         }
 
+        @Override
         public void tick() {
             if (EntityVoidWorm.this.portalTarget != null) {
                 noPhysics = true;
@@ -968,11 +1016,13 @@ public class EntityVoidWorm extends Monster {
             }
         }
 
+        @Override
         public void stop() {
             noPhysics = false;
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67) {

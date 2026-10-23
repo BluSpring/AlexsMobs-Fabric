@@ -1,5 +1,8 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AquaticMoveController;
@@ -7,6 +10,11 @@ import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.entity.PartEntity;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -25,7 +33,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
@@ -51,12 +64,6 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.List;
 
 public class EntityGiantSquid extends WaterAnimal {
 
@@ -116,6 +123,7 @@ public class EntityGiantSquid extends WaterAnimal {
         return false;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.giantSquidSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -125,8 +133,9 @@ public class EntityGiantSquid extends WaterAnimal {
     }
 
 
-    @javax.annotation.Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @javax.annotation.Nullable SpawnGroupData spawnDataIn) {
+    @Override
+    @Nullable
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         if (reason == MobSpawnType.NATURAL) {
             doInitialPosing(worldIn);
         }
@@ -141,10 +150,12 @@ public class EntityGiantSquid extends WaterAnimal {
         this.setPos(down.getX() + 0.5F, down.getY() + 3 + random.nextInt(3), down.getZ() + 0.5F);
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.GIANT_SQUID_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.GIANT_SQUID_HURT.get();
     }
@@ -176,17 +187,20 @@ public class EntityGiantSquid extends WaterAnimal {
     }
 
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
         return super.mobInteract(player, hand);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new WaterBoundPathNavigation(this, worldIn);
     }
 
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new TryFindWaterGoal(this));
         this.goalSelector.addGoal(1, new AIAvoidWhales());
@@ -195,17 +209,20 @@ public class EntityGiantSquid extends WaterAnimal {
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, EntityCachalotWhale.class)));
         this.targetSelector.addGoal(2, new EntityAINearestTarget3D(this, Guardian.class, 20, true, true, null) {
+            @Override
             public boolean canUse() {
                 return super.canUse();
             }
         });
         this.targetSelector.addGoal(3, new EntityAINearestTarget3D(this, LivingEntity.class, 70, false, true, AMEntityRegistry.buildPredicateFromTag(AMTagRegistry.GIANT_SQUID_TARGETS)) {
+            @Override
             public boolean canUse() {
                 return  !EntityGiantSquid.this.isInWaterOrBubble() && !EntityGiantSquid.this.isCaptured() && super.canUse();
             }
         });
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         if (!this.isNoAi()) {
@@ -225,6 +242,7 @@ public class EntityGiantSquid extends WaterAnimal {
         }
     }
 
+    @Override
     public void tick() {
         super.tick();
         if(this.tickCount % 100 == 0){
@@ -396,14 +414,17 @@ public class EntityGiantSquid extends WaterAnimal {
         setPartPosition(part, f2, pitch, -f3, offsetScale);
     }
 
+    @Override
     public int getMaxHeadXRot() {
         return 1;
     }
 
+    @Override
     public int getMaxHeadYRot() {
         return 3;
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             if (entityData.get(OVERRIDE_BODYROT)) {
@@ -420,20 +441,24 @@ public class EntityGiantSquid extends WaterAnimal {
 
     // EntityGiantSquid extends WaterAnimal which already can breathe underwater by default
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setBlue(compound.getBoolean("Blue"));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Blue", isBlue());
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
@@ -486,6 +511,7 @@ public class EntityGiantSquid extends WaterAnimal {
         this.entityData.set(BLUE, Boolean.valueOf(t));
     }
 
+    @Override
     public void push(Entity entity) {
         if (!this.isCaptured()) {
             super.push(entity);
@@ -499,6 +525,7 @@ public class EntityGiantSquid extends WaterAnimal {
         this.walkAnimation.update(f2, 0.4F);
     }
 
+    @Override
     public boolean canBeCollidedWith() {
         return this.isAlive();
     }
@@ -538,6 +565,7 @@ public class EntityGiantSquid extends WaterAnimal {
         return vec3;
     }
 
+    @Override
     public float getXRot() {
         return getSquidPitch();
     }
@@ -548,7 +576,7 @@ public class EntityGiantSquid extends WaterAnimal {
     }
 
     @Override
-    public net.neoforged.neoforge.entity.PartEntity<?>[] getParts() {
+    public PartEntity<?>[] getParts() {
         return this.allParts;
     }
 
@@ -556,6 +584,7 @@ public class EntityGiantSquid extends WaterAnimal {
         return this.hurt(source, amount);
     }
 
+    @Override
     public boolean isInvulnerableTo(DamageSource source) {
         return source.is(DamageTypes.IN_WALL) || super.isInvulnerableTo(source);
     }
@@ -567,10 +596,12 @@ public class EntityGiantSquid extends WaterAnimal {
         this.setYRot(this.rotlerp(this.getYRot(), f, shift ? 10 : 5));
     }
 
+    @Override
     public float getViewXRot(float partialTick) {
         return prevSquidPitch + (getSquidPitch() - prevSquidPitch) * partialTick;
     }
 
+    @Override
     public float getViewYRot(float partialTick) {
         return partialTick == 1.0F ? this.yBodyRot : Mth.lerp(partialTick, this.yBodyRotO, this.yBodyRot);
     }
@@ -632,12 +663,14 @@ public class EntityGiantSquid extends WaterAnimal {
         return false;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         super.handleEntityEvent(id);
 
     }
 
+    @Override
     public boolean hurt(DamageSource src, float f) {
         if (super.hurt(src, f) && this.getLastHurtByMob() != null && !this.isCaptured() && random.nextBoolean()) {
             this.spawnInk();
@@ -695,6 +728,7 @@ public class EntityGiantSquid extends WaterAnimal {
             return whale != null && whale.isAlive() && !EntityGiantSquid.this.horizontalCollision && EntityGiantSquid.this.distanceTo(whale) < 60;
         }
 
+        @Override
         public void tick() {
             if (whale != null && whale.isAlive()) {
                 double dist = EntityGiantSquid.this.distanceTo(whale);
@@ -704,6 +738,7 @@ public class EntityGiantSquid extends WaterAnimal {
             }
         }
 
+        @Override
         public void stop() {
             whale = null;
             moveTo = null;
@@ -763,6 +798,7 @@ public class EntityGiantSquid extends WaterAnimal {
             }
         }
 
+        @Override
         public void start() {
             EntityGiantSquid.this.getNavigation().moveTo(moveTo.getX() + 0.5F, moveTo.getY() + 0.5F, moveTo.getZ() + 0.5F, 1.0F);
         }
@@ -780,6 +816,7 @@ public class EntityGiantSquid extends WaterAnimal {
             return EntityGiantSquid.this.isInWaterOrBubble() && EntityGiantSquid.this.getTarget() != null && EntityGiantSquid.this.getTarget().isAlive();
         }
 
+        @Override
         public void tick() {
             EntityGiantSquid squid = EntityGiantSquid.this;
             LivingEntity target = EntityGiantSquid.this.getTarget();

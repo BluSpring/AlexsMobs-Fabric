@@ -1,6 +1,8 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.PathfinderMob;
@@ -9,13 +11,12 @@ import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
-
 public class AnimalAISwimBottom extends RandomStrollGoal {
     public AnimalAISwimBottom(PathfinderMob p_i48937_1_, double p_i48937_2_, int p_i48937_4_) {
         super(p_i48937_1_, p_i48937_2_, p_i48937_4_);
     }
 
+    @Override
     @Nullable
     protected Vec3 getPosition() {
         Vec3 vec = DefaultRandomPos.getPos(this.mob, 10, 7);

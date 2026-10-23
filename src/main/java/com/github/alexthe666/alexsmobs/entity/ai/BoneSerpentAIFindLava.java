@@ -1,12 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityBoneSerpent;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.goal.Goal;
-
-import java.util.EnumSet;
 
 public class BoneSerpentAIFindLava extends Goal {
     private final EntityBoneSerpent creature;
@@ -17,6 +18,7 @@ public class BoneSerpentAIFindLava extends Goal {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
+    @Override
     public boolean canUse() {
         if ((this.creature.jumpCooldown == 0 || this.creature.onGround()) && !this.creature.level().getFluidState(this.creature.blockPosition()).is(FluidTags.WATER) && !this.creature.level().getFluidState(this.creature.blockPosition()).is(FluidTags.LAVA)){
             targetPos = generateTarget();
@@ -25,12 +27,14 @@ public class BoneSerpentAIFindLava extends Goal {
         return false;
     }
 
+    @Override
     public void start() {
         if(targetPos != null){
             this.creature.getNavigation().moveTo(targetPos.getX(), targetPos.getY(), targetPos.getZ(), 0.5D);
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         return !this.creature.getNavigation().isDone() && targetPos != null && !this.creature.level().getFluidState(this.creature.blockPosition()).is(FluidTags.WATER) && !this.creature.level().getFluidState(this.creature.blockPosition()).is(FluidTags.LAVA);
     }

@@ -39,6 +39,7 @@ public class GUITransmutationTable extends AbstractContainerScreen<MenuTransmuta
         transmuteBtn3.visible = false;
     }
 
+    @Override
     public void render(GuiGraphics guiGraphics, int x, int y, float partialTick) {
         this.renderBackground(guiGraphics, x, y, partialTick);
         this.renderBg(guiGraphics, partialTick, x, y);
@@ -47,12 +48,14 @@ public class GUITransmutationTable extends AbstractContainerScreen<MenuTransmuta
         this.renderTooltip(guiGraphics, x, y);
     }
 
+    @Override
     protected void renderBg(GuiGraphics guiGraphics, float f, int x, int y) {
         int i = this.leftPos;
         int j = this.topPos;
         guiGraphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
     }
 
+    @Override
     protected void containerTick() {
         tickCount++;
         boolean thingIn = !this.menu.getSlot(0).getItem().isEmpty();
@@ -61,6 +64,7 @@ public class GUITransmutationTable extends AbstractContainerScreen<MenuTransmuta
         transmuteBtn3.visible = !AlexsMobs.PROXY.getDisplayTransmuteResult(2).isEmpty() && thingIn;
     }
 
+    @Override
     protected void renderLabels(GuiGraphics guiGraphics, int x, int y) {
         this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
         guiGraphics.drawString(font, this.title, this.titleLabelX, this.titleLabelY, 0X4EFF21, false);

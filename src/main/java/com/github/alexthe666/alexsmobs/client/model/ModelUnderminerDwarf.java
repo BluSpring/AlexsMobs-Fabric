@@ -167,7 +167,7 @@ public class ModelUnderminerDwarf extends AdvancedEntityModel<EntityUnderminer> 
         }
 
         if (this.rightArmPose != HumanoidModel.ArmPose.SPYGLASS) {
-            this.rightArm.rotateAngleZ += 1.0F * (Mth.cos(p_102869_ * 0.09F) * 0.05F + 0.05F);
+            this.rightArm.rotateAngleZ += (Mth.cos(p_102869_ * 0.09F) * 0.05F + 0.05F);
             this.rightArm.rotateAngleX += 1.0F * Mth.sin(p_102869_ * 0.067F) * 0.05F;
         }
 

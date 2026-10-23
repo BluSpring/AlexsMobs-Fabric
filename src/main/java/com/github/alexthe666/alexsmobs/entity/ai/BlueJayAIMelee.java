@@ -21,11 +21,13 @@ public class BlueJayAIMelee extends Goal {
         this.blueJay = blueJay;
     }
 
+    @Override
     public boolean canUse(){
         Entity entity = blueJay.getTarget();
         return entity != null && entity.isAlive();
     }
 
+    @Override
     public void start() {
         clockwise = blueJay.getRandom().nextBoolean();
         yLevel = blueJay.getRandom().nextInt(2);
@@ -34,6 +36,7 @@ public class BlueJayAIMelee extends Goal {
         circleDistance = 0.5F + blueJay.getRandom().nextFloat() * 2F;
     }
 
+    @Override
     public void stop() {
         clockwise = blueJay.getRandom().nextBoolean();
         yLevel = blueJay.getRandom().nextInt(2);
@@ -45,6 +48,7 @@ public class BlueJayAIMelee extends Goal {
         }
     }
 
+    @Override
     public void tick() {
         if (this.blueJay.isFlying()) {
             circlingTime++;

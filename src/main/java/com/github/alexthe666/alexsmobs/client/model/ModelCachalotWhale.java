@@ -107,8 +107,8 @@ public class ModelCachalotWhale extends AdvancedEntityModel<EntityCachalotWhale>
 		float beachedProgress = entity.prevBeachedProgress + (entity.beachedProgress - entity.prevBeachedProgress) * partialTicks;
 		float grabProgress = entity.prevGrabProgress + (entity.grabProgress - entity.prevGrabProgress) * partialTicks;
 		float f = Mth.clamp((float)entity.getMovementOffsets(7, partialTicks)[0] - renderYaw, -50, 50);
-		this.tail1.rotateAngleY += (float) Mth.clamp((float)entity.getMovementOffsets(15, partialTicks)[0] - renderYaw, -50, 50)  * 0.017453292F;
-		this.tail2.rotateAngleY += (float) Mth.clamp((float)entity.getMovementOffsets(17, partialTicks)[0] - renderYaw, -50, 50)  * 0.017453292F;
+		this.tail1.rotateAngleY += Mth.clamp((float)entity.getMovementOffsets(15, partialTicks)[0] - renderYaw, -50, 50) * 0.017453292F;
+		this.tail2.rotateAngleY += Mth.clamp((float)entity.getMovementOffsets(17, partialTicks)[0] - renderYaw, -50, 50) * 0.017453292F;
 		this.body.rotateAngleX += Math.min(properPitch, sleepProgress * -9) * Mth.DEG_TO_RAD;
 		this.body.rotateAngleZ += f * 0.017453292F;
 		this.head.rotateAngleY += Math.sin((entity.grabTime + partialTicks) * 0.3F) * 0.1F * grabProgress;

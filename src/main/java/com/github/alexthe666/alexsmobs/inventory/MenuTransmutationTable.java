@@ -24,6 +24,7 @@ public class MenuTransmutationTable extends AbstractContainerMenu {
     private TileEntityTransmutationTable table;
 
     public final Container container = new SimpleContainer(1) {
+        @Override
         public void setChanged() {
             MenuTransmutationTable.this.slotsChanged(this);
             super.setChanged();
@@ -40,6 +41,7 @@ public class MenuTransmutationTable extends AbstractContainerMenu {
         this.player = player;
         this.access = access;
         this.addSlot(transmuteSlot = new Slot(this.container, 0, 83, 83) {
+            @Override
             public boolean mayPlace(ItemStack stack) {
                 ResourceLocation name = BuiltInRegistries.ITEM.getKey(stack.getItem());
                 return stack.getMaxStackSize() > 1 && (name == null || !AMConfig.transmutationBlacklist.contains(name.toString()));
@@ -61,10 +63,12 @@ public class MenuTransmutationTable extends AbstractContainerMenu {
         }
     }
 
+    @Override
     public boolean stillValid(Player player) {
         return stillValid(this.access, player, AMBlockRegistry.TRANSMUTATION_TABLE.get());
     }
 
+    @Override
     public void slotsChanged(Container container) {
         if(table != null){
             if(!table.hasPossibilities()){
@@ -73,6 +77,7 @@ public class MenuTransmutationTable extends AbstractContainerMenu {
         }
     }
 
+    @Override
     public ItemStack quickMoveStack(Player player, int slotIndex) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(slotIndex);
@@ -103,6 +108,7 @@ public class MenuTransmutationTable extends AbstractContainerMenu {
         return itemstack;
     }
 
+    @Override
     public boolean clickMenuButton(Player player, int buttonId) {
         if(player.level().isClientSide){
             AlexsMobs.sendMSGToServer(new MessageTransmuteFromMenu(player.getId(), buttonId));
@@ -125,6 +131,7 @@ public class MenuTransmutationTable extends AbstractContainerMenu {
         }
     }
 
+    @Override
     public void removed(Player player) {
         super.removed(player);
         this.access.execute((p_39152_, p_39153_) -> {

@@ -21,11 +21,13 @@ public class RenderCrocodile extends MobRenderer<EntityCrocodile, ModelCrocodile
         this.addLayer(new CrownLayer(this));
     }
 
+    @Override
     protected void scale(EntityCrocodile entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.9F, 0.9F, 0.9F);
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityCrocodile entity) {
         return entity.isDesert() ? TEXTURE_1 : TEXTURE_0;
     }
@@ -36,6 +38,7 @@ public class RenderCrocodile extends MobRenderer<EntityCrocodile, ModelCrocodile
             super(p_i50928_1_);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityCrocodile entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if (entitylivingbaseIn.isCrowned()) {
                 VertexConsumer shoeBuffer = bufferIn.getBuffer(AMRenderTypes.entityCutoutNoCull(TEXTURE_CROWN));

@@ -28,12 +28,14 @@ public class CaimanAIBellow extends Goal {
         return super.canContinueToUse() && bellowTime < 60;
     }
 
+    @Override
     public void stop() {
         bellowTime = 0;
         caiman.bellowCooldown = 1000 + caiman.getRandom().nextInt(1000);
         caiman.setBellowing(false);
     }
 
+    @Override
     public void tick(){
         if(caiman.isInWaterOrBubble()){
             final double d1 = caiman.getFluidTypeHeight(NeoForgeMod.WATER_TYPE.value());

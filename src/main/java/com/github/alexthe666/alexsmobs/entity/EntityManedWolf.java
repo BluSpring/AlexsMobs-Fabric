@@ -1,5 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
@@ -11,6 +15,10 @@ import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityLeafcutterAnthill;
 import com.google.common.base.Predicates;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -32,7 +40,14 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.animal.Animal;
@@ -46,13 +61,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class EntityManedWolf extends Animal implements ITargetsDroppedItems, IDancingMob {
 
@@ -82,10 +90,12 @@ public class EntityManedWolf extends Animal implements ITargetsDroppedItems, IDa
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 16.0D).add(Attributes.FOLLOW_RANGE, 32.0D).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.MOVEMENT_SPEED, 0.3F);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.manedWolfSpawnRolls, this.getRandom(), spawnReasonIn) && super.checkSpawnRules(worldIn, spawnReasonIn);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -128,19 +138,23 @@ public class EntityManedWolf extends Animal implements ITargetsDroppedItems, IDa
         return this.entityData.get(DANCING);
     }
 
+    @Override
     public void setDancing(boolean dancing) {
         this.entityData.set(DANCING, dancing);
         this.isJukeboxing = dancing;
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.MANED_WOLF_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.MANED_WOLF_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.MANED_WOLF_HURT.get();
     }
@@ -204,6 +218,7 @@ public class EntityManedWolf extends Animal implements ITargetsDroppedItems, IDa
         this.entityData.set(SHAKING_TIME, shaking);
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -234,6 +249,7 @@ public class EntityManedWolf extends Animal implements ITargetsDroppedItems, IDa
         }
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevEarPitch = this.getEarPitch();
@@ -310,10 +326,12 @@ public class EntityManedWolf extends Animal implements ITargetsDroppedItems, IDa
         }
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return !stack.is(AMTagRegistry.MANED_WOLF_STENCH_FOODS) && allFoods.test(stack);
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isDancing() || danceProgress > 0) {
             if (this.getNavigation().getPath() != null) {
@@ -343,6 +361,7 @@ public class EntityManedWolf extends Animal implements ITargetsDroppedItems, IDa
         return AMEntityRegistry.MANED_WOLF.get().create(serverWorld);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void setRecordPlayingNearby(BlockPos pos, boolean isPartying) {
         AlexsMobs.sendMSGToServer(new MessageStartDancing(this.getId(), isPartying, pos));

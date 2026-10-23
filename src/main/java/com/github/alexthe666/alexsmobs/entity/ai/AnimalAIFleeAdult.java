@@ -1,13 +1,14 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.List;
 
 public class AnimalAIFleeAdult extends Goal {
     private final Animal childAnimal;
@@ -23,6 +24,7 @@ public class AnimalAIFleeAdult extends Goal {
         this.fleeDistance = fleeDistance;
     }
 
+    @Override
     public boolean canUse() {
         if (this.childAnimal.getAge() >= 0) {
             return false;
@@ -60,6 +62,7 @@ public class AnimalAIFleeAdult extends Goal {
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         if (this.childAnimal.getAge() >= 0) {
             return false;
@@ -71,15 +74,18 @@ public class AnimalAIFleeAdult extends Goal {
     }
 
 
+    @Override
     public void start() {
         childAnimal.getNavigation().moveTo(this.path, moveSpeed);
     }
+    @Override
     public void stop() {
         this.parentAnimal = null;
         this.childAnimal.getNavigation().stop();
         this.path = null;
     }
 
+    @Override
     public void tick() {
     }
 }

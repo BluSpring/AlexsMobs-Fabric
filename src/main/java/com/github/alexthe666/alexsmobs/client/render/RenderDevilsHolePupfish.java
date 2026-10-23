@@ -14,6 +14,7 @@ public class RenderDevilsHolePupfish extends MobRenderer<EntityDevilsHolePupfish
         super(renderManagerIn, new ModelDevilsHolePupfish(), 0.2F);
     }
 
+    @Override
     protected void scale(EntityDevilsHolePupfish entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         float scale = entitylivingbaseIn.getPupfishScale();
         if(entitylivingbaseIn.isBaby()){
@@ -23,6 +24,7 @@ public class RenderDevilsHolePupfish extends MobRenderer<EntityDevilsHolePupfish
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityDevilsHolePupfish entity) {
         return TEXTURE;
     }

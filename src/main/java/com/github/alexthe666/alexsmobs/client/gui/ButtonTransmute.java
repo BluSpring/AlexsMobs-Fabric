@@ -37,12 +37,14 @@ public class ButtonTransmute extends Button {
         return Minecraft.getInstance().player.experienceLevel >= cost || Minecraft.getInstance().player.getAbilities().instabuild;
     }
 
+    @Override
     public void playDownSound(SoundManager sounds) {
         if(canBeTransmuted(AMConfig.transmutingExperienceCost)){
             super.playDownSound(sounds);
         }
     }
 
+    @Override
     public void onPress() {
         if(canBeTransmuted(AMConfig.transmutingExperienceCost)){
             super.onPress();

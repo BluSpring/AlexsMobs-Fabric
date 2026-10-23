@@ -31,6 +31,7 @@ public class RenderBaldEagle extends MobRenderer<EntityBaldEagle, ModelBaldEagle
         this.addLayer(new CapLayer(this));
     }
 
+    @Override
     public boolean shouldRender(EntityBaldEagle baldEagle, Frustum p_225626_2_, double p_225626_3_, double p_225626_5_, double p_225626_7_) {
         if( baldEagle.isPassenger() && baldEagle.getVehicle() instanceof Player && Minecraft.getInstance().player == baldEagle.getVehicle() && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON){
             return false;
@@ -38,10 +39,10 @@ public class RenderBaldEagle extends MobRenderer<EntityBaldEagle, ModelBaldEagle
         return super.shouldRender(baldEagle, p_225626_2_, p_225626_3_, p_225626_5_, p_225626_7_);
     }
 
+    @Override
     protected void scale(EntityBaldEagle eagle, PoseStack matrixStackIn, float partialTickTime) {
         if(eagle.isPassenger() && eagle.getVehicle() != null) {
-            if (eagle.getVehicle() instanceof Player) {
-                Player mount = (Player)eagle.getVehicle();
+            if (eagle.getVehicle() instanceof Player mount) {
                 boolean leftHand = false;
                 if(mount.getItemInHand(InteractionHand.MAIN_HAND).getItem() == AMItemRegistry.FALCONRY_GLOVE.get()){
                     leftHand = mount.getMainArm() == HumanoidArm.LEFT;
@@ -71,6 +72,7 @@ public class RenderBaldEagle extends MobRenderer<EntityBaldEagle, ModelBaldEagle
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityBaldEagle entity) {
         return TEXTURE;
     }
@@ -81,6 +83,7 @@ public class RenderBaldEagle extends MobRenderer<EntityBaldEagle, ModelBaldEagle
             super(p_i50928_1_);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityBaldEagle entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if (entitylivingbaseIn.hasCap()) {
                 VertexConsumer lead = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE_CAP));

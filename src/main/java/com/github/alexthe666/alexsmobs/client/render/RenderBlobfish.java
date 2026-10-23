@@ -19,6 +19,7 @@ public class RenderBlobfish extends MobRenderer<EntityBlobfish, EntityModel<Enti
         super(renderManagerIn, new ModelBlobfish(), 0.35F);
     }
 
+    @Override
     protected void scale(EntityBlobfish entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         if(entitylivingbaseIn.isDepressurized()){
             model = modelDepressurized;
@@ -29,6 +30,7 @@ public class RenderBlobfish extends MobRenderer<EntityBlobfish, EntityModel<Enti
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityBlobfish entity) {
         return entity.isDepressurized() ? TEXTURE_DEPRESSURIZED : TEXTURE;
     }

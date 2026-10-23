@@ -1,6 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity;
 
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EntityType;
@@ -9,8 +12,7 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+
 public class EntityEmuEgg extends ThrowableItemProjectile {
 
     public EntityEmuEgg(EntityType p_i50154_1_, Level p_i50154_2_) {
@@ -25,6 +27,7 @@ public class EntityEmuEgg extends ThrowableItemProjectile {
         super(AMEntityRegistry.EMU_EGG.get(), x, y, z, worldIn);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 3) {
@@ -35,6 +38,7 @@ public class EntityEmuEgg extends ThrowableItemProjectile {
 
     }
 
+    @Override
     protected void onHit(HitResult result) {
         super.onHit(result);
         if (!this.level().isClientSide) {
@@ -61,6 +65,7 @@ public class EntityEmuEgg extends ThrowableItemProjectile {
 
     }
 
+    @Override
     protected Item getDefaultItem() {
         return AMItemRegistry.EMU_EGG.get();
     }

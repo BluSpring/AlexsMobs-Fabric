@@ -3,6 +3,8 @@ package com.github.alexthe666.alexsmobs.entity.util;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
+import net.neoforged.neoforge.network.PacketDistributor;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -11,7 +13,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 public class RockyChestplateUtil {
 
@@ -84,7 +85,7 @@ public class RockyChestplateUtil {
             if(!roller.level().isClientSide){
                 for (Entity entity : roller.level().getEntitiesOfClass(LivingEntity.class, roller.getBoundingBox().inflate(1.0F))) {
                     if (!roller.isAlliedTo(entity) && !entity.isAlliedTo(roller) && entity != roller) {
-                        entity.hurt(entity.damageSources().mobAttack(roller), 2.0F + roller.getRandom().nextFloat() * 1.0F);
+                        entity.hurt(entity.damageSources().mobAttack(roller), 2.0F + roller.getRandom().nextFloat());
                     }
                 }
             }

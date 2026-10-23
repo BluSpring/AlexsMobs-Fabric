@@ -7,6 +7,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -17,8 +20,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 public class ParticleBearFreddy extends Particle {
     private final ModelGrizzlyBear model = new ModelGrizzlyBear();
@@ -30,10 +31,12 @@ public class ParticleBearFreddy extends Particle {
         this.lifetime = 15;
     }
 
+    @Override
     public ParticleRenderType getRenderType() {
         return ParticleRenderType.CUSTOM;
     }
 
+    @Override
     public void render(VertexConsumer vertexConsumer, Camera camera, float partialTick) {
         float fogBefore = RenderSystem.getShaderFogEnd();
         RenderSystem.setShaderFogEnd(40);
@@ -64,6 +67,7 @@ public class ParticleBearFreddy extends Particle {
 
     @OnlyIn(Dist.CLIENT)
     public static class Factory implements ParticleProvider<SimpleParticleType> {
+        @Override
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             return new ParticleBearFreddy(worldIn, x, y, z);
         }

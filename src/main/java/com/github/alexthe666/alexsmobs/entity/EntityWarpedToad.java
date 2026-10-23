@@ -1,10 +1,23 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeapRandomly;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeaveWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
+import com.github.alexthe666.alexsmobs.entity.ai.AquaticMoveController;
+import com.github.alexthe666.alexsmobs.entity.ai.BoneSerpentPathNavigator;
+import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
+import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
+import com.github.alexthe666.alexsmobs.entity.ai.WarpedToadAIRandomSwimming;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.neoforge.fluids.FluidType;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -21,11 +34,23 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
@@ -47,10 +72,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.fluids.FluidType;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
 
 public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedItems, IFollower, ISemiAquatic {
 
@@ -97,14 +118,17 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D).add(Attributes.FOLLOW_RANGE, 32.0D).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.25F).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.WARPED_TOAD_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.WARPED_TOAD_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.WARPED_TOAD_HURT.get();
     }
@@ -114,22 +138,27 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
         return false; // Warped toad can breathe underwater
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.warpedToadSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 5;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -143,18 +172,21 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("ToadSitting", this.isOrderedToSit());
         compound.putInt("Command", this.getCommand());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setOrderedToSit(compound.getBoolean("ToadSitting"));
         this.setCommand(compound.getInt("Command"));
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(1, new TongueAttack(this));
@@ -165,6 +197,7 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.0D, Ingredient.of(AMTagRegistry.WARPED_TOAD_FOODSTUFFS), false));
         this.goalSelector.addGoal(5, new WarpedToadAIRandomSwimming(this, 1.0D, 7));
         this.goalSelector.addGoal(6, new AnimalAILeapRandomly(this, 50, 7){
+            @Override
             public boolean canUse(){
                 return super.canUse() && !EntityWarpedToad.this.isOrderedToSit();
             }
@@ -179,6 +212,7 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
         this.targetSelector.addGoal(5, new HurtByTargetGoal(this));
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isOrderedToSit()) {
             if (this.getNavigation().getPath() != null) {
@@ -199,26 +233,32 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
 
     }
 
+    @Override
     protected float getJumpPower() {
         return 0.5F;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     public void customServerAiStep() {
         super.customServerAiStep();
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.WARPED_TOAD_BREEDABLES) && isTame();
     }
 
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -265,6 +305,7 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
     }
 
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -282,6 +323,7 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
         return super.isAlliedTo(entityIn);
     }
 
+    @Override
     public boolean canSpawnSprintParticle() {
         return false;
     }
@@ -290,6 +332,7 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
         this.setYRot( (float) (Mth.atan2(z - this.getZ(), x - this.getX()) * (double) Mth.RAD_TO_DEG) - 90.0F);
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         if(this.isBaby() && this.getEyeHeight() > this.getBbHeight()){
@@ -350,6 +393,7 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
         this.entityData.set(SITTING, sit);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevBlinkProgress = blinkProgress;
@@ -497,6 +541,7 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
         entityData.set(TONGUE_LENGTH, length);
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
@@ -544,20 +589,24 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Flag.LOOK));
         }
 
+        @Override
         public boolean canUse() {
 
             return parentEntity.getTarget() != null && parentEntity.getPassengers().isEmpty();
         }
 
+        @Override
         public boolean canContinueToUse() {
             return parentEntity.getTarget() != null && parentEntity.getPassengers().isEmpty();
         }
 
+        @Override
         public void stop() {
             spitCooldown = 20;
             parentEntity.getNavigation().stop();
         }
 
+        @Override
         public void tick() {
             if (spitCooldown > 0) {
                 spitCooldown--;
@@ -603,6 +652,7 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
             }
         }
 
+        @Override
         public boolean canUse() {
             LivingEntity lvt_1_1_ = this.tameable.getOwner();
             if (lvt_1_1_ == null) {
@@ -619,6 +669,7 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             if (this.tameable.getNavigation().isDone()) {
                 return false;
@@ -629,18 +680,21 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
             }
         }
 
+        @Override
         public void start() {
             this.timeToRecalcPath = 0;
             this.oldWaterCost = this.tameable.getPathfindingMalus(PathType.WATER);
             this.tameable.setPathfindingMalus(PathType.WATER, 0.0F);
         }
 
+        @Override
         public void stop() {
             this.owner = null;
             this.tameable.getNavigation().stop();
             this.tameable.setPathfindingMalus(PathType.WATER, this.oldWaterCost);
         }
 
+        @Override
         public void tick() {
             this.tameable.getLookControl().setLookAt(this.owner, 10.0F, (float) this.tameable.getMaxHeadXRot());
             if (--this.timeToRecalcPath <= 0) {

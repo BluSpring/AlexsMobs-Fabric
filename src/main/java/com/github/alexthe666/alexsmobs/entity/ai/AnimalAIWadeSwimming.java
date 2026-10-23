@@ -1,10 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-
-import java.util.EnumSet;
 
 public class AnimalAIWadeSwimming  extends Goal {
     private final Mob entity;
@@ -15,10 +15,12 @@ public class AnimalAIWadeSwimming  extends Goal {
         entity.getNavigation().setCanFloat(true);
     }
 
+    @Override
     public boolean canUse() {
         return this.entity.isInWater() && this.entity.getFluidHeight(FluidTags.WATER) > 1F  || this.entity.isInLava();
     }
 
+    @Override
     public void tick() {
         if (this.entity.getRandom().nextFloat() < 0.8F) {
             this.entity.getJumpControl().jump();

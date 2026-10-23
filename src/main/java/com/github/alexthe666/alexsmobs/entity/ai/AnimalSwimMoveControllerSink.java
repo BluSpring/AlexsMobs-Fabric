@@ -28,6 +28,7 @@ public class AnimalSwimMoveControllerSink extends MoveControl {
         this.yawLimit = yawLimit;
     }
 
+    @Override
     public void tick() {
         if (entity instanceof ISemiAquatic && ((ISemiAquatic) entity).shouldStopMoving()) {
             this.entity.setSpeed(0.0F);

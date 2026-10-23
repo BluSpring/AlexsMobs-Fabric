@@ -1,8 +1,14 @@
 package com.github.alexthe666.alexsmobs.block;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityEndPirateAnchor;
 import com.mojang.serialization.MapCodec;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -14,7 +20,11 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -27,11 +37,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
 
 public class BlockEndPirateAnchor extends BaseEntityBlock implements AMSpecialRenderBlock {
     public static final MapCodec<BlockEndPirateAnchor> CODEC = simpleCodec(p -> new BlockEndPirateAnchor());
@@ -79,6 +84,7 @@ public class BlockEndPirateAnchor extends BaseEntityBlock implements AMSpecialRe
         }
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         LevelReader levelreader = context.getLevel();
         BlockPos blockpos = context.getClickedPos();
@@ -93,17 +99,19 @@ public class BlockEndPirateAnchor extends BaseEntityBlock implements AMSpecialRe
         return isClearForPlacement(levelreader, blockpos, axis) ? defaultBlockState().setValue(EASTORWEST, axis) : null;
     }
 
-    public boolean isLadder(BlockState state, net.minecraft.world.level.LevelReader world, BlockPos pos, net.minecraft.world.entity.LivingEntity entity) {
+    @Override
+    public boolean isLadder(BlockState state, LevelReader world, BlockPos pos, LivingEntity entity) {
         return state.getValue(PIECE) == PieceType.CHAIN;
     }
 
+    @Override
     public boolean isScaffolding(BlockState state, LevelReader world, BlockPos pos, LivingEntity entity) {
         return state.getValue(PIECE) == PieceType.CHAIN;
     }
 
+    @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        if (entity instanceof LivingEntity && state.getValue(PIECE) == PieceType.CHAIN) {
-            LivingEntity livingEntity = (LivingEntity)entity;
+        if (entity instanceof LivingEntity livingEntity && state.getValue(PIECE) == PieceType.CHAIN) {
             if (livingEntity.horizontalCollision && !livingEntity.isInWater()) {
                 livingEntity.fallDistance = 0.0F;
                 Vec3 motion = livingEntity.getDeltaMovement();
@@ -120,6 +128,7 @@ public class BlockEndPirateAnchor extends BaseEntityBlock implements AMSpecialRe
     }
 
 
+    @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos p_52780_, boolean p_52781_) {
         if (state.getValue(PIECE) == PieceType.ANCHOR_SIDE) {
             for (int i = -2; i <= 2; i++) {
@@ -141,6 +150,7 @@ public class BlockEndPirateAnchor extends BaseEntityBlock implements AMSpecialRe
         }
     }
 
+    @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity player, ItemStack stack) {
         placeAnchor(level, pos, state);
     }
@@ -177,10 +187,12 @@ public class BlockEndPirateAnchor extends BaseEntityBlock implements AMSpecialRe
         return false;
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_58032_) {
         p_58032_.add(EASTORWEST, PIECE);
     }
 
+    @Override
     public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
         if (state.getValue(PIECE) == PieceType.CHAIN) {
             return CHAIN_AABB;
@@ -194,15 +206,18 @@ public class BlockEndPirateAnchor extends BaseEntityBlock implements AMSpecialRe
         return state.getValue(PIECE) == PieceType.ANCHOR ? new TileEntityEndPirateAnchor(pos, state) : null;
     }
 
+    @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152180_, BlockState state, BlockEntityType<T> p_152182_) {
         return state.getValue(PIECE) == PieceType.ANCHOR ? createTickerHelper(p_152182_, AMTileEntityRegistry.END_PIRATE_ANCHOR.get(), TileEntityEndPirateAnchor::commonTick) : null;
     }
 
+    @Override
     public RenderShape getRenderShape(BlockState state) {
         return state.getValue(PIECE) == PieceType.ANCHOR_SIDE ? RenderShape.INVISIBLE : RenderShape.ENTITYBLOCK_ANIMATED;
     }
 
+    @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return state.getValue(PIECE) == PieceType.ANCHOR ? super.getDrops(state, builder) : Collections.emptyList();
     }
@@ -216,6 +231,7 @@ public class BlockEndPirateAnchor extends BaseEntityBlock implements AMSpecialRe
             return this.getSerializedName();
         }
 
+        @Override
         public String getSerializedName() {
             return this.name().toLowerCase(Locale.ROOT);
         }

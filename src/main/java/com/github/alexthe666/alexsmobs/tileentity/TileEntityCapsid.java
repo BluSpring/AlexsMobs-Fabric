@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.tileentity;
 
+import java.util.Random;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.block.BlockCapsid;
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
@@ -7,8 +9,15 @@ import com.github.alexthe666.alexsmobs.entity.EntityEnderiophage;
 import com.github.alexthe666.alexsmobs.message.MessageUpdateCapsid;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.CapsidRecipe;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -31,13 +40,7 @@ import net.minecraft.world.level.block.EndRodBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-
-import java.util.Random;
+import net.minecraft.world.phys.AABB;
 
 public class TileEntityCapsid extends BaseContainerBlockEntity implements WorldlyContainer {
     private static final int[] slotsTop = new int[]{0};
@@ -140,8 +143,8 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
     }
 
     @OnlyIn(Dist.CLIENT)
-    public net.minecraft.world.phys.AABB getRenderBoundingBox() {
-        return new net.minecraft.world.phys.AABB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), worldPosition.getX() + 1, worldPosition.getY() + 2, worldPosition.getZ() + 1);
+    public AABB getRenderBoundingBox() {
+        return new AABB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), worldPosition.getX() + 1, worldPosition.getY() + 2, worldPosition.getZ() + 1);
     }
 
     @Override
@@ -212,7 +215,7 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public void loadAdditional(CompoundTag compound, net.minecraft.core.HolderLookup.Provider registries) {
+    public void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
         super.loadAdditional(compound, registries);
         this.stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         ContainerHelper.loadAllItems(compound, this.stacks, registries);
@@ -223,7 +226,7 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound, net.minecraft.core.HolderLookup.Provider registries) {
+    public void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
         super.saveAdditional(compound, registries);
         ContainerHelper.saveAllItems(compound, this.stacks, registries);
     }
@@ -282,7 +285,7 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, net.minecraft.core.HolderLookup.Provider registries) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
         if (packet != null && packet.getTag() != null) {
             this.stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
             ContainerHelper.loadAllItems(packet.getTag(), this.stacks, registries);
@@ -290,7 +293,7 @@ public class TileEntityCapsid extends BaseContainerBlockEntity implements Worldl
     }
 
     @Override
-    public CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         return this.saveWithoutMetadata(registries);
     }
 

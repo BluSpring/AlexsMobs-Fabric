@@ -230,7 +230,7 @@ public class ModelTiger extends AdvancedEntityModel<EntityTiger> {
         float holdProgress = entity.prevHoldProgress + (entity.holdProgress - entity.prevHoldProgress) * partialTick;
         float sleepProgress = entity.prevSleepProgress + (entity.sleepProgress - entity.prevSleepProgress) * partialTick;
         boolean leftSleep = entity.getId() % 2 == 0;
-        this.walk(tail, idleSpeed, idleDegree * 1F, false, -2F, 0.1F, ageInTicks, 1);
+        this.walk(tail, idleSpeed, idleDegree, false, -2F, 0.1F, ageInTicks, 1);
         this.flap(tail, idleSpeed, idleDegree * 1.2F, false, 2F, 0F, ageInTicks, 1);
         this.flap(tail2, idleSpeed, idleDegree * 2F, false, 2F, 0F, ageInTicks, 1);
         AdvancedModelBox[] tailBoxes = new AdvancedModelBox[]{tail, tail2};
@@ -248,10 +248,10 @@ public class ModelTiger extends AdvancedEntityModel<EntityTiger> {
             this.bob(head, runSpeed, runDegree * -1, false, limbSwing, limbSwingAmount);
             this.walk(armleft, runSpeed, runDegree * 0.75F, true, 0F, 0F, limbSwing, limbSwingAmount);
             this.walk(armright, runSpeed, runDegree * 0.75F, true, 0F, 0F, limbSwing, limbSwingAmount);
-            this.walk(legright, runSpeed, runDegree * 1F, false, 0.5F, 0F, limbSwing, limbSwingAmount);
-            this.walk(legleft, runSpeed, runDegree * 1F, false, 0.5F, 0F, limbSwing, limbSwingAmount);
+            this.walk(legright, runSpeed, runDegree, false, 0.5F, 0F, limbSwing, limbSwingAmount);
+            this.walk(legleft, runSpeed, runDegree, false, 0.5F, 0F, limbSwing, limbSwingAmount);
         } else {
-            this.chainFlap(tailBoxes, walkSpeed, walkDegree * 1F, -1, limbSwing, limbSwingAmount);
+            this.chainFlap(tailBoxes, walkSpeed, walkDegree, -1, limbSwing, limbSwingAmount);
             this.flap(body, walkSpeed, walkDegree * 0.3F, false, 0F, 0F, limbSwing, limbSwingAmount);
             this.flap(head, walkSpeed, -walkDegree * 0.3F, false, 0F, 0F, limbSwing, limbSwingAmount);
             this.flap(armleft, walkSpeed, -walkDegree * 0.1F, false, 0F, 0F, limbSwing, limbSwingAmount);

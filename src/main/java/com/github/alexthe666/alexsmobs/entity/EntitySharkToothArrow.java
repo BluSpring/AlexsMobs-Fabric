@@ -1,7 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity;
 
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.event.EventHooks;
+
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -15,7 +19,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.ItemAbilities;
+
 public class EntitySharkToothArrow extends Arrow {
 
     public EntitySharkToothArrow(EntityType type, Level worldIn) {
@@ -44,9 +48,9 @@ public class EntitySharkToothArrow extends Arrow {
             player.getUseItem().hurtAndBreak(i, player, slot);
 
             if (player.getUseItem().isEmpty()) {
-                net.neoforged.neoforge.event.EventHooks.onPlayerDestroyItem(player, copyBeforeUse, hand);
+                EventHooks.onPlayerDestroyItem(player, copyBeforeUse, hand);
 
-                if (hand == net.minecraft.world.InteractionHand.MAIN_HAND) {
+                if (hand == InteractionHand.MAIN_HAND) {
                     player.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
                 } else {
                     player.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
@@ -57,12 +61,13 @@ public class EntitySharkToothArrow extends Arrow {
         }
     }
 
+    @Override
     protected void doPostHurtEffects(LivingEntity living) {
         if (living instanceof Player) {
             this.damageShield((Player) living, (float) this.getBaseDamage());
         }
         Entity entity1 = this.getOwner();
-        if(living.getType().is(net.minecraft.tags.EntityTypeTags.AQUATIC) || living instanceof Drowned || !living.getType().is(net.minecraft.tags.EntityTypeTags.UNDEAD) && living.canBreatheUnderwater()){
+        if(living.getType().is(EntityTypeTags.AQUATIC) || living instanceof Drowned || !living.getType().is(EntityTypeTags.UNDEAD) && living.canBreatheUnderwater()){
             DamageSource damagesource;
             if (entity1 == null) {
                 damagesource = damageSources().arrow(this, this);
@@ -74,6 +79,7 @@ public class EntitySharkToothArrow extends Arrow {
     }
 
 
+    @Override
     public boolean isInWater() {
         return false;
     }

@@ -1,6 +1,9 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.entity.EntityMosquitoSpit;
+
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -16,8 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.function.Predicate;
-
 public class ItemBloodSprayer extends Item {
 
     public static final Predicate<ItemStack> IS_BLOOD = (stack) -> {
@@ -28,10 +29,12 @@ public class ItemBloodSprayer extends Item {
         super(properties);
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return isUsable(stack) ? Integer.MAX_VALUE : 0;
     }
 
+    @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.BOW;
     }
@@ -72,28 +75,28 @@ public class ItemBloodSprayer extends Item {
         return ItemStack.EMPTY;
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return !ItemStack.isSameItem(oldStack, newStack);
     }
     
+    @Override
     public boolean isBarVisible(ItemStack itemStack) {
         return super.isBarVisible(itemStack) && isUsable(itemStack);
     }
 
+    @Override
     public void onUseTick(Level worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
         if(isUsable(stack)) {
             int usedTicks = getUseDuration(stack, livingEntityIn) - count;
             if (usedTicks % 2 == 0) {
-                boolean left = false;
-                if (livingEntityIn.getUsedItemHand() == InteractionHand.OFF_HAND && livingEntityIn.getMainArm() == HumanoidArm.RIGHT || livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND && livingEntityIn.getMainArm() == HumanoidArm.LEFT) {
-                    left = true;
-                }
+                boolean left = livingEntityIn.getUsedItemHand() == InteractionHand.OFF_HAND && livingEntityIn.getMainArm() == HumanoidArm.RIGHT || livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND && livingEntityIn.getMainArm() == HumanoidArm.LEFT;
                 EntityMosquitoSpit blood = new EntityMosquitoSpit(worldIn, livingEntityIn, !left);
                 Vec3 vector3d = livingEntityIn.getViewVector(1.0F);
                 RandomSource rand = worldIn.getRandom();
                 livingEntityIn.gameEvent(GameEvent.ITEM_INTERACT_START);
                 livingEntityIn.playSound(SoundEvents.LAVA_POP,1.0F, 1.2F + (rand.nextFloat() - rand.nextFloat()) * 0.2F);
-                blood.shoot((double) vector3d.x(), (double) vector3d.y(), (double) vector3d.z(), 1F, 10);
+                blood.shoot(vector3d.x(), vector3d.y(), vector3d.z(), 1F, 10);
                 if (!worldIn.isClientSide) {
                     worldIn.addFreshEntity(blood);
                 }

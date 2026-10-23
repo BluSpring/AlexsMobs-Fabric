@@ -13,6 +13,7 @@ public class ItemFuel extends Item {
         this.burnTime = burnTime;
     }
 
+    @Override
     public int getBurnTime(ItemStack itemStack, RecipeType<?> recipeType) {
         return burnTime;
     }

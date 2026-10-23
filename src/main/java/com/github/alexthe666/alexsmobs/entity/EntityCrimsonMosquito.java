@@ -1,5 +1,8 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
@@ -12,7 +15,12 @@ import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -32,7 +40,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -57,12 +71,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.function.Predicate;
 
 public class EntityCrimsonMosquito extends Monster {
 
@@ -119,18 +127,21 @@ public class EntityCrimsonMosquito extends Monster {
         this.setMosquitoScale(0.2F);
         this.setFromFly(true);
         for (int j = 0; j < 4; ++j) {
-            this.level().addParticle(net.minecraft.core.particles.ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 1.0F, 0.0F, 0.0F), this.getX() + this.random.nextDouble() / 2.0D, this.getY(0.5D), this.getZ() + this.random.nextDouble() / 2.0D, 0, 0, 0);
+            this.level().addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 1.0F, 0.0F, 0.0F), this.getX() + this.random.nextDouble() / 2.0D, this.getY(0.5D), this.getZ() + this.random.nextDouble() / 2.0D, 0, 0, 0);
         }
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.MOSQUITO_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.MOSQUITO_DIE.get();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.crimsonMosquitoSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -139,6 +150,7 @@ public class EntityCrimsonMosquito extends Monster {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.FOLLOW_RANGE, 32.0D).add(Attributes.ARMOR, 0.0D).add(Attributes.ATTACK_DAMAGE, 5.0D).add(Attributes.MOVEMENT_SPEED, 0.25F);
     }
 
+    @Override
     @Nullable
     protected ResourceKey<LootTable> getDefaultLootTable() {
         if (this.getBloodLevel() > 0) {
@@ -152,6 +164,7 @@ public class EntityCrimsonMosquito extends Monster {
         return true;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(2, new FlyTowardsTarget(this));
         this.goalSelector.addGoal(2, new FlyAwayFromTarget(this));
@@ -171,6 +184,7 @@ public class EntityCrimsonMosquito extends Monster {
     }
 
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("FlightTicks", this.flightTicks);
@@ -182,6 +196,7 @@ public class EntityCrimsonMosquito extends Monster {
         compound.putBoolean("Sick", this.isSick());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.flightTicks = compound.getInt("FlightTicks");
@@ -218,6 +233,7 @@ public class EntityCrimsonMosquito extends Monster {
         return source.is(DamageTypes.FALL) || source.is(DamageTypes.DROWN) || source.is(DamageTypes.IN_WALL) || source.is(DamageTypes.LAVA) || source.is(DamageTypeTags.IS_FIRE) || super.isInvulnerableTo(source);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() != null && this.getRootVehicle() == source.getEntity().getRootVehicle()) {
             return super.hurt(source, amount * 0.333F);
@@ -228,6 +244,7 @@ public class EntityCrimsonMosquito extends Monster {
         return super.hurt(source, amount);
     }
 
+    @Override
     public void rideTick() {
         final Entity entity = this.getVehicle();
         if (this.isPassenger() && !entity.isAlive()) {
@@ -379,6 +396,7 @@ public class EntityCrimsonMosquito extends Monster {
         this.entityData.set(SICK, shrink);
     }
 
+    @Override
     public void tick() {
         super.tick();
         final boolean shooting = entityData.get(SHOOTING);
@@ -406,11 +424,7 @@ public class EntityCrimsonMosquito extends Monster {
             if (this.isPassenger())
                 this.setFlying(false);
 
-            if (isFlying()) {
-                this.setNoGravity(true);
-            } else {
-                this.setNoGravity(false);
-            }
+            this.setNoGravity(isFlying());
             LivingEntity target = this.getTarget();
             if (this.getFleeingEntityId() == -1) {
                 if (target == null && tickCount - repellentCheckTime > 50) {
@@ -558,6 +572,7 @@ public class EntityCrimsonMosquito extends Monster {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 79) {
@@ -573,17 +588,21 @@ public class EntityCrimsonMosquito extends Monster {
 
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     public EntityDimensions getDefaultDimensions(Pose poseIn) {
         return isFlying() ? FLIGHT_SIZE : super.getDefaultDimensions(poseIn);
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.onGround() && !this.isFlying()) {
             if (this.getNavigation().getPath() != null) {
@@ -594,6 +613,7 @@ public class EntityCrimsonMosquito extends Monster {
         super.travel(vec3d);
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -630,6 +650,7 @@ public class EntityCrimsonMosquito extends Monster {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
+        @Override
         public boolean canUse() {
             MoveControl movementcontroller = this.parentEntity.getMoveControl();
             if (!parentEntity.isFlying() || parentEntity.getTarget() != null || parentEntity.hasLuringLaviathan() || parentEntity.getFleeingEntityId() != -1) {
@@ -645,14 +666,17 @@ public class EntityCrimsonMosquito extends Monster {
             return false;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return target != null && parentEntity.isFlying() && parentEntity.distanceToSqr(Vec3.atCenterOf(target)) > 2.4D && parentEntity.getMoveControl().hasWanted() && !parentEntity.horizontalCollision;
         }
 
+        @Override
         public void stop() {
             target = null;
         }
 
+        @Override
         public void tick() {
             if (target == null) {
                 target = getBlockInViewMosquito();
@@ -692,6 +716,7 @@ public class EntityCrimsonMosquito extends Monster {
             this.parentEntity = sunbird;
         }
 
+        @Override
         public void tick() {
             if (speedModifier >= 1 && parentEntity.isSick()) {
                 speedModifier = 0.35D;
@@ -763,6 +788,7 @@ public class EntityCrimsonMosquito extends Monster {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
+        @Override
         public boolean canUse() {
             if (!parentEntity.isFlying() || parentEntity.getBloodLevel() > 0 || parentEntity.drinkTime < 0 || parentEntity.getFleeingEntityId() != -1) {
                 return false;
@@ -770,6 +796,7 @@ public class EntityCrimsonMosquito extends Monster {
             return !parentEntity.isPassenger() && parentEntity.getTarget() != null && !isBittenByMosquito(parentEntity.getTarget());
         }
 
+        @Override
         public boolean canContinueToUse() {
             return parentEntity.drinkTime >= 0 && parentEntity.getFleeingEntityId() == -1 && parentEntity.getTarget() != null && !isBittenByMosquito(parentEntity.getTarget()) && !parentEntity.horizontalCollision && parentEntity.getBloodLevel() == 0 && parentEntity.isFlying() && parentEntity.getMoveControl().hasWanted();
         }
@@ -783,9 +810,11 @@ public class EntityCrimsonMosquito extends Monster {
             return false;
         }
 
+        @Override
         public void stop() {
         }
 
+        @Override
         public void tick() {
             if (parentEntity.getTarget() != null) {
                 this.parentEntity.getMoveControl().setWantedPosition(parentEntity.getTarget().getX(), parentEntity.getTarget().getY(), parentEntity.getTarget().getZ(), 1.0D);
@@ -809,6 +838,7 @@ public class EntityCrimsonMosquito extends Monster {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
+        @Override
         public boolean canUse() {
             if (!parentEntity.isFlying() || parentEntity.getBloodLevel() <= 0 && parentEntity.drinkTime >= 0 || parentEntity.getFleeingEntityId() != -1) {
                 return false;
@@ -820,14 +850,17 @@ public class EntityCrimsonMosquito extends Monster {
             return false;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return parentEntity.getTarget() != null && (parentEntity.getBloodLevel() > 0 || parentEntity.drinkTime < 0) && parentEntity.isFlying() && !parentEntity.horizontalCollision;
         }
 
+        @Override
         public void stop() {
             spitCooldown = 20;
         }
 
+        @Override
         public void tick() {
             if (spitCooldown > 0) {
                 spitCooldown--;

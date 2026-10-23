@@ -18,6 +18,7 @@ public class LayerGrizzlyHoney extends RenderLayer<EntityGrizzlyBear, ModelGrizz
         super(renderGrizzlyBear);
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityGrizzlyBear entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if(entitylivingbaseIn.isHoneyed()){
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));

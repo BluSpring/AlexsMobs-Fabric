@@ -1,8 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.entity.EntityLaviathan;
 import com.github.alexthe666.alexsmobs.entity.IHerdPanic;
 import com.google.common.base.Predicate;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
@@ -14,10 +19,6 @@ import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.List;
 
 public class AnimalAIHerdPanic extends Goal {
     protected final PathfinderMob creature;
@@ -43,6 +44,7 @@ public class AnimalAIHerdPanic extends Goal {
         };
     }
 
+    @Override
     public boolean canUse() {
         if (this.creature.getLastHurtByMob() == null || !this.creature.getLastHurtByMob().isAlive()) {
             return false;
@@ -110,6 +112,7 @@ public class AnimalAIHerdPanic extends Goal {
     /**
      * Execute a one shot task or start executing a continuous task
      */
+    @Override
     public void start() {
         if (this.creature instanceof IHerdPanic) {
             ((IHerdPanic) this.creature).onPanic();
@@ -122,6 +125,7 @@ public class AnimalAIHerdPanic extends Goal {
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
+    @Override
     public void stop() {
         this.running = false;
     }
@@ -129,6 +133,7 @@ public class AnimalAIHerdPanic extends Goal {
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
+    @Override
     public boolean canContinueToUse() {
         return !this.creature.getNavigation().isDone();
     }

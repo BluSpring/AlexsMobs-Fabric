@@ -19,6 +19,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class ItemStinkRay extends Item {
@@ -31,10 +32,12 @@ public class ItemStinkRay extends Item {
         super(properties);
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return isUsable(stack) ? 72000 : 0;
     }
 
+    @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.BOW;
     }
@@ -43,6 +46,7 @@ public class ItemStinkRay extends Item {
         return stack.getDamageValue() < stack.getMaxDamage() - 1;
     }
 
+    @Override
     public boolean isBarVisible(ItemStack itemStack) {
         return super.isBarVisible(itemStack) && isUsable(itemStack);
     }
@@ -58,20 +62,18 @@ public class ItemStinkRay extends Item {
         return f;
     }
 
+    @Override
     public void releaseUsing(ItemStack itemStack, Level level, LivingEntity entity, int time) {
         if (entity instanceof Player player && isUsable(itemStack)) {
             int i = this.getUseDuration(itemStack, entity) - time;
             if (i >= 10) {
-                boolean left = false;
-                if (entity.getUsedItemHand() == InteractionHand.OFF_HAND && entity.getMainArm() == HumanoidArm.RIGHT || entity.getUsedItemHand() == InteractionHand.MAIN_HAND && entity.getMainArm() == HumanoidArm.LEFT) {
-                    left = true;
-                }
+                boolean left = entity.getUsedItemHand() == InteractionHand.OFF_HAND && entity.getMainArm() == HumanoidArm.RIGHT || entity.getUsedItemHand() == InteractionHand.MAIN_HAND && entity.getMainArm() == HumanoidArm.LEFT;
                 EntityFart blood = new EntityFart(level, entity, !left);
                 Vec3 vector3d = entity.getViewVector(1.0F);
                 RandomSource rand = level.getRandom();
                 entity.gameEvent(GameEvent.ITEM_INTERACT_START);
                 entity.playSound(AMSoundRegistry.STINK_RAY.get(), 1.0F, 0.9F + (rand.nextFloat() - rand.nextFloat()) * 0.2F);
-                blood.shoot((double) vector3d.x(), (double) vector3d.y(), (double) vector3d.z(), 0.2F + getPowerForTime(i) * 0.4F, 10);
+                blood.shoot(vector3d.x(), vector3d.y(), vector3d.z(), 0.2F + getPowerForTime(i) * 0.4F, 10);
                 if (!level.isClientSide) {
                     level.addFreshEntity(blood);
                 }
@@ -120,12 +122,13 @@ public class ItemStinkRay extends Item {
     }
 
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return !ItemStack.isSameItem(oldStack, newStack);
     }
 
     @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getISTERProperties());
     }
 }

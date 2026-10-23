@@ -154,7 +154,7 @@ public class ModelCosmaw extends AdvancedEntityModel<EntityCosmaw> {
         float biteProgress = entity.prevBiteProgress + (entity.biteProgress - entity.prevBiteProgress) * partialTick;
         float openProgress = Math.max(Math.max(entity.prevOpenProgress + (entity.openProgress - entity.prevOpenProgress) * partialTick, clutchProgress), biteProgress);
         float cosmawPitch = (float) (Math.toRadians(entity.getClampedCosmawPitch(partialTick)) * (5F - clutchProgress) * 0.2F);
-        float cosmawPitchPos = (float) ((entity.getClampedCosmawPitch(partialTick) / 90F) * (5F - clutchProgress) * 0.2F);
+        float cosmawPitchPos = (entity.getClampedCosmawPitch(partialTick) / 90F) * (5F - clutchProgress) * 0.2F;
         body.rotateAngleX += cosmawPitch;
         eyesBase.rotateAngleX -= cosmawPitch;
         mouthArm1.rotateAngleX -= cosmawPitch * 0.2F;

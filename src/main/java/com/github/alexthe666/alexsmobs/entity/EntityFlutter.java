@@ -1,13 +1,24 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
+import com.github.alexthe666.alexsmobs.entity.ai.FlightMoveController;
+import com.github.alexthe666.alexsmobs.entity.ai.FlyingAIFollowOwner;
+import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
+import com.github.alexthe666.alexsmobs.entity.ai.TameableAITempt;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -23,11 +34,21 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
@@ -37,9 +58,8 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -50,11 +70,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
 
 public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAnimal {
 
@@ -95,14 +110,17 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
     }
 
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !requiresCustomPersistence() && !this.hasCustomName();
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.hasCustomName() || this.isTame() || this.isPotted();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.flutterSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -116,6 +134,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         return reason == MobSpawnType.SPAWNER || !iServerWorld.canSeeSky(pos) && blockstate.is(AMTagRegistry.FLUTTER_SPAWNS) && pos.getY() <= 64 && canFlutterSpawnInLight(entityType, iServerWorld, reason, pos, random);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -147,10 +166,12 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         }
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -179,10 +200,12 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, Boolean.valueOf(sit));
     }
 
+    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
@@ -215,18 +238,22 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         entityData.set(FLUTTER_PITCH, getFlutterPitch() - pitch);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.FLUTTER_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.FLUTTER_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.FLUTTER_HURT.get();
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevShootProgress = shootProgress;
@@ -365,6 +392,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         }
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.FLUTTER_BREEDABLES) && this.isTame();
     }
@@ -388,6 +416,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         return this.entityData.get(SHAKING_HEAD_TICKS) > 0;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -421,7 +450,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             if (item == Items.FLOWER_POT && !this.isPotted()) {
                 this.setPotted(true);
                 return InteractionResult.SUCCESS;
-            } else if (itemstack.is(net.minecraft.world.item.Items.SHEARS) && this.isPotted()) {
+            } else if (itemstack.is(Items.SHEARS) && this.isPotted()) {
                 this.setPotted(false);
                 this.spawnAtLocation(Items.FLOWER_POT);
                 return InteractionResult.SUCCESS;
@@ -451,6 +480,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         return type;
     }
 
+    @Override
     public void followEntity(TamableAnimal tameable, LivingEntity owner, double followSpeed) {
         if (this.distanceTo(owner) > 8) {
             this.setFlying(true);
@@ -475,6 +505,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         return this.getCommand() == 1;
     }
 
+    @Override
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.isPotted()) {
@@ -484,6 +515,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         }
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -500,6 +532,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         return super.isAlliedTo(entityIn);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Flying", this.isFlying());
@@ -512,6 +545,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         compound.putBoolean("FlutterSitting", this.isSitting());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFlying(compound.getBoolean("Flying"));
@@ -605,7 +639,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             tag.put("FlutterData", platTag);
         }));
         if (this.hasCustomName()) {
-            stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
+            stack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
         return stack;
     }
@@ -630,6 +664,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         this.entityData.set(SHOOTING, true);
     }
 
+    @Override
     public void spawnChildFromBreeding(ServerLevel world, Animal partner) {
         super.spawnChildFromBreeding(world, partner);
         for(int i = 0; i < 15 + random.nextInt(10); i++){
@@ -683,6 +718,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             }
         }
 
+        @Override
         public void tick() {
             if (flightTarget) {
                 phage.getMoveControl().setWantedPosition(x, y, z, 1F);
@@ -697,7 +733,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             }
         }
 
-        @javax.annotation.Nullable
+        @Nullable
         protected Vec3 getPosition() {
             Vec3 vector3d = phage.position();
             if (phage.isOverWaterOrVoid()) {
@@ -714,6 +750,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             if (phage.isSitting()) {
                 return false;
@@ -725,6 +762,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             }
         }
 
+        @Override
         public void start() {
             if (flightTarget) {
                 phage.setFlying(true);
@@ -734,6 +772,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             }
         }
 
+        @Override
         public void stop() {
             this.phage.getNavigation().stop();
             super.stop();
@@ -751,10 +790,12 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
 
+        @Override
         public boolean canUse() {
             return !parentEntity.isSitting() && parentEntity.getTarget() != null && parentEntity.getTarget().isAlive()  && !parentEntity.isBaby();
         }
 
+        @Override
         public void tick() {
             if (spitCooldown > 0) {
                 spitCooldown--;

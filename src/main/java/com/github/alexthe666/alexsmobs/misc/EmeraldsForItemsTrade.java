@@ -25,6 +25,7 @@ public class EmeraldsForItemsTrade implements VillagerTrades.ItemListing {
         this.priceMultiplier = 0.05F;
     }
 
+    @Override
     public MerchantOffer getOffer(Entity p_221182_1_, RandomSource p_221182_2_) {
         return new MerchantOffer(new ItemCost(this.tradeItem, 1), new ItemStack(Items.EMERALD, this.count), this.maxUses, this.xpValue, this.priceMultiplier);
     }

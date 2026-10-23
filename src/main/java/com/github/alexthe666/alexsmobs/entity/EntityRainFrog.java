@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
@@ -7,6 +9,10 @@ import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
 import com.github.alexthe666.alexsmobs.message.MessageStartDancing;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -23,10 +29,21 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
@@ -42,10 +59,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import java.util.EnumSet;
 
 public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDancingMob {
 
@@ -76,6 +89,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new TemptGoal(this, 1.0D, Ingredient.of(AMTagRegistry.RAIN_FROG_BREEDABLES), false));
@@ -93,6 +107,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         return spawnBlock && worldIn.getLevelData() != null && (worldIn.getLevelData().isThundering() || worldIn.getLevelData().isRaining());
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.rainFrogSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -146,11 +161,12 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         this.entityData.set(DANCE_TIME, Integer.valueOf(danceTime));
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.RAIN_FROG_BREEDABLES);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel p_241840_1_, AgeableMob p_241840_2_) {
         EntityRainFrog frog = AMEntityRegistry.RAIN_FROG.get().create(p_241840_1_);
@@ -170,6 +186,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         builder.define(DISTURBED, false);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevBurrowProgress = burrowProgress;
@@ -239,6 +256,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         }
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if (prev && source.getDirectEntity() instanceof LivingEntity) {
@@ -250,10 +268,12 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         return prev;
     }
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !requiresCustomPersistence();
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.isDisturbed();
     }
@@ -263,22 +283,26 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         return source.is(DamageTypes.IN_WALL)  || super.isInvulnerableTo(source);
     }
 
+    @Override
     public boolean isSleeping() {
         return this.isBurrowed();
     }
 
+    @Override
     public void calculateEntityAnimation(boolean flying) {
         float f1 = (float)Mth.length(this.getX() - this.xo, 0, this.getZ() - this.zo);
         float f2 = Math.min(f1 * 128.0F, 1.0F);
         this.walkAnimation.update(f2, 0.4F);
     }
 
-    @javax.annotation.Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @javax.annotation.Nullable SpawnGroupData spawnDataIn) {
+    @Override
+    @Nullable
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setVariant(random.nextInt(3));
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setDisturbed(compound.getBoolean("Disturbed"));
@@ -286,6 +310,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         this.weatherCooldown = compound.getInt("WeatherCooldown");
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Disturbed", isDisturbed());
@@ -293,6 +318,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         compound.putInt("WeatherCooldown", this.weatherCooldown);
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -313,6 +339,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         return type;
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isBurrowed() || this.getDanceTime() > 0) {
             if (this.getNavigation().getPath() != null) {
@@ -368,6 +395,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         weatherCooldown = time + 24000;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void setRecordPlayingNearby(BlockPos pos, boolean isPartying) {
         AlexsMobs.sendMSGToServer(new MessageStartDancing(this.getId(), isPartying, pos));
@@ -390,18 +418,22 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         this.jukeboxPosition = pos;
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return getStanceTime() > 0 ? AMSoundRegistry.RAIN_FROG_HURT.get() : AMSoundRegistry.RAIN_FROG_IDLE.get();
     }
 
+    @Override
     public int getAmbientSoundInterval() {
         return getStanceTime() > 0 ? 10 : 80;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.RAIN_FROG_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.RAIN_FROG_HURT.get();
     }
@@ -442,6 +474,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
             return blockpos;
         }
 
+        @Override
         public void tick() {
             if (EntityRainFrog.this.isBurrowed()) {
                 burrowedTime++;
@@ -460,6 +493,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
             }
         }
 
+        @Override
         public void stop() {
             EntityRainFrog.this.setBurrowed(false);
             EntityRainFrog.this.burrowCooldown = 120 + random.nextInt(1200);

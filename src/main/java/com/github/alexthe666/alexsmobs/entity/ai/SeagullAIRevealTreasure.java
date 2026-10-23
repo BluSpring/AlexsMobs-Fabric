@@ -1,11 +1,12 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntitySeagull;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
 
 public class SeagullAIRevealTreasure extends Goal {
 
@@ -22,17 +23,20 @@ public class SeagullAIRevealTreasure extends Goal {
         return seagull.getTreasurePos() != null && seagull.treasureSitTime > 0;
     }
 
+    @Override
     public void start(){
         seagull.aiItemFlag = true;
         sitPos = seagull.getSeagullGround(seagull.getTreasurePos());
     }
 
+    @Override
     public void stop(){
         sitPos = null;
         seagull.setSitting(false);
         seagull.aiItemFlag = false;
     }
 
+    @Override
     public void tick(){
         if(sitPos != null){
             if(seagull.distanceToSqr(new Vec3(sitPos.getX() + 0.5F, seagull.getY(), sitPos.getZ() + 0.5F)) > 2.5F){

@@ -20,6 +20,7 @@ public class SoundLaCucaracha extends AbstractTickableSoundInstance {
         this.z = this.cockroach.getZ();
     }
 
+    @Override
     public boolean canPlaySound() {
         return !this.cockroach.isSilent() && this.cockroach.hasMaracas() && this.cockroach.isDancing() && ClientProxy.COCKROACH_SOUND_MAP.get(this.cockroach.getId()) == this;
     }
@@ -35,12 +36,13 @@ public class SoundLaCucaracha extends AbstractTickableSoundInstance {
 
 
     public double distanceSq(double p_218140_1_, double p_218140_3_, double p_218140_5_) {
-        double lvt_10_1_ = (double)this.getX() - p_218140_1_;
-        double lvt_12_1_ = (double)this.getY() - p_218140_3_;
-        double lvt_14_1_ = (double)this.getZ() - p_218140_5_;
+        double lvt_10_1_ = this.getX() - p_218140_1_;
+        double lvt_12_1_ = this.getY() - p_218140_3_;
+        double lvt_14_1_ = this.getZ() - p_218140_5_;
         return lvt_10_1_ * lvt_10_1_ + lvt_12_1_ * lvt_12_1_ + lvt_14_1_ * lvt_14_1_;
     }
 
+    @Override
     public void tick() {
         if (!this.cockroach.isRemoved() && this.cockroach.isAlive() && this.cockroach.isDancing() && this.cockroach.hasMaracas()) {
             this.volume = 1;

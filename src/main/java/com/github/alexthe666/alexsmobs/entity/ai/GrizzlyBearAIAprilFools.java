@@ -1,17 +1,18 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityGrizzlyBear;
 import com.github.alexthe666.alexsmobs.message.MessageSendVisualFlagFromServer;
 import com.github.alexthe666.alexsmobs.misc.AMDamageTypes;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.gameevent.GameEvent;
-
-import java.util.EnumSet;
 
 public class GrizzlyBearAIAprilFools extends Goal {
 
@@ -49,6 +50,7 @@ public class GrizzlyBearAIAprilFools extends Goal {
         return target != null && bear.distanceTo(target) < maxDistance * 2;
     }
 
+    @Override
     public void start(){
         maxMusicBoxTime = 100 + bear.getRandom().nextInt(130);
     }

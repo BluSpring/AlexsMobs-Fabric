@@ -4,6 +4,8 @@ import com.github.alexthe666.alexsmobs.client.model.ModelSugarGlider;
 import com.github.alexthe666.alexsmobs.entity.EntitySugarGlider;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import org.joml.Quaternionf;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -17,7 +19,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
-import org.joml.Quaternionf;
 
 public class RenderSugarGlider extends MobRenderer<EntitySugarGlider, ModelSugarGlider> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/sugar_glider.png");
@@ -84,16 +85,16 @@ public class RenderSugarGlider extends MobRenderer<EntitySugarGlider, ModelSugar
         } else if (entityLiving.hasCustomName() ) {
             String s = ChatFormatting.stripFormatting(entityLiving.getName().getString());
             if (("Dinnerbone".equals(s) || "Grumm".equals(s))) {
-                matrixStackIn.translate(0.0D, (double)(entityLiving.getBbHeight() + 0.1F), 0.0D);
+                matrixStackIn.translate(0.0D, entityLiving.getBbHeight() + 0.1F, 0.0D);
                 matrixStackIn.mulPose(Axis.ZP.rotationDegrees(180.0F));
             }
         }
     }
 
+    @Override
     protected void scale(EntitySugarGlider mob, PoseStack matrixStackIn, float partialTickTime) {
         if(mob.isPassenger() && mob.getVehicle() != null) {
-            if (mob.getVehicle() instanceof Player) {
-                Player mount = (Player)mob.getVehicle();
+            if (mob.getVehicle() instanceof Player mount) {
                 EntityRenderer playerRender = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(mount);
                 if(Minecraft.getInstance().player == mount && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON){
                     //handled via event
@@ -107,6 +108,7 @@ public class RenderSugarGlider extends MobRenderer<EntitySugarGlider, ModelSugar
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntitySugarGlider entity) {
         return TEXTURE;
     }

@@ -1,16 +1,36 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeaveWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalSwimMoveControllerSink;
+import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticAIRandomSwimming;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticPathNavigator;
+import com.github.alexthe666.alexsmobs.entity.ai.TameableAIFollowOwnerWater;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.base.Predicate;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.fluids.FluidType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -32,11 +52,25 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
@@ -50,11 +84,15 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -62,14 +100,6 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.fluids.FluidType;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.stream.Stream;
 
 public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, IFollower, Bucketable {
 
@@ -139,26 +169,32 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         return null;
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.MIMIC_OCTOPUS_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.MIMIC_OCTOPUS_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.MIMIC_OCTOPUS_HURT.get();
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.mimicOctopusSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.entityData.set(PREV_MIMIC_ORDINAL, 0);
@@ -167,6 +203,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(MIMIC_ORDINAL, compound.getInt("MimicState"));
@@ -191,6 +228,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         this.mimicreamFeedings = compound.getInt("MimicreamFeedings");
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("MimicState", this.getMimicState().ordinal());
@@ -212,19 +250,19 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.MIMIC_OCTOPUS_BUCKET.get());
         if (this.hasCustomName()) {
-            stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
+            stack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
         return stack;
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NotNull ItemStack bucket) {
         if (this.hasCustomName()) {
-            bucket.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
+            bucket.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
         Bucketable.saveDefaultDataToBucketTag(this, bucket);
         CompoundTag platTag = new CompoundTag();
@@ -235,7 +273,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NotNull CompoundTag compound) {
         Bucketable.loadDefaultDataFromBucketTag(this, compound);
         if (compound.contains("MimicOctopusData")) {
             this.readAdditionalSaveData(compound.getCompound("MimicOctopusData"));
@@ -243,6 +281,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         this.setMoistness(60000);
     }
 
+    @Override
     protected float getJumpPower() {
         return super.getJumpPower() * (this.isInWaterOrBubble() ? 1.3F : 1F);
     }
@@ -252,6 +291,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         return this.getCommand() == 1;
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -268,10 +308,12 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         return super.isAlliedTo(entityIn);
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new AIAttack());
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
@@ -304,6 +346,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         });
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         Item item = stack.getItem();
         return isTame() && stack.is(AMTagRegistry.MIMIC_OCTOPUS_BREEDABLES);
@@ -313,6 +356,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         return this.getMimicState() == MimicState.OVERLAY && this.getMimickedBlock() != null;
     }
 
+    @Override
     public double getVisibilityPercent(@Nullable Entity lookingEntity) {
         if (isActiveCamo()) {
             return super.getVisibilityPercent(lookingEntity) * 0.1F;
@@ -322,8 +366,8 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     }
 
     @Override
-    @Nonnull
-    public InteractionResult mobInteract(@Nonnull Player player, @Nonnull InteractionHand hand) {
+    @NotNull
+    public InteractionResult mobInteract(@NotNull Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
         MimicState readState = getStateForItem(itemstack);
@@ -477,6 +521,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         }
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (localMimic != this.getPrevMimickedBlock()) {
@@ -620,6 +665,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         return ((float) this.guardianLaserTime + p_175477_1_) / 30F;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 68) {
@@ -660,6 +706,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         return pos;
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isSitting()) {
             if (this.getNavigation().getPath() != null) {
@@ -682,6 +729,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, Boolean.valueOf(sit));
     }
@@ -697,7 +745,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public SoundEvent getPickupSound() {
         return SoundEvents.BUCKET_FILL_FISH;
     }
@@ -754,6 +802,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         return super.requiresCustomPersistence() || this.fromBucket() || this.isTame();
     }
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !this.isTame() && !this.fromBucket();
     }
@@ -869,6 +918,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         return position;
     }
 
+    @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
         if (UPGRADED_LASER_ENTITY_ID.equals(key)) {
@@ -898,6 +948,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
             super(EntityMimicOctopus.this, 1, 35);
         }
 
+        @Override
         protected Vec3 findSurfaceTarget(PathfinderMob creature, int i, int i1) {
             if (creature.getRandom().nextInt(5) == 0) {
                 return super.findSurfaceTarget(creature, i, i1);
@@ -965,6 +1016,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
             return targetEntity != null && !EntityMimicOctopus.this.isTame() && EntityMimicOctopus.this.distanceTo(targetEntity) < 20;
         }
 
+        @Override
         public void stop() {
             flightTarget = null;
             this.targetEntity = null;
@@ -1014,6 +1066,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     }
 
     public record EntitySorter(Entity theEntity) implements Comparator<Entity> {
+        @Override
         public int compare(Entity p_compare_1_, Entity p_compare_2_) {
             final double d0 = this.theEntity.distanceToSqr(p_compare_1_);
             final double d1 = this.theEntity.distanceToSqr(p_compare_2_);
@@ -1071,6 +1124,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
             return targetEntity != null && EntityMimicOctopus.this.distanceTo(targetEntity) < 10 && EntityMimicOctopus.this.getMimicState() == MimicState.OVERLAY;
         }
 
+        @Override
         public void stop() {
             EntityMimicOctopus.this.getNavigation().stop();
             flightTarget = null;
@@ -1141,6 +1195,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
             return executionCooldown == 0 && EntityMimicOctopus.this.isTame() && EntityMimicOctopus.this.getTarget() != null && EntityMimicOctopus.this.getTarget().isAlive();
         }
 
+        @Override
         public void stop() {
             fleePosition = null;
             scareMobTime = 0;
@@ -1174,6 +1229,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
             return null;
         }
 
+        @Override
         public void tick() {
             LivingEntity target = EntityMimicOctopus.this.getTarget();
             if (target != null) {

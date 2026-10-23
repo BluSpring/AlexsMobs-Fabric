@@ -14,6 +14,7 @@ public class RenderTriops extends MobRenderer<EntityTriops, ModelTriops> {
         super(renderManagerIn, new ModelTriops(), 0.2F);
     }
 
+    @Override
     protected void scale(EntityTriops entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         float scale = entitylivingbaseIn.getTriopsScale();
         if(entitylivingbaseIn.isBaby()){
@@ -22,6 +23,7 @@ public class RenderTriops extends MobRenderer<EntityTriops, ModelTriops> {
         matrixStackIn.scale(scale, scale, scale);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityTriops entity) {
         return TEXTURE;
     }

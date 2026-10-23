@@ -53,6 +53,7 @@ public class EffectClinging extends MobEffect {
         return duration > 0;
     }
 
+    @Override
     public String getDescriptionId() {
         return "alexsmobs.potion.clinging";
     }

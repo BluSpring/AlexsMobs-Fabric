@@ -3,6 +3,7 @@ package com.github.alexthe666.alexsmobs.tileentity;
 import com.github.alexthe666.alexsmobs.entity.EntityTerrapin;
 import com.github.alexthe666.alexsmobs.entity.util.TerrapinTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -44,7 +45,7 @@ public class TileEntityTerrapinEgg extends BlockEntity {
 
 
     @Override
-    protected void loadAdditional(CompoundTag compound, net.minecraft.core.HolderLookup.Provider registries) {
+    protected void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
         super.loadAdditional(compound, registries);
         if(compound.contains("Parent1Data")){
             this.parent1 = new ParentData(compound.getCompound("Parent1Data"));
@@ -55,7 +56,7 @@ public class TileEntityTerrapinEgg extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound, net.minecraft.core.HolderLookup.Provider registries) {
+    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
         super.saveAdditional(compound, registries);
         if(this.parent1 != null){
             CompoundTag tag = new CompoundTag();

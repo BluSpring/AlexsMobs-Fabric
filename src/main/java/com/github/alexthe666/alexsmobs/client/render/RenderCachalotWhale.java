@@ -21,9 +21,11 @@ public class RenderCachalotWhale extends MobRenderer<EntityCachalotWhale, ModelC
         this.addLayer(new LayerCachalotWhaleCapturedSquid(this));
     }
 
+    @Override
     protected void scale(EntityCachalotWhale entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     public boolean shouldRender(EntityCachalotWhale livingEntityIn, Frustum camera, double camX, double camY, double camZ) {
         if (super.shouldRender(livingEntityIn, camera, camX, camY, camZ)) {
             return true;
@@ -37,6 +39,7 @@ public class RenderCachalotWhale extends MobRenderer<EntityCachalotWhale, ModelC
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityCachalotWhale entity) {
         if(entity.isAlbino()){
             return entity.isSleeping() || entity.isBeached() ? TEXTURE_ALBINO_SLEEPING : TEXTURE_ALBINO;

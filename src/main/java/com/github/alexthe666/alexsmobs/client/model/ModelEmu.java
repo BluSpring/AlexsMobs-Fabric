@@ -263,7 +263,7 @@ public class ModelEmu extends AdvancedEntityModel<EntityEmu> {
             this.walk(leg_left, walkSpeed, walkDegree * 2F, true, 0F, 0F, limbSwing, limbSwingAmount);
             this.walk(foot_right, walkSpeed, walkDegree * 1.5F, false, 2F, 0.2F, limbSwing, limbSwingAmount);
             this.walk(foot_left, walkSpeed, walkDegree * 1.5F, true, 2F, 0.2F, limbSwing, limbSwingAmount);
-            this.walk(neck1, walkSpeed, walkDegree * 1F, false, 1F, 0F, limbSwing, limbSwingAmount);
+            this.walk(neck1, walkSpeed, walkDegree, false, 1F, 0F, limbSwing, limbSwingAmount);
             this.walk(neck2, walkSpeed, walkDegree * 0.8F, true, 1.3F, 0F, limbSwing, limbSwingAmount);
             this.walk(head, walkSpeed, walkDegree * 0.25F, true, 1.3F, 0F, limbSwing, limbSwingAmount);
             this.walk(tail, walkSpeed, walkDegree * 0.4F, true, 1.3F, -0.4F, limbSwing, limbSwingAmount);
@@ -299,6 +299,7 @@ public class ModelEmu extends AdvancedEntityModel<EntityEmu> {
         progressRotationPrev(headPivot, runProgress, Maths.rad(-50), 0, 0, 5F);
     }
 
+    @Override
     public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.young) {
             float f = 1.5F;

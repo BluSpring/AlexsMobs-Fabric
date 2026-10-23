@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -7,8 +9,6 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
 
 public class SmartClimbPathNavigator extends GroundPathNavigation {
 
@@ -19,18 +19,21 @@ public class SmartClimbPathNavigator extends GroundPathNavigation {
         super(entitylivingIn, worldIn);
     }
 
+    @Override
     public Path createPath(BlockPos p_26589_, int p_26590_) {
         this.pathToPosition = p_26589_;
         return super.createPath(p_26589_, p_26590_);
     }
 
+    @Override
     public Path createPath(Entity p_26586_, int p_26587_) {
         this.pathToPosition = p_26586_.blockPosition();
         return super.createPath(p_26586_, p_26587_);
     }
 
+    @Override
     public boolean moveTo(Entity p_26583_, double p_26584_) {
-        Path path = this.createPath((Entity)p_26583_, 0);
+        Path path = this.createPath(p_26583_, 0);
         if (path != null) {
             return this.moveTo(path, p_26584_);
         } else {
@@ -41,6 +44,7 @@ public class SmartClimbPathNavigator extends GroundPathNavigation {
     }
 
 
+    @Override
     public void tick() {
         super.tick();
         if (!this.isDone()) {
@@ -51,7 +55,7 @@ public class SmartClimbPathNavigator extends GroundPathNavigation {
             if (dist < this.mob.getBbWidth() || this.mob.getY() > (double)this.pathToPosition.getY()) {
                 this.pathToPosition = null;
             } else {
-                this.mob.getMoveControl().setWantedPosition((double)this.pathToPosition.getX(), (double)this.mob.getY(), (double)this.pathToPosition.getZ(), this.speedModifier);
+                this.mob.getMoveControl().setWantedPosition(this.pathToPosition.getX(), this.mob.getY(), this.pathToPosition.getZ(), this.speedModifier);
             }
         }
     }

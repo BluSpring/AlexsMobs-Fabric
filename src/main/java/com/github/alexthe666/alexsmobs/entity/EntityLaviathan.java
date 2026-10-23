@@ -1,7 +1,18 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWaterLava;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHerdPanic;
+import com.github.alexthe666.alexsmobs.entity.ai.BoneSerpentPathNavigator;
+import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
+import com.github.alexthe666.alexsmobs.entity.ai.LaviathanAIRandomSwimming;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
@@ -9,6 +20,12 @@ import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.collect.Sets;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.entity.PartEntity;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.fluids.FluidType;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -28,11 +45,18 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -62,16 +86,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.fluids.FluidType;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic {
 
@@ -138,6 +152,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         switchNavigator(true);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.laviathanSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -150,18 +165,22 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         return p_234314_1_.getBlockState(blockpos$mutable).isAir();
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.LAVIATHAN_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.LAVIATHAN_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.LAVIATHAN_HURT.get();
     }
 
+    @Override
     @Nullable
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return this.isObsidian() ? OBSIDIAN_LOOT : super.getDefaultLootTable();
@@ -171,32 +190,39 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 60D).add(Attributes.ATTACK_DAMAGE, 1.0D).add(Attributes.ARMOR, 10D).add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.STEP_HEIGHT, 1.1D);
     }
 
+    @Override
     public boolean canBeCollidedWith() {
         return this.isAlive();
     }
 
+    @Override
     protected boolean canAddPassenger(Entity p_38390_) {
         return this.getPassengers().size() < 4 && !this.isEyeInFluid(FluidTags.LAVA) && !this.isEyeInFluid(FluidTags.WATER);
     }
 
+    @Override
     public void push(Entity entity) {
         if (!entity.isPassengerOfSameVehicle(this)) {
             entity.setDeltaMovement(entity.getDeltaMovement().add(this.getDeltaMovement()));
         }
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.LAVIATHAN_BREEDABLES);
     }
 
+    @Override
     public boolean isPushable() {
         return false;
     }
 
+    @Override
     public float getPickRadius() {
         return 0.0F;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -254,6 +280,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         return closest;
     }
 
+    @Override
     @Nullable
     public LivingEntity getControllingPassenger() {
         int playerPosition = -1;
@@ -304,6 +331,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         return posit;
     }
 
+    @Override
     protected void addPassenger(Entity entity) {
         int rayTrace = getSeatRaytrace(entity);
         if (rayTrace >= 0 && rayTrace < 4) {
@@ -321,6 +349,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Obsidian", this.isObsidian());
@@ -329,6 +358,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         compound.putInt("ChillTime", this.getChillTime());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setObsidian(compound.getBoolean("Obsidian"));
@@ -337,6 +367,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         this.setChillTime(compound.getInt("ChillTime"));
     }
 
+    @Override
     public void positionRider(Entity passenger, Entity.MoveFunction moveFunc) {
         if (this.hasPassenger(passenger)) {
             int posit = getRiderPosition(passenger);
@@ -357,6 +388,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         return (double) this.getBbHeight() - 0.4F;
     }
 
+    @Override
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.hasBodyGear()) {
@@ -385,10 +417,12 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         }
     }
 
+    @Override
     protected PathNavigation createNavigation(Level level) {
         return new GroundPathNavigatorWide(this, level);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new AnimalAIHerdPanic(this, 1.0D) {
             @Override
@@ -414,10 +448,12 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         return true;
     }
 
+    @Override
     protected float getBlockSpeedFactor() {
-        return shouldSwim() || false /* onSoulSpeedBlock removed */ ? 1.0F : super.getBlockSpeedFactor();
+        return shouldSwim() /* onSoulSpeedBlock removed */ ? 1.0F : super.getBlockSpeedFactor();
     }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         if (worldIn.getBlockState(pos).getFluidState().is(FluidTags.WATER) || worldIn.getBlockState(pos).getFluidState().is(FluidTags.LAVA)) {
             return 10.0F;
@@ -426,18 +462,22 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         }
     }
 
+    @Override
     public int getMaxFallDistance() {
         return 256;
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 1;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
 
+    @Override
     protected Vec3 getRiddenInput(Player player, Vec3 deltaIn) {
         if (player.zza != 0) {
             float f = player.zza < 0.0F ? 0.5F : 1.0F;
@@ -462,6 +502,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         return Vec3.ZERO;
     }
 
+    @Override
     protected void tickRidden(Player player, Vec3 vec3) {
         super.tickRidden(player, vec3);
         this.setRot(player.getYRot(), player.getXRot() * 0.5F);
@@ -469,6 +510,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         this.setTarget(null);
     }
 
+    @Override
     protected float getRiddenSpeed(Player rider) {
         return (float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED));
     }
@@ -478,6 +520,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         return type == NeoForgeMod.WATER_TYPE.value() || type == NeoForgeMod.LAVA_TYPE.value() ? 1.0F : super.getFluidMotionScale(type);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if (prev && source.getEntity() != null) {
@@ -500,6 +543,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         builder.define(ATTACK_TICK, 0);
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         boolean liquid = this.isInLava() || this.isInWater();
         if (this.isControlledByLocalInstance() && liquid) {
@@ -515,6 +559,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         }
     }
 
+    @Override
     public void calculateEntityAnimation(boolean flying) {
         float f1 = (float) Mth.length(this.getX() - this.lastX, 0, this.getZ() - this.lastZ);
         float walkSpeed = 4.0F;
@@ -522,14 +567,17 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         walkAnimation.update(f2, 0.4F);
     }
 
+    @Override
     public int getMaxHeadXRot() {
         return 50;
     }
 
+    @Override
     public int getMaxHeadYRot() {
         return 50;
     }
 
+    @Override
     public int getHeadRotSpeed() {
         return 4;
     }
@@ -539,10 +587,12 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         return false; // Laviathan can breathe in all fluids (lava creature)
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.yBodyRot = Mth.approachDegrees(this.yBodyRotO, yBodyRot, getHeadRotSpeed());
@@ -728,6 +778,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
     }
 
 
+    @Override
     public void customServerAiStep() {
         super.customServerAiStep();
         breakBlock();
@@ -739,7 +790,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
             return;
         }
         boolean flag = false;
-        if (!this.level().isClientSide && this.isVehicle() && this.blockBreakCounter == 0 && net.neoforged.neoforge.event.EventHooks.canEntityGrief(level(), this)) {
+        if (!this.level().isClientSide && this.isVehicle() && this.blockBreakCounter == 0 && EventHooks.canEntityGrief(level(), this)) {
             for (int a = (int) Math.round(this.getBoundingBox().minX); a <= (int) Math.round(this.getBoundingBox().maxX); a++) {
                 for (int b = (int) Math.round(this.getBoundingBox().minY) - 1; (b <= (int) Math.round(this.getBoundingBox().maxY) + 1) && (b <= 127); b++) {
                     for (int c = (int) Math.round(this.getBoundingBox().minZ); c <= (int) Math.round(this.getBoundingBox().maxZ); c++) {
@@ -820,6 +871,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         }
     }
 
+    @Override
     public Vec3 getDismountLocationForPassenger(LivingEntity livingEntity) {
         float expand = this.getBbWidth() + 1.0F;
         Vec3[] avector3d = new Vec3[]{getCollisionHorizontalEscapeVector(expand, livingEntity.getBbWidth(), livingEntity.getYRot()), getCollisionHorizontalEscapeVector(expand, livingEntity.getBbWidth(), livingEntity.getYRot() - 22.5F), getCollisionHorizontalEscapeVector(expand, livingEntity.getBbWidth(), livingEntity.getYRot() + 22.5F), getCollisionHorizontalEscapeVector(expand, livingEntity.getBbWidth(), livingEntity.getYRot() - 45.0F), getCollisionHorizontalEscapeVector(expand, livingEntity.getBbWidth(), livingEntity.getYRot() + 45.0F)};
@@ -893,13 +945,16 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         return (float) (l + 1);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
@@ -978,7 +1033,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
     }
 
     @Override
-    public net.neoforged.neoforge.entity.PartEntity<?>[] getParts() {
+    public PartEntity<?>[] getParts() {
         return this.allParts;
     }
 
@@ -1024,6 +1079,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
         }
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         scaleParts();
@@ -1057,6 +1113,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
             this.laviathan = dolphinIn;
         }
 
+        @Override
         public void tick() {
             float speed = (float) (this.speedModifier * 3 * laviathan.getAttributeValue(Attributes.MOVEMENT_SPEED));
             if (this.operation == Operation.MOVE_TO && (!this.laviathan.getNavigation().isDone() || laviathan.getControllingPassenger() != null)) {
@@ -1111,6 +1168,7 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
 
+        @Override
         public boolean canUse() {
             if (!this.animal.isInLove()) {
                 return false;
@@ -1120,15 +1178,18 @@ public class EntityLaviathan extends Animal implements ISemiAquatic, IHerdPanic 
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             return this.partner.isAlive() && this.partner.isInLove() && this.loveTime < 60;
         }
 
+        @Override
         public void stop() {
             this.partner = null;
             this.loveTime = 0;
         }
 
+        @Override
         public void tick() {
             this.animal.getLookControl().setLookAt(this.partner, 10.0F, (float)this.animal.getMaxHeadXRot());
             this.animal.getNavigation().moveTo(this.partner, this.speedModifier);

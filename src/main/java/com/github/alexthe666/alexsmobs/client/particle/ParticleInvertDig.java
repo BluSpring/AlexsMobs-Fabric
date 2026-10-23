@@ -1,6 +1,9 @@
 package com.github.alexthe666.alexsmobs.client.particle;
 
 import com.github.alexthe666.alexsmobs.item.ItemDimensionalCarver;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -11,8 +14,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 public class ParticleInvertDig extends SimpleAnimatedParticle {
 
@@ -30,10 +31,12 @@ public class ParticleInvertDig extends SimpleAnimatedParticle {
         this.creator = world.getEntity((int) creatorId);
     }
 
+    @Override
     public int getLightColor(float p_189214_1_) {
         return 240;
     }
 
+    @Override
     public void tick() {
         this.xo = this.x;
         this.yo = this.y;
@@ -65,6 +68,7 @@ public class ParticleInvertDig extends SimpleAnimatedParticle {
             this.spriteSet = spriteSet;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             ParticleInvertDig heartparticle = new ParticleInvertDig(worldIn, x, y, z, this.spriteSet, xSpeed);
             heartparticle.setSpriteFromAge(this.spriteSet);

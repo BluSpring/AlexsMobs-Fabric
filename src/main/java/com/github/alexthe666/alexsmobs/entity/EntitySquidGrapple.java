@@ -1,5 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Optional;
+import java.util.UUID;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -18,10 +23,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.UUID;
 
 public class EntitySquidGrapple extends Entity {
 
@@ -116,6 +117,7 @@ public class EntitySquidGrapple extends Entity {
         this.entityData.set(WITHDRAWING, withdrawing);
     }
 
+    @Override
     public void tick() {
         this.xRotO = this.getXRot();
         this.yRotO = this.getYRot();

@@ -93,14 +93,13 @@ public class RenderTendonSegment extends EntityRenderer<EntityTendonSegment> {
         double d5 = Mth.lerp(partialTicks, mob.yo, mob.getY());
         double d6 = Mth.lerp(partialTicks, mob.zo, mob.getZ());
         float f3 = 0;
-        if(mob instanceof Player && segment.isCreator(mob)){
-            Player player = (Player) mob;
+        if(mob instanceof Player player && segment.isCreator(mob)){
             float f = player.getAttackAnim(partialTicks);
             float f1 = Mth.sin(Mth.sqrt(f) * Mth.PI);
             float f2 = Mth.lerp(partialTicks, player.yBodyRotO, player.yBodyRot) * Mth.DEG_TO_RAD;
             int i = player.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
-            double d0 = (double) Mth.sin(f2);
-            double d1 = (double) Mth.cos(f2);
+            double d0 = Mth.sin(f2);
+            double d1 = Mth.cos(f2);
             double d2 = (double) i * 0.35D;
             ItemStack itemstack = player.getMainHandItem();
             if (!itemstack.is(AMItemRegistry.TENDON_WHIP.get())) {
@@ -112,14 +111,14 @@ public class RenderTendonSegment extends EntityRenderer<EntityTendonSegment> {
                 vec3 = vec3.scale(d7);
                 vec3 = vec3.yRot(f1 * 0.25F);
                 vec3 = vec3.xRot(-f1 * 0.35F);
-                d4 = Mth.lerp((double) partialTicks, player.xo, player.getX()) + vec3.x;
-                d5 = Mth.lerp((double) partialTicks, player.yo, player.getY()) + vec3.y;
-                d6 = Mth.lerp((double) partialTicks, player.zo, player.getZ()) + vec3.z;
+                d4 = Mth.lerp(partialTicks, player.xo, player.getX()) + vec3.x;
+                d5 = Mth.lerp(partialTicks, player.yo, player.getY()) + vec3.y;
+                d6 = Mth.lerp(partialTicks, player.zo, player.getZ()) + vec3.z;
                 f3 = player.getEyeHeight() * 0.4F;
             } else {
-                d4 = Mth.lerp((double) partialTicks, player.xo, player.getX()) - d1 * d2 - d0 * 0.2D;
+                d4 = Mth.lerp(partialTicks, player.xo, player.getX()) - d1 * d2 - d0 * 0.2D;
                 d5 = player.yo + (double) player.getEyeHeight() + (player.getY() - player.yo) * (double) partialTicks - 1D;
-                d6 = Mth.lerp((double) partialTicks, player.zo, player.getZ()) - d0 * d2 + d1 * 0.2D;
+                d6 = Mth.lerp(partialTicks, player.zo, player.getZ()) - d0 * d2 + d1 * 0.2D;
                 f3 = (player.isCrouching() ? -0.1875F : 0.0F) - player.getEyeHeight() * 0.3F;
             }
         }

@@ -1,13 +1,25 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFollowParentRanged;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHurtByTargetNotBaby;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIRandomSwimming;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalSwimMoveControllerSink;
+import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.entity.PartEntity;
+import net.neoforged.neoforge.event.EventHooks;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -24,11 +36,23 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FollowBoatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TryFindWaterGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -51,11 +75,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
 
 public class EntityCachalotWhale extends Animal {
 
@@ -133,6 +152,7 @@ public class EntityCachalotWhale extends Animal {
         return iServerWorld.getFluidState(up.below()).is(FluidTags.WATER) && up.getY() < iServerWorld.getSeaLevel() + 15 && iServerWorld.canSeeSky(up);
     }
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !this.isSleeping() && !this.isCharging() && !this.isDespawnBeach() && !isAlbino();
     }
@@ -151,14 +171,17 @@ public class EntityCachalotWhale extends Animal {
         }
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.CACHALOT_WHALE_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.CACHALOT_WHALE_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.CACHALOT_WHALE_HURT.get();
     }
@@ -173,17 +196,21 @@ public class EntityCachalotWhale extends Animal {
         }
     }
 
+    @Override
     public boolean isPickable() {
         return true;
     }
 
+    @Override
     public void pushEntities() {
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         return super.mobInteract(player, hand);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Albino", this.isAlbino());
@@ -193,6 +220,7 @@ public class EntityCachalotWhale extends Animal {
         compound.putInt("DespawnDelay", this.despawnDelay);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setAlbino(compound.getBoolean("Albino"));
@@ -235,12 +263,14 @@ public class EntityCachalotWhale extends Animal {
         }
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new AIBreathe());
         this.goalSelector.addGoal(1, new TryFindWaterGoal(this));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new AnimalAIFollowParentRanged(this, 1.1F, 32, 10));
         this.goalSelector.addGoal(4, new AnimalAIRandomSwimming(this, 0.6D, 10, 24, true) {
+            @Override
             public boolean canUse() {
                 return !EntityCachalotWhale.this.isSleeping() && !EntityCachalotWhale.this.isBeached() && super.canUse();
             }
@@ -250,16 +280,19 @@ public class EntityCachalotWhale extends Animal {
         this.goalSelector.addGoal(7, new FollowBoatGoal(this));
         this.targetSelector.addGoal(1, (new AnimalAIHurtByTargetNotBaby(this).setAlertOthers()));
         this.targetSelector.addGoal(2, new EntityAINearestTarget3D(this, LivingEntity.class, 30, false, true, AMEntityRegistry.buildPredicateFromTag(AMTagRegistry.CACHALOT_WHALE_TARGETS)) {
+            @Override
             public boolean canUse() {
                 return !EntityCachalotWhale.this.isSleeping() && !EntityCachalotWhale.this.isBeached() && super.canUse();
             }
         });
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new WaterBoundPathNavigation(this, worldIn);
     }
 
+    @Override
     public void customServerAiStep() {
         super.customServerAiStep();
         breakBlock();
@@ -271,7 +304,7 @@ public class EntityCachalotWhale extends Animal {
             return;
         }
         boolean flag = false;
-        if (!this.level().isClientSide && this.blockBreakCounter == 0 && net.neoforged.neoforge.event.EventHooks.canEntityGrief(level(), this)) {
+        if (!this.level().isClientSide && this.blockBreakCounter == 0 && EventHooks.canEntityGrief(level(), this)) {
             final TagKey<Block> breakables = this.isCharging() && this.getTarget() != null && AMConfig.cachalotDestruction ? AMTagRegistry.CACHALOT_WHALE_BREAKABLES : AMTagRegistry.ORCA_BREAKABLES;
             for (int a = (int) Math.round(this.getBoundingBox().minX); a <= (int) Math.round(this.getBoundingBox().maxX); a++) {
                 for (int b = (int) Math.round(this.getBoundingBox().minY) - 1; (b <= (int) Math.round(this.getBoundingBox().maxY) + 1) && (b <= 127); b++) {
@@ -299,6 +332,7 @@ public class EntityCachalotWhale extends Animal {
         }
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -332,6 +366,7 @@ public class EntityCachalotWhale extends Animal {
         this.entityData.set(CHARGING, Boolean.valueOf(charging));
     }
 
+    @Override
     public boolean isSleeping() {
         return this.entityData.get(SLEEPING);
     }
@@ -389,10 +424,12 @@ public class EntityCachalotWhale extends Animal {
         this.entityData.set(DESPAWN_BEACH, Boolean.valueOf(despawn));
     }
 
+    @Override
     protected float getSoundVolume() {
         return this.isSilent() ? 0 : (float) AMConfig.cachalotVolume;
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         scaleParts();
@@ -423,7 +460,7 @@ public class EntityCachalotWhale extends Animal {
                 this.whaleSpeedMod = 1;
             }
         }
-        float rPitch = (float) -((float) this.getDeltaMovement().y * Mth.RAD_TO_DEG);
+        float rPitch = -((float) this.getDeltaMovement().y * Mth.RAD_TO_DEG);
         if (this.isGrabbing()) {
             this.setXRot(0);
         } else {
@@ -783,6 +820,7 @@ public class EntityCachalotWhale extends Animal {
     }
 
 
+    @Override
     public void setTarget(@Nullable LivingEntity entitylivingbaseIn) {
         LivingEntity prev = this.getTarget();
         if (prev != entitylivingbaseIn && entitylivingbaseIn != null) {
@@ -810,6 +848,7 @@ public class EntityCachalotWhale extends Animal {
         return adouble;
     }
 
+    @Override
     public void push(Entity entityIn) {
     }
 
@@ -823,7 +862,7 @@ public class EntityCachalotWhale extends Animal {
     }
 
     @Override
-    public net.neoforged.neoforge.entity.PartEntity<?>[] getParts() {
+    public PartEntity<?>[] getParts() {
         return this.whaleParts;
     }
 
@@ -839,6 +878,7 @@ public class EntityCachalotWhale extends Animal {
         return this.hurt(source, amount);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setAirSupply(this.getMaxAirSupply());
@@ -852,16 +892,19 @@ public class EntityCachalotWhale extends Animal {
 
     // Cachalot whale is a mammal and cannot breathe underwater - default behavior is correct
 
+    @Override
     public void baseTick() {
         int i = this.getAirSupply();
         super.baseTick();
         this.updateAir(i);
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return this.isBeached();
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
@@ -869,10 +912,12 @@ public class EntityCachalotWhale extends Animal {
     protected void updateAir(int p_209207_1_) {
     }
 
+    @Override
     public int getMaxAirSupply() {
         return 4000;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67) {
@@ -882,6 +927,7 @@ public class EntityCachalotWhale extends Animal {
         }
     }
 
+    @Override
     protected int increaseAirSupply(int currentAir) {
         if (!this.level().isClientSide && prevEyesInWater && spoutTimer <= 0 && !this.isEyeInFluid(FluidTags.WATER) && currentAir < this.getMaxAirSupply() / 2) {
             spoutTimer = 20 + random.nextInt(10);
@@ -889,10 +935,12 @@ public class EntityCachalotWhale extends Animal {
         return this.getMaxAirSupply();
     }
 
+    @Override
     public int getMaxHeadXRot() {
         return 1;
     }
 
+    @Override
     public int getMaxHeadYRot() {
         return 3;
     }
@@ -901,10 +949,12 @@ public class EntityCachalotWhale extends Animal {
         this.receivedEcho = true;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.cachalotWhaleSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public Vec3 getDismountLocationForPassenger(LivingEntity dismount) {
         Vec3 mouth = this.getMouthVec();
         BlockPos pos = AMBlockPos.fromVec3(mouth);
@@ -921,18 +971,22 @@ public class EntityCachalotWhale extends Animal {
             this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         }
 
+        @Override
         public boolean canUse() {
             return EntityCachalotWhale.this.getAirSupply() < 140;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return this.canUse();
         }
 
+        @Override
         public boolean isInterruptable() {
             return false;
         }
 
+        @Override
         public void start() {
             this.navigate();
         }
@@ -958,6 +1012,7 @@ public class EntityCachalotWhale extends Animal {
             EntityCachalotWhale.this.getNavigation().moveTo(lvt_2_1_.getX(), lvt_2_1_.getY(), lvt_2_1_.getZ(), 0.7D);
         }
 
+        @Override
         public void tick() {
             this.navigate();
         }

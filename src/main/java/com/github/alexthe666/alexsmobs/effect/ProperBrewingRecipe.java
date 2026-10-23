@@ -1,10 +1,10 @@
 package com.github.alexthe666.alexsmobs.effect;
 
+import net.neoforged.neoforge.common.brewing.BrewingRecipe;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.neoforged.neoforge.common.brewing.BrewingRecipe;
-
-import javax.annotation.Nonnull;
 
 public class ProperBrewingRecipe extends BrewingRecipe {
 
@@ -21,7 +21,7 @@ public class ProperBrewingRecipe extends BrewingRecipe {
 
 
     @Override
-    public boolean isInput(@Nonnull ItemStack stack) {
+    public boolean isInput(@NotNull ItemStack stack) {
         if (stack == null) {
             return false;
         } else {

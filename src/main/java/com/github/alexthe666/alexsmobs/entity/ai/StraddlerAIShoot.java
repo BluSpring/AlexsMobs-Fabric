@@ -1,10 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityStraddler;
+
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-
-import java.util.EnumSet;
 
 public class StraddlerAIShoot  extends Goal {
     private final EntityStraddler entity;
@@ -30,24 +31,28 @@ public class StraddlerAIShoot  extends Goal {
         this.attackCooldown = attackCooldownIn;
     }
 
+    @Override
     public boolean canUse() {
-        return this.entity.getTarget() == null ? false : this.isBowInMainhand();
+        return this.entity.getTarget() != null && this.isBowInMainhand();
     }
 
     protected boolean isBowInMainhand() {
         return this.entity.shouldShoot();
     }
 
+    @Override
     public boolean canContinueToUse() {
         return (this.canUse() || !this.entity.getNavigation().isDone()) && this.isBowInMainhand();
     }
 
+    @Override
     public void start() {
         super.start();
         this.entity.setAggressive(true);
     }
 
 
+    @Override
     public void stop() {
         super.stop();
         this.entity.setAggressive(false);
@@ -59,6 +64,7 @@ public class StraddlerAIShoot  extends Goal {
     /**
      * Keep ticking a continuous task that has already been started
      */
+    @Override
     public void tick() {
         LivingEntity livingentity = this.entity.getTarget();
         if(animationCooldown > 0){

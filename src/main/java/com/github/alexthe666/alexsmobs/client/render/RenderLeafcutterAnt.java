@@ -100,17 +100,19 @@ public class RenderLeafcutterAnt extends MobRenderer<EntityLeafcutterAnt, Advanc
         } else if (entityLiving.hasCustomName() ) {
             String s = ChatFormatting.stripFormatting(entityLiving.getName().getString());
             if (("Dinnerbone".equals(s) || "Grumm".equals(s))) {
-                matrixStackIn.translate(0.0D, (double)(entityLiving.getBbHeight() + 0.1F), 0.0D);
+                matrixStackIn.translate(0.0D, entityLiving.getBbHeight() + 0.1F, 0.0D);
                 matrixStackIn.mulPose(Axis.ZP.rotationDegrees(180.0F));
             }
         }
     }
 
+    @Override
     protected void scale(EntityLeafcutterAnt entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         model = entitylivingbaseIn.isQueen() ? modelQueen : modelAnt;
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityLeafcutterAnt entity) {
         if(entity.getRemainingPersistentAngerTime() > 0){
             return entity.isQueen() ? TEXTURE_QUEEN_ANGRY : TEXTURE_ANGRY;

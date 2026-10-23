@@ -1,9 +1,15 @@
 package com.github.alexthe666.alexsmobs.block;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.entity.EntityCaiman;
 import com.github.alexthe666.alexsmobs.entity.EntityCrocodile;
 import com.github.alexthe666.alexsmobs.entity.EntityPlatypus;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
@@ -11,7 +17,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Zombie;
@@ -34,10 +45,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.registries.DeferredHolder;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class BlockReptileEgg extends Block {
     public static final IntegerProperty HATCH = BlockStateProperties.HATCH;
@@ -60,11 +67,13 @@ public class BlockReptileEgg extends Block {
         return reader.getBlockState(pos).is(BlockTags.SAND) || reader.getBlockState(pos).is(AMTagRegistry.CROCODILE_SPAWNS);
     }
 
+    @Override
     public void stepOn(Level worldIn, BlockPos pos, BlockState state, Entity entityIn) {
         this.tryTrample(worldIn, pos, entityIn, 100);
         super.stepOn(worldIn, pos, state, entityIn);
     }
 
+    @Override
     public void fallOn(Level worldIn, BlockState state, BlockPos pos, Entity entityIn, float fallDistance) {
         if (!(entityIn instanceof Zombie)) {
             this.tryTrample(worldIn, pos, entityIn, 3);
@@ -106,6 +115,7 @@ public class BlockReptileEgg extends Block {
 
     }
 
+    @Override
     public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
         if (this.canGrow(worldIn) && hasProperHabitat(worldIn, pos)) {
             int i = state.getValue(HATCH);
@@ -146,6 +156,7 @@ public class BlockReptileEgg extends Block {
 
     }
 
+    @Override
     public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (hasProperHabitat(worldIn, pos) && !worldIn.isClientSide) {
             worldIn.levelEvent(2005, pos, 0);
@@ -162,25 +173,30 @@ public class BlockReptileEgg extends Block {
         }
     }
 
+    @Override
     public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
         super.playerDestroy(worldIn, player, pos, state, te, stack);
         this.removeOneEgg(worldIn, pos, state);
     }
 
+    @Override
     public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
         return useContext.getItemInHand().getItem() == this.asItem() && state.getValue(EGGS) < 4 || super.canBeReplaced(state, useContext);
     }
 
+    @Override
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState blockstate = context.getLevel().getBlockState(context.getClickedPos());
         return blockstate.getBlock() == this ? blockstate.setValue(EGGS, Integer.valueOf(Math.min(4, blockstate.getValue(EGGS) + 1))) : super.getStateForPlacement(context);
     }
 
+    @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return state.getValue(EGGS) > 1 ? MULTI_EGG_SHAPE : ONE_EGG_SHAPE;
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HATCH, EGGS);
     }
@@ -190,7 +206,7 @@ public class BlockReptileEgg extends Block {
             if (!(trampler instanceof LivingEntity)) {
                 return false;
             } else {
-                return trampler instanceof Player || net.neoforged.neoforge.event.EventHooks.canEntityGrief(worldIn, trampler);
+                return trampler instanceof Player || EventHooks.canEntityGrief(worldIn, trampler);
             }
         } else {
             return false;

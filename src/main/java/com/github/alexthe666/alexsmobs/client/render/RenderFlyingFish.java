@@ -16,11 +16,13 @@ public class RenderFlyingFish extends MobRenderer<EntityFlyingFish, ModelFlyingF
         super(renderManagerIn, new ModelFlyingFish(), 0.2F);
     }
 
+    @Override
     protected void scale(EntityFlyingFish entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.8F, 0.8F, 0.8F);
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityFlyingFish entity) {
         switch (entity.getVariant()){
             case 0:

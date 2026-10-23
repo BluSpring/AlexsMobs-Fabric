@@ -19,11 +19,13 @@ public class RenderWarpedToad extends MobRenderer<EntityWarpedToad, ModelWarpedT
         this.addLayer(new LayerWarpedToadGlow(this));
     }
 
+    @Override
     protected void scale(EntityWarpedToad entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(1.25F, 1.25F, 1.25F);
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityWarpedToad entity) {
         if(entity.isBased()){
             return entity.isBlinking() ? TEXTURE_PEPE_BLINKING : TEXTURE_PEPE;

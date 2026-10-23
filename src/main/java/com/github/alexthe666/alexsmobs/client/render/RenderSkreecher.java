@@ -21,9 +21,11 @@ public class RenderSkreecher extends MobRenderer<EntitySkreecher, ModelSkreecher
         this.addLayer(new LayerScorch(this));
     }
 
+    @Override
     protected void scale(EntitySkreecher entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntitySkreecher entity) {
         return TEXTURE;
     }
@@ -34,9 +36,10 @@ public class RenderSkreecher extends MobRenderer<EntitySkreecher, ModelSkreecher
             super(render);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntitySkreecher entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntitySkreecher entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             VertexConsumer scorch = bufferIn.getBuffer(AMRenderTypes.getEyesAlphaEnabled(TEXTURE_GLOW));
             float alpha = (float) Math.sin((entitylivingbaseIn.tickCount + partialTicks) * 0.1F) * 0.35F + 0.5F;
             this.getParentModel().renderToBuffer(matrixStackIn, scorch, 240,

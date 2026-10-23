@@ -30,9 +30,10 @@ public class LayerLeafcutterAntLeaf extends RenderLayer<EntityLeafcutterAnt, Adv
         super(render);
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-            EntityLeafcutterAnt entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-            float ageInTicks, float netHeadYaw, float headPitch) {
+                       EntityLeafcutterAnt entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                       float ageInTicks, float netHeadYaw, float headPitch) {
         if (entitylivingbaseIn.hasLeaf() && !entitylivingbaseIn.isQueen()
                 && this.getParentModel() instanceof ModelLeafcutterAnt) {
             final int leafType = entitylivingbaseIn.getId() % 3;

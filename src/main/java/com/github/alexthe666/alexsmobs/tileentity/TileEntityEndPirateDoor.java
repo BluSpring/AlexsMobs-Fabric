@@ -2,15 +2,16 @@ package com.github.alexthe666.alexsmobs.tileentity;
 
 import com.github.alexthe666.alexsmobs.block.BlockEndPirateDoor;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraft.world.phys.AABB;
 
 public class TileEntityEndPirateDoor extends BlockEntity {
 
@@ -31,8 +32,8 @@ public class TileEntityEndPirateDoor extends BlockEntity {
 
 
     @OnlyIn(Dist.CLIENT)
-    public net.minecraft.world.phys.AABB getRenderBoundingBox() {
-        return new net.minecraft.world.phys.AABB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), 
+    public AABB getRenderBoundingBox() {
+        return new AABB(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(),
             worldPosition.getX() + 1, worldPosition.getY() + 3, worldPosition.getZ() + 1);
     }
 
@@ -49,7 +50,7 @@ public class TileEntityEndPirateDoor extends BlockEntity {
         }
         if(opened && openProgress == 0F || !opened && openProgress == 1F){
             this.level.gameEvent(GameEvent.BLOCK_ACTIVATE, this.getBlockPos(), GameEvent.Context.of(this.getBlockState()));
-            this.level.playSound((Player)null, this.getBlockPos(), AMSoundRegistry.END_PIRATE_DOOR.get(), SoundSource.BLOCKS, 1F, 1F);
+            this.level.playSound(null, this.getBlockPos(), AMSoundRegistry.END_PIRATE_DOOR.get(), SoundSource.BLOCKS, 1F, 1F);
         }
         if(opened && openProgress < 1F){
             openProgress += 0.25F;

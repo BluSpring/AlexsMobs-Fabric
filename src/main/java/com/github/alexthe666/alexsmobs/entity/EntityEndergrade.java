@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
@@ -9,6 +11,8 @@ import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -23,11 +27,19 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.FlyingAnimal;
@@ -46,9 +58,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
 
 public class EntityEndergrade extends Animal implements FlyingAnimal {
 
@@ -76,16 +85,19 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
         return !worldIn.getBlockState(pos.below()).isAir();
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new DirectPathNavigator(this, worldIn);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Saddled", this.isSaddled());
         compound.putInt("BoostTime", this.entityData.get(BOOST_TIME));
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setSaddled(compound.getBoolean("Saddled"));
@@ -100,36 +112,43 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
         builder.define(BOOST_TIME, 0);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new EndergradeAIBreakFlowers(this));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.2D) {
+            @Override
             public void start() {
                 super.start();
                 EntityEndergrade.this.stopWandering = true;
             }
 
+            @Override
             public void stop() {
                 super.stop();
                 EntityEndergrade.this.stopWandering = false;
             }
         });
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.1D, Ingredient.of(AMTagRegistry.ENDERGRADE_BREEDABLES), false) {
+            @Override
             public void start() {
                 super.start();
                 EntityEndergrade.this.stopWandering = true;
             }
 
+            @Override
             public void stop() {
                 super.stop();
                 EntityEndergrade.this.stopWandering = false;
             }
         });
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.1D, Ingredient.of(AMTagRegistry.ENDERGRADE_FOLLOWS), false) {
+            @Override
             public void start() {
                 super.start();
                 EntityEndergrade.this.stopWandering = true;
             }
 
+            @Override
             public void stop() {
                 super.stop();
                 EntityEndergrade.this.stopWandering = false;
@@ -141,11 +160,11 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
         this.targetSelector.addGoal(1, new EndergradeAITargetItems(this, true));
     }
 
+    @Override
     @Nullable
     public LivingEntity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof Player) {
-                Player player = (Player) passenger;
+            if (passenger instanceof Player player) {
                 if (player.getMainHandItem().is(AMTagRegistry.ENDERGRADE_FOLLOWS) || player.getOffhandItem().is(AMTagRegistry.ENDERGRADE_FOLLOWS)) {
                     return player;
                 }
@@ -153,14 +172,17 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
         }
         return null;
     }
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.ENDERGRADE_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.ENDERGRADE_HURT.get();
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -189,10 +211,12 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
         return type;
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.ENDERGRADE_BREEDABLES);
     }
 
+    @Override
     public void positionRider(Entity passenger, Entity.MoveFunction moveFunc) {
         if (this.hasPassenger(passenger)) {
             float radius = -0.25F;
@@ -210,6 +234,7 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
         return (double) this.getBbHeight() - 0.1D + (double) (0.12F * Mth.cos(f1 * 0.7F) * 0.7F * f);
     }
 
+    @Override
     public boolean isNoGravity() {
         return true;
     }
@@ -227,12 +252,13 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
             int boostDuration = 100 + this.random.nextInt(40); // 5-7 seconds of boost
             this.boostTimeTotal = boostDuration;
             this.entityData.set(BOOST_TIME, boostDuration);
-            this.playSound(net.minecraft.sounds.SoundEvents.CHORUS_FRUIT_TELEPORT, 1.0F, 1.0F);
+            this.playSound(SoundEvents.CHORUS_FRUIT_TELEPORT, 1.0F, 1.0F);
             return true;
         }
         return false;
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevTartigradePitch = this.tartigradePitch;
@@ -259,10 +285,12 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
         }
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -295,6 +323,7 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
         this.entityData.set(BITE_TICK, 5);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.endergradeSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -305,6 +334,7 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
         return AMEntityRegistry.ENDERGRADE.get().create(p_241840_1_);
     }
 
+    @Override
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.isSaddled()) {
@@ -314,6 +344,7 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
         }
     }
 
+    @Override
     protected Vec3 getRiddenInput(Player player, Vec3 deltaIn) {
         if (player.zza != 0) {
             this.setSprinting(true);
@@ -328,6 +359,7 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
         }
         return Vec3.ZERO;
     }
+    @Override
     protected void tickRidden(Player player, Vec3 vec3) {
         super.tickRidden(player, vec3);
         if(player.zza != 0 || player.xxa != 0){
@@ -339,6 +371,7 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
         }
     }
 
+    @Override
     protected float getRiddenSpeed(Player rider) {
         float baseSpeed = (float)(this.getAttributeValue(Attributes.MOVEMENT_SPEED) * (this.onGround() ? 0.2F : 0.8F));
         int boostTime = this.entityData.get(BOOST_TIME);
@@ -364,6 +397,7 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
+        @Override
         public boolean canUse() {
             MoveControl movementcontroller = this.parentEntity.getMoveControl();
             if (parentEntity.stopWandering || parentEntity.hasItemTarget) {
@@ -379,14 +413,17 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
             return false;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return target != null && !parentEntity.stopWandering && !parentEntity.hasItemTarget && parentEntity.distanceToSqr(Vec3.atCenterOf(target)) > 2.4D && parentEntity.getMoveControl().hasWanted() && !parentEntity.horizontalCollision;
         }
 
+        @Override
         public void stop() {
             target = null;
         }
 
+        @Override
         public void tick() {
             if (target == null) {
                 target = getBlockInViewEndergrade();
@@ -424,6 +461,7 @@ public class EntityEndergrade extends Animal implements FlyingAnimal {
             this.parentEntity = sunbird;
         }
 
+        @Override
         public void tick() {
             if (this.operation == Operation.STRAFE) {
                 Vec3 vector3d = new Vec3(this.wantedX - parentEntity.getX(), this.wantedY - parentEntity.getY(), this.wantedZ - parentEntity.getZ());

@@ -1,9 +1,17 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.IFalconry;
 import com.github.alexthe666.alexsmobs.message.MessageSyncEntityPos;
 import com.google.common.base.Predicate;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
@@ -12,11 +20,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
 
 public class ItemFalconryGlove extends Item implements ILeftClick {
 
@@ -25,10 +28,12 @@ public class ItemFalconryGlove extends Item implements ILeftClick {
     }
 
     @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getISTERProperties());
     }
 
+    @Override
+    @Override
     public boolean onLeftClick(ItemStack stack, LivingEntity playerIn) {
         if(stack.getItem() == AMItemRegistry.FALCONRY_GLOVE.get()){
             final float dist = 128;
@@ -41,6 +46,7 @@ public class ItemFalconryGlove extends Item implements ILeftClick {
             double d1 = dist;
             Entity pointedEntity = null;
             List<Entity> list = playerIn.level().getEntities(playerIn, playerIn.getBoundingBox().expandTowards(vector3d1xDist, vector3d1yDist, vector3d1zDist).inflate(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
+                @Override
                 public boolean apply(@Nullable Entity entity) {
                     return entity != null && entity.isPickable() && (entity instanceof Player || (entity instanceof LivingEntity));
                 }
@@ -71,9 +77,8 @@ public class ItemFalconryGlove extends Item implements ILeftClick {
             }
 
             if(!playerIn.getPassengers().isEmpty()){
-                for(Entity entity : new java.util.ArrayList<>(playerIn.getPassengers())){
-                    if(entity instanceof IFalconry && entity instanceof Animal animal){
-                        IFalconry falcon = (IFalconry)entity;
+                for(Entity entity : new ArrayList<>(playerIn.getPassengers())){
+                    if(entity instanceof IFalconry falcon && entity instanceof Animal animal){
                         animal.removeVehicle();
                         animal.moveTo(playerIn.getX(), playerIn.getEyeY(), playerIn.getZ(), animal.getYRot(), animal.getXRot());
                         if(animal.level().isClientSide){

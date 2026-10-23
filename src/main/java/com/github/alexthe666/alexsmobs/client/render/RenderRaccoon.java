@@ -27,10 +27,12 @@ public class RenderRaccoon extends MobRenderer<EntityRaccoon, ModelRaccoon> {
         this.addLayer(new BandanaLayer(this));
     }
 
+    @Override
     protected void scale(EntityRaccoon entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.75F, 0.75F, 0.75F);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityRaccoon entity) {
         return entity.isRigby() ? TEXTURE_RIGBY : TEXTURE;
     }
@@ -40,9 +42,10 @@ public class RenderRaccoon extends MobRenderer<EntityRaccoon, ModelRaccoon> {
             super(renderRaccoon);
         }
 
+        @Override
         public void render(PoseStack p_225628_1_, MultiBufferSource p_225628_2_, int p_225628_3_, EntityRaccoon raccoon,
-                float p_225628_5_, float p_225628_6_, float p_225628_7_, float p_225628_8_, float p_225628_9_,
-                float p_225628_10_) {
+                           float p_225628_5_, float p_225628_6_, float p_225628_7_, float p_225628_8_, float p_225628_9_,
+                           float p_225628_10_) {
             if (raccoon.getColor() != null && !raccoon.isInvisible()) {
                 float lvt_11_2_;
                 float lvt_12_2_;

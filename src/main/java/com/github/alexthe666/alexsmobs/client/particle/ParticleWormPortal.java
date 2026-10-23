@@ -1,10 +1,15 @@
 package com.github.alexthe666.alexsmobs.client.particle;
 
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SimpleAnimatedParticle;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.core.particles.SimpleParticleType;
 
 public class ParticleWormPortal extends SimpleAnimatedParticle {
 
@@ -19,12 +24,14 @@ public class ParticleWormPortal extends SimpleAnimatedParticle {
         this.setSpriteFromAge(sprites);
     }
 
+    @Override
     public int getLightColor(float p_189214_1_) {
         int lvt_2_1_ = super.getLightColor(p_189214_1_);
         int lvt_4_1_ = lvt_2_1_ >> 16 & 255;
         return 240 | lvt_4_1_ << 16;
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.oRoll = this.roll;
@@ -52,6 +59,7 @@ public class ParticleWormPortal extends SimpleAnimatedParticle {
             this.spriteSet = spriteSet;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             ParticleWormPortal p = new ParticleWormPortal(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet);
             return p;

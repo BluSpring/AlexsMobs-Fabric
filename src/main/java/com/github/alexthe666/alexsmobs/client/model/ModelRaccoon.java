@@ -10,9 +10,10 @@ import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import org.joml.Vector4f;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector4f;
 
 public class ModelRaccoon extends AdvancedEntityModel<EntityRaccoon> {
     public AdvancedModelBox root;
@@ -228,6 +229,7 @@ public class ModelRaccoon extends AdvancedEntityModel<EntityRaccoon> {
 
     }
 
+    @Override
     public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.young) {
             float f = 1.65F;

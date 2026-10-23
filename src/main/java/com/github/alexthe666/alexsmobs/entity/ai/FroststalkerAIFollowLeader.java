@@ -1,12 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
-import com.github.alexthe666.alexsmobs.entity.EntityFroststalker;
-import com.mojang.datafixers.DataFixUtils;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.player.Player;
-
 import java.util.List;
 import java.util.function.Predicate;
+
+import com.github.alexthe666.alexsmobs.entity.EntityFroststalker;
+import com.mojang.datafixers.DataFixUtils;
+
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
 
 public class FroststalkerAIFollowLeader  extends Goal {
     private static final int INTERVAL_TICKS = 200;
@@ -23,6 +24,7 @@ public class FroststalkerAIFollowLeader  extends Goal {
         return 100 + froststalker.getRandom().nextInt(200) % 40;
     }
 
+    @Override
     public boolean canUse() {
         if (this.mob.hasFollowers()) {
             return false;
@@ -58,18 +60,22 @@ public class FroststalkerAIFollowLeader  extends Goal {
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         return this.mob.isFollower() && this.mob.inRangeOfLeader();
     }
 
+    @Override
     public void start() {
         this.timeToRecalcPath = 0;
     }
 
+    @Override
     public void stop() {
         this.mob.stopFollowing();
     }
 
+    @Override
     public void tick() {
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = 10;

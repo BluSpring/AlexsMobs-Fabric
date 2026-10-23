@@ -1,7 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.entity.EntityPlatypus;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -22,8 +25,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.List;
 
 public class PlatypusAIDigForItems extends Goal {
 
@@ -61,10 +62,12 @@ public class PlatypusAIDigForItems extends Goal {
 
     }
 
+    @Override
     public boolean canContinueToUse() {
         return platypus.getTarget() == null && platypus.isSensing() && platypus.getLastHurtByMob() == null && digPos != null && platypus.level().getBlockState(digPos).is(AMTagRegistry.PLATYPUS_DIGABLES) && platypus.level().getFluidState(digPos.above()).is(FluidTags.WATER);
     }
 
+    @Override
     public void tick() {
         double dist = platypus.distanceToSqr(Vec3.atCenterOf(digPos.above()));
         double d0 = digPos.getX() + 0.5 - this.platypus.getX();
@@ -108,6 +111,7 @@ public class PlatypusAIDigForItems extends Goal {
 
     }
 
+    @Override
     public void stop() {
         generatePosCooldown = 0;
         platypus.setSensing(false);

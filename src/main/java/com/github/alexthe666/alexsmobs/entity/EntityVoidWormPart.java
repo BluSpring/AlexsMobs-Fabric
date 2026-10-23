@@ -1,10 +1,16 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.message.MessageHurtMultipart;
 import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.google.common.collect.ImmutableList;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -17,7 +23,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
@@ -27,11 +39,6 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipart {
 
@@ -73,14 +80,17 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D).add(Attributes.MOVEMENT_SPEED, 0.15F);
     }
 
+    @Override
     public void push(Entity entityIn) {
 
     }
 
+    @Override
     public void kill() {
         this.remove(RemovalReason.DISCARDED);
     }
 
+    @Override
     public EntityDimensions getDefaultDimensions(Pose poseIn) {
         return this.isTail() ? TAIL_SIZE.scale(getWormScaleForDimensions()) : super.getDefaultDimensions(poseIn);
     }
@@ -109,6 +119,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
         return false;
     }
 
+    @Override
     public boolean startRiding(Entity entityIn) {
         if (!(entityIn instanceof AbstractMinecart || entityIn instanceof Boat)) {
             return super.startRiding(entityIn);
@@ -121,6 +132,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
         return source.is(DamageTypes.FALL) || source.is(DamageTypes.DROWN) || source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.IN_WALL)  || source.is(DamageTypes.LAVA) || source.is(DamageTypeTags.IS_FIRE) || super.isInvulnerableTo(source);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.getParentId() != null) {
@@ -138,6 +150,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
         compound.putFloat("PartYOffset", offsetY);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.hasUUID("ParentUUID")) {
@@ -291,6 +304,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
         }
     }
 
+    @Override
     protected void tickDeath() {
         ++this.deathTime;
         if (this.deathTime == 20) {
@@ -305,13 +319,13 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
 
     }
 
+    @Override
     public void die(DamageSource cause) {
         EntityVoidWorm worm = this.getWorm();
         if (worm != null) {
             final int segments = Math.max(worm.getSegmentCount() / 2 - 1, 1);
             worm.setSegmentCount(segments);
-            if (this.getChild() instanceof EntityVoidWormPart) {
-                EntityVoidWormPart segment = (EntityVoidWormPart) this.getChild();
+            if (this.getChild() instanceof EntityVoidWormPart segment) {
                 EntityVoidWorm worm2 = AMEntityRegistry.VOID_WORM.get().create(level());
                 worm2.setNoAi(worm.isNoAi());
                 worm2.setInvulnerable(worm.isInvulnerable());
@@ -338,6 +352,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
         }
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         EntityVoidWorm worm = this.getWorm();
         return super.isAlliedTo(entityIn) || worm != null && worm.isAlliedTo(entityIn);
@@ -375,7 +390,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
     }
 
     @Override
-    public boolean is(net.minecraft.world.entity.Entity entity) {
+    public boolean is(Entity entity) {
         return this == entity || this.getParent() == entity;
     }
 
@@ -384,6 +399,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
         return true;
     }
 
+    @Override
     @Nullable
     public ItemStack getPickResult() {
         Entity parent = this.getParent();
@@ -395,6 +411,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
         return null;
     }
 
+    @Override
     public void pushEntities() {
         List<Entity> entities = this.level().getEntities(this, this.getBoundingBox().expandTowards(0.20000000298023224D, 0.0D, 0.20000000298023224D));
         Entity parent = this.getParent();
@@ -404,6 +421,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
         }
     }
 
+    @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         Entity parent = getParent();
 

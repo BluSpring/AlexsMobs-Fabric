@@ -140,6 +140,7 @@ public class ModelAlligatorSnappingTurtle extends AdvancedEntityModel<EntityAlli
 
     }
 
+    @Override
     public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         this.head_inside.setScale(0.99F, 0.99F, 0.99F);
         if (this.young) {

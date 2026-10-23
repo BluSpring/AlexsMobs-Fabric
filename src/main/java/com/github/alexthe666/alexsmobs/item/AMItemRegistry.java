@@ -3,38 +3,47 @@ package com.github.alexthe666.alexsmobs.item;
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
-import com.github.alexthe666.alexsmobs.entity.*;
-import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
+import com.github.alexthe666.alexsmobs.entity.EntityCockroachEgg;
+import com.github.alexthe666.alexsmobs.entity.EntityEmuEgg;
+import com.github.alexthe666.alexsmobs.entity.EntityEnderiophageRocket;
+import com.github.alexthe666.alexsmobs.entity.EntitySharkToothArrow;
+import com.github.alexthe666.alexsmobs.entity.EntityTossedItem;
+import com.github.alexthe666.alexsmobs.misc.AMProjectileDispenseBehavior;
 import com.github.alexthe666.citadel.server.block.LecternBooks;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
-import com.github.alexthe666.alexsmobs.misc.AMProjectileDispenseBehavior;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.BannerPatternItem;
+import net.minecraft.world.item.DispensibleContainerItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.JukeboxSong;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class AMItemRegistry {
     public static final AMArmorMaterial ROADRUNNER_ARMOR_MATERIAL = new AMArmorMaterial("roadrunner", 18, new int[]{3, 3, 3, 3}, 20, SoundEvents.ARMOR_EQUIP_TURTLE, 0);
@@ -347,6 +356,7 @@ public class AMItemRegistry {
             /**
              * Return the projectile entity spawned by this dispense behavior.
              */
+            @Override
             protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntitySharkToothArrow entityarrow = new EntitySharkToothArrow(AMEntityRegistry.SHARK_TOOTH_ARROW.get(), position.x(), position.y(), position.z(), worldIn);
                 entityarrow.pickup = EntitySharkToothArrow.Pickup.ALLOWED;
@@ -354,6 +364,7 @@ public class AMItemRegistry {
             }
         });
         DispenserBlock.registerBehavior(ANCIENT_DART.get(), new AMProjectileDispenseBehavior() {
+            @Override
             protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntityTossedItem tossedItem = new EntityTossedItem(worldIn, position.x(), position.y(), position.z());
                 tossedItem.setDart(true);
@@ -361,18 +372,21 @@ public class AMItemRegistry {
             }
         });
         DispenserBlock.registerBehavior(COCKROACH_OOTHECA.get(), new AMProjectileDispenseBehavior() {
+            @Override
             protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntityCockroachEgg entityarrow = new EntityCockroachEgg(worldIn, position.x(), position.y(), position.z());
                 return entityarrow;
             }
         });
         DispenserBlock.registerBehavior(EMU_EGG.get(), new AMProjectileDispenseBehavior() {
+            @Override
             protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntityEmuEgg entityarrow = new EntityEmuEgg(worldIn, position.x(), position.y(), position.z());
                 return entityarrow;
             }
         });
         DispenserBlock.registerBehavior(ENDERIOPHAGE_ROCKET.get(), new AMProjectileDispenseBehavior() {
+            @Override
             protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntityEnderiophageRocket entityarrow = new EntityEnderiophageRocket(worldIn, position.x(), position.y(), position.z(), stackIn);
                 return entityarrow;
@@ -381,12 +395,13 @@ public class AMItemRegistry {
         DispenseItemBehavior bucketDispenseBehavior = new DefaultDispenseItemBehavior() {
             private final DefaultDispenseItemBehavior defaultDispenseItemBehavior = new DefaultDispenseItemBehavior();
 
+            @Override
             public ItemStack execute(BlockSource blockSource, ItemStack stack) {
                 DispensibleContainerItem dispensiblecontaineritem = (DispensibleContainerItem)stack.getItem();
                 BlockPos blockpos = blockSource.pos().relative(blockSource.state().getValue(DispenserBlock.FACING));
                 Level level = blockSource.level();
-                if (dispensiblecontaineritem.emptyContents((Player)null, level, blockpos, (BlockHitResult)null)) {
-                    dispensiblecontaineritem.checkExtraContent((Player)null, level, stack, blockpos);
+                if (dispensiblecontaineritem.emptyContents(null, level, blockpos, null)) {
+                    dispensiblecontaineritem.checkExtraContent(null, level, stack, blockpos);
                     return new ItemStack(Items.BUCKET);
                 } else {
                     return this.defaultDispenseItemBehavior.dispense(blockSource, stack);

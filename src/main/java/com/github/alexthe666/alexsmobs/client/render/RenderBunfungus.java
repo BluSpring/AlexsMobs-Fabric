@@ -25,6 +25,7 @@ public class RenderBunfungus extends MobRenderer<EntityBunfungus, ModelBunfungus
     }
 
 
+    @Override
     protected void scale(EntityBunfungus rabbit, PoseStack matrixStackIn, float partialTickTime) {
         float f = rabbit.prevTransformTime + (rabbit.transformsIn() - rabbit.prevTransformTime) * partialTickTime;
         float f1 = (EntityBunfungus.MAX_TRANSFORM_TIME - f) / (float)EntityBunfungus.MAX_TRANSFORM_TIME;
@@ -32,6 +33,7 @@ public class RenderBunfungus extends MobRenderer<EntityBunfungus, ModelBunfungus
         matrixStackIn.scale(f2, f2, f2);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityBunfungus entity) {
         return entity.isSleeping() ? TEXTURE_SLEEPING : TEXTURE;
     }
@@ -42,6 +44,7 @@ public class RenderBunfungus extends MobRenderer<EntityBunfungus, ModelBunfungus
             super(render);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityBunfungus entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             ItemStack itemstack = entitylivingbaseIn.getItemBySlot(EquipmentSlot.MAINHAND);
             matrixStackIn.pushPose();

@@ -26,12 +26,14 @@ public class RenderGiantSquid extends MobRenderer<EntityGiantSquid, ModelGiantSq
         this.addLayer(new LayerDepressurization(this));
     }
 
+    @Override
     protected float getFlipDegrees(EntityGiantSquid squid) {
         return 0.0F;
     }
 
+    @Override
     public boolean shouldRender(EntityGiantSquid livingEntityIn, Frustum camera, double camX, double camY,
-            double camZ) {
+                                double camZ) {
         if (livingEntityIn.isCaptured() && livingEntityIn.isAlive()) {
             return false;
         }
@@ -47,9 +49,11 @@ public class RenderGiantSquid extends MobRenderer<EntityGiantSquid, ModelGiantSq
         }
     }
 
+    @Override
     protected void scale(EntityGiantSquid entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityGiantSquid entity) {
         return entity.isBlue() ? TEXTURE_BLUE : TEXTURE;
     }
@@ -60,9 +64,10 @@ public class RenderGiantSquid extends MobRenderer<EntityGiantSquid, ModelGiantSq
             super(render);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntityGiantSquid squid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
-                float netHeadYaw, float headPitch) {
+                           EntityGiantSquid squid, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
+                           float netHeadYaw, float headPitch) {
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE_DEPRESSURIZED));
             float alpha = squid.prevDepressurization
                     + (squid.getDepressurization() - squid.prevDepressurization) * partialTicks;

@@ -1,6 +1,11 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.function.Consumer;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -9,9 +14,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-
-import javax.annotation.Nullable;
 
 public class ItemTabIcon extends ItemInventoryOnly {
     public ItemTabIcon(Item.Properties properties) {
@@ -29,7 +31,7 @@ public class ItemTabIcon extends ItemInventoryOnly {
     }
 
     @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getISTERProperties());
     }
 

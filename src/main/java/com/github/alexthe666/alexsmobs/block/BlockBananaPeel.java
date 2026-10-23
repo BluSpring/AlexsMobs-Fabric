@@ -28,9 +28,11 @@ public class BlockBananaPeel extends BushBlock {
         super(BlockBehaviour.Properties.of().dynamicShape().sound(SoundType.WET_GRASS).noCollission().requiresCorrectToolForDrops().strength(0.2F).friction(0.9999999999F));
     }
 
+    @Override
     public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
     }
 
+    @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos) {
         return canSupportRigidBlock(worldIn, pos);
     }
@@ -39,19 +41,23 @@ public class BlockBananaPeel extends BushBlock {
         return BlockBehaviour.OffsetType.XZ;
     }
 
+    @Override
     @Deprecated
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
+    @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return SHAPE_COLLISON;
     }
 
+    @Override
     public VoxelShape getBlockSupportShape(BlockState state, BlockGetter reader, BlockPos pos) {
         return SHAPE_COLLISON;
     }
 
+    @Override
     public VoxelShape getVisualShape(BlockState state, BlockGetter reader, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }

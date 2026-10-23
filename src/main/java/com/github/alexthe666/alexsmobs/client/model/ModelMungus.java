@@ -139,7 +139,8 @@ public class ModelMungus extends AdvancedEntityModel<EntityMungus> {
 		return ImmutableList.of(root, body, hair, eye, leg_left, leg_right, sack, nose);
 	}
 
-	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
+	@Override
+    public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
 		if (this.young) {
 			this.eye.setScale(1.5F, 1.5F, 1.5F);
 			this.nose.setScale(1.5F, 1.5F, 1.5F);

@@ -35,6 +35,7 @@ public class EntityGust extends Entity {
         this(AMEntityRegistry.GUST.get(), worldIn);
     }
 
+    @Override
     public void push(Entity entityIn) {
 
     }
@@ -51,6 +52,7 @@ public class EntityGust extends Entity {
         return Mth.lerp(0.2F, p_234614_0_, p_234614_1_);
     }
 
+    @Override
     public void tick() {
         super.tick();
         if(this.tickCount > 300){
@@ -107,8 +109,7 @@ public class EntityGust extends Entity {
 
     protected void onEntityHit(EntityHitResult result) {
         Entity entity = result.getEntity();
-        if(entity instanceof EntityGust){
-            EntityGust other = (EntityGust)entity;
+        if(entity instanceof EntityGust other){
             double avgX = (other.getX() + this.getX()) / 2F;
             double avgY = (other.getY() + this.getY()) / 2F;
             double avgZ = (other.getZ() + this.getZ()) / 2F;
@@ -148,6 +149,7 @@ public class EntityGust extends Entity {
         builder.define(Z_DIR, 0F);
     }
 
+    @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         compound.putBoolean("VerticalTornado", getVertical());
         compound.putFloat("GustDirX", this.entityData.get(X_DIR));
@@ -158,6 +160,7 @@ public class EntityGust extends Entity {
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
+    @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         this.entityData.set(X_DIR, compound.getFloat("GustDirX"));
         this.entityData.set(Y_DIR, compound.getFloat("GustDirX"));
@@ -183,6 +186,7 @@ public class EntityGust extends Entity {
 
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void lerpMotion(double x, double y, double z) {
         this.setDeltaMovement(x, y, z);

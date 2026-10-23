@@ -1,14 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.entity.EntityGorilla;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
-import java.util.List;
 
 public class GorillaAIChargeLooker extends Goal {
     private final EntityGorilla gorilla;
@@ -54,6 +55,7 @@ public class GorillaAIChargeLooker extends Goal {
         runDelay = 300 + gorilla.getRandom().nextInt(200);
     }
 
+    @Override
     public void tick(){
         this.gorilla.setOrderedToSit(false);
         this.gorilla.poundChestCooldown = 50;

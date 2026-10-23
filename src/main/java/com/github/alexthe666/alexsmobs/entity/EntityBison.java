@@ -1,5 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AdvancedPathNavigateNoTeleport;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHurtByTargetNotBaby;
@@ -11,6 +15,13 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import net.neoforged.neoforge.common.IShearable;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -25,10 +36,23 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Shearable;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
@@ -49,13 +73,8 @@ import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumSet;
-
-public class EntityBison extends Animal implements IAnimatedEntity, Shearable, net.neoforged.neoforge.common.IShearable {
+public class EntityBison extends Animal implements IAnimatedEntity, Shearable, IShearable {
 
     public static final Animation ANIMATION_PREPARE_CHARGE = Animation.create(40);
     public static final Animation ANIMATION_EAT = Animation.create(35);
@@ -83,29 +102,35 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 40.0D).add(Attributes.ATTACK_DAMAGE, 8.0D).add(Attributes.FOLLOW_RANGE, 32.0D).add(Attributes.MOVEMENT_SPEED, 0.25F).add(Attributes.ATTACK_KNOCKBACK, 2.0D).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.bisonSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @javax.annotation.Nullable SpawnGroupData spawnDataIn) {
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         if (spawnDataIn == null) {
             spawnDataIn = new AgeableMob.AgeableMobGroupData(0.25F);
         }
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.BISON_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.BISON_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.BISON_HURT.get();
     }
 
+    @Override
     protected void playStepSound(BlockPos p_28301_, BlockState p_28302_) {
         this.playSound(SoundEvents.COW_STEP, 0.1F, 1.0F);
     }
@@ -118,6 +143,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
         this.entityData.set(SNOWY, Boolean.valueOf(honeyed));
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -135,6 +161,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
 
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.BISON_BREEDABLES);
     }
@@ -154,6 +181,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
         return AMEntityRegistry.BISON.get().create(level());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setSnowy(compound.getBoolean("Snowy"));
@@ -163,6 +191,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
         this.feedingsSinceLastShear = compound.getInt("Feedings");
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Snowy", this.isSnowy());
@@ -172,10 +201,12 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
         compound.putInt("Feedings", this.feedingsSinceLastShear);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new AdvancedPathNavigateNoTeleport(this, worldIn, true);
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevChargeProgress = this.chargeProgress;
@@ -272,6 +303,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             this.setAnimation(ANIMATION_ATTACK);
@@ -309,6 +341,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
         }
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         final ItemStack itemstack = player.getItemInHand(hand);
         final Item item = itemstack.getItem();
@@ -337,6 +370,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
         return type;
     }
 
+    @Override
     public void customServerAiStep() {
         super.customServerAiStep();
         breakBlock();
@@ -348,7 +382,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
             return;
         }
         boolean flag = false;
-        if (!this.level().isClientSide && this.blockBreakCounter == 0 && net.neoforged.neoforge.event.EventHooks.canEntityGrief(level(), this)) {
+        if (!this.level().isClientSide && this.blockBreakCounter == 0 && EventHooks.canEntityGrief(level(), this)) {
             for (int a = (int) Math.round(this.getBoundingBox().minX); a <= (int) Math.round(this.getBoundingBox().maxX); a++) {
                 for (int b = (int) Math.round(this.getBoundingBox().minY) - 1; (b <= (int) Math.round(this.getBoundingBox().maxY) + 1) && (b <= 127); b++) {
                     for (int c = (int) Math.round(this.getBoundingBox().minZ); c <= (int) Math.round(this.getBoundingBox().maxZ); c++) {
@@ -395,20 +429,20 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
     }
 
     @Override
-    public boolean isShearable(@javax.annotation.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
+    public boolean isShearable(@Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         return this.readyForShearing();
     }
 
-    @javax.annotation.Nonnull
+    @NotNull
     @Override
-    public java.util.List<ItemStack> onSheared(@javax.annotation.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
+    public List<ItemStack> onSheared(@Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         if (player != null) {
             level().playSound(null, this, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
         this.gameEvent(GameEvent.ENTITY_INTERACT);
         this.setSheared(true);
         this.feedingsSinceLastShear = 0;
-        java.util.List<ItemStack> drops = new java.util.ArrayList<>();
+        List<ItemStack> drops = new ArrayList<>();
         for (int i = 0; i < 2 + random.nextInt(2); i++) {
             drops.add(new ItemStack(AMItemRegistry.BISON_FUR.get()));
         }
@@ -506,6 +540,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
             return EntityBison.this.isValidCharging() && EntityBison.this.chargePartner != null && EntityBison.this.chargePartner.isValidCharging() && !EntityBison.this.chargePartner.is(EntityBison.this);
         }
 
+        @Override
         public void tick() {
             EntityBison.this.lookAt(EntityBison.this.chargePartner, 30, 30);
             EntityBison.this.yBodyRot = EntityBison.this.getYRot();
@@ -550,6 +585,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
             super(EntityBison.this, Player.class, 80, true, true, null);
         }
 
+        @Override
         public boolean canUse() {
             if (EntityBison.this.isBaby() || EntityBison.this.isInLove()) {
                 return false;
@@ -558,6 +594,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, n
             }
         }
 
+        @Override
         protected double getFollowDistance() {
             return 3.0D;
         }

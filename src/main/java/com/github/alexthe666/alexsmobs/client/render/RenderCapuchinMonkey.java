@@ -19,10 +19,12 @@ public class RenderCapuchinMonkey extends MobRenderer<EntityCapuchinMonkey, Mode
         this.addLayer(new LayerCapuchinItem(this));
     }
 
+    @Override
     protected void scale(EntityCapuchinMonkey entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.8F, 0.8F, 0.8F);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityCapuchinMonkey entity) {
         return switch (entity.getVariant()) {
             case 1 -> TEXTURE_1;

@@ -33,14 +33,16 @@ public class RenderGrizzlyBear extends MobRenderer<EntityGrizzlyBear, ModelGrizz
         this.addLayer(new LayerGrizzlyItem(this));
     }
 
+    @Override
     public boolean shouldRender(EntityGrizzlyBear livingEntityIn, Frustum camera, double camX, double camY,
-            double camZ) {
+                                double camZ) {
         if (livingEntityIn.getAprilFoolsFlag() == 5) {
             return false;
         }
         return super.shouldRender(livingEntityIn, camera, camX, camY, camZ);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityGrizzlyBear entity) {
         return entity.isFreddy() ? TEXTURE_FREDDY : TEXTURE;
     }
@@ -51,9 +53,10 @@ public class RenderGrizzlyBear extends MobRenderer<EntityGrizzlyBear, ModelGrizz
             super(RenderGrizzlyBear.this);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntityGrizzlyBear entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntityGrizzlyBear entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             if (entitylivingbaseIn.isSnowy()) {
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(TEXTURE_SNOWY));
                 this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn,
@@ -68,9 +71,10 @@ public class RenderGrizzlyBear extends MobRenderer<EntityGrizzlyBear, ModelGrizz
             super(RenderGrizzlyBear.this);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntityGrizzlyBear entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntityGrizzlyBear entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             if (entitylivingbaseIn.getAprilFoolsFlag() == 4 && entitylivingbaseIn.tickCount % 6 <= 2) {
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(AMRenderTypes.getEyesNoFog(TEXTURE_FREDDY_EYES));
                 this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn,

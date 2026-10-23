@@ -5,6 +5,8 @@ import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import net.neoforged.neoforge.event.EventHooks;
+
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -26,18 +28,22 @@ public class GorillaAIForageLeaves extends MoveToBlockGoal {
         this.gorilla = gorilla;
     }
 
+    @Override
     public boolean canUse() {
         return !gorilla.isBaby() && gorilla.getMainHandItem().isEmpty() && super.canUse();
     }
 
+    @Override
     public void stop() {
         idleAtLeavesTime = 0;
     }
 
+    @Override
     public double acceptedDistance() {
         return 2D;
     }
 
+    @Override
     public void tick() {
         super.tick();
         BlockPos blockpos = this.getMoveToTarget();
@@ -76,12 +82,13 @@ public class GorillaAIForageLeaves extends MoveToBlockGoal {
         return blockpos.distSqr(AMBlockPos.fromCoords(positionVec.x(), blockpos.getY(), positionVec.z())) < distance * distance;
     }
 
+    @Override
     protected boolean isReachedTarget() {
         return this.isAboveDestinationBear;
     }
 
     private void breakLeaves() {
-        if (net.neoforged.neoforge.event.EventHooks.canEntityGrief(gorilla.level(), gorilla)) {
+        if (EventHooks.canEntityGrief(gorilla.level(), gorilla)) {
             BlockState blockstate = gorilla.level().getBlockState(this.blockPos);
             if (blockstate.is(AMTagRegistry.GORILLA_BREAKABLES)) {
                 gorilla.level().destroyBlock(blockPos, false);

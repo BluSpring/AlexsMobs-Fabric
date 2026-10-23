@@ -1,13 +1,14 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityLeafcutterAnt;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
-import java.util.List;
 
 public class LeafcutterAntAIFollowCaravan extends Goal {
     public final EntityLeafcutterAnt ant;
@@ -21,6 +22,7 @@ public class LeafcutterAntAIFollowCaravan extends Goal {
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean canUse() {
         long worldTime = this.ant.level().getGameTime() % 10;
         if (this.ant.getNoActionTime() >= 100 && worldTime != 0) {
@@ -77,6 +79,7 @@ public class LeafcutterAntAIFollowCaravan extends Goal {
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
+    @Override
     public boolean canContinueToUse() {
 
         if (this.ant.inCaravan() && this.ant.getCaravanHead().isAlive() && this.firstIsSilverback(this.ant, 0)) {
@@ -103,16 +106,18 @@ public class LeafcutterAntAIFollowCaravan extends Goal {
         }
     }
 
+    @Override
     public void stop() {
         this.ant.leaveCaravan();
         this.speedModifier = 1.5D;
     }
 
+    @Override
     public void tick() {
         if (this.ant.inCaravan() && !this.ant.shouldLeadCaravan()) {
             EntityLeafcutterAnt llamaentity = this.ant.getCaravanHead();
             if (llamaentity != null) {
-                double d0 = (double) this.ant.distanceTo(llamaentity);
+                double d0 = this.ant.distanceTo(llamaentity);
                 Vec3 vector3d = (new Vec3(llamaentity.getX() - this.ant.getX(), llamaentity.getY() - this.ant.getY(), llamaentity.getZ() - this.ant.getZ())).normalize().scale(Math.max(d0 - 2.0D, 0.0D));
                 if(ant.getNavigation().isDone()) {
                     try {

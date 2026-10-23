@@ -1,11 +1,16 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Optional;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.neoforge.fluids.FluidType;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -25,7 +30,11 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.animal.Animal;
@@ -39,10 +48,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.fluids.FluidType;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public class EntityBananaSlug extends Animal {
 
@@ -67,14 +72,17 @@ public class EntityBananaSlug extends Animal {
 
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new WallClimberNavigation(this, worldIn);
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.BANANA_SLUG_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.BANANA_SLUG_HURT.get();
     }
@@ -84,6 +92,7 @@ public class EntityBananaSlug extends Animal {
         return !worldIn.getBlockState(pos.below()).isAir();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.bananaSlugSpawnRolls, this.getRandom(), spawnReasonIn) && super.checkSpawnRules(worldIn, spawnReasonIn);
     }
@@ -96,17 +105,21 @@ public class EntityBananaSlug extends Animal {
         builder.define(VARIANT, 0);
     }
 
+    @Override
     public boolean canTrample(BlockState state, BlockPos pos, float fallDistance) {
         return false;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     protected void onInsideBlock(BlockState state) {
 
     }
@@ -116,8 +129,9 @@ public class EntityBananaSlug extends Animal {
         return false; // Banana slug can breathe underwater
     }
 
-    @javax.annotation.Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @javax.annotation.Nullable SpawnGroupData spawnDataIn) {
+    @Override
+    @Nullable
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setVariant(random.nextInt(4));
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
@@ -137,6 +151,7 @@ public class EntityBananaSlug extends Animal {
         return (this.entityData.get(CLIMBING) & 1) != 0 && this.getAttachmentFacing() != Direction.DOWN;
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.BANANA_SLUG_BREEDABLES);
     }
@@ -156,6 +171,7 @@ public class EntityBananaSlug extends Animal {
         return this.entityData.get(ATTACHED_FACE);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new TemptGoal(this, 1.0D, Ingredient.of(AMTagRegistry.BANANA_SLUG_BREEDABLES), false));
@@ -169,6 +185,7 @@ public class EntityBananaSlug extends Animal {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 4.0D).add(Attributes.ATTACK_DAMAGE, 1.0D).add(Attributes.MOVEMENT_SPEED, 0.1F);
     }
 
+    @Override
     public void tick(){
         super.tick();
         this.prevTrailYaw = trailYaw;
@@ -252,19 +269,23 @@ public class EntityBananaSlug extends Animal {
         }
     }
 
+    @Override
     protected float getJumpPower() {
         return super.getJumpPower();
     }
 
+    @Override
     public int getMaxHeadXRot() {
         return 1;
     }
 
+    @Override
     public int getMaxHeadYRot() {
         return 4;
     }
 
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
     }
 
@@ -293,6 +314,7 @@ public class EntityBananaSlug extends Animal {
         return this.getAttachmentFacing() != Direction.DOWN;
     }
 
+    @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
         super.onSyncedDataUpdated(entityDataAccessor);
         if (ATTACHED_FACE.equals(entityDataAccessor)) {
@@ -302,7 +324,8 @@ public class EntityBananaSlug extends Animal {
     }
 
 
-    public void calculateEntityAnimation( boolean flying) {
+    @Override
+    public void calculateEntityAnimation(boolean flying) {
         float f1 = (float)Mth.length(this.getX() - this.xo, 0.5F * (this.getY() - this.yo), this.getZ() - this.zo);
         float f2 = Math.min(f1 * 16.0F, 1.0F);
         this.walkAnimation.update(f2, 0.4F);
@@ -316,12 +339,14 @@ public class EntityBananaSlug extends Animal {
         return slug;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putInt("SlimeTime", this.timeUntilSlime);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("SlimeTime")) {

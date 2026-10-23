@@ -16,10 +16,12 @@ public class RenderRockyRoller extends MobRenderer<EntityRockyRoller, ModelRocky
         super(renderManagerIn, new ModelRockyRoller(), 0.7F);
     }
 
+    @Override
     protected void scale(EntityRockyRoller entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityRockyRoller entity) {
         return entity.isRolling() ? TEXTURE_ROLLING : entity.isAngry() ? TEXTURE_ANGRY : TEXTURE;
     }

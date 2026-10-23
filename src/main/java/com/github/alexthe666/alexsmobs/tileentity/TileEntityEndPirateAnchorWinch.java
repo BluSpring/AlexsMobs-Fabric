@@ -3,7 +3,11 @@ package com.github.alexthe666.alexsmobs.tileentity;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.block.BlockEndPirateAnchor;
 import com.github.alexthe666.alexsmobs.block.BlockEndPirateAnchorWinch;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -13,8 +17,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 public class TileEntityEndPirateAnchorWinch extends BlockEntity {
 
@@ -254,7 +256,7 @@ public class TileEntityEndPirateAnchorWinch extends BlockEntity {
 
 
     @Override
-    protected void loadAdditional(CompoundTag compound, net.minecraft.core.HolderLookup.Provider registries) {
+    protected void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
         super.loadAdditional(compound, registries);
         this.pullingUp = compound.getBoolean("PullingUp");
         this.draggingAnchor = compound.getBoolean("DraggingAnchor");
@@ -264,7 +266,7 @@ public class TileEntityEndPirateAnchorWinch extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound, net.minecraft.core.HolderLookup.Provider registries) {
+    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
         super.saveAdditional(compound, registries);
         compound.putBoolean("PullingUp", pullingUp);
         compound.putBoolean("DraggingAnchor", draggingAnchor);
@@ -274,7 +276,7 @@ public class TileEntityEndPirateAnchorWinch extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         return this.saveWithoutMetadata(registries);
     }
 

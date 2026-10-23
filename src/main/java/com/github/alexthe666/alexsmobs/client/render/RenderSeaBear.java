@@ -14,9 +14,11 @@ public class RenderSeaBear extends MobRenderer<EntitySeaBear, ModelSeaBear> {
         super(renderManagerIn, new ModelSeaBear(), 1.2F);
     }
 
+    @Override
     protected void scale(EntitySeaBear entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntitySeaBear entity) {
         return TEXTURE;
     }

@@ -19,23 +19,28 @@ public class EndergradeAIBreakFlowers extends MoveToBlockGoal {
         this.endergrade = bird;
     }
 
+    @Override
     public boolean canUse() {
         return !endergrade.isBaby() && !endergrade.hasItemTarget && super.canUse();
     }
 
+    @Override
     public boolean canContinueToUse() {
         return !endergrade.hasItemTarget && super.canContinueToUse();
     }
 
+    @Override
     public void stop() {
         idleAtFlowerTime = 0;
         this.endergrade.stopWandering = false;
     }
 
+    @Override
     public double acceptedDistance() {
         return 2D;
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.endergrade.stopWandering = true;
@@ -66,6 +71,7 @@ public class EndergradeAIBreakFlowers extends MoveToBlockGoal {
         return blockpos.distSqr(new BlockPos((int) positionVec.x(), blockpos.getY(), (int) positionVec.z())) < distance * distance;
     }
 
+    @Override
     protected boolean isReachedTarget() {
         return this.isAboveDestinationBear;
     }

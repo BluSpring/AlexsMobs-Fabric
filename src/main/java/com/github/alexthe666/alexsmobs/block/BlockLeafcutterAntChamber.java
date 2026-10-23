@@ -1,11 +1,17 @@
 package com.github.alexthe666.alexsmobs.block;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.github.alexthe666.alexsmobs.entity.EntityLeafcutterAnt;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMPointOfInterestRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityLeafcutterAnthill;
 import com.google.common.base.Predicates;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -27,11 +33,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class BlockLeafcutterAntChamber extends Block {
     public static final IntegerProperty FUNGUS = IntegerProperty.create("fungus", 0, 5);
@@ -73,6 +74,7 @@ public class BlockLeafcutterAntChamber extends Block {
         return InteractionResult.PASS;
     }
 
+    @Override
     public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
             if (!worldIn.isAreaLoaded(pos, 3))
                 return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
@@ -81,6 +83,7 @@ public class BlockLeafcutterAntChamber extends Block {
         }
     }
 
+    @Override
     public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
         super.playerDestroy(worldIn, player, pos, state, te, stack);
         this.angerNearbyAnts(worldIn, pos);
@@ -105,8 +108,7 @@ public class BlockLeafcutterAntChamber extends Block {
             Stream<BlockPos> stream = pointofinterestmanager.findAll((poiTypeHolder -> poiTypeHolder.is(AMPointOfInterestRegistry.LEAFCUTTER_ANT_HILL.getKey())), Predicates.alwaysTrue(), pos, 50, PoiManager.Occupancy.ANY);
             List<BlockPos> listOfHives = stream.collect(Collectors.toList());
             for (BlockPos pos2 : listOfHives) {
-                if(world.getBlockEntity(pos2) instanceof TileEntityLeafcutterAnthill){
-                    TileEntityLeafcutterAnthill beehivetileentity = (TileEntityLeafcutterAnthill) world.getBlockEntity(pos2);
+                if(world.getBlockEntity(pos2) instanceof TileEntityLeafcutterAnthill beehivetileentity){
                     beehivetileentity.angerAnts(player, world.getBlockState(pos2), BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
                 }
 
@@ -114,6 +116,7 @@ public class BlockLeafcutterAntChamber extends Block {
         }
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FUNGUS);
     }
