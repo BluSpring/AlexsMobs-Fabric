@@ -3,13 +3,18 @@ package com.github.alexthe666.alexsmobs.entity;
 import com.github.alexthe666.alexsmobs.enchantment.AMEnchantmentRegistry;
 import com.github.alexthe666.alexsmobs.fabric.SittableVehicleEntity;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.BlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -17,17 +22,21 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.PlayerRideableJumping;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-
-import org.jetbrains.annotations.Nullable;
 
 public class EntityStraddleboard extends Entity implements PlayerRideableJumping, SittableVehicleEntity {
     private static final EntityDataAccessor<ItemStack> ITEMSTACK = SynchedEntityData.defineId(EntityStraddleboard.class, EntityDataSerializers.ITEM_STACK);
@@ -457,9 +466,9 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         }
     }
 
-    private int getEnchantLevel(net.minecraft.resources.ResourceKey<Enchantment> enchantmentKey) {
-        if (this.level().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT).get(enchantmentKey).isPresent()) {
-            net.minecraft.core.Holder<Enchantment> holder = this.level().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT).get(enchantmentKey).get();
+    private int getEnchantLevel(ResourceKey<Enchantment> enchantmentKey) {
+        if (this.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).get(enchantmentKey).isPresent()) {
+            Holder<Enchantment> holder = this.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).get(enchantmentKey).get();
             return EnchantmentHelper.getItemEnchantmentLevel(holder, this.getItemBoard());
         }
         return 0;
