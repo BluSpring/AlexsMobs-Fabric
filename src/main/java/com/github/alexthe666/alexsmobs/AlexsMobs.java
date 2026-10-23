@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.function.Supplier;
 
 import com.github.alexthe666.alexsmobs.attachment.AMAttachmentRegistry;
-
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.client.model.layered.AMModelLayers;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
