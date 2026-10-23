@@ -3,6 +3,7 @@ package com.github.alexthe666.alexsmobs.item;
 import com.github.alexthe666.alexsmobs.entity.EntityStraddleboard;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -31,7 +32,7 @@ public class ItemStraddleboard extends Item {
 
     public int getColor(ItemStack stack) {
         DyedItemColor dyedColor = stack.get(DataComponents.DYED_COLOR);
-        return dyedColor != null ? dyedColor.rgb() : DEFAULT_COLOR;
+        return FastColor.ARGB32.opaque(dyedColor != null ? dyedColor.rgb() : DEFAULT_COLOR);
     }
 
     public boolean hasCustomColor(ItemStack stack) {
