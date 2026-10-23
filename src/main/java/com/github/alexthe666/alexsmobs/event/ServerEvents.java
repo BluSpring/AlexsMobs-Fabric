@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import com.github.alexthe666.alexsmobs.attachment.AMAttachmentRegistry;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.component.AMDataComponentRegistry;
@@ -35,6 +36,7 @@ import com.github.alexthe666.alexsmobs.entity.util.FlyingFishBootsUtil;
 import com.github.alexthe666.alexsmobs.entity.util.RainbowUtil;
 import com.github.alexthe666.alexsmobs.entity.util.RockyChestplateUtil;
 import com.github.alexthe666.alexsmobs.entity.util.VineLassoUtil;
+import com.github.alexthe666.alexsmobs.fabric.ForcedPoseEntity;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.item.ILeftClick;
 import com.github.alexthe666.alexsmobs.message.MessageSwingArm;
@@ -93,6 +95,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
@@ -828,6 +831,9 @@ public class ServerEvents {
         }
         if (RockyChestplateUtil.isWearing(entity)) {
             RockyChestplateUtil.tickRockyRolling(entity);
+        } else if (entity.hasAttached(AMAttachmentRegistry.ROCKY_ROLL_TICKS) && entity instanceof ForcedPoseEntity forcedPose && forcedPose.alexsmobs$getForcedPose() == Pose.SWIMMING){
+            forcedPose.alexsmobs$setForcedPose(null);
+            entity.removeAttached(AMAttachmentRegistry.ROCKY_ROLL_TICKS);
         }
         if (FlyingFishBootsUtil.isWearing(entity)) {
             FlyingFishBootsUtil.tickFlyingFishBoots(entity);
