@@ -19,6 +19,7 @@
   ],
   "client": [
     "LivingEntityRendererMixin",
+    "fabric.LivingEntityRendererMixin",
     "fabric.RenderBuffersMixin",
     "fabric.event.EntityRendererMixin"
   ],

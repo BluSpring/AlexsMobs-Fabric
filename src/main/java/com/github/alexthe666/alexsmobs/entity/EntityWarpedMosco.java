@@ -7,6 +7,7 @@ import com.github.alexthe666.alexsmobs.entity.ai.FlightMoveController;
 import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.fabric.EventHooks;
+import com.github.alexthe666.alexsmobs.fabric.SittableVehicleEntity;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
@@ -53,7 +54,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 
-public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
+public class EntityWarpedMosco extends Monster implements IAnimatedEntity, SittableVehicleEntity {
 
     public static final Animation ANIMATION_PUNCH_R = Animation.create(25);
     public static final Animation ANIMATION_PUNCH_L = Animation.create(25);

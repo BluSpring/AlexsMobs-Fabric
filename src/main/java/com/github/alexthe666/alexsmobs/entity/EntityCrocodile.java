@@ -5,6 +5,7 @@ import com.github.alexthe666.alexsmobs.block.BlockReptileEgg;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.*;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
+import com.github.alexthe666.alexsmobs.fabric.SittableVehicleEntity;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
@@ -59,7 +60,7 @@ import io.github.fabricators_of_create.porting_lib.tool.ItemAbilities;
 import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 
-public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, ISemiAquatic {
+public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, ISemiAquatic, SittableVehicleEntity {
 
     public static final Animation ANIMATION_LUNGE = Animation.create(23);
     public static final Animation ANIMATION_DEATHROLL = Animation.create(40);
