@@ -1,12 +1,17 @@
 package com.github.alexthe666.alexsmobs.block;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityTerrapin;
 import com.github.alexthe666.alexsmobs.fabric.EventHooks;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityTerrapinEgg;
 import com.mojang.serialization.MapCodec;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -21,7 +26,6 @@ import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.BlockGetter;
@@ -41,9 +45,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.List;
 
 public class BlockTerrapinEgg extends BaseEntityBlock {
     public static final MapCodec<BlockTerrapinEgg> CODEC = simpleCodec(p -> new BlockTerrapinEgg());
@@ -67,6 +68,7 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
         return isProperHabitat(reader, blockReader.below());
     }
 
+    @Override
     public RenderShape getRenderShape(BlockState p_149645_1_) {
         return RenderShape.MODEL;
     }
@@ -75,11 +77,13 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
         return reader.getBlockState(pos).is(BlockTags.SAND) || reader.getBlockState(pos).is(AMTagRegistry.CROCODILE_SPAWNS);
     }
 
+    @Override
     public void stepOn(Level worldIn, BlockPos pos, BlockState state, Entity entityIn) {
         this.tryTrample(worldIn, pos, entityIn, 100);
         super.stepOn(worldIn, pos, state, entityIn);
     }
 
+    @Override
     public void fallOn(Level worldIn, BlockState state, BlockPos pos, Entity entityIn, float fallDistance) {
         if (!(entityIn instanceof Zombie)) {
             this.tryTrample(worldIn, pos, entityIn, 3);
@@ -112,6 +116,7 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
 
     }
 
+    @Override
     public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
         if (this.canGrow(worldIn) && hasProperHabitat(worldIn, pos)) {
             int i = state.getValue(HATCH);
@@ -139,6 +144,7 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
 
     }
 
+    @Override
     public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (hasProperHabitat(worldIn, pos) && !worldIn.isClientSide) {
             worldIn.levelEvent(2005, pos, 0);
@@ -155,25 +161,30 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
         }
     }
 
+    @Override
     public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
         super.playerDestroy(worldIn, player, pos, state, te, stack);
         this.removeOneEgg(worldIn, pos, state);
     }
 
+    @Override
     public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
         return useContext.getItemInHand().getItem() == this.asItem() && state.getValue(EGGS) < 4 || super.canBeReplaced(state, useContext);
     }
 
+    @Override
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockState blockstate = context.getLevel().getBlockState(context.getClickedPos());
         return blockstate.getBlock() == this ? blockstate.setValue(EGGS, Integer.valueOf(Math.min(4, blockstate.getValue(EGGS) + 1))) : super.getStateForPlacement(context);
     }
 
+    @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return state.getValue(EGGS) > 1 ? MULTI_EGG_SHAPE : ONE_EGG_SHAPE;
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HATCH, EGGS);
     }
@@ -190,6 +201,7 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
         }
     }
 
+    @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         ItemStack pickaxe = builder.getOptionalParameter(LootContextParams.TOOL);
         BlockEntity blockentity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
@@ -198,9 +210,8 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
             Level level = builder.getLevel();
             silkTouch = pickaxe.getEnchantments().getLevel(level.holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH)) > 0;
         }
-        if (silkTouch && blockentity instanceof TileEntityTerrapinEgg) {
+        if (silkTouch && blockentity instanceof TileEntityTerrapinEgg egg) {
             ItemStack stack = new ItemStack(AMBlockRegistry.TERRAPIN_EGG);
-            TileEntityTerrapinEgg egg = (TileEntityTerrapinEgg)blockentity;
             CompoundTag tag = new CompoundTag();
             CompoundTag parent1 = new CompoundTag();
             CompoundTag parent2 = new CompoundTag();
@@ -238,6 +249,7 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
     }
     */
 
+    @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState state2, boolean b) {
         if (state.is(AMBlockRegistry.TERRAPIN_EGG) && state.getValue(EGGS) <= 1) {
             super.onRemove(state, level, pos, state2, b);

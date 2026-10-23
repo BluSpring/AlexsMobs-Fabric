@@ -24,6 +24,7 @@ public class LayerKangarooBaby extends RenderLayer<EntityKangaroo, ModelKangaroo
         super(render);
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityKangaroo roo, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if(roo.isVehicle() && !roo.isBaby()){
             for(Entity passenger : roo.getPassengers()){

@@ -125,6 +125,7 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
         return false;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.giantSquidSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -134,6 +135,7 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
     }
 
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         if (reason == MobSpawnType.NATURAL) {
@@ -150,10 +152,12 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
         this.setPos(down.getX() + 0.5F, down.getY() + 3 + random.nextInt(3), down.getZ() + 0.5F);
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.GIANT_SQUID_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.GIANT_SQUID_HURT;
     }
@@ -185,17 +189,20 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
     }
 
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
         return super.mobInteract(player, hand);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new WaterBoundPathNavigation(this, worldIn);
     }
 
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new TryFindWaterGoal(this));
         this.goalSelector.addGoal(1, new AIAvoidWhales());
@@ -204,17 +211,20 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, EntityCachalotWhale.class)));
         this.targetSelector.addGoal(2, new EntityAINearestTarget3D(this, Guardian.class, 20, true, true, null) {
+            @Override
             public boolean canUse() {
                 return super.canUse();
             }
         });
         this.targetSelector.addGoal(3, new EntityAINearestTarget3D(this, LivingEntity.class, 70, false, true, AMEntityRegistry.buildPredicateFromTag(AMTagRegistry.GIANT_SQUID_TARGETS)) {
+            @Override
             public boolean canUse() {
                 return  !EntityGiantSquid.this.isInWaterOrBubble() && !EntityGiantSquid.this.isCaptured() && super.canUse();
             }
         });
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         if (!this.isNoAi()) {
@@ -234,6 +244,7 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
         }
     }
 
+    @Override
     public void tick() {
         super.tick();
         if(this.tickCount % 100 == 0){
@@ -405,14 +416,17 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
         setPartPosition(part, f2, pitch, -f3, offsetScale);
     }
 
+    @Override
     public int getMaxHeadXRot() {
         return 1;
     }
 
+    @Override
     public int getMaxHeadYRot() {
         return 3;
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             if (entityData.get(OVERRIDE_BODYROT)) {
@@ -429,20 +443,24 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
 
     // EntityGiantSquid extends WaterAnimal which already can breathe underwater by default
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setBlue(compound.getBoolean("Blue"));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Blue", isBlue());
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
@@ -495,6 +513,7 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
         this.entityData.set(BLUE, Boolean.valueOf(t));
     }
 
+    @Override
     public void push(Entity entity) {
         if (!this.isCaptured()) {
             super.push(entity);
@@ -508,6 +527,7 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
         this.walkAnimation.update(f2, 0.4F);
     }
 
+    @Override
     public boolean canBeCollidedWith() {
         return this.isAlive();
     }
@@ -547,6 +567,7 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
         return vec3;
     }
 
+    @Override
     public float getXRot() {
         return getSquidPitch();
     }
@@ -565,6 +586,7 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
         return this.hurt(source, amount);
     }
 
+    @Override
     public boolean isInvulnerableTo(DamageSource source) {
         return source.is(DamageTypes.IN_WALL) || super.isInvulnerableTo(source);
     }
@@ -576,10 +598,12 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
         this.setYRot(this.rotlerp(this.getYRot(), f, shift ? 10 : 5));
     }
 
+    @Override
     public float getViewXRot(float partialTick) {
         return prevSquidPitch + (getSquidPitch() - prevSquidPitch) * partialTick;
     }
 
+    @Override
     public float getViewYRot(float partialTick) {
         return partialTick == 1.0F ? this.yBodyRot : Mth.lerp(partialTick, this.yBodyRotO, this.yBodyRot);
     }
@@ -641,12 +665,14 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
         return false;
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         super.handleEntityEvent(id);
 
     }
 
+    @Override
     public boolean hurt(DamageSource src, float f) {
         if (super.hurt(src, f) && this.getLastHurtByMob() != null && !this.isCaptured() && random.nextBoolean()) {
             this.spawnInk();
@@ -704,6 +730,7 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
             return whale != null && whale.isAlive() && !EntityGiantSquid.this.horizontalCollision && EntityGiantSquid.this.distanceTo(whale) < 60;
         }
 
+        @Override
         public void tick() {
             if (whale != null && whale.isAlive()) {
                 double dist = EntityGiantSquid.this.distanceTo(whale);
@@ -713,6 +740,7 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
             }
         }
 
+        @Override
         public void stop() {
             whale = null;
             moveTo = null;
@@ -772,6 +800,7 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
             }
         }
 
+        @Override
         public void start() {
             EntityGiantSquid.this.getNavigation().moveTo(moveTo.getX() + 0.5F, moveTo.getY() + 0.5F, moveTo.getZ() + 0.5F, 1.0F);
         }
@@ -789,6 +818,7 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
             return EntityGiantSquid.this.isInWaterOrBubble() && EntityGiantSquid.this.getTarget() != null && EntityGiantSquid.this.getTarget().isAlive();
         }
 
+        @Override
         public void tick() {
             EntityGiantSquid squid = EntityGiantSquid.this;
             LivingEntity target = EntityGiantSquid.this.getTarget();

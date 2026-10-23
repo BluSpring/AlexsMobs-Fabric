@@ -1,13 +1,14 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityCaiman;
+
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
 
 public class CaimanAIMelee extends Goal {
     private final EntityCaiman caiman;
@@ -24,11 +25,13 @@ public class CaimanAIMelee extends Goal {
         return target != null && target.isAlive();
     }
 
+    @Override
     public void stop(){
         caiman.setHeldMobId(-1);
         grabTime = 0;
     }
 
+    @Override
     public void tick() {
         if(grabTime < 0){
             grabTime++;

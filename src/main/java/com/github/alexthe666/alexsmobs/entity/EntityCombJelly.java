@@ -3,7 +3,11 @@ package com.github.alexthe666.alexsmobs.entity;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -29,14 +33,14 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class EntityCombJelly extends WaterAnimal implements Bucketable {
 
@@ -55,18 +59,22 @@ public class EntityCombJelly extends WaterAnimal implements Bucketable {
         super(animal, level);
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 4;
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.hasCustomName() || this.fromBucket();
     }
 
+    @Override
     public boolean removeWhenFarAway(double p_213397_1_) {
         return !this.fromBucket() && !this.hasCustomName();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.terrapinSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -90,10 +98,12 @@ public class EntityCombJelly extends WaterAnimal implements Bucketable {
         builder.define(JELLY_SCALE, 1.0F);
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.COMB_JELLY_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.COMB_JELLY_HURT;
     }
@@ -152,6 +162,7 @@ public class EntityCombJelly extends WaterAnimal implements Bucketable {
         return stack;
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevOnLandProgress = onLandProgress;
@@ -208,6 +219,7 @@ public class EntityCombJelly extends WaterAnimal implements Bucketable {
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("FromBucket", this.fromBucket());
@@ -215,6 +227,7 @@ public class EntityCombJelly extends WaterAnimal implements Bucketable {
         compound.putInt("Variant", this.getVariant());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFromBucket(compound.getBoolean("FromBucket"));
@@ -231,6 +244,7 @@ public class EntityCombJelly extends WaterAnimal implements Bucketable {
         return dist <= 1.0D || result.getType() == HitResult.Type.MISS;
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -274,6 +288,7 @@ public class EntityCombJelly extends WaterAnimal implements Bucketable {
         }
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setVariant(random.nextInt(3));
@@ -310,6 +325,7 @@ public class EntityCombJelly extends WaterAnimal implements Bucketable {
         return f1;
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }

@@ -73,12 +73,12 @@ public class ModelMurmurHead extends AdvancedEntityModel<EntityMurmurHead> {
         //hair physics
         if(ageInTicks > 5F){
             float hairAnimateScale = Math.min(1F, (ageInTicks - 5F) / 10F);
-            double d0 = Mth.lerp((double)partialTicks, entity.prevXHair, entity.xHair) - Mth.lerp((double)partialTicks, entity.xo, entity.getX());
-            double d1 = Mth.lerp((double)partialTicks, entity.prevYHair, entity.yHair) - Mth.lerp((double)partialTicks, entity.yo, entity.getY());
-            double d2 = Mth.lerp((double)partialTicks, entity.prevZHair, entity.zHair) - Mth.lerp((double)partialTicks, entity.zo, entity.getZ());
+            double d0 = Mth.lerp(partialTicks, entity.prevXHair, entity.xHair) - Mth.lerp(partialTicks, entity.xo, entity.getX());
+            double d1 = Mth.lerp(partialTicks, entity.prevYHair, entity.yHair) - Mth.lerp(partialTicks, entity.yo, entity.getY());
+            double d2 = Mth.lerp(partialTicks, entity.prevZHair, entity.zHair) - Mth.lerp(partialTicks, entity.zo, entity.getZ());
             float f = entity.yBodyRotO + (entity.yBodyRot - entity.yBodyRotO);
-            double d3 = (double)Mth.sin(f * Mth.DEG_TO_RAD);
-            double d4 = (double)(-Mth.cos(f * Mth.DEG_TO_RAD));
+            double d3 = Mth.sin(f * Mth.DEG_TO_RAD);
+            double d4 = -Mth.cos(f * Mth.DEG_TO_RAD);
             float f1 = (float)d1 * 10.0F;
             f1 = Mth.clamp(f1, -6.0F, 32.0F) * hairAnimateScale;
             float f2 = (float)(d0 * d3 + d2 * d4) * 100.0F;

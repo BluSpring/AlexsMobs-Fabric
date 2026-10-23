@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityCatfish;
 import com.github.alexthe666.alexsmobs.entity.EntityLobster;
@@ -28,9 +30,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 
-import java.util.List;
-import java.util.function.Supplier;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -46,6 +45,7 @@ public class ItemModFishBucket extends MobBucketItem {
         return this.fishType;
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
             TooltipFlag flagIn) {
@@ -87,9 +87,8 @@ public class ItemModFishBucket extends MobBucketItem {
     }
 
     private void spawnFish(ServerLevel serverLevel, ItemStack stack, BlockPos pos) {
-        Entity entity = getFishType().spawn(serverLevel, stack, (Player) null, pos, MobSpawnType.BUCKET, true, false);
-        if (entity instanceof Bucketable) {
-            Bucketable bucketable = (Bucketable) entity;
+        Entity entity = getFishType().spawn(serverLevel, stack, null, pos, MobSpawnType.BUCKET, true, false);
+        if (entity instanceof Bucketable bucketable) {
             bucketable.loadFromBucketTag(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag());
             bucketable.setFromBucket(true);
         }

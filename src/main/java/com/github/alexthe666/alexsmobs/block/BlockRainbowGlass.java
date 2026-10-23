@@ -34,10 +34,12 @@ public class BlockRainbowGlass extends TransparentBlock {
                 .setValue(SOUTH, Boolean.valueOf(false)));
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_58032_) {
         p_58032_.add(UP, DOWN, NORTH, SOUTH, EAST, WEST);
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         LevelReader levelreader = context.getLevel();
         BlockPos blockpos = context.getClickedPos();
@@ -56,6 +58,7 @@ public class BlockRainbowGlass extends TransparentBlock {
         return defaultBlockState().setValue(NORTH, northState.is(this)).setValue(NORTH, northState.is(this)).setValue(EAST, eastState.is(this)).setValue(SOUTH, southState.is(this)).setValue(WEST, westState.is(this)).setValue(UP, upState.is(this)).setValue(DOWN, downState.is(this));
     }
 
+    @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState state2, LevelAccessor levelreader, BlockPos blockpos, BlockPos pos2) {
         BlockPos n = blockpos.north();
         BlockPos e = blockpos.east();
@@ -73,15 +76,15 @@ public class BlockRainbowGlass extends TransparentBlock {
     }
 
     private static Boolean noOption(BlockState p_50806_, BlockGetter p_50807_, BlockPos p_50808_) {
-        return (boolean)false;
+        return false;
     }
 
     private static Boolean yes(BlockState p_50806_, BlockGetter p_50807_, BlockPos p_50808_) {
-        return (boolean)false;
+        return false;
     }
 
     private static Boolean noOption(BlockState p_50779_, BlockGetter p_50780_, BlockPos p_50781_, EntityType<?> p_50782_) {
-        return (boolean)false;
+        return false;
     }
 
 

@@ -3,11 +3,12 @@ package com.github.alexthe666.alexsmobs.block;
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityCapsid;
 import com.mojang.serialization.MapCodec;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -15,7 +16,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -24,10 +31,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-
-import org.jetbrains.annotations.Nullable;
 
 public class BlockCapsid extends BaseEntityBlock {
     public static final MapCodec<BlockCapsid> CODEC = simpleCodec(p -> new BlockCapsid());
@@ -42,39 +48,43 @@ public class BlockCapsid extends BaseEntityBlock {
         return CODEC;
     }
 
+    @Override
     public BlockState rotate(BlockState p_185499_1_, Rotation p_185499_2_) {
-        return (BlockState)p_185499_1_.setValue(HORIZONTAL_FACING, p_185499_2_.rotate((Direction)p_185499_1_.getValue(HORIZONTAL_FACING)));
+        return p_185499_1_.setValue(HORIZONTAL_FACING, p_185499_2_.rotate(p_185499_1_.getValue(HORIZONTAL_FACING)));
     }
 
+    @Override
     public BlockState mirror(BlockState p_185471_1_, Mirror p_185471_2_) {
-        return p_185471_1_.rotate(p_185471_2_.getRotation((Direction)p_185471_1_.getValue(HORIZONTAL_FACING)));
+        return p_185471_1_.rotate(p_185471_2_.getRotation(p_185471_1_.getValue(HORIZONTAL_FACING)));
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection());
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HORIZONTAL_FACING);
     }
 
     private static Boolean spawnOption(BlockState state, BlockGetter reader, BlockPos pos, EntityType<?> entity) {
-        return (boolean)false;
+        return false;
     }
 
     private static boolean isntSolid(BlockState state, BlockGetter reader, BlockPos pos) {
         return false;
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public boolean skipRendering(BlockState p_200122_1_, BlockState p_200122_2_, Direction p_200122_3_) {
-        return p_200122_2_.getBlock() == this ? true : super.skipRendering(p_200122_1_, p_200122_2_, p_200122_3_);
+        return p_200122_2_.getBlock() == this || super.skipRendering(p_200122_1_, p_200122_2_, p_200122_3_);
     }
 
     @Override
     public ItemInteractionResult useItemOn(ItemStack heldItem, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        if (worldIn.getBlockEntity(pos) instanceof TileEntityCapsid && !player.isShiftKeyDown() && heldItem.getItem() != this.asItem()) {
-            TileEntityCapsid capsid = (TileEntityCapsid)worldIn.getBlockEntity(pos);
+        if (worldIn.getBlockEntity(pos) instanceof TileEntityCapsid capsid && !player.isShiftKeyDown() && heldItem.getItem() != this.asItem()) {
             // Has item in hand: try to put in or swap
             ItemStack copy = heldItem.copy();
             copy.setCount(1);
@@ -99,6 +109,7 @@ public class BlockCapsid extends BaseEntityBlock {
         return super.useItemOn(heldItem, state, worldIn, pos, player, handIn, hit);
     }
 
+    @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         BlockEntity tileentity = worldIn.getBlockEntity(pos);
         if (tileentity instanceof TileEntityCapsid) {
@@ -109,6 +120,7 @@ public class BlockCapsid extends BaseEntityBlock {
     }
 
 
+    @Override
     public RenderShape getRenderShape(BlockState p_149645_1_) {
         return RenderShape.MODEL;
     }
@@ -120,6 +132,7 @@ public class BlockCapsid extends BaseEntityBlock {
         return new TileEntityCapsid(pos, state);
     }
 
+    @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152180_, BlockState p_152181_, BlockEntityType<T> p_152182_) {
         return createTickerHelper(p_152182_, AMTileEntityRegistry.CAPSID, TileEntityCapsid::commonTick);

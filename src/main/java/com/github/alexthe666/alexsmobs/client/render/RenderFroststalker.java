@@ -15,13 +15,16 @@ public class RenderFroststalker extends MobRenderer<EntityFroststalker, ModelFro
         super(renderManagerIn, new ModelFroststalker(), 0.4F);
     }
 
+    @Override
     protected void scale(EntityFroststalker entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityFroststalker entity) {
         return entity.hasSpikes() ? TEXTURE : TEXTURE_NOSPIKES;
     }
 
+    @Override
     protected boolean isShaking(EntityFroststalker entity) {
         return entity.isInWaterRainOrBubble() && !entity.hasSpikes();
     }

@@ -1,8 +1,14 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -36,11 +42,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
-import java.util.Optional;
-import java.util.UUID;
-
 public class EntityMurmurHead extends Monster implements FlyingAnimal {
 
     private static final EntityDataAccessor<Optional<UUID>> BODY_UUID = SynchedEntityData.defineId(EntityMurmurHead.class, EntityDataSerializers.OPTIONAL_UUID);
@@ -68,6 +69,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
         this.doSpawnPositioning(parent);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level level) {
         FlyingPathNavigation flyingpathnavigation = new FlyingPathNavigation(this, level());
         flyingpathnavigation.setCanOpenDoors(false);
@@ -76,10 +78,12 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
         return flyingpathnavigation;
     }
 
+    @Override
     protected int getBaseExperienceReward() {
         return 0;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new AttackGoal());
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
@@ -106,13 +110,16 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D).add(Attributes.FOLLOW_RANGE, 48.0D).add(Attributes.ATTACK_DAMAGE, 3.0D).add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     public boolean isNoGravity() {
         return true;
     }
@@ -149,8 +156,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
     public Vec3 getNeckBottom(float partialTick){
         Entity body = this.getBody();
         Vec3 top = this.getNeckTop(partialTick);
-        if(body instanceof EntityMurmur){
-            EntityMurmur murmur = (EntityMurmur) body;
+        if(body instanceof EntityMurmur murmur){
             Vec3 bodyBase = murmur.getNeckBottom(partialTick);
             final double sub = top.subtract(bodyBase).horizontalDistance();
             return sub <= 0.06 ? new Vec3(top.x, bodyBase.y, top.z) : bodyBase;
@@ -181,6 +187,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
         }
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.hasUUID("BodyUUID")) {
@@ -189,6 +196,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
     }
 
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.getBodyId() != null) {
@@ -198,6 +206,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
 
     // getStandingEyeHeight removed in 1.21 - eye height now defined in EntityDimensions
 
+    @Override
     public void tick(){
         super.tick();
         this.yHeadRot = Mth.clamp(this.yHeadRot, this.yBodyRot - 70, this.yBodyRot + 70);
@@ -211,8 +220,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
         moveHair();
         Entity body = getBody();
         if(!this.level().isClientSide) {
-            if (body instanceof EntityMurmur) {
-                EntityMurmur murmur = (EntityMurmur) body;
+            if (body instanceof EntityMurmur murmur) {
                 this.entityData.set(BODY_ID, body.getId());
                 if(this.isPulledIn() && murmur.isAlive()){
                     Vec3 base = murmur.getNeckBottom(1.0F).add(0, 0.55F, 0);
@@ -251,8 +259,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
                 this.remove(RemovalReason.DISCARDED);
             }
         }else{
-            if (body instanceof EntityMurmur) {
-                EntityMurmur murmur = (EntityMurmur) body;
+            if (body instanceof EntityMurmur murmur) {
                 if (murmur.hurtTime > 0 || murmur.deathTime > 0) {
                     this.hurtTime = murmur.hurtTime;
                     this.deathTime = murmur.deathTime;
@@ -265,6 +272,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
         prevLaunched = this.isPulledIn();
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
@@ -281,6 +289,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
         return super.hurt(source, damage);
     }
 
+    @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
         return super.isInvulnerableTo(damageSource) || damageSource.is(DamageTypes.IN_WALL);
     }
@@ -328,32 +337,39 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
         this.yHair += d1 * 0.25D;
     }
 
+    @Override
     public boolean isAlliedTo(Entity entity) {
         return this.getBodyId() != null && entity.getUUID().equals(this.getBodyId()) || super.isAlliedTo(entity);
     }
 
+    @Override
     public void playAmbientSound() {
         if(this.isPulledIn() && !this.isAngry()){
             super.playAmbientSound();
         }
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.MURMUR_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return this.getBody() == null ? AMSoundRegistry.MURMUR_HURT : null;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return this.getBody() == null ? AMSoundRegistry.MURMUR_HURT : null;
     }
 
+    @Override
     public boolean isFlying() {
         return true;
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
@@ -365,6 +381,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
             this.parentEntity = EntityMurmurHead.this;
         }
 
+        @Override
         public void tick() {
             if(EntityMurmurHead.this.isPulledIn()){
                 return;
@@ -424,18 +441,21 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
             return EntityMurmurHead.this.getTarget() != null && EntityMurmurHead.this.getTarget().isAlive();
         }
 
+        @Override
         public void start(){
             time = 0;
             biteCooldown = 0;
             EntityMurmurHead.this.setPulledIn(false);
         }
 
+        @Override
         public void stop(){
             time = 0;
             EntityMurmurHead.this.setPulledIn(true);
             EntityMurmurHead.this.setAngry(false);
         }
 
+        @Override
         public void tick(){
             LivingEntity target = EntityMurmurHead.this.getTarget();
             Entity body = EntityMurmurHead.this.getBody();
@@ -443,8 +463,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
                 double dist = Math.sqrt(EntityMurmurHead.this.distanceToSqr(target.getEyePosition()));
                 double bodyDist = body != null ? body.distanceTo(target) : 0.0;
                 if(bodyDist > 16 && time > 30){
-                    if(body instanceof EntityMurmur){
-                        EntityMurmur murmur = (EntityMurmur) body;
+                    if(body instanceof EntityMurmur murmur){
                         murmur.setTarget(target);
                         murmur.getNavigation().moveTo(target, 1.35D);
                     }

@@ -1,14 +1,12 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.List;
+
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
@@ -16,19 +14,16 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.List;
-import java.util.function.Consumer;
-
-import io.github.fabricators_of_create.porting_lib.item.DamageableItem;
 
 public class ItemGhostlyPickaxe extends PickaxeItem {
 
@@ -40,6 +35,7 @@ public class ItemGhostlyPickaxe extends PickaxeItem {
         return player instanceof Player && ((Player)player).getInventory().getFreeSlot() == -1 ;
     }
 
+    @Override
     public float getDestroySpeed(ItemStack stack, BlockState blockState) {
         return blockState.is(BlockTags.MINEABLE_WITH_PICKAXE) ? 20.0F : 1.0F;
     }
@@ -58,8 +54,7 @@ public class ItemGhostlyPickaxe extends PickaxeItem {
                 }
             }
         }
-        if(user instanceof Player){
-            Player player = (Player) user;
+        if(user instanceof Player player){
             if(player.getInventory().add(item)){
                 return;
             }else if(container.canAddItem(item)){
@@ -84,10 +79,10 @@ public class ItemGhostlyPickaxe extends PickaxeItem {
         }
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int i, boolean offhand) {
         super.inventoryTick(stack, level, entity, i, offhand);
-        if(entity instanceof Player){
-            Player player = (Player) entity;
+        if(entity instanceof Player player){
             if(player.tickCount % 3 == 0){
                 CustomData customData = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
                 CompoundTag compoundtag = customData.copyTag();
@@ -128,6 +123,7 @@ public class ItemGhostlyPickaxe extends PickaxeItem {
         }
     }
 
+    @Override
     public boolean isValidRepairItem(ItemStack pickaxe, ItemStack stack) {
         return stack.is(Items.PHANTOM_MEMBRANE);
     }

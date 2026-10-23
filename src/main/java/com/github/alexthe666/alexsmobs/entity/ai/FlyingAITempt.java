@@ -11,6 +11,7 @@ public class FlyingAITempt extends TemptGoal {
         super(mob, speed, ingredient, skittish);
     }
 
+    @Override
     public void tick() {
         super.tick();
         if(mob instanceof ITargetsDroppedItems hasFlyingItemAI && mob.onGround()){

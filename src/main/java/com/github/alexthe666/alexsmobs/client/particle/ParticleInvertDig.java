@@ -30,10 +30,12 @@ public class ParticleInvertDig extends SimpleAnimatedParticle {
         this.creator = world.getEntity((int) creatorId);
     }
 
+    @Override
     public int getLightColor(float p_189214_1_) {
         return 240;
     }
 
+    @Override
     public void tick() {
         this.xo = this.x;
         this.yo = this.y;
@@ -65,6 +67,7 @@ public class ParticleInvertDig extends SimpleAnimatedParticle {
             this.spriteSet = spriteSet;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             ParticleInvertDig heartparticle = new ParticleInvertDig(worldIn, x, y, z, this.spriteSet, xSpeed);
             heartparticle.setSpriteFromAge(this.spriteSet);

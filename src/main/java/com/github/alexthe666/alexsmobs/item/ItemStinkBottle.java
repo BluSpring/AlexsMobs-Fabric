@@ -14,6 +14,7 @@ public class ItemStinkBottle extends AMBlockItem {
         super(blockSupplier, props);
     }
 
+    @Override
     public InteractionResult place(BlockPlaceContext context) {
         InteractionResult result = super.place(context);
         if(result.consumesAction()){
@@ -26,6 +27,7 @@ public class ItemStinkBottle extends AMBlockItem {
         }
         return result;
     }
+    @Override
     public String getDescriptionId() {
         return this.getOrCreateDescriptionId();
     }

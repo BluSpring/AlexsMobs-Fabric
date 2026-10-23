@@ -27,6 +27,7 @@ public class RenderBlueJay extends MobRenderer<EntityBlueJay, ModelBlueJay> {
         this.addLayer(new LayerShiny());
     }
 
+    @Override
     protected void scale(EntityBlueJay mob, PoseStack matrixStackIn, float partialTicks) {
         matrixStackIn.scale(0.9F, 0.9F, 0.9F);
         if (mob.isPassenger() && mob.getVehicle() != null) {
@@ -50,6 +51,7 @@ public class RenderBlueJay extends MobRenderer<EntityBlueJay, ModelBlueJay> {
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityBlueJay entity) {
         return TEXTURE;
     }
@@ -60,9 +62,10 @@ public class RenderBlueJay extends MobRenderer<EntityBlueJay, ModelBlueJay> {
             super(RenderBlueJay.this);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntityBlueJay entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntityBlueJay entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             if (entitylivingbaseIn.getFeedTime() > 0) {
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE_SHINY));
                 float alpha = (float) (1F + Math.sin(ageInTicks * 0.3F)) * 0.1F + 0.8F;

@@ -114,14 +114,17 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         return (blockstate.is(AMTagRegistry.CAPUCHIN_MONKEY_SPAWNS) || blockstate.is(Blocks.AIR)) && worldIn.getRawBrightness(p_223317_3_, 0) > 8;
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 8;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.capuchinMonkeySpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -133,6 +136,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         return temptItems;
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -145,6 +149,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         }
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
@@ -152,6 +157,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         this.goalSelector.addGoal(3, new CapuchinAIRangedAttack(this, 1, 20, 15));
         this.goalSelector.addGoal(6, new TameableAIFollowOwner(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.1D, Ingredient.of(AMTagRegistry.CAPUCHIN_MONKEY_TAMEABLES), true) {
+            @Override
             public void tick() {
                 super.tick();
                 if (this.mob.distanceToSqr(this.player) < 6.25D && this.mob.getRandom().nextInt(14) == 0) {
@@ -170,18 +176,22 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         this.targetSelector.addGoal(5, new CapuchinAITargetBalloons(this, true));
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.CAPUCHIN_MONKEY_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.CAPUCHIN_MONKEY_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.CAPUCHIN_MONKEY_HURT;
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -199,6 +209,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         return super.isAlliedTo(entityIn);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("MonkeySitting", this.isSitting());
@@ -208,6 +219,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         compound.putInt("Variant", this.getVariant());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setOrderedToSit(compound.getBoolean("MonkeySitting"));
@@ -217,6 +229,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         this.setVariant(compound.getInt("Variant"));
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevSitProgress = this.sitProgress;
@@ -279,13 +292,16 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             this.setAnimation(ANIMATION_SCRATCH);
@@ -293,6 +309,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         return true;
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isSitting()) {
             if (this.getNavigation().getPath() != null) {
@@ -303,6 +320,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         super.travel(vec3d);
     }
 
+    @Override
     protected void dropEquipment() {
         super.dropEquipment();
         if (hasDart()) {
@@ -310,6 +328,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         }
     }
 
+    @Override
     public void rideTick() {
         final Entity entity = this.getVehicle();
         if (this.isPassenger() && !entity.isAlive()) {
@@ -362,6 +381,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, sit);
     }
@@ -452,6 +472,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         return source.is(DamageTypes.IN_WALL)  || super.isInvulnerableTo(source);
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         final ItemStack itemstack = player.getItemInHand(hand);
         if (isTameableFood(itemstack)) {
@@ -526,6 +547,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         return getAllFoods().test(stack) || isTameableFood(stack);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         Item item = stack.getItem();
         return isTame() && stack.is(AMTagRegistry.CAPUCHIN_MONKEY_BREEDABLES);
@@ -554,6 +576,7 @@ public class EntityCapuchinMonkey extends TamableAnimal implements IAnimatedEnti
         }
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance diff, MobSpawnType spawnType, @Nullable SpawnGroupData data) {
         int i;

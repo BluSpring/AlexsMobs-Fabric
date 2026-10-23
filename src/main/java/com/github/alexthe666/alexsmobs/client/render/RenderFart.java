@@ -21,12 +21,13 @@ public class RenderFart extends EntityRenderer<EntityFart> {
         super(renderManagerIn);
     }
 
+    @Override
     public void render(EntityFart entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
-            MultiBufferSource bufferIn, int packedLightIn) {
+                       MultiBufferSource bufferIn, int packedLightIn) {
         float f = Math.min(entityIn.tickCount + partialTicks, 30F) / 30F;
         float alpha = 1F - f;
         matrixStackIn.pushPose();
-        matrixStackIn.translate(0.0D, (double) 0.15F, 0.0D);
+        matrixStackIn.translate(0.0D, 0.15F, 0.0D);
         matrixStackIn
                 .mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 180.0F));
         matrixStackIn.mulPose(Axis.XP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot())));
@@ -41,6 +42,7 @@ public class RenderFart extends EntityRenderer<EntityFart> {
     /**
      * Returns the location of an entity's texture.
      */
+    @Override
     public ResourceLocation getTextureLocation(EntityFart entity) {
         return FART_TEXTURE;
     }

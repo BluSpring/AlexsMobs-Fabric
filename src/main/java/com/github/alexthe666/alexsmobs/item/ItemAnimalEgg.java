@@ -1,7 +1,10 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.Random;
+
 import com.github.alexthe666.alexsmobs.entity.EntityCockroachEgg;
 import com.github.alexthe666.alexsmobs.entity.EntityEmuEgg;
+
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -14,8 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 
-import java.util.Random;
-
 public class ItemAnimalEgg extends Item {
 
     private final Random random = new Random();
@@ -24,10 +25,11 @@ public class ItemAnimalEgg extends Item {
         super(properties);
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
         playerIn.gameEvent(GameEvent.ITEM_INTERACT_START);
-        worldIn.playSound((Player)null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.EGG_THROW, SoundSource.PLAYERS, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+        worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.EGG_THROW, SoundSource.PLAYERS, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
         if (!worldIn.isClientSide) {
             ThrowableItemProjectile eggentity;
             if(this == AMItemRegistry.EMU_EGG){

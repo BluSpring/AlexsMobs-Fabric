@@ -1,8 +1,11 @@
 package com.github.alexthe666.alexsmobs.effect;
 
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityTarantulaHawk;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -20,8 +23,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
-
-import java.util.function.Predicate;
 
 public class EffectDebilitatingSting extends MobEffect {
 
@@ -79,7 +80,7 @@ public class EffectDebilitatingSting extends MobEffect {
     public boolean isEntityInsideOpaqueBlock(Entity entity) {
         Vec3 vec3 = entity.getEyePosition();
         float f = entity.getDimensions(entity.getPose()).width() * 0.8F;
-        AABB axisalignedbb = AABB.ofSize(vec3, (double)f, 1.0E-6D, (double)f);
+        AABB axisalignedbb = AABB.ofSize(vec3, f, 1.0E-6D, f);
         return entity.level().getBlockStates(axisalignedbb).filter(Predicate.not(BlockBehaviour.BlockStateBase::isAir)).anyMatch((p_185969_) -> {
             BlockPos blockpos = AMBlockPos.fromVec3(vec3);
             return p_185969_.isSuffocating(entity.level(), blockpos) && Shapes.joinIsNotEmpty(p_185969_.getCollisionShape(entity.level(), blockpos).move(vec3.x, vec3.y, vec3.z), Shapes.create(axisalignedbb), BooleanOp.AND);
@@ -92,6 +93,7 @@ public class EffectDebilitatingSting extends MobEffect {
         return duration > 0;
     }
 
+    @Override
     public String getDescriptionId() {
         return "alexsmobs.potion.debilitating_sting";
     }

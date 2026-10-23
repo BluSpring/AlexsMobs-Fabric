@@ -24,6 +24,7 @@ public class ItemLeafcutterPupa extends Item {
         super(props);
     }
 
+    @Override
     public InteractionResult useOn(UseOnContext context) {
         Level world = context.getLevel();
         BlockPos blockpos = context.getClickedPos();
@@ -38,8 +39,7 @@ public class ItemLeafcutterPupa extends Item {
                 world.setBlock(blockpos, AMBlockRegistry.LEAFCUTTER_ANTHILL.defaultBlockState(), 11);
                 world.setBlock(blockpos.below(), AMBlockRegistry.LEAFCUTTER_ANT_CHAMBER.defaultBlockState(), 11);
                 BlockEntity tileentity = world.getBlockEntity(blockpos);
-                if (tileentity instanceof TileEntityLeafcutterAnthill) {
-                    TileEntityLeafcutterAnthill beehivetileentity = (TileEntityLeafcutterAnthill)tileentity;
+                if (tileentity instanceof TileEntityLeafcutterAnthill beehivetileentity) {
                     int j = Math.min(3, AMConfig.leafcutterAntColonySize);
                     for(int k = 0; k < j; ++k) {
                         EntityLeafcutterAnt beeentity = new EntityLeafcutterAnt(AMEntityRegistry.LEAFCUTTER_ANT, world);

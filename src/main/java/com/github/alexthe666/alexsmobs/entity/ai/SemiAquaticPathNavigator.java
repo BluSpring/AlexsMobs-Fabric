@@ -16,15 +16,18 @@ public class SemiAquaticPathNavigator extends WaterBoundPathNavigation {
         super(entitylivingIn, worldIn);
     }
 
+    @Override
     protected PathFinder createPathFinder(int p_179679_1_) {
         this.nodeEvaluator = new AmphibiousNodeEvaluator(true);
         return new PathFinder(this.nodeEvaluator, p_179679_1_);
     }
 
+    @Override
     protected boolean canUpdatePath() {
         return true;
     }
 
+    @Override
     protected Vec3 getTempMobPos() {
         return new Vec3(this.mob.getX(), this.mob.getY(0.5D), this.mob.getZ());
     }
@@ -34,10 +37,12 @@ public class SemiAquaticPathNavigator extends WaterBoundPathNavigation {
         return this.level.clip(new ClipContext(posVec31, vector3d, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.mob)).getType() == HitResult.Type.MISS;
     }
 
+    @Override
     public boolean isStableDestination(BlockPos pos) {
         return !this.level.getBlockState(pos.below()).isAir();
     }
 
+    @Override
     public void setCanFloat(boolean canSwim) {
     }
 }

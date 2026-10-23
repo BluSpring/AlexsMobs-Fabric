@@ -24,9 +24,11 @@ public class RenderSeagull extends MobRenderer<EntitySeagull, ModelSeagull> {
         this.addLayer(new LayerHeldItem(this));
     }
 
+    @Override
     protected void scale(EntitySeagull entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntitySeagull entity) {
         return entity.isWingull() ? TEXTURE_WINGULL : TEXTURE;
     }
@@ -37,6 +39,7 @@ public class RenderSeagull extends MobRenderer<EntitySeagull, ModelSeagull> {
             super(render);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntitySeagull entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             ItemStack itemstack = entitylivingbaseIn.getItemBySlot(EquipmentSlot.MAINHAND);
             matrixStackIn.pushPose();

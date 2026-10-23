@@ -1,11 +1,12 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
-import com.github.alexthe666.alexsmobs.entity.EntityCosmicCod;
-import com.mojang.datafixers.DataFixUtils;
-import net.minecraft.world.entity.ai.goal.Goal;
-
 import java.util.List;
 import java.util.function.Predicate;
+
+import com.github.alexthe666.alexsmobs.entity.EntityCosmicCod;
+import com.mojang.datafixers.DataFixUtils;
+
+import net.minecraft.world.entity.ai.goal.Goal;
 
 public class CosmicCodAIFollowLeader extends Goal {
     private static final int INTERVAL_TICKS = 200;
@@ -22,6 +23,7 @@ public class CosmicCodAIFollowLeader extends Goal {
         return reducedTickDelay(100 + p_25252_.getRandom().nextInt(100) % 20);
     }
 
+    @Override
     public boolean canUse() {
         if (this.mob.isGroupLeader() || this.mob.isCircling()) {
             return false;
@@ -44,18 +46,22 @@ public class CosmicCodAIFollowLeader extends Goal {
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         return this.mob.hasGroupLeader() && this.mob.inRangeOfGroupLeader() && !this.mob.isCircling();
     }
 
+    @Override
     public void start() {
         this.timeToRecalcPath = 0;
     }
 
+    @Override
     public void stop() {
         this.mob.leaveGroup();
     }
 
+    @Override
     public void tick() {
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = this.adjustedTickDelay(10);

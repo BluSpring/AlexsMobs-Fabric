@@ -5,6 +5,7 @@ import com.github.alexthe666.alexsmobs.client.model.ModelEndPirateDoor;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityEndPirateDoor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -12,7 +13,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Con
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
-import net.minecraft.world.phys.AABB;
 
 public class RenderEndPirateDoor<T extends TileEntityEndPirateDoor> implements BlockEntityRenderer<T> {
 
@@ -52,6 +52,7 @@ public class RenderEndPirateDoor<T extends TileEntityEndPirateDoor> implements B
         matrixStackIn.popPose();
     }
 
+    @Override
     public int getViewDistance() {
         return 128;
     }

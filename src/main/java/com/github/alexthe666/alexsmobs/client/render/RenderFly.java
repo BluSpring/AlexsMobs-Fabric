@@ -14,13 +14,16 @@ public class RenderFly extends MobRenderer<EntityFly, ModelFly> {
         super(renderManagerIn, new ModelFly(), 0.2F);
     }
 
+    @Override
     protected void scale(EntityFly entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     protected boolean isShaking(EntityFly fly) {
         return fly.isInNether();
     }
 
+    @Override
     protected void setupRotations(EntityFly entityLiving, PoseStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks, float tickDelta) {
         if (this.isShaking(entityLiving)) {
             rotationYaw += (float)(Math.cos((double)entityLiving.tickCount * 7F) * Math.PI * (double)0.9F);
@@ -30,6 +33,7 @@ public class RenderFly extends MobRenderer<EntityFly, ModelFly> {
         super.setupRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks, tickDelta);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityFly entity) {
         return TEXTURE;
     }

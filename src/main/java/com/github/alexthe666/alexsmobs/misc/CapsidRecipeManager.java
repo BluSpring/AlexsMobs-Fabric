@@ -1,21 +1,22 @@
 package com.github.alexthe666.alexsmobs.misc;
 
+import java.util.List;
+import java.util.Map;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import org.apache.logging.log4j.Level;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.ItemStack;
-import org.apache.logging.log4j.Level;
-
-import java.util.List;
-import java.util.Map;
 
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 
@@ -29,6 +30,7 @@ public class CapsidRecipeManager extends SimpleJsonResourceReloadListener implem
         super(GSON, "capsid_recipes");
     }
 
+    @Override
     protected void apply(Map<ResourceLocation, JsonElement> jsonMap, ResourceManager resourceManager, ProfilerFiller profile) {
         this.capsidRecipes.clear();
         ImmutableMap.Builder<ResourceLocation, CapsidRecipe> builder = ImmutableMap.builder();

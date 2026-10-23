@@ -17,6 +17,7 @@ public class BlockTriopsEggs extends FrogspawnBlock {
         super(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).instabreak().noOcclusion().noCollission().sound(SoundType.FROGSPAWN).offsetType(OffsetType.XZ));
     }
 
+    @Override
     public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
         if (!this.canSurvive(blockState, serverLevel, blockPos)) {
             serverLevel.destroyBlock(blockPos, false);
@@ -26,8 +27,8 @@ public class BlockTriopsEggs extends FrogspawnBlock {
             for (int j = 1; j <= i; ++j) {
                 EntityTriops tadpole = AMEntityRegistry.TRIOPS.create(serverLevel);
                 if (tadpole != null) {
-                    double d0 = (double) blockPos.getX();
-                    double d1 = (double) blockPos.getZ();
+                    double d0 = blockPos.getX();
+                    double d1 = blockPos.getZ();
                     int k = randomSource.nextInt(1, 361);
                     tadpole.moveTo(d0, (double) blockPos.getY() - 0.5D, d1, (float) k, 0.0F);
                     tadpole.setPersistenceRequired();

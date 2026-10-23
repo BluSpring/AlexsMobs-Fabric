@@ -1,8 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.message.MessageHurtMultipart;
 import com.github.alexthe666.alexsmobs.message.MessageInteractMultipart;
+import io.github.fabricators_of_create.porting_lib.entity.PartEntity;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -18,10 +23,6 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-
-import io.github.fabricators_of_create.porting_lib.entity.PartEntity;
-import org.jetbrains.annotations.Nullable;
-import java.util.List;
 
 public class EntityCachalotPart extends PartEntity<EntityCachalotWhale> {
 
@@ -60,16 +61,19 @@ public class EntityCachalotPart extends PartEntity<EntityCachalotWhale> {
         entityIn.push(this);
     }
 
+    @Override
     public boolean isPickable() {
         return true;
     }
 
+    @Override
     @Nullable
     public ItemStack getPickResult() {
         Entity parent = this.getParent();
         return parent != null ? parent.getPickResult() : ItemStack.EMPTY;
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if(this.level().isClientSide && this.getParent() != null && !this.getParent().isInvulnerableTo(source)){
             ResourceLocation key = this.level().registryAccess().registry(Registries.DAMAGE_TYPE).get().getKey(source.type());
@@ -80,10 +84,12 @@ public class EntityCachalotPart extends PartEntity<EntityCachalotWhale> {
         return !this.isInvulnerableTo(source) && this.getParent().attackEntityPartFrom(this, source, amount);
     }
 
+    @Override
     public boolean is(Entity entityIn) {
         return this == entityIn || this.getParent() == entityIn;
     }
 
+    @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity) {
         throw new UnsupportedOperationException();
     }
@@ -97,6 +103,7 @@ public class EntityCachalotPart extends PartEntity<EntityCachalotWhale> {
 
     }
 
+    @Override
     public void tick(){
         super.tick();
     }

@@ -60,10 +60,12 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         this.setPathfindingMalus(PathType.WATER_BORDER, 0.0F);
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 7;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
@@ -72,18 +74,22 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 5D).add(Attributes.ARMOR, 2.0D).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.MOVEMENT_SPEED, 0.15F);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.lobsterSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.LOBSTER_HURT;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.LOBSTER_HURT;
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
@@ -99,6 +105,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         };
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new AnimalAIFindWater(this));
         this.goalSelector.addGoal(1, new AnimalAILeaveWater(this));
@@ -108,6 +115,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -163,10 +171,12 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         }
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.fromBucket();
     }
 
+    @Override
     public boolean removeWhenFarAway(double p_27492_) {
         return !this.fromBucket() && !this.hasCustomName();
     }
@@ -177,15 +187,18 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         return Bucketable.bucketMobPickup(player, hand, this).orElse(super.mobInteract(player, hand));
     }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         return worldIn.getFluidState(pos.below()).isEmpty() && worldIn.getFluidState(pos).is(FluidTags.WATER) ? 10.0F : super.getWalkTargetValue(pos, worldIn);
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         this.entityData.set(ATTACK_TICK, 5);
         return super.doHurtTarget(entityIn);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevAttackProgress = attackProgress;
@@ -215,6 +228,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         }
     }
 
+    @Override
     protected void handleAirSupply(int air) {
 
     }
@@ -232,12 +246,14 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         this.entityData.set(VARIANT, Integer.valueOf(variant));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putBoolean("FromBucket", this.fromBucket());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
@@ -260,6 +276,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         return SoundEvents.BUCKET_FILL_FISH;
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         float variantChange = this.getRandom().nextFloat();
@@ -279,8 +296,10 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         SemiAquaticPathNavigator flyingpathnavigator = new SemiAquaticPathNavigator(this, worldIn) {
+            @Override
             public boolean isStableDestination(BlockPos pos) {
                 return this.level.getBlockState(pos).getFluidState().isEmpty();
             }

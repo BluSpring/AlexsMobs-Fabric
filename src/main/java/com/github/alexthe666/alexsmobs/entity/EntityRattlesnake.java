@@ -1,5 +1,8 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
@@ -7,6 +10,8 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -18,10 +23,20 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
@@ -33,10 +48,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.List;
-import java.util.function.Predicate;
 
 public class EntityRattlesnake extends Animal implements IAnimatedEntity {
 
@@ -61,6 +72,7 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
         super(type, worldIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2D, true));
@@ -76,23 +88,28 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
         this.targetSelector.addGoal(4, new ShortDistanceTarget());
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.RATTLESNAKE_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.RATTLESNAKE_HURT;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.rattlesnakeSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         this.setAnimation(ANIMATION_BITE);
         return true;
     }
 
+    @Override
     public boolean canBeAffected(MobEffectInstance potioneffectIn) {
         if (potioneffectIn.is(MobEffects.POISON)) {
             return false;
@@ -123,6 +140,7 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
         this.entityData.set(RATTLING, rattling);
     }
 
+    @Override
     public void tick(){
         super.tick();
         prevCurlProgress = curlProgress;
@@ -187,6 +205,7 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.onGround() && this.isCurled()) {
             if (this.getNavigation().getPath() != null) {
@@ -201,6 +220,7 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 8D).add(Attributes.ARMOR, 0.0D).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.MOVEMENT_SPEED, 0.28F);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.has(DataComponents.FOOD) && stack.get(DataComponents.FOOD) != null;
     }
@@ -290,6 +310,7 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
             super(EntityRattlesnake.this, Player.class, 3, true, true, TARGETABLE_PREDICATE);
         }
 
+        @Override
         public boolean canUse() {
             if (EntityRattlesnake.this.isBaby()) {
                 return false;
@@ -298,12 +319,14 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
             }
         }
 
+        @Override
         public void start(){
             super.start();
             EntityRattlesnake.this.setCurled(false);
             EntityRattlesnake.this.setRattling(true);
         }
 
+        @Override
         protected double getFollowDistance() {
             return 2D;
         }

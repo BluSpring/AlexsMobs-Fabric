@@ -32,32 +32,39 @@ public class LeafcutterAntAIForageLeaves extends MoveToBlockGoal {
         this.ant = LeafcutterAnt;
     }
 
+    @Override
     public boolean canUse() {
         return !ant.isBaby() && !ant.hasLeaf() && !ant.isBaby() && !ant.isQueen() && super.canUse();
     }
 
+    @Override
     public boolean canContinueToUse() {
         return super.canContinueToUse() && !ant.hasLeaf();
     }
 
+    @Override
     public void stop() {
         idleAtLeavesTime = 0;
         logStartPos = null;
         logTopPos = null;
     }
 
+    @Override
     public void start() {
         moveToCooldown = 10 + ant.getRandom().nextInt(10);
     }
 
+    @Override
     public double acceptedDistance() {
         return 2.0D;
     }
 
+    @Override
     public boolean shouldRecalculatePath() {
         return this.tryTicks % 40 == 0 && logStartPos == null;
     }
 
+    @Override
     public void tick() {
         if(moveToCooldown > 0){
             moveToCooldown--;

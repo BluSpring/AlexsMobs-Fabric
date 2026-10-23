@@ -1,6 +1,8 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.PathfinderMob;
@@ -9,13 +11,12 @@ import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 
-import org.jetbrains.annotations.Nullable;
-
 public class LavaAndWaterAIRandomSwimming extends RandomStrollGoal {
     public LavaAndWaterAIRandomSwimming(PathfinderMob creature, double speed, int chance) {
         super(creature, speed, chance, false);
     }
 
+    @Override
     public boolean canUse() {
         if (this.mob.isVehicle() || mob.getTarget() != null) {
             return false;
@@ -39,6 +40,7 @@ public class LavaAndWaterAIRandomSwimming extends RandomStrollGoal {
         }
     }
 
+    @Override
     @Nullable
     protected Vec3 getPosition() {
         if(this.mob.getRandom().nextFloat() < (this.mob.isInLava() ? 0.7F : 0.3F)){

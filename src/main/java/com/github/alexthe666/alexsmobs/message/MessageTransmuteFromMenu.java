@@ -39,8 +39,7 @@ public class MessageTransmuteFromMenu implements CustomPacketPayload {
     public static void handle(MessageTransmuteFromMenu message, ServerPlayNetworking.Context context) {
         context.server().execute(() -> {
             Player player = context.player();
-            if (player != null && player.getId() == message.playerId && player.containerMenu instanceof MenuTransmutationTable) {
-                MenuTransmutationTable table = (MenuTransmutationTable) player.containerMenu;
+            if (player != null && player.getId() == message.playerId && player.containerMenu instanceof MenuTransmutationTable table) {
                 table.transmute(player, message.choice);
             }
         });

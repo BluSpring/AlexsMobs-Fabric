@@ -23,8 +23,7 @@ public class EffectSunbird extends MobEffect {
                 }
             }
             boolean forceFall = false;
-            if (entity instanceof Player) {
-                Player player = (Player) entity;
+            if (entity instanceof Player player) {
                 if (!player.isCreative() || !player.getAbilities().flying) {
                     forceFall = true;
                 }
@@ -55,6 +54,7 @@ public class EffectSunbird extends MobEffect {
         return duration > 0;
     }
 
+    @Override
     public String getDescriptionId() {
         return curse ? "alexsmobs.potion.sunbird_curse" : "alexsmobs.potion.sunbird_blessing";
     }

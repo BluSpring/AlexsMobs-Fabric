@@ -1,7 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.entity.EntitySeal;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -23,8 +26,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.List;
 
 public class SealAIDiveForItems extends Goal {
 
@@ -54,10 +55,12 @@ public class SealAIDiveForItems extends Goal {
         return thrower != null && digPos != null;
     }
 
+    @Override
     public boolean canContinueToUse() {
         return seal.getTarget() == null && seal.revengeCooldown == 0 && seal.getLastHurtByMob() == null && thrower != null && seal.feederUUID != null && digPos != null && seal.level().getFluidState(digPos.above()).is(FluidTags.WATER);
     }
 
+    @Override
     public void tick() {
         seal.setBasking(false);
         if (returnToPlayer) {
@@ -122,6 +125,7 @@ public class SealAIDiveForItems extends Goal {
         }
     }
 
+    @Override
     public void stop() {
         seal.setDigging(false);
         digPos = null;

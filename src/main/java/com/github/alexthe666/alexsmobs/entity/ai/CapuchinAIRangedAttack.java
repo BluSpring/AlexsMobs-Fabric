@@ -1,10 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityCapuchinMonkey;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
-
-import java.util.EnumSet;
 
 public class CapuchinAIRangedAttack extends Goal {
     private final EntityCapuchinMonkey entity;
@@ -31,6 +32,7 @@ public class CapuchinAIRangedAttack extends Goal {
         this.attackCooldown = attackCooldownIn;
     }
 
+    @Override
     public boolean canUse() {
         return this.entity.getDartTarget() != null && this.shouldRange();
     }
@@ -39,16 +41,19 @@ public class CapuchinAIRangedAttack extends Goal {
         return this.entity.attackDecision;
     }
 
+    @Override
     public boolean canContinueToUse() {
         return this.entity.getDartTarget() != null && this.entity.getDartTarget().isAlive() &&(this.canUse() || !this.entity.getNavigation().isDone()) && this.shouldRange();
     }
 
+    @Override
     public void start() {
         super.start();
         this.maxAttackDistance = maxAttackDistanceDef * (entity.hasDart() ? 2 : 1);
         this.entity.setAggressive(true);
     }
 
+    @Override
     public void stop() {
         super.stop();
         this.entity.setAggressive(false);
@@ -58,6 +63,7 @@ public class CapuchinAIRangedAttack extends Goal {
         this.entity.stopUsingItem();
     }
 
+    @Override
     public void tick() {
         Entity livingentity = this.entity.getDartTarget();
         if (livingentity != null && livingentity.isAlive()) {

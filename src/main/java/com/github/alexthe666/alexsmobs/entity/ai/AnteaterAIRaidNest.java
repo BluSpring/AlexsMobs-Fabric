@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.block.BlockLeafcutterAntChamber;
 import com.github.alexthe666.alexsmobs.block.BlockLeafcutterAnthill;
@@ -10,6 +12,7 @@ import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityLeafcutterAnthill;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -30,8 +33,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.List;
 
 public class AnteaterAIRaidNest extends MoveToBlockGoal {
 
@@ -62,19 +63,23 @@ public class AnteaterAIRaidNest extends MoveToBlockGoal {
             }
         }
     }
+    @Override
     public boolean canUse() {
         return !anteater.isBaby() && super.canUse() && anteater.eatAntCooldown <= 0;
     }
 
+    @Override
     public boolean canContinueToUse() {
         return super.canContinueToUse() && anteater.eatAntCooldown <= 0;
     }
 
+    @Override
     public void start() {
         super.start();
         maxEatingTime = 150 + anteater.getRandom().nextInt(200);
     }
 
+    @Override
     public void stop() {
         super.stop();
         idleAtHiveTime = 0;
@@ -83,10 +88,12 @@ public class AnteaterAIRaidNest extends MoveToBlockGoal {
         anteater.resetAntCooldown();
     }
 
+    @Override
     public double acceptedDistance() {
         return 1.2D;
     }
 
+    @Override
     public void tick() {
         super.tick();
         BlockPos blockpos = this.getMoveToTarget();
@@ -130,6 +137,7 @@ public class AnteaterAIRaidNest extends MoveToBlockGoal {
         return blockpos.distSqr(AMBlockPos.fromCoords(positionVec.x(), blockpos.getY(), positionVec.z())) < distance * distance;
     }
 
+    @Override
     protected boolean isReachedTarget() {
         return this.isAboveDestinationAnteater;
     }
@@ -138,8 +146,7 @@ public class AnteaterAIRaidNest extends MoveToBlockGoal {
         if (EventHooks.canEntityGrief(anteater.level(), anteater)) {
             BlockState blockstate = anteater.level().getBlockState(this.blockPos);
             if (blockstate.is(AMBlockRegistry.LEAFCUTTER_ANTHILL)) {
-                if (anteater.level().getBlockEntity(this.blockPos) instanceof TileEntityLeafcutterAnthill) {
-                    TileEntityLeafcutterAnthill anthill = (TileEntityLeafcutterAnthill) anteater.level().getBlockEntity(this.blockPos);
+                if (anteater.level().getBlockEntity(this.blockPos) instanceof TileEntityLeafcutterAnthill anthill) {
                     anthill.angerAntsBecauseAnteater(anteater, blockstate, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
                     anteater.level().destroyBlock(blockPos, false);
                     if (blockstate.getBlock() instanceof BlockLeafcutterAnthill) {
@@ -158,9 +165,8 @@ public class AnteaterAIRaidNest extends MoveToBlockGoal {
         if (EventHooks.canEntityGrief(anteater.level(), anteater)) {
             BlockState blockstate = anteater.level().getBlockState(this.blockPos);
             if (blockstate.is(AMBlockRegistry.LEAFCUTTER_ANTHILL)) {
-                if (anteater.level().getBlockEntity(this.blockPos) instanceof TileEntityLeafcutterAnthill) {
+                if (anteater.level().getBlockEntity(this.blockPos) instanceof TileEntityLeafcutterAnthill anthill) {
                     final RandomSource rand = this.anteater.getRandom();
-                    TileEntityLeafcutterAnthill anthill = (TileEntityLeafcutterAnthill) anteater.level().getBlockEntity(this.blockPos);
                     anthill.angerAntsBecauseAnteater(anteater, blockstate, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
                     anteater.level().updateNeighbourForOutputSignal(this.blockPos, blockstate.getBlock());
                     if(!anthill.hasNoAnts()){

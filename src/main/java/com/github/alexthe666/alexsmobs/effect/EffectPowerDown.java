@@ -54,6 +54,7 @@ public class EffectPowerDown extends MobEffect {
         firstDuration = -1;
     }
 
+    @Override
     public String getDescriptionId() {
         return "alexsmobs.potion.power_down";
     }

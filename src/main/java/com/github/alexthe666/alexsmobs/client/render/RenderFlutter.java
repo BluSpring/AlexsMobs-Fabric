@@ -21,6 +21,7 @@ public class RenderFlutter extends MobRenderer<EntityFlutter, EntityModel<Entity
         this.addLayer(new LayerBasicGlow<>(this, TEXTURE_EYES));
     }
 
+    @Override
     protected void scale(EntityFlutter entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         if(entitylivingbaseIn.isPotted()){
             model = modelPotted;
@@ -30,6 +31,7 @@ public class RenderFlutter extends MobRenderer<EntityFlutter, EntityModel<Entity
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityFlutter entity) {
         return TEXTURE;
     }

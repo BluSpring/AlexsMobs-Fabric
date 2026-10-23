@@ -111,6 +111,7 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         }
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.cockroachSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -123,22 +124,27 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         return reason == MobSpawnType.SPAWNER || !iServerWorld.canSeeSky(pos) && pos.getY() <= 64 && canMonsterSpawnInLight(entityType, iServerWorld, reason, pos, random);
     }
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !requiresCustomPersistence();
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.hasCustomName() || this.isBreaded() || this.isDancing() || this.hasMaracas() || this.isHeadless();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.COCKROACH_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.COCKROACH_HURT;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.1D));
@@ -146,11 +152,13 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.of(AMTagRegistry.COCKROACH_FOODSTUFFS), false));
         this.goalSelector.addGoal(4, new AvoidEntityGoal(this, EntityCentipedeHead.class, 16, 1.3D, 1.0D));
         this.goalSelector.addGoal(4, new AvoidEntityGoal(this, Player.class, 8, 1.3D, 1.0D) {
+            @Override
             public boolean canUse() {
                 return !EntityCockroach.this.isBreaded() && super.canUse();
             }
         });
         this.goalSelector.addGoal(5, new AnimalAIFleeLight(this, 1.0D) {
+            @Override
             public boolean canUse() {
                 return !EntityCockroach.this.isBreaded() && super.canUse();
             }
@@ -161,6 +169,7 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         this.targetSelector.addGoal(1, new CreatureAITargetItems(this, false));
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if(prev){
@@ -178,10 +187,12 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         return prev;
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.COCKROACH_BREEDABLES);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Maracas", this.hasMaracas());
@@ -190,6 +201,7 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         compound.putInt("EggTime", this.timeUntilNextEgg);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setMaracas(compound.getBoolean("Maracas"));
@@ -200,15 +212,18 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         }
     }
 
+    @Override
     @Nullable
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return this.hasMaracas() ? this.isHeadless() ? MARACA_HEADLESS_LOOT : MARACA_LOOT : super.getDefaultLootTable();
     }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         return 0.5F - Math.max(worldIn.getBrightness(LightLayer.BLOCK, pos), worldIn.getBrightness(LightLayer.SKY, pos));
     }
 
+    @Override
     public EntityDimensions getDefaultDimensions(Pose poseIn) {
         return isDancing() ? STAND_SIZE.scale(this.getScale()) : super.getDefaultDimensions(poseIn);
     }
@@ -218,6 +233,7 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         return source.is(DamageTypes.FALL) || source.is(DamageTypes.DROWN) || source.is(DamageTypes.IN_WALL)  || source.is(DamageTypeTags.IS_EXPLOSION) || source.getMsgId().equals("anvil") || super.isInvulnerableTo(source);
     }
 
+    @Override
     public InteractionResult mobInteract(Player p_230254_1_, InteractionHand p_230254_2_) {
         ItemStack lvt_3_1_ = p_230254_1_.getItemInHand(p_230254_2_);
        if (lvt_3_1_.getItem() == AMItemRegistry.MARACA && this.isAlive() && !this.hasMaracas()) {
@@ -281,6 +297,7 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         return this.entityData.get(NEAREST_MUSICIAN).orElse(null);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevDanceProgress = danceProgress;
@@ -360,6 +377,7 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         return this.getBoundingBox().inflate(10, 10, 10);
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67) {
@@ -381,6 +399,7 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         this.entityData.set(NEAREST_MUSICIAN, Optional.ofNullable(uniqueId));
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void setRecordPlayingNearby(BlockPos pos, boolean isPartying) {
         this.jukeboxPosition = pos;
@@ -395,6 +414,7 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         return roach;
     }
 
+    @Override
     public boolean readyForShearing() {
         return this.isAlive() && !this.isBaby() && !isHeadless();
     }
@@ -434,6 +454,7 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         return stack.has(DataComponents.FOOD) || stack.is(AMTagRegistry.COCKROACH_BREEDABLES);
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isDancing() || danceProgress > 0) {
             if (this.getNavigation().getPath() != null) {

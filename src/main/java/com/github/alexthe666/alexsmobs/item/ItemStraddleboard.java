@@ -1,6 +1,10 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.entity.EntityStraddleboard;
+
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.FastColor;
@@ -17,9 +21,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.List;
-import java.util.function.Predicate;
 
 public class ItemStraddleboard extends Item {
 
@@ -39,10 +40,12 @@ public class ItemStraddleboard extends Item {
         return stack.has(DataComponents.DYED_COLOR);
     }
 
+    @Override
     public int getEnchantmentValue() {
         return 1;
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
         HitResult raytraceresult = getPlayerPOVHitResult(worldIn, playerIn, ClipContext.Fluid.ANY);

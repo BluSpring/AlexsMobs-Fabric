@@ -1,5 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAISwimBottom;
 import com.github.alexthe666.alexsmobs.entity.ai.AquaticMoveController;
@@ -7,7 +12,11 @@ import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -21,7 +30,12 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -36,22 +50,15 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.function.Predicate;
 
 public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, Bucketable {
 
@@ -90,6 +97,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
         builder.define(BABY_AGE, 0);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new BreedGoal());
@@ -100,19 +108,23 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
         this.targetSelector.addGoal(1, new CreatureAITargetItems(this, false, 10));
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 5;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
 
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new WaterBoundPathNavigation(this, worldIn);
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWaterOrBubble()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -128,12 +140,14 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
 
     }
 
+    @Override
     protected void playSwimSound(float f) {
         if (random.nextInt(2) == 0) {
             this.playSound(this.getSwimSound(), 0.2F, 1.3F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
         }
     }
 
+    @Override
     protected SoundEvent getSwimSound() {
         return SoundEvents.FISH_SWIM;
     }
@@ -159,11 +173,13 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
         return super.requiresCustomPersistence() || this.fromBucket() || this.isBaby() || fedCarrot;
     }
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !this.isBaby() && !this.fromBucket() && !fedCarrot;
     }
 
 
+    @Override
     protected void handleAirSupply(int i) {
         if (this.isAlive() && !this.isInWaterOrBubble()) {
             this.setAirSupply(i - 1);
@@ -192,10 +208,12 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
         this.entityData.set(TRIOPS_SCALE, scale);
     }
 
+    @Override
     public boolean isBaby() {
         return getBabyAge() < 0;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("FromBucket", this.fromBucket());
@@ -206,6 +224,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
         compound.putInt("BabyAge", this.getBabyAge());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFromBucket(compound.getBoolean("FromBucket"));
@@ -220,15 +239,18 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 4.0D).add(Attributes.MOVEMENT_SPEED, 0.25F);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setTriopsScale(0.9F + random.nextFloat() * 0.2F);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevOnLandProgress = onLandProgress;
@@ -236,7 +258,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
         this.prevTail1Yaw = tail1Yaw;
         this.prevTail2Yaw = tail2Yaw;
         final boolean onLand = !this.isInWaterOrBubble() && this.onGround();
-        this.setXRot((float) -((float) this.getDeltaMovement().y * 2.2F * Mth.RAD_TO_DEG));
+        this.setXRot(-((float) this.getDeltaMovement().y * 2.2F * Mth.RAD_TO_DEG));
         if (onLand && onLandProgress < 5F) {
             onLandProgress++;
         }
@@ -254,12 +276,14 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
         }
     }
 
+    @Override
     public void calculateEntityAnimation(boolean flying) {
         float f1 = (float) Mth.length(this.getX() - this.xo, this.getY() - this.yo, this.getZ() - this.zo);
         float f2 = Math.min(f1 * 6, 1.0F);
         this.walkAnimation.update(f2, 0.4F);
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67) {
@@ -294,6 +318,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
         }
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -350,10 +375,12 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
         return stack;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.TRIOPS_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.TRIOPS_HURT;
     }
@@ -426,10 +453,12 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
+        @Override
         public void stop() {
             eggPos = null;
         }
 
+        @Override
         public boolean canUse() {
             if (EntityTriops.this.pregnant && EntityTriops.this.getRandom().nextInt(30) == 0) {
                 BlockPos egg = getEggLayPos();
@@ -441,6 +470,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
             return false;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return eggPos != null && EntityTriops.this.pregnant && EntityTriops.this.level().getBlockState(eggPos).isAir();
         }
@@ -464,6 +494,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
             return null;
         }
 
+        @Override
         public void tick() {
             super.tick();
             EntityTriops.this.getNavigation().moveTo(eggPos.getX(), eggPos.getY(), eggPos.getZ(), 1);

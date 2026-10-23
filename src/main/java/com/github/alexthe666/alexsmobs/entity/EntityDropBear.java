@@ -1,5 +1,8 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.Random;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
 import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
@@ -10,6 +13,8 @@ import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -23,11 +28,19 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -41,12 +54,9 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
-import java.util.Random;
 
 public class EntityDropBear extends Monster implements IAnimatedEntity {
 
@@ -81,22 +91,27 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
         return pos;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.dropbearSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.DROPBEAR_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.DROPBEAR_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.DROPBEAR_HURT;
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             this.setAnimation(random.nextBoolean() ? ANIMATION_BITE : random.nextBoolean() ? ANIMATION_SWIPE_L : ANIMATION_SWIPE_R);
@@ -104,6 +119,7 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
         return true;
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -113,12 +129,14 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, LivingEntity.class, 30F));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this, EntityDropBear.class));
         this.targetSelector.addGoal(2, new EntityAINearestTarget3D(this, Player.class, true) {
+            @Override
             protected AABB getTargetSearchArea(double targetDistance) {
                 AABB bb = this.mob.getBoundingBox().inflate(targetDistance, targetDistance, targetDistance);
                 return new AABB(bb.minX, 0, bb.minZ, bb.maxX, 256, bb.maxZ);
             }
         });
         this.targetSelector.addGoal(2, new EntityAINearestTarget3D(this, AbstractVillager.class, true) {
+            @Override
             protected AABB getTargetSearchArea(double targetDistance) {
                 AABB bb = this.mob.getBoundingBox().inflate(targetDistance, targetDistance, targetDistance);
                 return new AABB(bb.minX, 0, bb.minZ, bb.maxX, 256, bb.maxZ);
@@ -126,14 +144,17 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
         });
     }
 
+    @Override
     public boolean isInvulnerableTo(DamageSource source) {
         return super.isInvulnerableTo(source) || source.is(DamageTypeTags.IS_FALL) || source.is(DamageTypes.IN_WALL);
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
         super.checkFallDamage(y, onGroundIn, state, pos);
     }
 
+    @Override
     protected void playBlockFallSound() {
         this.onLand();
         super.playBlockFallSound();
@@ -151,6 +172,7 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
         }
     }
 
+    @Override
     public void tick() {
         super.tick();
         AnimationHandler.INSTANCE.updateAnimations(this);
@@ -300,6 +322,7 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
         this.setPos(highest.getX() + 0.5F, highest.getY(), highest.getZ() + 0.5F);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         if (reason == MobSpawnType.NATURAL) {
@@ -330,6 +353,7 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
         }
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 39) {
@@ -374,6 +398,7 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
             super(EntityDropBear.this, 1D, 50);
         }
 
+        @Override
         @Nullable
         protected Vec3 getPosition() {
             if (EntityDropBear.this.isUpsideDown()) {
@@ -391,10 +416,12 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
             }
         }
 
+        @Override
         public boolean canUse() {
             return super.canUse();
         }
 
+        @Override
         public boolean canContinueToUse() {
             if (EntityDropBear.this.isUpsideDown()) {
                 double d0 = EntityDropBear.this.getX() - wantedX;
@@ -406,6 +433,7 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
             }
         }
 
+        @Override
         public void stop() {
             super.stop();
             this.wantedX = 0;
@@ -413,6 +441,7 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
             this.wantedZ = 0;
         }
 
+        @Override
         public void start() {
             if (EntityDropBear.this.isUpsideDown()) {
                 this.mob.getMoveControl().setWantedPosition(this.wantedX, this.wantedY, this.wantedZ, this.speedModifier * 0.7F);

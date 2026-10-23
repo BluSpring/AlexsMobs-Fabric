@@ -130,7 +130,8 @@ public class ModelMantisShrimp extends AdvancedEntityModel<EntityMantisShrimp> {
 		return ImmutableList.of(root, body, head, eye_left, eye_right, fist_left, fist_right, arm_left, arm_right, whisker_left, whisker_right, flapper_left, flapper_right, tail, legs_back, legs_front);
 	}
 
-	public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
+	@Override
+    public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
 		if (this.young) {
 			this.eye_left.setScale(1.15F, 1.15F, 1.15F);
 			this.eye_right.setScale(1.15F, 1.15F, 1.15F);
@@ -176,12 +177,12 @@ public class ModelMantisShrimp extends AdvancedEntityModel<EntityMantisShrimp> {
 		this.head.rotateAngleX += headPitch * 0.8F * Mth.DEG_TO_RAD;
 		this.walk(whisker_left, idleSpeed * 1.5F, idleDegree, false, 0F, -0.25F, ageInTicks, 1);
 		this.walk(whisker_right, idleSpeed * 1.5F, idleDegree, true, 0F, 0.25F, ageInTicks, 1);
-		this.swing(whisker_left, idleSpeed * 1F, idleDegree * 0.75F, false, 1F, 0F, ageInTicks, 1);
-		this.swing(whisker_right, idleSpeed * 1F, idleDegree * 0.75F, false, 1F, 0F, ageInTicks, 1);
-		this.swing(flapper_left, idleSpeed * 1F, idleDegree * 0.75F, false, 2F, -0.3F, ageInTicks, 1);
-		this.swing(flapper_right, idleSpeed * 1F, idleDegree * 0.75F, true, 2F, -0.3F, ageInTicks, 1);
-		this.swing(arm_left, idleSpeed * 1F, idleDegree * 0.5F, false, 1F, -0.2F, ageInTicks, 1);
-		this.swing(arm_right, idleSpeed * 1F, idleDegree * 0.5F, true, 1F, -0.2F, ageInTicks, 1);
+		this.swing(whisker_left, idleSpeed, idleDegree * 0.75F, false, 1F, 0F, ageInTicks, 1);
+		this.swing(whisker_right, idleSpeed, idleDegree * 0.75F, false, 1F, 0F, ageInTicks, 1);
+		this.swing(flapper_left, idleSpeed, idleDegree * 0.75F, false, 2F, -0.3F, ageInTicks, 1);
+		this.swing(flapper_right, idleSpeed, idleDegree * 0.75F, true, 2F, -0.3F, ageInTicks, 1);
+		this.swing(arm_left, idleSpeed, idleDegree * 0.5F, false, 1F, -0.2F, ageInTicks, 1);
+		this.swing(arm_right, idleSpeed, idleDegree * 0.5F, true, 1F, -0.2F, ageInTicks, 1);
 		this.walk(legs_front, walkSpeed, walkDegree * 1, true, 2, 0, limbSwing, limbSwingAmount);
 		this.bob(legs_front, walkSpeed * 0.5F, walkDegree * 4F, true, limbSwing, limbSwingAmount);
 		this.walk(legs_back, walkSpeed, walkDegree * 0.2F, true, 2, 0, limbSwing, limbSwingAmount);
@@ -196,9 +197,9 @@ public class ModelMantisShrimp extends AdvancedEntityModel<EntityMantisShrimp> {
 		progressPositionPrev(arm_right, swimProgress, 0, -3, 0, 5F);
 		if(swimProgress > 0){
 			this.bob(body, walkSpeed * 0.5F, walkDegree * 4F, true, limbSwing, limbSwingAmount);
-			this.walk(body, walkSpeed * 1F, walkDegree * 0.2F, true, 3F, 0F, limbSwing, limbSwingAmount);
-			this.walk(tail, walkSpeed * 1F, walkDegree * 0.5F, true, 3F, -0.2F, limbSwing, limbSwingAmount);
-			this.walk(head, walkSpeed * 1F, walkDegree * 0.1F, true, 2F, 0F, limbSwing, limbSwingAmount);
+			this.walk(body, walkSpeed, walkDegree * 0.2F, true, 3F, 0F, limbSwing, limbSwingAmount);
+			this.walk(tail, walkSpeed, walkDegree * 0.5F, true, 3F, -0.2F, limbSwing, limbSwingAmount);
+			this.walk(head, walkSpeed, walkDegree * 0.1F, true, 2F, 0F, limbSwing, limbSwingAmount);
 
 		}
 		progressPositionPrev(arm_right, punchProgress, 1, -7, 0, 2F);

@@ -69,6 +69,7 @@ public class ItemDimensionalCarver extends Item implements ReequipAnimationItem,
         return 1; // fix for incompatibility with other mods
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
         if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
@@ -99,6 +100,7 @@ public class ItemDimensionalCarver extends Item implements ReequipAnimationItem,
 
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 200;
     }
@@ -108,6 +110,7 @@ public class ItemDimensionalCarver extends Item implements ReequipAnimationItem,
         return 100F;
     }
 
+    @Override
     public void onUseTick(Level level, LivingEntity player, ItemStack itemstack, int count) {
         player.swing(player.getUsedItemHand());
         RandomSource random = player.getRandom();
@@ -142,6 +145,7 @@ public class ItemDimensionalCarver extends Item implements ReequipAnimationItem,
         }
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
         CompoundTag tag = getCustomData(stack);
         if (tag.getBoolean("HASBLOCK")) {
@@ -175,6 +179,7 @@ public class ItemDimensionalCarver extends Item implements ReequipAnimationItem,
     }
 
 
+    @Override
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
         CompoundTag tag = getCustomData(stack);
         tag.putBoolean("HASBLOCK", false);
@@ -194,8 +199,7 @@ public class ItemDimensionalCarver extends Item implements ReequipAnimationItem,
         portal.setLifespan(1200);
         ResourceKey<Level> respawnDimension = Level.OVERWORLD;
         BlockPos respawnPosition = player.getSleepingPos().isPresent() ? player.getSleepingPos().get() : player.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, BlockPos.ZERO);
-        if (player instanceof ServerPlayer) {
-            ServerPlayer serverPlayer = (ServerPlayer) player;
+        if (player instanceof ServerPlayer serverPlayer) {
             respawnDimension = serverPlayer.getRespawnDimension();
             if (serverPlayer.getRespawnPosition() != null) {
                 respawnPosition = serverPlayer.getRespawnPosition();

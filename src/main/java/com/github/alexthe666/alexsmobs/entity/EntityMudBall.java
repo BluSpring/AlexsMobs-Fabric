@@ -24,10 +24,11 @@ public class EntityMudBall extends EntityMobProjectile {
         this.setPos(vec3.x, vec3.y, vec3.z);
     }
 
+    @Override
     public void doBehavior() {
-        this.setDeltaMovement(this.getDeltaMovement().scale((double)0.9F));
+        this.setDeltaMovement(this.getDeltaMovement().scale(0.9F));
         if (!this.isNoGravity()) {
-            this.setDeltaMovement(this.getDeltaMovement().add(0.0D, (double)-0.06F, 0.0D));
+            this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.06F, 0.0D));
         }
 
     }

@@ -14,6 +14,7 @@ public class RenderRoadrunner extends MobRenderer<EntityRoadrunner, ModelRoadrun
         super(renderManagerIn, new ModelRoadrunner(), 0.3F);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityRoadrunner entity) {
         return entity.isMeep() ? TEXTURE_MEEP : TEXTURE;
     }

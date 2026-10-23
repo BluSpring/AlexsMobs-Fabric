@@ -3,30 +3,13 @@ package com.github.alexthe666.alexsmobs.client.render;
 import com.github.alexthe666.alexsmobs.client.model.ModelTiger;
 import com.github.alexthe666.alexsmobs.client.render.layer.LayerTigerEyes;
 import com.github.alexthe666.alexsmobs.entity.EntityTiger;
-import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.phys.Vec3;
-
-import io.github.fabricators_of_create.porting_lib.event.client.LivingEntityRenderEvents;
-import org.joml.Matrix4f;
-
-import org.jetbrains.annotations.Nullable;
 
 public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/tiger/tiger.png");
@@ -61,6 +44,7 @@ public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityTiger entity) {
         if (entity.isSleeping()) {
             return entity.isWhite() ? TEXTURE_SLEEPING_WHITE : TEXTURE_SLEEPING;

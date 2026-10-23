@@ -29,14 +29,17 @@ public class RenderSpectre extends MobRenderer<EntitySpectre, ModelSpectre> {
         this.addLayer(new SpectreMembraneLayer(this));
     }
 
+    @Override
     protected void scale(EntitySpectre entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(1.3F, 1.3F, 1.3F);
     }
 
+    @Override
     protected int getBlockLightLevel(EntitySpectre entityIn, BlockPos partialTicks) {
         return 15;
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntitySpectre entity) {
         return TEXTURE_BONE;
     }
@@ -51,6 +54,7 @@ public class RenderSpectre extends MobRenderer<EntitySpectre, ModelSpectre> {
             super(p_i50928_1_);
         }
 
+        @Override
         public RenderType renderType() {
             return RenderType.eyes(TEXTURE_EYES);
         }
@@ -62,9 +66,10 @@ public class RenderSpectre extends MobRenderer<EntitySpectre, ModelSpectre> {
             super(p_i50928_1_);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntitySpectre entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntitySpectre entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             VertexConsumer lvt_11_1_ = bufferIn.getBuffer(this.getRenderType());
             this.getParentModel().renderToBuffer(matrixStackIn, lvt_11_1_, 15728640,
                     LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0),

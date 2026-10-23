@@ -3,7 +3,6 @@ package com.github.alexthe666.alexsmobs.item;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.fabric.CustomHurtHandlingItem;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -14,7 +13,11 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
@@ -32,6 +35,7 @@ public class AMBlockItem extends BlockItem implements CustomTabBehavior, CustomH
 //        return !(this.getBlock() instanceof ShulkerBoxBlock);
 //    }
 
+    @Override
     public void onDestroyed(ItemEntity p_150700_) {
         if (this.getBlock() instanceof ShulkerBoxBlock) {
             ItemStack itemstack = p_150700_.getItem();

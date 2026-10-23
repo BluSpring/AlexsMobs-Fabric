@@ -1,9 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.entity.util.TendonWhipUtil;
 import com.github.alexthe666.alexsmobs.fabric.FabricHooks;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -21,11 +27,6 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 public class EntityTendonSegment  extends Entity {
 
@@ -83,8 +84,7 @@ public class EntityTendonSegment  extends Entity {
         }
         if(progress == 0F && this.isRetracting()){
             Entity from = this.getFromEntity();
-            if(from instanceof EntityTendonSegment){
-                EntityTendonSegment tendonSegment = (EntityTendonSegment) from;
+            if(from instanceof EntityTendonSegment tendonSegment){
                 tendonSegment.setRetracting(true);
                 updateLastTendon(tendonSegment);
             }else{
@@ -215,8 +215,7 @@ public class EntityTendonSegment  extends Entity {
             creator = level().getPlayerByUUID(this.getCreatorEntityUUID());
         }
         Entity prior = getFromEntity();
-        if(creator instanceof Player){
-            Player player = (Player)creator;
+        if(creator instanceof Player player){
             ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND).is(AMItemRegistry.TENDON_WHIP) ? player.getItemInHand(InteractionHand.MAIN_HAND) : player.getItemInHand(InteractionHand.OFF_HAND);
             if(stack.is(AMItemRegistry.TENDON_WHIP)){
                 this.setHasGlint(stack.hasFoil());

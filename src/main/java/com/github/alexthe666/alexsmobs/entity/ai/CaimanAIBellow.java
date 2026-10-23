@@ -1,13 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityCaiman;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
 
 public class CaimanAIBellow extends Goal {
 
@@ -29,12 +29,14 @@ public class CaimanAIBellow extends Goal {
         return super.canContinueToUse() && bellowTime < 60;
     }
 
+    @Override
     public void stop() {
         bellowTime = 0;
         caiman.bellowCooldown = 1000 + caiman.getRandom().nextInt(1000);
         caiman.setBellowing(false);
     }
 
+    @Override
     public void tick(){
         if(caiman.isInWaterOrBubble()){
             final double d1 = caiman.getFluidHeight(FluidTags.WATER);

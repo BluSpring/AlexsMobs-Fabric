@@ -1,5 +1,8 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.EntityRaccoon;
@@ -23,9 +26,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class AnimalAILootChests extends MoveToBlockGoal {
 
     private final Animal entity;
@@ -43,8 +43,7 @@ public class AnimalAILootChests extends MoveToBlockGoal {
             Block block = world.getBlockState(pos).getBlock();
             boolean listed = false;
             BlockEntity entity = world.getBlockEntity(pos);
-            if (entity instanceof Container) {
-                Container inventory = (Container) entity;
+            if (entity instanceof Container inventory) {
                 try {
                     if (!inventory.isEmpty() && chestLooter.isLootable(inventory)) {
                         return true;
@@ -84,8 +83,7 @@ public class AnimalAILootChests extends MoveToBlockGoal {
 
     public boolean hasLineOfSightChest() {
         HitResult raytraceresult = entity.level().clip(new ClipContext(entity.getEyePosition(1.0F), new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
-        if (raytraceresult instanceof BlockHitResult) {
-            BlockHitResult blockRayTraceResult = (BlockHitResult) raytraceresult;
+        if (raytraceresult instanceof BlockHitResult blockRayTraceResult) {
             BlockPos pos = blockRayTraceResult.getBlockPos();
             return pos.equals(blockPos) || entity.level().isEmptyBlock(pos) || this.entity.level().getBlockEntity(pos) == this.entity.level().getBlockEntity(blockPos);
         }
@@ -114,11 +112,9 @@ public class AnimalAILootChests extends MoveToBlockGoal {
     public void tick() {
         super.tick();
     if(this.blockPos == null){
-        return;
     }else {
             BlockEntity te = this.entity.level().getBlockEntity(this.blockPos);
-            if (te instanceof Container) {
-                Container feeder = (Container) te;
+            if (te instanceof Container feeder) {
                 double distance = this.entity.distanceToSqr(this.blockPos.getX() + 0.5F, this.blockPos.getY() + 0.5F, this.blockPos.getZ() + 0.5F);
                 if (hasLineOfSightChest()) {
                     if (this.isReachedTarget() && distance <= 3) {
@@ -154,6 +150,7 @@ public class AnimalAILootChests extends MoveToBlockGoal {
     }
 
 
+    @Override
     public void stop() {
         super.stop();
         if (this.blockPos != null) {
@@ -173,8 +170,7 @@ public class AnimalAILootChests extends MoveToBlockGoal {
     }
 
     public void toggleChest(Container te, boolean open) {
-        if (te instanceof ChestBlockEntity) {
-            ChestBlockEntity chest = (ChestBlockEntity) te;
+        if (te instanceof ChestBlockEntity chest) {
             if (open) {
                 this.entity.level().blockEvent(this.blockPos, chest.getBlockState().getBlock(), 1, 1);
             } else {

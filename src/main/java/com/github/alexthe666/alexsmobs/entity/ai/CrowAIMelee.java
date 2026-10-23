@@ -20,10 +20,12 @@ public class CrowAIMelee extends Goal {
         this.crow = crow;
     }
 
+    @Override
     public boolean canUse(){
         return crow.getTarget() != null && !crow.isSitting() && crow.getCommand() != 3;
     }
 
+    @Override
     public void start() {
         clockwise = crow.getRandom().nextBoolean();
         yLevel = crow.getRandom().nextInt(2);
@@ -32,6 +34,7 @@ public class CrowAIMelee extends Goal {
         circleDistance = 1F + crow.getRandom().nextFloat() * 3F;
     }
 
+    @Override
     public void stop() {
         clockwise = crow.getRandom().nextBoolean();
         yLevel = crow.getRandom().nextInt(2);
@@ -43,6 +46,7 @@ public class CrowAIMelee extends Goal {
         }
     }
 
+    @Override
     public void tick() {
         LivingEntity target = crow.getTarget();
         if(target != null){

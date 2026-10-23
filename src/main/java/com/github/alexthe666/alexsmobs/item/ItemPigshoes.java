@@ -9,6 +9,7 @@ public class ItemPigshoes extends Item {
         super(props);
     }
 
+    @Override
     public int getEnchantmentValue() {
         return 1;
     }

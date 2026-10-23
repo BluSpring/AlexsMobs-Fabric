@@ -124,10 +124,12 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         return spawnBlock && worldIn.getRawBrightness(pos, 0) > 8;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.komodoDragonSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -150,6 +152,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         this.targetSelector.addGoal(8, new EntityAINearestTarget3D(this, LivingEntity.class, 180, false, true, AMEntityRegistry.buildPredicateFromTag(AMTagRegistry.KOMODO_DRAGON_TARGETS)));
     }
 
+    @Override
     protected Vec3 getRiddenInput(Player player, Vec3 deltaIn) {
         if (player.zza != 0) {
             float f = player.zza < 0.0F ? 0.5F : 1.0F;
@@ -160,6 +163,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         return Vec3.ZERO;
     }
 
+    @Override
     protected void tickRidden(Player player, Vec3 vec3) {
         super.tickRidden(player, vec3);
         if(player.zza != 0 || player.xxa != 0){
@@ -171,10 +175,12 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         }
     }
 
+    @Override
     protected float getRiddenSpeed(Player rider) {
         return (float)(this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 2);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -188,18 +194,22 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         }
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.KOMODO_DRAGON_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.KOMODO_DRAGON_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.KOMODO_DRAGON_HURT;
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("SpitTime")) {
@@ -210,6 +220,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         this.setSaddled(compound.getBoolean("Saddle"));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("SpitTime", this.timeUntilSpit);
@@ -218,11 +229,13 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         compound.putInt("JostlingCooldown", this.jostleCooldown);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         Item item = stack.getItem();
         return isTame() && stack.is(AMTagRegistry.KOMODO_DRAGON_BREEDABLES);
     }
 
+    @Override
     public void tick() {
         prevJostleAngle = this.getJostleAngle();
         super.tick();
@@ -239,8 +252,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         if(riderAttackCooldown > 0){
             riderAttackCooldown--;
         }
-        if(this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player){
-            Player rider = (Player)this.getControllingPassenger();
+        if(this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player rider){
             if(rider.getLastHurtMob() != null && this.distanceTo(rider.getLastHurtMob()) < this.getBbWidth() + 3F && !this.isAlliedTo(rider.getLastHurtMob())){
                 UUID preyUUID = rider.getLastHurtMob().getUUID();
                 if (!this.getUUID().equals(preyUUID) && riderAttackCooldown == 0) {
@@ -274,11 +286,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
                 sitProgress--;
         }
 
-        if(this.getCommand() == 2 && !this.isVehicle()){
-            this.setOrderedToSit(true);
-        }else{
-            this.setOrderedToSit(false);
-        }
+        this.setOrderedToSit(this.getCommand() == 2 && !this.isVehicle());
 
         if (jostleCooldown > 0) {
             jostleCooldown--;
@@ -295,10 +303,12 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         }
     }
 
+    @Override
     public EntityDimensions getDefaultDimensions(Pose poseIn) {
         return isJostling() && !isBaby() ? JOSTLING_SIZE.scale(this.getScale()) : super.getDefaultDimensions(poseIn);
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -316,6 +326,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         return super.isAlliedTo(entityIn);
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (super.doHurtTarget(entityIn)) {
             if (entityIn instanceof LivingEntity) {
@@ -334,6 +345,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         }
     }
 
+    @Override
     public boolean canBeAffected(MobEffectInstance potioneffectIn) {
         if (potioneffectIn.is(MobEffects.POISON)) {
             return false;
@@ -341,17 +353,18 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         return super.canBeAffected(potioneffectIn);
     }
 
+    @Override
     @Nullable
     public LivingEntity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof Player) {
-                Player player = (Player) passenger;
+            if (passenger instanceof Player player) {
                 return player;
             }
         }
         return null;
     }
 
+    @Override
     public void positionRider(Entity passenger, Entity.MoveFunction moveFunc) {
         if (this.hasPassenger(passenger)) {
             float radius = 0;
@@ -371,6 +384,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
 
 
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -428,10 +442,12 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         super(type, worldIn);
     }
 
+    @Override
     protected float getWaterSlowDown() {
         return 0.98F;
     }
 
+    @Override
     public void setTarget(@Nullable LivingEntity entitylivingbaseIn) {
         if(!this.isBaby() || slaughterCooldown > 0){
             super.setTarget(entitylivingbaseIn);
@@ -528,6 +544,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
     public void playJostleSound() {
     }
 
+    @Override
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.isSaddled()) {

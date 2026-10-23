@@ -19,6 +19,7 @@ public class ItemEnderiophageRocket extends Item {
         super(group);
     }
 
+    @Override
     public InteractionResult useOn(UseOnContext context) {
         Level world = context.getLevel();
         if (!world.isClientSide) {
@@ -34,6 +35,7 @@ public class ItemEnderiophageRocket extends Item {
         return InteractionResult.sidedSuccess(world.isClientSide);
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         if (playerIn.isFallFlying()) {
             ItemStack itemstack = playerIn.getItemInHand(handIn);

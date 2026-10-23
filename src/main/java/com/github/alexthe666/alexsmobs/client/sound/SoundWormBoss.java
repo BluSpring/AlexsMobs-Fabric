@@ -21,6 +21,7 @@ public class SoundWormBoss extends AbstractTickableSoundInstance {
         this.z = this.voidWorm.getZ();
     }
 
+    @Override
     public boolean canPlaySound() {
         return !this.voidWorm.isSilent() && ClientProxy.WORMBOSS_SOUND_MAP.get(this.voidWorm.getId()) == this;
     }
@@ -37,12 +38,13 @@ public class SoundWormBoss extends AbstractTickableSoundInstance {
 
 
     public double distanceSq(double p_218140_1_, double p_218140_3_, double p_218140_5_) {
-        double lvt_10_1_ = (double)this.getX() - p_218140_1_;
-        double lvt_12_1_ = (double)this.getY() - p_218140_3_;
-        double lvt_14_1_ = (double)this.getZ() - p_218140_5_;
+        double lvt_10_1_ = this.getX() - p_218140_1_;
+        double lvt_12_1_ = this.getY() - p_218140_3_;
+        double lvt_14_1_ = this.getZ() - p_218140_5_;
         return lvt_10_1_ * lvt_10_1_ + lvt_12_1_ * lvt_12_1_ + lvt_14_1_ * lvt_14_1_;
     }
 
+    @Override
     public void tick() {
         if(ticksExisted % 100 == 0){
             Minecraft.getInstance().getMusicManager().stopPlaying();

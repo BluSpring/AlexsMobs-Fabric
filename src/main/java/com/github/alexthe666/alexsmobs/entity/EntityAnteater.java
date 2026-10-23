@@ -1,12 +1,23 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.Locale;
+import java.util.UUID;
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHurtByTargetNotBaby;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIRideParent;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
+import com.github.alexthe666.alexsmobs.entity.ai.AnteaterAIRaidNest;
+import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -24,10 +35,21 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -39,12 +61,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
-import java.util.Locale;
-import java.util.UUID;
-import java.util.function.Predicate;
 
 public class EntityAnteater extends Animal implements NeutralMob, IAnimatedEntity, ITargetsDroppedItems {
 
@@ -84,10 +100,12 @@ public class EntityAnteater extends Animal implements NeutralMob, IAnimatedEntit
         return worldIn.getRawBrightness(pos, 0) > 8;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.anteaterSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new AIMelee());
@@ -108,26 +126,31 @@ public class EntityAnteater extends Animal implements NeutralMob, IAnimatedEntit
         return super.isInvulnerableTo(source) || source.getDirectEntity() != null && source.getDirectEntity() instanceof EntityLeafcutterAnt;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.ANTEATER_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.ANTEATER_HURT;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Standing", this.isStanding());
         compound.putInt("AntCooldown", this.eatAntCooldown);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setStanding(compound.getBoolean("Standing"));
         this.eatAntCooldown = compound.getInt("AntCooldown");
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.ANTEATER_BREEDABLES);
     }
@@ -141,22 +164,27 @@ public class EntityAnteater extends Animal implements NeutralMob, IAnimatedEntit
         builder.define(ANGER_TIME, 0);
     }
 
+    @Override
     public int getRemainingPersistentAngerTime() {
         return this.entityData.get(ANGER_TIME);
     }
 
+    @Override
     public void setRemainingPersistentAngerTime(int time) {
         this.entityData.set(ANGER_TIME, time);
     }
 
+    @Override
     public UUID getPersistentAngerTarget() {
         return this.lastHurtBy;
     }
 
+    @Override
     public void setPersistentAngerTarget(@Nullable UUID target) {
         this.lastHurtBy = target;
     }
 
+    @Override
     public void startPersistentAngerTimer() {
         this.setRemainingPersistentAngerTime(ANGRY_TIMER.sample(this.random));
     }
@@ -177,10 +205,12 @@ public class EntityAnteater extends Animal implements NeutralMob, IAnimatedEntit
         this.entityData.set(ANT_ON_TONGUE, standing);
     }
 
+    @Override
     public boolean canCollideWith(Entity entity) {
         return !(entity instanceof EntityLeafcutterAnt) && super.canCollideWith(entity);
     }
 
+    @Override
     public void push(Entity entity) {
         if (!(entity instanceof EntityLeafcutterAnt)) {
             super.push(entity);
@@ -195,16 +225,19 @@ public class EntityAnteater extends Animal implements NeutralMob, IAnimatedEntit
         this.entityData.set(LEANING_DOWN, leaning);
     }
 
+    @Override
     protected boolean isImmobile() {
         return super.isImmobile();
     }
 
+    @Override
     protected void customServerAiStep() {
         if (!this.level().isClientSide) {
             this.updatePersistentAnger((ServerLevel) this.level(), false);
         }
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         final ItemStack itemstack = player.getItemInHand(hand);
         final InteractionResult type = super.mobInteract(player, hand);
@@ -225,6 +258,7 @@ public class EntityAnteater extends Animal implements NeutralMob, IAnimatedEntit
     }
 
 
+    @Override
     public void tick() {
         super.tick();
         prevStandProgress = standProgress;
@@ -423,6 +457,7 @@ public class EntityAnteater extends Animal implements NeutralMob, IAnimatedEntit
         return lowercaseName.contains("peter") || lowercaseName.contains("petr") || lowercaseName.contains("zot");
     }
 
+    @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         if (spawnDataIn == null)
             spawnDataIn = new AgeableMob.AgeableMobGroupData(0.5F);
@@ -458,6 +493,7 @@ public class EntityAnteater extends Animal implements NeutralMob, IAnimatedEntit
             return EntityAnteater.this.getTarget() != null && EntityAnteater.this.getTarget().isAlive() && !EntityAnteater.this.isBaby();
         }
 
+        @Override
         public void tick() {
             final LivingEntity enemy = EntityAnteater.this.getTarget();
             if (enemy != null) {
@@ -486,6 +522,7 @@ public class EntityAnteater extends Animal implements NeutralMob, IAnimatedEntit
             }
         }
 
+        @Override
         public void stop() {
             EntityAnteater.this.setStanding(false);
             super.stop();

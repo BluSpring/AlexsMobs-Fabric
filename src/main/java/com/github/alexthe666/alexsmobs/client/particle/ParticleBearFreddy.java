@@ -30,10 +30,12 @@ public class ParticleBearFreddy extends Particle {
         this.lifetime = 15;
     }
 
+    @Override
     public ParticleRenderType getRenderType() {
         return ParticleRenderType.CUSTOM;
     }
 
+    @Override
     public void render(VertexConsumer vertexConsumer, Camera camera, float partialTick) {
         float fogBefore = RenderSystem.getShaderFogEnd();
         RenderSystem.setShaderFogEnd(40);
@@ -64,6 +66,7 @@ public class ParticleBearFreddy extends Particle {
 
     @Environment(EnvType.CLIENT)
     public static class Factory implements ParticleProvider<SimpleParticleType> {
+        @Override
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             return new ParticleBearFreddy(worldIn, x, y, z);
         }

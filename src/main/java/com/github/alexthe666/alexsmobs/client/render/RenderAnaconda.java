@@ -18,6 +18,7 @@ public class RenderAnaconda extends MobRenderer<EntityAnaconda, ModelAnaconda<En
         super(renderManagerIn, new ModelAnaconda(AnacondaPartIndex.HEAD), 0.3F);
     }
 
+    @Override
     protected void scale(EntityAnaconda entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(entitylivingbaseIn.getScale(), entitylivingbaseIn.getScale(), entitylivingbaseIn.getScale());
     }
@@ -26,6 +27,7 @@ public class RenderAnaconda extends MobRenderer<EntityAnaconda, ModelAnaconda<En
         return yellow ? shedding ? TEXTURE_YELLOW_SHEDDING : TEXTURE_YELLOW : shedding ? TEXTURE_SHEDDING : TEXTURE;
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityAnaconda entity) {
         return getAnacondaTexture(entity.isYellow(), entity.isShedding());
     }

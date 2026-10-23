@@ -1,10 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityGeladaMonkey;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
-import net.minecraft.world.entity.ai.goal.Goal;
 
-import java.util.EnumSet;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 public class GeladaAIGroom extends Goal {
 
@@ -41,6 +42,7 @@ public class GeladaAIGroom extends Goal {
         return beingGroomed != null && beingGroomed.isAlive() && !beingGroomed.shouldStopBeingGroomed() && groomTime < 200 && (beingGroomed.groomerID == -1 || beingGroomed.groomerID == monkey.getId());
     }
 
+    @Override
     public void stop(){
         groomTime = 0;
         monkey.isGrooming = false;
@@ -50,6 +52,7 @@ public class GeladaAIGroom extends Goal {
         beingGroomed = null;
     }
 
+    @Override
     public void tick() {
         double dist = monkey.distanceTo(beingGroomed);
         if(dist < monkey.getBbWidth() + 0.5F){

@@ -1,5 +1,10 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityCachalotEcho;
 import com.github.alexthe666.alexsmobs.message.MessageSetPupfishChunkOnClient;
@@ -7,6 +12,7 @@ import com.github.alexthe666.alexsmobs.misc.AMPointOfInterestRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.world.AMWorldData;
 import com.google.common.base.Predicates;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -26,11 +32,6 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.gameevent.GameEvent;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ItemEcholocator extends Item {
 
@@ -77,12 +78,10 @@ public class ItemEcholocator extends Item {
         return world.getBlockState(checkPos).isAir() && world.getBrightness(LightLayer.SKY, checkPos) == 0 && world.getBrightness(LightLayer.BLOCK, checkPos) < 4;
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player livingEntityIn, InteractionHand handIn) {
         ItemStack stack = livingEntityIn.getItemInHand(handIn);
-        boolean left = false;
-        if (livingEntityIn.getUsedItemHand() == InteractionHand.OFF_HAND && livingEntityIn.getMainArm() == HumanoidArm.RIGHT || livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND && livingEntityIn.getMainArm() == HumanoidArm.LEFT) {
-            left = true;
-        }
+        boolean left = livingEntityIn.getUsedItemHand() == InteractionHand.OFF_HAND && livingEntityIn.getMainArm() == HumanoidArm.RIGHT || livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND && livingEntityIn.getMainArm() == HumanoidArm.LEFT;
         EntityCachalotEcho whaleEcho = new EntityCachalotEcho(worldIn, livingEntityIn, !left, type == EchoType.PUPFISH);
         if (!worldIn.isClientSide && worldIn instanceof ServerLevel) {
             BlockPos playerPos = livingEntityIn.blockPosition();
@@ -130,7 +129,7 @@ public class ItemEcholocator extends Item {
                 whaleEcho.shoot(d0, d1, d2, 0.4F, 0.3F);
                 worldIn.addFreshEntity(whaleEcho);
                 livingEntityIn.gameEvent(GameEvent.ITEM_INTERACT_START);
-                worldIn.playSound((Player)null, whaleEcho.getX(), whaleEcho.getY(), whaleEcho.getZ(), AMSoundRegistry.CACHALOT_WHALE_CLICK, SoundSource.PLAYERS, 1.0F, 1.0F);
+                worldIn.playSound(null, whaleEcho.getX(), whaleEcho.getY(), whaleEcho.getZ(), AMSoundRegistry.CACHALOT_WHALE_CLICK, SoundSource.PLAYERS, 1.0F, 1.0F);
                 stack.hurtAndBreak(1, livingEntityIn, EquipmentSlot.MAINHAND);
             }
         }

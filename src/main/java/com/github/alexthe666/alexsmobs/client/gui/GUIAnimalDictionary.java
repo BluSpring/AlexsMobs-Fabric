@@ -27,6 +27,7 @@ public class GUIAnimalDictionary extends GuiBasicBook {
         this.currentPageJSON = this.getTextFileDirectory().withSuffix(page + ".json");
     }
 
+    @Override
     public void render(GuiGraphics guiGraphics, int x, int y, float partialTicks) {
         RenderLaviathan.renderWithoutShaking = true;
         ModelLaviathan.renderStaticInBook = true;
@@ -39,14 +40,17 @@ public class GUIAnimalDictionary extends GuiBasicBook {
         RenderUnderminer.renderWithPickaxe = false;
     }
 
+    @Override
     protected int getBindingColor() {
         return 0X606B26;
     }
 
+    @Override
     public ResourceLocation getRootPage() {
         return ROOT;
     }
 
+    @Override
     public ResourceLocation getTextFileDirectory() {
         return ResourceLocation.parse("alexsmobs:book/animal_dictionary/");
     }

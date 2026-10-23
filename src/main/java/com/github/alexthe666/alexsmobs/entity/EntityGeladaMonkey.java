@@ -84,6 +84,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         this.setPathfindingMalus(PathType.WATER, -1.0F);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.geladaMonkeySpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -92,27 +93,32 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 18.0D).add(Attributes.ATTACK_DAMAGE, 4.0D).add(Attributes.MOVEMENT_SPEED, 0.25F);
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 10;
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.GELADA_MONKEY_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.GELADA_MONKEY_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.GELADA_MONKEY_HURT;
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5D, true) {
-            protected double getAttackReachSqr(LivingEntity attackTarget) {
+            private double getAttackReachSqr(LivingEntity attackTarget) {
                 return EntityGeladaMonkey.this.getBbWidth() * 2.0F * EntityGeladaMonkey.this.getBbWidth() * 2.0F + attackTarget.getBbWidth() + 1.5;
             }
 
@@ -141,6 +147,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         }));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Leader", this.isLeader());
@@ -149,6 +156,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         compound.putBoolean("MonkeySitting", this.isSitting());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setLeader(compound.getBoolean("Leader"));
@@ -157,6 +165,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         this.leaderFightTime = compound.getInt("FightTime");
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.GELADA_MONKEY_BREEDABLES);
     }
@@ -202,6 +211,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         this.entityData.set(GRASS_TIME, i);
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevSitProgress = this.sitProgress;
@@ -298,6 +308,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         }
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             attackAnimation();
@@ -334,6 +345,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         return new Animation[]{ANIMATION_SWIPE_R, ANIMATION_SWIPE_L, ANIMATION_GROOM, ANIMATION_CHEST};
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if (prev) {
@@ -347,6 +359,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         return prev;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -389,6 +402,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         return this.getLastHurtByMob() instanceof EntityGeladaMonkey && this.random.nextInt(3) == 0;
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isSitting() || this.getAnimation() == ANIMATION_CHEST) {
             if (this.getNavigation().getPath() != null) {
@@ -399,10 +413,10 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         super.travel(vec3d);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
-        if (spawnDataIn instanceof AgeableMob.AgeableMobGroupData) {
-            AgeableMob.AgeableMobGroupData pack = (AgeableMob.AgeableMobGroupData) spawnDataIn;
+        if (spawnDataIn instanceof AgeableMobGroupData pack) {
             if (pack.getGroupSize() == 0 || pack.getGroupSize() > 4 && random.nextInt(2) == 0) {
                 this.setLeader(true);
             }
@@ -438,10 +452,12 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
             return false;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return target != null && EntityGeladaMonkey.this.level().getBlockState(target).is(AMTagRegistry.GELADA_MONKEY_GRASS);
         }
 
+        @Override
         public void tick() {
             EntityGeladaMonkey.this.setSitting(false);
             EntityGeladaMonkey.this.getNavigation().moveTo(target.getX() + 0.5F, target.getY() + 0.5F, target.getZ() + 0.5F, 1.4F);

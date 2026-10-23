@@ -18,6 +18,7 @@ public class LayerSealItem extends RenderLayer<EntitySeal, ModelSeal> {
         super(render);
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntitySeal entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack itemstack = entitylivingbaseIn.getMainHandItem();
         matrixStackIn.pushPose();

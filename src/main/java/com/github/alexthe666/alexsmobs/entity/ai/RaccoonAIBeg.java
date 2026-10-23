@@ -1,11 +1,12 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityRaccoon;
+
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
-
-import java.util.EnumSet;
 
 public class RaccoonAIBeg extends Goal {
     private static final TargetingConditions ENTITY_PREDICATE = TargetingConditions.forNonCombat().range(32D);
@@ -21,6 +22,7 @@ public class RaccoonAIBeg extends Goal {
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
+    @Override
     public boolean canUse() {
         if (this.delayTemptCounter > 0) {
             --this.delayTemptCounter;
@@ -40,14 +42,17 @@ public class RaccoonAIBeg extends Goal {
     }
 
 
+    @Override
     public boolean canContinueToUse() {
         return this.raccoon.getMainHandItem().isEmpty() && this.canUse();
     }
 
+    @Override
     public void start() {
         this.isRunning = true;
     }
 
+    @Override
     public void stop() {
         this.closestPlayer = null;
         this.raccoon.getNavigation().stop();
@@ -56,6 +61,7 @@ public class RaccoonAIBeg extends Goal {
         this.isRunning = false;
     }
 
+    @Override
     public void tick() {
         this.raccoon.getLookControl().setLookAt(this.closestPlayer, (float)(this.raccoon.getMaxHeadYRot() + 20), (float)this.raccoon.getMaxHeadXRot());
         if (this.raccoon.distanceToSqr(this.closestPlayer) < 12D) {

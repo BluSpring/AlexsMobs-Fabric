@@ -1,17 +1,18 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.entity.EntityMudskipper;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
 
 public class MudskipperAIDisplay extends Goal {
 
@@ -52,6 +53,7 @@ public class MudskipperAIDisplay extends Goal {
         return false;
     }
 
+    @Override
     public void start(){
         this.mudskipper.displayTimer = 0;
         this.angle = 0;
@@ -63,6 +65,7 @@ public class MudskipperAIDisplay extends Goal {
         this.partner.displayDirection = !dir;
     }
 
+    @Override
     public void stop() {
         this.center = null;
         this.mudskipper.setDisplaying(false);
@@ -79,6 +82,7 @@ public class MudskipperAIDisplay extends Goal {
 
     }
 
+    @Override
     public void tick() {
         if(partner != null){
             if(center == null || mudskipper.getRandom().nextInt(100) == 0){

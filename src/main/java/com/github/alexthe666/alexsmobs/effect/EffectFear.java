@@ -27,6 +27,7 @@ public class EffectFear extends MobEffect {
         return duration > 0;
     }
 
+    @Override
     public String getDescriptionId() {
         return "alexsmobs.potion.fear";
     }

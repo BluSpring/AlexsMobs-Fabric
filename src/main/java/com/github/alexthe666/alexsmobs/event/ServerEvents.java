@@ -714,7 +714,6 @@ public class ServerEvents {
                 if (event.getNewTarget().getItemBySlot(EquipmentSlot.CHEST).is(AMItemRegistry.UNSETTLING_KIMONO)
                         && event.getEntity().getLastHurtByMob() != event.getNewTarget()) {
                     event.setCanceled(true);
-                    return;
                 }
             }
         }

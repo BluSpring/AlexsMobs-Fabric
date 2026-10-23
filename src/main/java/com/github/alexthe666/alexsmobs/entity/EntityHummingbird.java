@@ -1,5 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.github.alexthe666.alexsmobs.block.BlockHummingbirdFeeder;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.FlightMoveController;
@@ -9,6 +15,8 @@ import com.github.alexthe666.alexsmobs.misc.AMPointOfInterestRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.base.Predicates;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -22,10 +30,20 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
@@ -33,21 +51,19 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class EntityHummingbird extends Animal {
 
@@ -78,22 +94,27 @@ public class EntityHummingbird extends Animal {
         this.setPathfindingMalus(PathType.LEAVES, 0.0F);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.hummingbirdSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.HUMMINGBIRD_IDLE;
     }
 
+    @Override
     public int getAmbientSoundInterval() {
         return 60;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.HUMMINGBIRD_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.HUMMINGBIRD_HURT;
     }
@@ -103,19 +124,23 @@ public class EntityHummingbird extends Animal {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 4.0D).add(Attributes.FLYING_SPEED, 7F).add(Attributes.ATTACK_DAMAGE, 0.0D).add(Attributes.MOVEMENT_SPEED, 0.45F);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.HUMMINGBIRD_BREEDABLES);
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 7;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
 
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new BreedGoal(this, 1));
         this.goalSelector.addGoal(2, new TemptGoal(this, 1, Ingredient.of(AMTagRegistry.HUMMINGBIRD_BREEDABLES), false));
@@ -126,10 +151,13 @@ public class EntityHummingbird extends Animal {
         this.goalSelector.addGoal(6, new FloatGoal(this));
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {}
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         FlyingPathNavigation flyingpathnavigator = new FlyingPathNavigation(this, worldIn) {
+            @Override
             public boolean isStableDestination(BlockPos pos) {
                 return !this.level.getBlockState(pos.below(2)).isAir();
             }
@@ -140,10 +168,12 @@ public class EntityHummingbird extends Animal {
         return flyingpathnavigator;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -156,10 +186,12 @@ public class EntityHummingbird extends Animal {
     }
 
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         return worldIn.getBlockState(pos).isAir() ? 10.0F : 0.0F;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
@@ -174,6 +206,7 @@ public class EntityHummingbird extends Animal {
 
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
@@ -206,6 +239,7 @@ public class EntityHummingbird extends Animal {
         builder.define(FEEDER_POS, Optional.empty());
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setVariant(this.getRandom().nextInt(3));
@@ -243,6 +277,7 @@ public class EntityHummingbird extends Animal {
         this.entityData.set(CROPS_POLLINATED, Integer.valueOf(crops));
     }
 
+    @Override
     public void tick() {
         super.tick();
         Vec3 vector3d = this.getDeltaMovement();
@@ -296,6 +331,7 @@ public class EntityHummingbird extends Animal {
         prevSipProgress = sipProgress;
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if(id == 68){
@@ -342,6 +378,7 @@ public class EntityHummingbird extends Animal {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));
         }
 
+        @Override
         public void stop(){
             localFeeder = null;
             idleAtFlowerTime = 0;
@@ -379,10 +416,12 @@ public class EntityHummingbird extends Animal {
            return false;
         }
 
+        @Override
         public boolean canContinueToUse(){
             return localFeeder != null && isValidFeeder(level().getBlockState(localFeeder)) && EntityHummingbird.this.sipCooldown == 0;
         }
 
+        @Override
         public void tick(){
             if(localFeeder != null && isValidFeeder(level().getBlockState(localFeeder))){
                 if(EntityHummingbird.this.getY() > localFeeder.getY() && !EntityHummingbird.this.onGround()){

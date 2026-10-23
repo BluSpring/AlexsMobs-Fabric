@@ -25,6 +25,7 @@ public class EntityEmuEgg extends ThrowableItemProjectile {
         super(AMEntityRegistry.EMU_EGG, x, y, z, worldIn);
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 3) {
@@ -35,6 +36,7 @@ public class EntityEmuEgg extends ThrowableItemProjectile {
 
     }
 
+    @Override
     protected void onHit(HitResult result) {
         super.onHit(result);
         if (!this.level().isClientSide) {
@@ -61,6 +63,7 @@ public class EntityEmuEgg extends ThrowableItemProjectile {
 
     }
 
+    @Override
     protected Item getDefaultItem() {
         return AMItemRegistry.EMU_EGG;
     }

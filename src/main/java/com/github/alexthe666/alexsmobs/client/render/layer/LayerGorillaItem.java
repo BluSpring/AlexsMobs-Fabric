@@ -21,6 +21,7 @@ public class LayerGorillaItem extends RenderLayer<EntityGorilla, ModelGorilla> {
         super(render);
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityGorilla entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack itemstack = entitylivingbaseIn.getItemBySlot(EquipmentSlot.MAINHAND);
         String name = entitylivingbaseIn.getName().getString().toLowerCase();

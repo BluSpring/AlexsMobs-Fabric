@@ -20,6 +20,7 @@ public class ParticleWhaleSplash  extends WaterDropParticle {
 
     }
 
+    @Override
     public void tick() {
         super.tick();
         if(this.yd < 0D){
@@ -40,6 +41,7 @@ public class ParticleWhaleSplash  extends WaterDropParticle {
             this.spriteSet = p_i50679_1_;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType p_199234_1_, ClientLevel p_199234_2_, double p_199234_3_, double p_199234_5_, double p_199234_7_, double p_199234_9_, double p_199234_11_, double p_199234_13_) {
             ParticleWhaleSplash lvt_15_1_ = new ParticleWhaleSplash(p_199234_2_, p_199234_3_, p_199234_5_, p_199234_7_, p_199234_9_, p_199234_11_, p_199234_13_);
             lvt_15_1_.pickSprite(this.spriteSet);

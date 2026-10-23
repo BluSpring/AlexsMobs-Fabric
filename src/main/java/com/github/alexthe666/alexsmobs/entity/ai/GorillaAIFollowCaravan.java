@@ -1,13 +1,14 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityGorilla;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
-import java.util.List;
 
 public class GorillaAIFollowCaravan extends Goal {
     public final EntityGorilla gorilla;
@@ -20,6 +21,7 @@ public class GorillaAIFollowCaravan extends Goal {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
+    @Override
     public boolean canUse() {
         if (!this.gorilla.isSilverback() && !this.gorilla.inCaravan() && !gorilla.isSitting()) {
             double dist = 15D;
@@ -69,6 +71,7 @@ public class GorillaAIFollowCaravan extends Goal {
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
+    @Override
     public boolean canContinueToUse() {
         if (gorilla.isSitting()) {
             return false;
@@ -97,11 +100,13 @@ public class GorillaAIFollowCaravan extends Goal {
         }
     }
 
+    @Override
     public void stop() {
         this.gorilla.leaveCaravan();
         this.speedModifier = 1.5D;
     }
 
+    @Override
     public void tick() {
         if (this.gorilla.inCaravan() && !this.gorilla.isSitting()) {
             EntityGorilla llamaentity = this.gorilla.getCaravanHead();

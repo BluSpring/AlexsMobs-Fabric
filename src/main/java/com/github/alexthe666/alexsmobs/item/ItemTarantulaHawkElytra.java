@@ -1,6 +1,9 @@
 package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import io.github.fabricators_of_create.porting_lib.item.extensions.ArmorTextureItem;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -16,11 +19,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import io.github.fabricators_of_create.porting_lib.item.extensions.ArmorTextureItem;
-
-import org.jetbrains.annotations.Nullable;
-
-import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents;
 import net.fabricmc.fabric.api.entity.event.v1.FabricElytraItem;
 
 public class ItemTarantulaHawkElytra extends ArmorItem implements ArmorTextureItem, FabricElytraItem {
@@ -33,6 +31,7 @@ public class ItemTarantulaHawkElytra extends ArmorItem implements ArmorTextureIt
         return stack.getDamageValue() < stack.getMaxDamage() - 1;
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         return super.use(worldIn, playerIn, handIn);
     }
@@ -50,6 +49,7 @@ public class ItemTarantulaHawkElytra extends ArmorItem implements ArmorTextureIt
         }
     }
 
+    @Override
     public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return repair.getItem() == AMItemRegistry.TARANTULA_HAWK_WING_FRAGMENT;
     }

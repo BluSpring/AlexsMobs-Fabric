@@ -1,12 +1,23 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
+import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
+import com.github.alexthe666.alexsmobs.entity.ai.FlightMoveController;
+import com.github.alexthe666.alexsmobs.entity.ai.FlyingAIFollowOwner;
+import com.github.alexthe666.alexsmobs.entity.ai.SmartClimbPathNavigator;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.collect.Maps;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,11 +43,23 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -62,12 +85,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
 
 public class EntitySugarGlider extends TamableAnimal implements IFollower {
 
@@ -120,17 +137,20 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.MOVEMENT_SPEED, 0.25F).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(2, new FlyingAIFollowOwner(this, 1.0D, 5.0F, 2.0F, true));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.1D, Ingredient.fromValues(Stream.of(new Ingredient.TagValue(AMTagRegistry.SUGAR_GLIDER_BREEDABLES), new Ingredient.TagValue(AMTagRegistry.SUGAR_GLIDER_TAMEABLES))), false){
+            @Override
             public void start(){
                 super.start();
                 EntitySugarGlider.this.entityData.set(ATTACHED_FACE, Direction.DOWN);
             }
         });
         this.goalSelector.addGoal(4, new BreedGoal(this, 0.8D){
+            @Override
             public void start(){
                 super.start();
                 EntitySugarGlider.this.entityData.set(ATTACHED_FACE, Direction.DOWN);
@@ -166,18 +186,22 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
         }
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.SUGAR_GLIDER_BREEDABLES);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.SUGAR_GLIDER_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.SUGAR_GLIDER_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.SUGAR_GLIDER_HURT;
     }
@@ -186,6 +210,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
         return isBrightEnoughToSpawn(worldIn, pos);
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader reader) {
         if (reader.isUnobstructed(this) && !reader.containsAnyLiquid(this.getBoundingBox())) {
             BlockPos blockpos = this.blockPosition();
@@ -195,10 +220,12 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
         return false;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.sugarGliderSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevGlideProgress = glideProgress;
@@ -324,6 +351,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
         }
     }
 
+    @Override
     public void rideTick() {
         Entity entity = this.getVehicle();
         if (this.isPassenger() && !entity.isAlive()) {
@@ -372,6 +400,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
 
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isOrderedToSit()) {
             if (this.getNavigation().getPath() != null) {
@@ -385,6 +414,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
         super.travel(travelVector);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(ATTACHED_FACE, Direction.from3DDataValue(compound.getByte("AttachFace")));
@@ -392,6 +422,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
         this.setOrderedToSit(compound.getBoolean("SugarGliderSitting"));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putByte("AttachFace", (byte) this.entityData.get(ATTACHED_FACE).get3DDataValue());
@@ -403,13 +434,16 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
         return false;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     protected void onInsideBlock(BlockState state) {
 
     }
@@ -464,6 +498,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, Boolean.valueOf(sit));
     }
@@ -476,6 +511,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
         this.entityData.set(COMMAND, Integer.valueOf(command));
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -536,8 +572,10 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
         this.walkAnimation.update(f2, 0.4F);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new WallClimberNavigation(this, worldIn) {
+            @Override
             protected boolean canUpdatePath() {
                 // mob.jumping is protected in 1.21, check vertical velocity instead
                 return super.canUpdatePath() || ((EntitySugarGlider) mob).isBesideClimbableBlock() || mob.getDeltaMovement().y > 0;
@@ -564,6 +602,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
         return this.getCommand() == 1;
     }
 
+    @Override
     public void followEntity(TamableAnimal tameable, LivingEntity owner, double followSpeed) {
         if (this.distanceTo(owner) < 5 || this.isBaby()) {
             this.setGliding(!this.onGround());
@@ -627,6 +666,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
             return climb != null && !itsOver && climbTimeout < 30 && (!climbing || !level().isEmptyBlock(climb) && !EntitySugarGlider.this.getNavigation().isStuck()) && EntitySugarGlider.this.getForagingTime() <= 0 && !EntitySugarGlider.this.isOrderedToSit();
         }
 
+        @Override
         public void start() {
             climbTimeout = 0;
             leapSearchCooldown = 0;
@@ -636,6 +676,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
             EntitySugarGlider.this.getNavigation().stop();
         }
 
+        @Override
         public void stop() {
             climbTimeout = 0;
             climb = null;
@@ -646,6 +687,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
             EntitySugarGlider.this.getNavigation().stop();
         }
 
+        @Override
         public void tick() {
             if (leapSearchCooldown > 0) {
                 leapSearchCooldown--;

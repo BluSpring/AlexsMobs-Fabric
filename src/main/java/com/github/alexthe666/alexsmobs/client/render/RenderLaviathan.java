@@ -71,6 +71,7 @@ public class RenderLaviathan extends MobRenderer<EntityLaviathan, ModelLaviathan
                 .setColor(f2, f3, f4, 1.0F).setLight(k);
     }
 
+    @Override
     public boolean shouldRender(EntityLaviathan livingEntityIn, Frustum camera, double camX, double camY, double camZ) {
         if (super.shouldRender(livingEntityIn, camera, camX, camY, camZ)) {
             return true;
@@ -84,8 +85,9 @@ public class RenderLaviathan extends MobRenderer<EntityLaviathan, ModelLaviathan
         }
     }
 
+    @Override
     public void render(EntityLaviathan mob, float p_115456_, float partialTick, PoseStack ms,
-            MultiBufferSource p_115459_, int p_115460_) {
+                       MultiBufferSource p_115459_, int p_115460_) {
         super.render(mob, p_115456_, partialTick, ms, p_115459_, p_115460_);
         Entity entity = mob.getControllingPassenger();
         if (entity != null) {
@@ -100,13 +102,16 @@ public class RenderLaviathan extends MobRenderer<EntityLaviathan, ModelLaviathan
         }
     }
 
+    @Override
     protected void scale(EntityLaviathan entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     protected boolean isShaking(EntityLaviathan entity) {
         return entity.isInWaterRainOrBubble() && !entity.isObsidian() && !renderWithoutShaking;
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityLaviathan entity) {
         return entity.isObsidian() ? TEXTURE_OBSIDIAN : TEXTURE;
     }
@@ -225,9 +230,10 @@ public class RenderLaviathan extends MobRenderer<EntityLaviathan, ModelLaviathan
             super(render);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntityLaviathan laviathan, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
-                float netHeadYaw, float headPitch) {
+                           EntityLaviathan laviathan, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
+                           float netHeadYaw, float headPitch) {
             if (!laviathan.isObsidian()) {
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.eyes(TEXTURE_GLOW));
                 this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn,

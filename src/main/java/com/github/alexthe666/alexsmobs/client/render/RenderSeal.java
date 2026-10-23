@@ -1,10 +1,15 @@
 package com.github.alexthe666.alexsmobs.client.render;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.client.model.ModelSeal;
 import com.github.alexthe666.alexsmobs.client.render.layer.LayerSealItem;
 import com.github.alexthe666.alexsmobs.entity.EntitySeal;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import org.joml.Matrix4f;
+
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -13,10 +18,6 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix4f;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RenderSeal extends MobRenderer<EntitySeal, ModelSeal> {
     private static final ResourceLocation TEXTURE_BROWN_0 = ResourceLocation.parse("alexsmobs:textures/entity/seal/seal_brown_0.png");
@@ -33,10 +34,12 @@ public class RenderSeal extends MobRenderer<EntitySeal, ModelSeal> {
         this.addLayer(new SealTearsLayer(this));
     }
 
+    @Override
     protected boolean shouldShowName(EntitySeal seal) {
         return super.shouldShowName(seal) || seal.isTearsEasterEgg();
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntitySeal entity) {
         if(entity.isArctic()){
             return entity.isBaby() ? TEXTURE_ARCTIC_BABY : entity.getVariant() == 1 ? TEXTURE_ARCTIC_1 : TEXTURE_ARCTIC_0;
@@ -64,7 +67,7 @@ public class RenderSeal extends MobRenderer<EntitySeal, ModelSeal> {
                 int i = 10 - 10 * strings.size();
 
                 poseStack.pushPose();
-                poseStack.translate(0.0D, (double)f, 0.0D);
+                poseStack.translate(0.0D, f, 0.0D);
                 poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
                 poseStack.scale(-0.025F, -0.025F, 0.025F);
                 Matrix4f matrix4f = poseStack.last().pose();
@@ -101,6 +104,7 @@ public class RenderSeal extends MobRenderer<EntitySeal, ModelSeal> {
             super(p_i50928_1_);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntitySeal entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if(entitylivingbaseIn.isTearsEasterEgg()){
                 VertexConsumer lead = bufferIn.getBuffer(AMRenderTypes.entityCutoutNoCull(TEXTURE_TEARS));

@@ -21,9 +21,10 @@ public class RenderGust extends EntityRenderer<EntityGust> {
         super(renderManagerIn);
     }
 
+    @Override
     public void render(EntityGust entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
-        matrixStackIn.translate(0.0D, (double)0.5F, 0.0D);
+        matrixStackIn.translate(0.0D, 0.5F, 0.0D);
         if(!entityIn.getVertical()){
             matrixStackIn.mulPose(Axis.XP.rotationDegrees(180F));
         }else{
@@ -41,6 +42,7 @@ public class RenderGust extends EntityRenderer<EntityGust> {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityGust entity) {
         return TEXTURE;
     }

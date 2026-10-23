@@ -4,14 +4,15 @@ import com.github.alexthe666.alexsmobs.entity.EntityMudBall;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 public class RenderMudBall extends EntityRenderer<EntityMudBall> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/mud_ball.png");
@@ -20,8 +21,9 @@ public class RenderMudBall extends EntityRenderer<EntityMudBall> {
         super(p_173962_);
     }
 
+    @Override
     public void render(EntityMudBall entityMudBall, float f, float f2, PoseStack p_114083_, MultiBufferSource p_114084_,
-            int p_114085_) {
+                       int p_114085_) {
         p_114083_.pushPose();
         p_114083_.scale(0.7F, 0.7F, 0.7F);
         p_114083_.mulPose(this.entityRenderDispatcher.cameraOrientation());
@@ -49,6 +51,7 @@ public class RenderMudBall extends EntityRenderer<EntityMudBall> {
                 .setNormal(normal.x, normal.y, normal.z);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityMudBall mudball) {
         return TEXTURE;
     }

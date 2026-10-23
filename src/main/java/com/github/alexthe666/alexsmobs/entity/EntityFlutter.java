@@ -112,14 +112,17 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
     }
 
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !requiresCustomPersistence() && !this.hasCustomName();
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.hasCustomName() || this.isTame() || this.isPotted();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.flutterSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -133,6 +136,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         return reason == MobSpawnType.SPAWNER || !iServerWorld.canSeeSky(pos) && blockstate.is(AMTagRegistry.FLUTTER_SPAWNS) && pos.getY() <= 64 && canFlutterSpawnInLight(entityType, iServerWorld, reason, pos, random);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -164,10 +168,12 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         }
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -196,10 +202,12 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, Boolean.valueOf(sit));
     }
 
+    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
@@ -232,18 +240,22 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         entityData.set(FLUTTER_PITCH, getFlutterPitch() - pitch);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.FLUTTER_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.FLUTTER_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.FLUTTER_HURT;
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevShootProgress = shootProgress;
@@ -382,6 +394,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         }
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.FLUTTER_BREEDABLES) && this.isTame();
     }
@@ -405,6 +418,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         return this.entityData.get(SHAKING_HEAD_TICKS) > 0;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -468,6 +482,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         return type;
     }
 
+    @Override
     public void followEntity(TamableAnimal tameable, LivingEntity owner, double followSpeed) {
         if (this.distanceTo(owner) > 8) {
             this.setFlying(true);
@@ -492,6 +507,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         return this.getCommand() == 1;
     }
 
+    @Override
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.isPotted()) {
@@ -501,6 +517,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         }
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -517,6 +534,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         return super.isAlliedTo(entityIn);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Flying", this.isFlying());
@@ -529,6 +547,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         compound.putBoolean("FlutterSitting", this.isSitting());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFlying(compound.getBoolean("Flying"));
@@ -647,6 +666,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         this.entityData.set(SHOOTING, true);
     }
 
+    @Override
     public void spawnChildFromBreeding(ServerLevel world, Animal partner) {
         super.spawnChildFromBreeding(world, partner);
         for(int i = 0; i < 15 + random.nextInt(10); i++){
@@ -700,6 +720,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             }
         }
 
+        @Override
         public void tick() {
             if (flightTarget) {
                 phage.getMoveControl().setWantedPosition(x, y, z, 1F);
@@ -731,6 +752,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             if (phage.isSitting()) {
                 return false;
@@ -742,6 +764,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             }
         }
 
+        @Override
         public void start() {
             if (flightTarget) {
                 phage.setFlying(true);
@@ -751,6 +774,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             }
         }
 
+        @Override
         public void stop() {
             this.phage.getNavigation().stop();
             super.stop();
@@ -768,10 +792,12 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
 
+        @Override
         public boolean canUse() {
             return !parentEntity.isSitting() && parentEntity.getTarget() != null && parentEntity.getTarget().isAlive()  && !parentEntity.isBaby();
         }
 
+        @Override
         public void tick() {
             if (spitCooldown > 0) {
                 spitCooldown--;

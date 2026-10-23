@@ -14,14 +14,17 @@ public class CapuchinAIMelee extends MeleeAttackGoal {
         this.monkey = monkey;
     }
 
+    @Override
     public boolean canUse() {
         return super.canUse() && !monkey.attackDecision;
     }
 
+    @Override
     public boolean canContinueToUse() {
         return super.canContinueToUse() && !monkey.attackDecision;
     }
 
+    @Override
     protected void checkAndPerformAttack(LivingEntity enemy) {
         this.checkAndPerformAttack(enemy, this.mob.distanceToSqr(enemy));
     }
@@ -37,7 +40,7 @@ public class CapuchinAIMelee extends MeleeAttackGoal {
     }
 
     protected double getAttackReachSqr(LivingEntity target) {
-        return (double)(this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + target.getBbWidth());
+        return this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + target.getBbWidth();
     }
 
 }

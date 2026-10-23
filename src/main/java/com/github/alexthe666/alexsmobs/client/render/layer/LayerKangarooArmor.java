@@ -66,9 +66,10 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
         return resourcelocation;
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityKangaroo roo,
-            float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
-            float headPitch) {
+                       float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
+                       float headPitch) {
         matrixStackIn.pushPose();
         if (roo.isRoger()) {
             ItemStack haloStack = new ItemStack(AMItemRegistry.HALO);
@@ -131,8 +132,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
             {
                 matrixStackIn.pushPose();
                 ItemStack itemstack = roo.getItemBySlot(EquipmentSlot.CHEST);
-                if (itemstack.getItem() instanceof ArmorItem) {
-                    ArmorItem armoritem = (ArmorItem) itemstack.getItem();
+                if (itemstack.getItem() instanceof ArmorItem armoritem) {
                     if (armoritem.getEquipmentSlot() == EquipmentSlot.CHEST) {
                         HumanoidModel a = defaultBipedModel;
                         a = getArmorModelHook(roo, itemstack, EquipmentSlot.CHEST, a);

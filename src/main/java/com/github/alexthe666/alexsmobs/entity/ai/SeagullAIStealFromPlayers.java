@@ -1,8 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.EntitySeagull;
 import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,10 +17,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
 
 public class SeagullAIStealFromPlayers extends Goal {
 
@@ -48,10 +49,12 @@ public class SeagullAIStealFromPlayers extends Goal {
         return false;
     }
 
+    @Override
     public void start(){
         this.seagull.aiItemFlag = true;
     }
 
+    @Override
     public void stop(){
         this.seagull.aiItemFlag = false;
         target = null;
@@ -64,6 +67,7 @@ public class SeagullAIStealFromPlayers extends Goal {
         return target != null && !target.isCreative() && (seagull.getMainHandItem().isEmpty() || fleeTime > 0);
     }
 
+    @Override
     public void tick(){
         seagull.setFlying(true);
         seagull.getMoveControl().setWantedPosition(target.getX(), target.getEyeY(), target.getZ(), 1.2F);

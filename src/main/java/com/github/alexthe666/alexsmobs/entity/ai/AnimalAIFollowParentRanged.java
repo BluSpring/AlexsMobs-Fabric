@@ -1,10 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.animal.Animal;
-
 import java.util.Iterator;
 import java.util.List;
+
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Animal;
 
 public class AnimalAIFollowParentRanged  extends Goal {
     private final Animal childAnimal;
@@ -20,6 +20,7 @@ public class AnimalAIFollowParentRanged  extends Goal {
         this.minDist = minDist;
     }
 
+    @Override
     public boolean canUse() {
         if (this.childAnimal.getAge() >= 0) {
             return false;
@@ -51,6 +52,7 @@ public class AnimalAIFollowParentRanged  extends Goal {
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         if (this.childAnimal.getAge() >= 0) {
             return false;
@@ -62,14 +64,17 @@ public class AnimalAIFollowParentRanged  extends Goal {
         }
     }
 
+    @Override
     public void start() {
         this.delayCounter = 0;
     }
 
+    @Override
     public void stop() {
         this.parentAnimal = null;
     }
 
+    @Override
     public void tick() {
         if (--this.delayCounter <= 0) {
             this.delayCounter = 10;

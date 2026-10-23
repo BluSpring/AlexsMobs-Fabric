@@ -27,6 +27,7 @@ public class TameableAITempt extends TemptGoal {
         return this.items.test(p_148139_.getMainHandItem()) || this.items.test(p_148139_.getOffhandItem());
     }
 
+    @Override
     public boolean canUse() {
         if (this.calmDown > 0) {
             --this.calmDown;
@@ -38,6 +39,7 @@ public class TameableAITempt extends TemptGoal {
     }
 
 
+    @Override
     public void stop() {
         super.stop();
         this.calmDown = reducedTickDelay(100);

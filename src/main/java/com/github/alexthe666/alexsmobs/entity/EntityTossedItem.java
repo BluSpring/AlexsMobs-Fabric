@@ -49,6 +49,7 @@ public class EntityTossedItem extends ThrowableItemProjectile {
         this.entityData.set(DART, dart);
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 3) {
@@ -62,12 +63,13 @@ public class EntityTossedItem extends ThrowableItemProjectile {
     }
 
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void lerpMotion(double x, double y, double z) {
         this.setDeltaMovement(x, y, z);
         if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
             final float f = Mth.sqrt((float) (x * x + z * z));
-            this.setXRot((float)(Mth.atan2(y, (double)f) * (double)Mth.RAD_TO_DEG));
+            this.setXRot((float)(Mth.atan2(y, f) * (double)Mth.RAD_TO_DEG));
             this.setYRot( (float)(Mth.atan2(x, z) * (double)Mth.RAD_TO_DEG));
             this.xRotO = this.getXRot();
             this.yRotO = this.getYRot();
@@ -76,11 +78,12 @@ public class EntityTossedItem extends ThrowableItemProjectile {
 
     }
 
+    @Override
     public void tick() {
         super.tick();
         Vec3 vector3d = this.getDeltaMovement();
         float f = Mth.sqrt((float) vector3d.horizontalDistanceSqr());
-        this.setXRot(lerpRotation(this.xRotO, (float)(Mth.atan2(vector3d.y, (double)f) * (double)Mth.RAD_TO_DEG)));
+        this.setXRot(lerpRotation(this.xRotO, (float)(Mth.atan2(vector3d.y, f) * (double)Mth.RAD_TO_DEG)));
         this.setYRot( lerpRotation(this.yRotO, (float)(Mth.atan2(vector3d.x, vector3d.z) * (double)Mth.RAD_TO_DEG)));
     }
 
@@ -97,26 +100,29 @@ public class EntityTossedItem extends ThrowableItemProjectile {
     }
 
 
+    @Override
     protected void onHitEntity(EntityHitResult p_213868_1_) {
         super.onHitEntity(p_213868_1_);
-        if(this.getOwner() instanceof EntityCapuchinMonkey){
-            EntityCapuchinMonkey boss = (EntityCapuchinMonkey) this.getOwner();
+        if(this.getOwner() instanceof EntityCapuchinMonkey boss){
             if(!boss.isAlliedTo(p_213868_1_.getEntity()) || !boss.isTame() && !(p_213868_1_.getEntity() instanceof EntityCapuchinMonkey)){
                 p_213868_1_.getEntity().hurt(damageSources().thrown(this, boss), isDart() ? 8 : 4);
             }
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Dart", this.isDart());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setDart(compound.getBoolean("Dart"));
     }
 
+    @Override
     protected void onHit(HitResult result) {
         super.onHit(result);
         if (!this.level().isClientSide && (!this.isDart() || result.getType() == HitResult.Type.BLOCK)) {
@@ -125,6 +131,7 @@ public class EntityTossedItem extends ThrowableItemProjectile {
         }
     }
 
+    @Override
     protected Item getDefaultItem() {
         return isDart() ? AMItemRegistry.ANCIENT_DART : Items.COBBLESTONE;
     }

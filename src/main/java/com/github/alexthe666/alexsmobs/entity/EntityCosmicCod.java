@@ -1,13 +1,21 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.CosmicCodAIFollowLeader;
 import com.github.alexthe666.alexsmobs.entity.ai.FlightMoveController;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import io.github.fabricators_of_create.porting_lib.entity.EntityHooks;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -21,7 +29,12 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -32,7 +45,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -43,12 +55,6 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import io.github.fabricators_of_create.porting_lib.entity.EntityHooks;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import java.util.List;
-import java.util.stream.Stream;
 
 public class EntityCosmicCod extends Mob implements Bucketable {
 
@@ -69,14 +75,17 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         this.moveControl = new FlightMoveController(this, 1F, false, true);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.cosmicCodSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.COSMIC_COD_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.COSMIC_COD_HURT;
     }
@@ -86,6 +95,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 4.0D).add(Attributes.MOVEMENT_SPEED, 0.35F);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new AISwimIdle(this));
@@ -146,24 +156,29 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         }
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.hasCustomName() || this.fromBucket();
     }
 
+    @Override
     public boolean removeWhenFarAway(double p_213397_1_) {
         return !this.fromBucket() && !this.hasCustomName();
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("FromBucket", this.fromBucket());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFromBucket(compound.getBoolean("FromBucket"));
     }
 
+    @Override
     public boolean isSensitiveToWater() {
         return true;
     }
@@ -184,10 +199,12 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         }
     }
 
+    @Override
     protected Entity.MovementEmission getMovementEmission() {
         return Entity.MovementEmission.EVENTS;
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevFishPitch = this.getFishPitch();
@@ -231,6 +248,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         }
     }
 
+    @Override
     public void handleEntityEvent(byte msg) {
         if (msg == 46) {
             this.gameEvent(GameEvent.TELEPORT);
@@ -243,6 +261,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         baitballCooldown = 120 + random.nextInt(100);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if(prev){
@@ -256,6 +275,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         return 3F;
     }
 
+    @Override
     public boolean isNoGravity() {
         return true;
     }
@@ -285,10 +305,12 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         entityData.set(FISH_PITCH, getFishPitch() - pitch);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -361,10 +383,12 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         return 15;
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 7;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
@@ -399,6 +423,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         });
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         if (spawnDataIn == null) {
@@ -462,6 +487,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
             return this.cod.isGroupLeader() || cod.hasNoLeader() || cod.hasGroupLeader() && cod.groupLeader.circlePos != null;
         }
 
+        @Override
         public void tick() {
             if(cod.circleTime > cod.maxCircleTime){
                 cod.circleTime = 0;

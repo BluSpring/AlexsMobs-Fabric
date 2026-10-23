@@ -106,6 +106,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         switchNavigator(true);
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isOrderedToSit()) {
             if (this.getNavigation().getPath() != null) {
@@ -129,10 +130,12 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         return blockstate.is(Blocks.MUD) || blockstate.is(Blocks.MUDDY_MANGROVE_ROOTS);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.mudskipperSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         BlockPos pos = AMBlockPos.fromCoords(this.getX(), this.getEyeY(), this.getZ());
         return !worldIn.getBlockState(pos).isSuffocating(worldIn, pos);
@@ -143,6 +146,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
 //        return false; // Mudskipper can breathe underwater
 //    }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
@@ -196,6 +200,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 12.0D).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("FromBucket", this.fromBucket());
@@ -204,6 +209,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         compound.putBoolean("MudskipperSitting", this.isOrderedToSit());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFromBucket(compound.getBoolean("FromBucket"));
@@ -212,6 +218,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         this.setOrderedToSit(compound.getBoolean("MudskipperSitting"));
     }
 
+    @Override
     public void tick(){
         super.tick();
         prevSwimProgress = swimProgress;
@@ -277,6 +284,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         }
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if (prev && source.getDirectEntity() instanceof LivingEntity) {
@@ -354,20 +362,24 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         return below.is(Blocks.MUD);
     }
 
+    @Override
     public void calculateEntityAnimation(boolean flying) {
         float f1 = (float) Mth.length(this.getX() - this.xo, 0, this.getZ() - this.zo);
         float f2 = Math.min(f1 * 8.0F, 1.0F);
         this.walkAnimation.update(f2, 0.4F);
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
         this.playSound(AMSoundRegistry.MUDSKIPPER_WALK, 1F, 1.0F);
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.MUDSKIPPER_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.MUDSKIPPER_HURT;
     }
@@ -380,10 +392,12 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         this.entityData.set(COMMAND, Integer.valueOf(command));
     }
 
+    @Override
     public boolean isOrderedToSit() {
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, Boolean.valueOf(sit));
     }
@@ -461,10 +475,12 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         return this.getCommand() == 1;
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.MUDSKIPPER_BREEDABLES);
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -512,6 +528,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         return Bucketable.bucketMobPickup(player, hand, this).orElse(type);
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();

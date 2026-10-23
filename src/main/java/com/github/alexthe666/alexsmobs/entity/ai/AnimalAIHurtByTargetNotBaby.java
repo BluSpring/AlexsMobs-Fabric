@@ -14,6 +14,7 @@ public class AnimalAIHurtByTargetNotBaby extends HurtByTargetGoal {
         this.animal = creatureIn;
     }
 
+    @Override
     public void start() {
         super.start();
         if (animal.isBaby()) {
@@ -23,6 +24,7 @@ public class AnimalAIHurtByTargetNotBaby extends HurtByTargetGoal {
 
     }
 
+    @Override
     protected void alertOther(Mob mobIn, LivingEntity targetIn) {
         if (!mobIn.isBaby()) {
             super.alertOther(mobIn, targetIn);

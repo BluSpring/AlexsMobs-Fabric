@@ -2,7 +2,12 @@ package com.github.alexthe666.alexsmobs.entity;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHurtByTargetNotBaby;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIRideParent;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
+import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
+import com.github.alexthe666.alexsmobs.entity.ai.KangarooAIMelee;
+import com.github.alexthe666.alexsmobs.entity.ai.TameableAIFollowOwner;
 import com.github.alexthe666.alexsmobs.fabric.AddedToLevelListenerEntity;
 import com.github.alexthe666.alexsmobs.fabric.FabricHooks;
 import com.github.alexthe666.alexsmobs.message.MessageKangarooEat;
@@ -12,7 +17,8 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
-import com.google.common.collect.Maps;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -23,26 +29,42 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.*;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerListener;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.JumpControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.camel.Camel;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -60,11 +82,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.Map;
 
 public class EntityKangaroo extends TamableAnimal implements ContainerListener, IAnimatedEntity, IFollower, AddedToLevelListenerEntity {
 
@@ -121,6 +141,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 22.0D).add(Attributes.FOLLOW_RANGE, 32.0D).add(Attributes.MOVEMENT_SPEED, 0.5F).add(Attributes.ATTACK_DAMAGE, 4F);
     }
 
+    @Override
     @Nullable
     public LivingEntity getControllingPassenger() {
         return null;
@@ -156,14 +177,17 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         return s != null && s.equalsIgnoreCase("roger");
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.kangarooSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.KANGAROO_IDLE;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.KANGAROO_IDLE;
     }
@@ -171,11 +195,13 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
     private void initKangarooInventory() {
         SimpleContainer animalchest = this.kangarooInventory;
         this.kangarooInventory = new SimpleContainer(9) {
+            @Override
             public void stopOpen(Player player) {
                 EntityKangaroo.this.entityData.set(POUCH_TICK, 10);
                 EntityKangaroo.this.resetKangarooSlots();
             }
 
+            @Override
             public boolean stillValid(Player player) {
                 return EntityKangaroo.this.isAlive() && EntityKangaroo.this.portalProcess == null;
             }
@@ -195,6 +221,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
     }
 
 
+    @Override
     protected void dropEquipment() {
         super.dropEquipment();
         for (int i = 0; i < kangarooInventory.getContainerSize(); i++) {
@@ -203,6 +230,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         kangarooInventory.clearContent();
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -259,6 +287,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         return type;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("KangarooSitting", this.isSitting());
@@ -275,7 +304,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
                 if (!itemstack.isEmpty()) {
                     CompoundTag CompoundNBT = new CompoundTag();
                     CompoundNBT.putByte("Slot", (byte) i);
-                    net.minecraft.nbt.Tag saved = (net.minecraft.nbt.Tag) itemstack.saveOptional(this.level().registryAccess());
+                    net.minecraft.nbt.Tag saved = itemstack.saveOptional(this.level().registryAccess());
                     nbttaglist.add(saved);
                 }
             }
@@ -283,6 +312,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         }
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setOrderedToSit(compound.getBoolean("KangarooSitting"));
@@ -315,7 +345,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
 
     public void openGUI(Player playerEntity) {
         if (!this.level().isClientSide && (!this.hasPassenger(playerEntity))) {
-            ((ServerPlayer)playerEntity).openMenu( new MenuProvider() {
+            playerEntity.openMenu(new MenuProvider() {
                 @Override
                 public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_, Player p_createMenu_3_) {
                     return new DispenserMenu(p_createMenu_1_, p_createMenu_2_, kangarooInventory);
@@ -333,6 +363,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, Boolean.valueOf(sit));
     }
@@ -380,6 +411,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         return new GroundPathNavigatorWide(this, worldIn, 2F);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(1, new KangarooAIMelee(this, 1.2D, false));
@@ -396,6 +428,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         this.targetSelector.addGoal(3, (new AnimalAIHurtByTargetNotBaby(this)));
     }
 
+    @Override
     protected boolean canAddPassenger(Entity passenger) {
         return super.canAddPassenger(passenger) && this.entityData.get(POUCH_TICK) == 0;
     }
@@ -412,6 +445,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         updateClientInventory();
     }
 
+    @Override
     public void tick() {
         super.tick();
         boolean moving = this.getDeltaMovement().lengthSqr() > 0.03D;
@@ -556,8 +590,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         }
 
         if (this.isPassenger()) {
-            if (this.isBaby() && this.getVehicle() instanceof EntityKangaroo) {
-                EntityKangaroo mount = (EntityKangaroo) this.getVehicle();
+            if (this.isBaby() && this.getVehicle() instanceof EntityKangaroo mount) {
                 this.setYRot(mount.yBodyRot);
                 this.yHeadRot = mount.yBodyRot;
                 this.yBodyRot = mount.yBodyRot;
@@ -576,6 +609,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         boolean prev = super.doHurtTarget(entityIn);
         if (prev) {
@@ -586,6 +620,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         return prev;
     }
 
+    @Override
     public boolean hurt(DamageSource src, float amount) {
         boolean prev = super.hurt(src, amount);
         if (prev) {
@@ -608,10 +643,12 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         }
     }
 
+    @Override
     public boolean isInvulnerableTo(DamageSource source) {
         return super.isInvulnerableTo(source) || source.is(DamageTypes.IN_WALL);
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -629,9 +666,11 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         return super.isAlliedTo(entityIn);
     }
 
+    @Override
     public MoveControl getMoveControl() {
         return this.moveControl;
     }
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isSitting() || this.getAnimation() == ANIMATION_EAT_GRASS) {
             if (this.getNavigation().getPath() != null) {
@@ -648,10 +687,12 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         this.disableJumpControl();
     }
 
+    @Override
     public PathNavigation getNavigation() {
         return this.navigation;
     }
 
+    @Override
     @Nullable
     public Entity getControlledVehicle() {
         return this.getVehicle() instanceof EntityKangaroo ? null : super.getControlledVehicle();
@@ -682,10 +723,12 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         this.setYRot( (float) (Mth.atan2(z - this.getZ(), x - this.getX()) * (double) Mth.RAD_TO_DEG) - 90.0F);
     }
 
+    @Override
     public boolean canSpawnSprintParticle() {
         return false;
     }
 
+    @Override
     public void customServerAiStep() {
         super.customServerAiStep();
 
@@ -708,8 +751,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
                     this.wasOnGround = true;
                 }
             }
-            if (this.jumpControl instanceof EntityKangaroo.JumpHelperController) {
-                EntityKangaroo.JumpHelperController rabbitController = (EntityKangaroo.JumpHelperController) this.jumpControl;
+            if (this.jumpControl instanceof JumpHelperController rabbitController) {
                 if (!rabbitController.getIsJumping()) {
                     if (this.moveControl.hasWanted() && this.currentMoveTypeDuration == 0) {
                         Path path = this.navigation.getPath();
@@ -779,17 +821,21 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         this.moveControl.setWantedPosition(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ(), newSpeed);
     }
 
+    @Override
     protected float getJumpPower() {
         return 0.5F;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         Item item = stack.getItem();
         return stack.is(AMTagRegistry.KANGAROO_BREEDABLES);
@@ -814,8 +860,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
                     if (FabricHooks.canEquip(stack, EquipmentSlot.HEAD, this)  && !this.isBaby() && helmetIndex == -1) {
                         helmetIndex = i;
                     }
-                    if (stack.getItem() instanceof ArmorItem && !this.isBaby()) {
-                        ArmorItem armorItem = (ArmorItem) stack.getItem();
+                    if (stack.getItem() instanceof ArmorItem armorItem && !this.isBaby()) {
                         if (armorItem.getEquipmentSlot() == EquipmentSlot.HEAD) {
                             double prot = getProtectionForItem(stack, EquipmentSlot.HEAD);
                             if (prot > 0 && prot > helmetArmor) {
@@ -848,6 +893,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         }
     }
 
+    @Override
     public ItemStack getItemBySlot(EquipmentSlot slotIn) {
         return switch (slotIn.getType()) {
             case HAND -> getItemInHand(slotIn);
@@ -897,6 +943,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         return 0;
     }
 
+    @Override
     public void jumpFromGround() {
         super.jumpFromGround();
         double d0 = this.moveControl.getSpeedModifier();
@@ -925,6 +972,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
 
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 1) {
@@ -955,6 +1003,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
             this.kangaroo = kangaroo;
         }
 
+        @Override
         public void tick() {
             if (this.kangaroo.hasJumper() && this.kangaroo.onGround() && !this.kangaroo.jumping && !((EntityKangaroo.JumpHelperController) this.kangaroo.jumpControl).getIsJumping()) {
                 this.kangaroo.setMovementSpeed(0.0D);
@@ -968,6 +1017,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         /**
          * Sets the speed and location to move to
          */
+        @Override
         public void setWantedPosition(double x, double y, double z, double speedIn) {
             if (this.kangaroo.isInWater()) {
                 speedIn = 1.5D;
@@ -1002,6 +1052,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
             this.canJump = canJumpIn;
         }
 
+        @Override
         public void tick() {
             if (this.jump) {
                 this.kangaroo.startJumping();

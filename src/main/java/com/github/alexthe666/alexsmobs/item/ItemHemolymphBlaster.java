@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.entity.EntityHemolymph;
 import io.github.fabricators_of_create.porting_lib.item.extensions.ReequipAnimationItem;
 
@@ -18,8 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.function.Predicate;
-
 public class ItemHemolymphBlaster extends Item implements ReequipAnimationItem {
 
     public static final Predicate<ItemStack> HEMOLYMPH = (stack) -> {
@@ -30,14 +30,17 @@ public class ItemHemolymphBlaster extends Item implements ReequipAnimationItem {
         super(properties);
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return isUsable(stack) ? Integer.MAX_VALUE : 0;
     }
 
+    @Override
     public boolean isBarVisible(ItemStack itemStack) {
         return super.isBarVisible(itemStack) && isUsable(itemStack);
     }
 
+    @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.BOW;
     }
@@ -88,16 +91,13 @@ public class ItemHemolymphBlaster extends Item implements ReequipAnimationItem {
         if(isUsable(stack)) {
             int usedTicks = getUseDuration(stack, livingEntityIn) - count;
             if (usedTicks % 2 == 0) {
-                boolean left = false;
-                if (livingEntityIn.getUsedItemHand() == InteractionHand.OFF_HAND && livingEntityIn.getMainArm() == HumanoidArm.RIGHT || livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND && livingEntityIn.getMainArm() == HumanoidArm.LEFT) {
-                    left = true;
-                }
+                boolean left = livingEntityIn.getUsedItemHand() == InteractionHand.OFF_HAND && livingEntityIn.getMainArm() == HumanoidArm.RIGHT || livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND && livingEntityIn.getMainArm() == HumanoidArm.LEFT;
                 EntityHemolymph blood = new EntityHemolymph(worldIn, livingEntityIn, !left);
                 Vec3 vector3d = livingEntityIn.getViewVector(1.0F);
                 RandomSource rand = worldIn.getRandom();
                 livingEntityIn.gameEvent(GameEvent.ITEM_INTERACT_START);
                 livingEntityIn.playSound(SoundEvents.LAVA_POP,1.0F, 0.5F + (rand.nextFloat() - rand.nextFloat()) * 0.2F);
-                blood.shoot((double) vector3d.x(), (double) vector3d.y(), (double) vector3d.z(), 1F, 3);
+                blood.shoot(vector3d.x(), vector3d.y(), vector3d.z(), 1F, 3);
                 if (!worldIn.isClientSide) {
                     worldIn.addFreshEntity(blood);
                 }

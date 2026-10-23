@@ -17,14 +17,17 @@ public class TameableAIDestroyTurtleEggs extends RemoveBlockGoal {
         nextStartTick = 800;
     }
 
+    @Override
     public boolean canUse() {
         return !((TamableAnimal)mob).isTame() && super.canUse();
     }
 
+    @Override
     public boolean canContinueToUse() {
         return !((TamableAnimal)mob).isTame() && super.canContinueToUse();
     }
 
+        @Override
         public void playDestroyProgressSound(LevelAccessor worldIn, BlockPos pos) {
         worldIn.playSound(null, pos, SoundEvents.ZOMBIE_DESTROY_EGG, SoundSource.HOSTILE, 0.5F, 0.9F + this.mob.getRandom().nextFloat() * 0.2F);
     }
@@ -34,10 +37,12 @@ public class TameableAIDestroyTurtleEggs extends RemoveBlockGoal {
         return reducedTickDelay(800 + mob.getRandom().nextInt(800));
     }
 
+    @Override
     public void playBreakSound(Level worldIn, BlockPos pos) {
         worldIn.playSound(null, pos, SoundEvents.TURTLE_EGG_BREAK, SoundSource.BLOCKS, 0.7F, 0.9F + worldIn.random.nextFloat() * 0.2F);
     }
 
+    @Override
     public double acceptedDistance() {
         return 1.14D;
     }

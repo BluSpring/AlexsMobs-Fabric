@@ -19,10 +19,12 @@ public class RenderGorilla extends MobRenderer<EntityGorilla, ModelGorilla> {
         this.addLayer(new LayerGorillaItem(this));
     }
 
+    @Override
     protected void scale(EntityGorilla entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(entitylivingbaseIn.getGorillaScale(), entitylivingbaseIn.getGorillaScale(), entitylivingbaseIn.getGorillaScale());
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityGorilla entity) {
         return entity.isFunkyKong() ? TEXTURE_FUNKY : entity.isDonkeyKong() ? TEXTURE_DK : entity.isSilverback() ? TEXTURE_SILVERBACK : TEXTURE;
     }

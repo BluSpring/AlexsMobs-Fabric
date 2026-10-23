@@ -6,6 +6,9 @@ import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -24,8 +27,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 public class RenderMungus extends MobRenderer<EntityMungus, ModelMungus> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/mungus.png");
@@ -45,6 +46,7 @@ public class RenderMungus extends MobRenderer<EntityMungus, ModelMungus> {
         this.addLayer(new MungusMushroomLayer(this));
     }
 
+    @Override
     protected boolean isShaking(EntityMungus mungus) {
         return mungus.isReverting();
     }
@@ -60,8 +62,9 @@ public class RenderMungus extends MobRenderer<EntityMungus, ModelMungus> {
                 .setColor(p_229108_6_, p_229108_7_, p_229108_8_, 255);
     }
 
+    @Override
     protected void setupRotations(EntityMungus entityLiving, PoseStack matrixStackIn, float ageInTicks,
-            float rotationYaw, float partialTicks, float tickDelta) {
+                                  float rotationYaw, float partialTicks, float tickDelta) {
         if (entityLiving.deathTime > 0) {
             matrixStackIn.mulPose(Axis.YP.rotationDegrees(180.0F - rotationYaw));
             float f = ((float) entityLiving.deathTime + partialTicks - 1.0F) / 20.0F * 1.6F;
@@ -75,10 +78,12 @@ public class RenderMungus extends MobRenderer<EntityMungus, ModelMungus> {
         }
     }
 
+    @Override
     protected float getFlipDegrees(EntityMungus p_77037_1_) {
         return 0F;
     }
 
+    @Override
     protected void scale(EntityMungus entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         String s = ChatFormatting.stripFormatting(entitylivingbaseIn.getName().getString());
         if (s != null && s.toLowerCase().contains("drip")) {
@@ -86,6 +91,7 @@ public class RenderMungus extends MobRenderer<EntityMungus, ModelMungus> {
         }
     }
 
+    @Override
     public boolean shouldRender(EntityMungus livingEntityIn, Frustum camera, double camX, double camY, double camZ) {
         if (super.shouldRender(livingEntityIn, camera, camX, camY, camZ)) {
             return true;
@@ -114,8 +120,9 @@ public class RenderMungus extends MobRenderer<EntityMungus, ModelMungus> {
         return new Vec3(d0, d1, d2);
     }
 
+    @Override
     public void render(EntityMungus entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
-            MultiBufferSource bufferIn, int packedLightIn) {
+                       MultiBufferSource bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         BlockPos target = entityIn.getBeamTarget();
         if (target != null) {
@@ -191,6 +198,7 @@ public class RenderMungus extends MobRenderer<EntityMungus, ModelMungus> {
 
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityMungus entity) {
         return TEXTURE;
     }
@@ -201,9 +209,10 @@ public class RenderMungus extends MobRenderer<EntityMungus, ModelMungus> {
             super(p_i50928_1_);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntityMungus entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntityMungus entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             VertexConsumer lead = bufferIn.getBuffer(AMRenderTypes.getEyesFlickering(TEXTURE_SACK_OVERLAY, 0));
             float alpha = 0.75F + (Mth.cos(ageInTicks * 0.2F) + 1F) * 0.125F;
             this.getParentModel().renderToBuffer(matrixStackIn, lead, 240, OverlayTexture.NO_OVERLAY,
@@ -234,9 +243,10 @@ public class RenderMungus extends MobRenderer<EntityMungus, ModelMungus> {
             super(p_i50928_1_);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntityMungus entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntityMungus entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             BlockRenderDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRenderer();
             BlockState blockstate = entitylivingbaseIn.getMushroomState();
             if (blockstate == null) {

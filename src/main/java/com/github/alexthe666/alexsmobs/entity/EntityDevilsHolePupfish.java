@@ -1,5 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIRandomSwimming;
 import com.github.alexthe666.alexsmobs.entity.ai.AquaticMoveController;
@@ -7,7 +13,11 @@ import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.alexsmobs.world.AMWorldData;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -26,7 +36,14 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -42,7 +59,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -54,14 +70,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
 
 public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal, Bucketable {
 
@@ -87,19 +95,23 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
         this.moveControl = new AquaticMoveController(this, 1.0F, 15F);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new WaterBoundPathNavigation(this, worldIn);
     }
 
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.DEVILS_HOLE_PUPFISH_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.DEVILS_HOLE_PUPFISH_HURT;
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new TryFindWaterGoal(this));
@@ -113,6 +125,7 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 2.0D).add(Attributes.MOVEMENT_SPEED, 0.34F);
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.hasCustomName() || this.fromBucket();
     }
@@ -133,14 +146,17 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
         return !iServerWorld.canSeeSky(pos) && pos.getY() < iServerWorld.getSeaLevel();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.devilsHolePupfishSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 6;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
@@ -155,6 +171,7 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
         builder.define(FEEDING_POS, Optional.empty());
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevOnLandProgress = onLandProgress;
@@ -211,14 +228,17 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
     }
 
 
+    @Override
     public EntityDimensions getDefaultDimensions(Pose poseIn) {
         return super.getDefaultDimensions(poseIn).scale(this.getPupfishScale());
     }
 
+    @Override
     public boolean fromBucket() {
         return this.entityData.get(FROM_BUCKET);
     }
 
+    @Override
     public void setFromBucket(boolean bucketed) {
         this.entityData.set(FROM_BUCKET, bucketed);
     }
@@ -292,10 +312,12 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
         this.entityData.set(BABY_AGE, babyAge);
     }
 
+    @Override
     public boolean isBaby(){
         return getBabyAge() < 0;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("FromBucket", this.fromBucket());
@@ -304,6 +326,7 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
         compound.putInt("BabyAge", this.getBabyAge());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFromBucket(compound.getBoolean("FromBucket"));
@@ -312,12 +335,14 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
         this.setBabyAge(compound.getInt("BabyAge"));
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setPupfishScale(0.65F + random.nextFloat() * 0.35F);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
+    @Override
     protected void handleAirSupply(int i) {
         if (this.isAlive() && !this.isInWaterOrBubble()) {
             this.setAirSupply(i - 1);
@@ -330,10 +355,12 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
         }
     }
 
+    @Override
     public int getMaxAirSupply() {
         return 600;
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -349,16 +376,19 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
     }
 
 
+    @Override
     protected void playSwimSound(float f) {
         if(random.nextInt(2) == 0){
             this.playSound(this.getSwimSound(), 0.2F, 1.3F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
         }
     }
 
+    @Override
     protected SoundEvent getSwimSound() {
         return SoundEvents.FISH_SWIM;
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
     }
 
@@ -379,6 +409,7 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
         return loottable.getRandomItems((new LootParams.Builder((ServerLevel) pupfish.level())).withParameter(LootContextParams.THIS_ENTITY, pupfish).create(LootContextParamSets.PIGLIN_BARTER));
     }
 
+    @Override
     public boolean removeWhenFarAway(double dist) {
         return !this.fromBucket() && !this.hasCustomName() && !this.isBaby();
     }
@@ -493,6 +524,7 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
             verticalSearchRange = 6;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return destinationBlock != null && isMossBlock(pupfish.level(), destinationBlock.mutable()) && isCloseToMoss(16);
         }
@@ -515,10 +547,12 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
             }
         }
 
+        @Override
         public void start(){
             maxFeedTime = 60 + random.nextInt(60);
         }
 
+        @Override
         public void tick() {
             Vec3 vec = Vec3.atCenterOf(destinationBlock);
             if (vec != null) {
@@ -550,6 +584,7 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
             }
         }
 
+        @Override
         public void stop() {
             pupfish.entityData.set(FEEDING_POS, Optional.empty());
             destinationBlock = null;

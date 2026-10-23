@@ -84,11 +84,13 @@ public class EntitySkunk extends Animal {
         builder.define(SPRAY_TIME, 0);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new SprayGoal());
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.5D){
+            @Override
             public void tick() {
                 super.tick();
                 EntitySkunk.this.harassedTime += 10;
@@ -101,13 +103,16 @@ public class EntitySkunk extends Animal {
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(3, new AvoidEntityGoal(this, LivingEntity.class, AMEntityRegistry.buildPredicateFromTag(AMTagRegistry.SKUNK_FEARS), 10,  1.3D, 1.1D, EntitySelector.NO_CREATIVE_OR_SPECTATOR) {
+            @Override
             public boolean canUse() {
                 return super.canUse() && EntitySkunk.this.getSprayTime() <= 0;
             }
 
+            @Override
             public boolean canContinueToUse() {
                 return super.canContinueToUse() && EntitySkunk.this.getSprayTime() <= 0;
             }
+            @Override
             public void tick() {
                 super.tick();
                 if(toAvoid != null){
@@ -118,10 +123,12 @@ public class EntitySkunk extends Animal {
         });
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.skunkSpawnRolls, this.getRandom(), spawnReasonIn) && super.checkSpawnRules(worldIn, spawnReasonIn);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.SKUNK_BREEDABLES);
     }
@@ -142,14 +149,17 @@ public class EntitySkunk extends Animal {
         entityData.set(SPRAY_TIME, time);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.SKUNK_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.SKUNK_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.SKUNK_HURT;
     }
@@ -217,6 +227,7 @@ public class EntitySkunk extends Animal {
 
     }
 
+    @Override
     public void handleEntityEvent(byte id) {
         if (id == 48) {
             Vec3 modelBack = new Vec3(0, 0.4F, -0.4F).xRot(-this.getXRot() * Mth.DEG_TO_RAD).yRot(-this.getYRot() * Mth.DEG_TO_RAD);

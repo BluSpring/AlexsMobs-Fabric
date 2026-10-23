@@ -42,6 +42,7 @@ public class EntityFart extends Entity {
         this.setPos(p_i47273_2_.getX() - (double) (p_i47273_2_.getBbWidth()) * 0.5D * (double) Mth.sin(rot * Mth.DEG_TO_RAD), p_i47273_2_.getEyeY() - (double) 0.2F, p_i47273_2_.getZ() + (double) (p_i47273_2_.getBbWidth()) * 0.5D * (double) Mth.cos(rot * Mth.DEG_TO_RAD));
     }
 
+    @Override
     public void tick(){
         super.tick();
         Vec3 vector3d = this.getDeltaMovement();
@@ -60,6 +61,7 @@ public class EntityFart extends Entity {
         }
     }
 
+    @Override
     public boolean isNoGravity() {
         return true;
     }
@@ -123,6 +125,7 @@ public class EntityFart extends Entity {
         this.setYRot(lerpRotation(this.yRotO, (float) (Mth.atan2(vector3d.x, vector3d.z) * (double) Mth.RAD_TO_DEG)));
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void lerpMotion(double x, double y, double z) {
         this.setDeltaMovement(x, y, z);
@@ -137,6 +140,7 @@ public class EntityFart extends Entity {
 
     }
 
+    @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         if (this.ownerUUID != null) {
             compound.putUUID("Owner", this.ownerUUID);
@@ -152,6 +156,7 @@ public class EntityFart extends Entity {
 
     }
 
+    @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         if (compound.hasUUID("Owner")) {
             this.ownerUUID = compound.getUUID("Owner");

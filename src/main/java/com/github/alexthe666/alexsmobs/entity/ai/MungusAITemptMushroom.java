@@ -1,13 +1,14 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityMungus;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.EnumSet;
 
 public class MungusAITemptMushroom extends Goal {
 
@@ -30,6 +31,7 @@ public class MungusAITemptMushroom extends Goal {
         this.targetingConditions = TEMP_TARGETING.copy();
     }
 
+    @Override
     public boolean canUse() {
         if (this.calmDown > 0) {
             --this.calmDown;
@@ -43,21 +45,25 @@ public class MungusAITemptMushroom extends Goal {
         return false;
     }
 
+    @Override
     public boolean canContinueToUse() {
         return this.canUse();
     }
 
+    @Override
     public void start() {
         this.px = this.player.getX();
         this.py = this.player.getY();
         this.pz = this.player.getZ();
     }
 
+    @Override
     public void stop() {
         this.player = null;
         this.mob.getNavigation().stop();
     }
 
+    @Override
     public void tick() {
         this.mob.getLookControl().setLookAt(this.player, (float)(this.mob.getMaxHeadYRot() + 20), (float)this.mob.getMaxHeadXRot());
         if (this.mob.distanceToSqr(this.player) < 6.25D) {

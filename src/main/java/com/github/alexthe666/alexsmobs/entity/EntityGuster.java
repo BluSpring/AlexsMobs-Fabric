@@ -1,11 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
 import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -24,7 +28,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -46,9 +54,6 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 
-import org.jetbrains.annotations.Nullable;
-import java.util.List;
-
 public class EntityGuster extends Monster {
 
     private static final EntityDataAccessor<Integer> LIFT_ENTITY = SynchedEntityData.defineId(EntityGuster.class, EntityDataSerializers.INT);
@@ -65,26 +70,32 @@ public class EntityGuster extends Monster {
         this.setPathfindingMalus(PathType.WATER, -1.0F);
     }
 
+    @Override
     public int getAmbientSoundInterval() {
         return 80;
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.GUSTER_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.GUSTER_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.GUSTER_HURT;
     }
 
+    @Override
     public boolean isSensitiveToWater() {
         return true;
     }
 
+    @Override
     @Nullable
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return this.getVariant() == 2 ? SOUL_LOOT : this.getVariant() == 1 ? RED_LOOT : super.getDefaultLootTable();
@@ -99,10 +110,12 @@ public class EntityGuster extends Monster {
         return spawnBlock && (!AMConfig.limitGusterSpawnsToWeather || worldIn.getLevelData() != null && (worldIn.getLevelData().isThundering() || worldIn.getLevelData().isRaining()) || isBiomeNether(worldIn, pos));
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.gusterSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new MeleeGoal());
         this.goalSelector.addGoal(1, new AnimalAIWanderRanged(this, 60, 1.0D, 10, 7));
@@ -113,21 +126,26 @@ public class EntityGuster extends Monster {
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, true));
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new GroundPathNavigatorWide(this, worldIn);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
 
+    @Override
     public void doPush(Entity entityIn) {
         if (this.getLiftedEntity() == null && liftingTime >= 0 && !(entityIn instanceof EntityGuster)) {
             this.setLiftedEntity(entityIn.getId());
@@ -147,6 +165,7 @@ public class EntityGuster extends Monster {
     }
 
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -174,6 +193,7 @@ public class EntityGuster extends Monster {
         this.level().addFreshEntity(sghot);
     }
 
+    @Override
     public double getEyeY() {
         return this.getY() + 1.0F;
     }
@@ -188,12 +208,13 @@ public class EntityGuster extends Monster {
         }
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType
             reason, @Nullable SpawnGroupData spawnDataIn) {
-        if(this.isBiomeNether(worldIn, this.blockPosition())){
+        if(isBiomeNether(worldIn, this.blockPosition())){
             this.setVariant(2);
-        }else if(this.isBiomeRed(worldIn, this.blockPosition())){
+        }else if(isBiomeRed(worldIn, this.blockPosition())){
             this.setVariant(1);
         }else{
             this.setVariant(0);
@@ -215,6 +236,7 @@ public class EntityGuster extends Monster {
         this.entityData.set(VARIANT, Integer.valueOf(variant));
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         Entity lifted = this.getLiftedEntity();
@@ -290,11 +312,13 @@ public class EntityGuster extends Monster {
         return s != null && s.toLowerCase().contains("tweester");
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
@@ -323,10 +347,12 @@ public class EntityGuster extends Monster {
         public MeleeGoal() {
         }
 
+        @Override
         public boolean canUse() {
             return EntityGuster.this.getTarget() != null;
         }
 
+        @Override
         public void tick() {
             Entity thrownEntity = EntityGuster.this.getLiftedEntity();
 

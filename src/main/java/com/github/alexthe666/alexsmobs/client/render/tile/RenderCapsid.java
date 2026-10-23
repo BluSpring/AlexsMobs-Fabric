@@ -1,22 +1,21 @@
 package com.github.alexthe666.alexsmobs.client.render.tile;
 
+import java.util.Random;
+
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityCapsid;
 import com.mojang.blaze3d.vertex.PoseStack;
+import org.joml.Quaternionf;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.AABB;
-import org.joml.Quaternionf;
-
-import java.util.Random;
 
 public class RenderCapsid<T extends TileEntityCapsid> implements BlockEntityRenderer<T> {
 
@@ -49,7 +48,7 @@ public class RenderCapsid<T extends TileEntityCapsid> implements BlockEntityRend
         ItemStack stack = entity.getItem(0);
         if (!stack.isEmpty()) {
             int i =  Item.getId(stack.getItem()) + stack.getDamageValue();
-            this.random.setSeed((long)i);
+            this.random.setSeed(i);
             float floatProgress = entity.prevFloatUpProgress + (entity.floatUpProgress - entity.prevFloatUpProgress) * partialTicks;
             float yaw = entity.prevYawSwitchProgress + (entity.yawSwitchProgress - entity.prevYawSwitchProgress) * partialTicks;
             int j = this.getModelCount(stack);
@@ -63,13 +62,13 @@ public class RenderCapsid<T extends TileEntityCapsid> implements BlockEntityRend
                 matrixStackIn.translate((entity.getLevel().random.nextFloat() - 0.5F)* vibrate, (entity.getLevel().random.nextFloat() - 0.5F) * vibrate, (entity.getLevel().random.nextFloat() - 0.5F)* vibrate);
             }
             matrixStackIn.scale(1.3F, 1.3F, 1.3F);
-            BakedModel ibakedmodel = Minecraft.getInstance().getItemRenderer().getModel(stack, entity.getLevel(), (LivingEntity)null, 0);
+            BakedModel ibakedmodel = Minecraft.getInstance().getItemRenderer().getModel(stack, entity.getLevel(), null, 0);
             boolean flag = ibakedmodel.isGui3d();
             if (!flag) {
                 float f7 = -0.0F * (float)(j - 1) * 0.5F;
                 float f8 = -0.0F * (float)(j - 1) * 0.5F;
                 float f9 = -0.09375F * (float)(j - 1) * 0.5F;
-                matrixStackIn.translate((double)f7, (double)f8, (double)f9);
+                matrixStackIn.translate(f7, f8, (double)f9);
             }
 
             for(int k = 0; k < j; ++k) {

@@ -1,5 +1,8 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
@@ -13,6 +16,8 @@ import com.github.alexthe666.alexsmobs.message.MessageMosquitoDismount;
 import com.github.alexthe666.alexsmobs.message.MessageMosquitoMountPlayer;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -27,7 +32,16 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -50,10 +64,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
-import java.util.function.Predicate;
 
 public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
 
@@ -105,6 +115,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         return true;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.enderiophageSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -114,6 +125,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         this.setPos(down.getX() + 0.5F, down.getY() + 1, down.getZ() + 0.5F);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         if (reason == MobSpawnType.NATURAL) {
@@ -123,6 +135,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 2;
     }
@@ -143,25 +156,30 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         this.entityData.set(VARIANT, Integer.valueOf(variant));
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new FlyTowardsTarget(this));
         this.goalSelector.addGoal(2, new AIWalkIdle());
         this.targetSelector.addGoal(1, new EntityAINearestTarget3D(this, EnderMan.class, 15, true, true, null) {
+            @Override
             public boolean canUse() {
                 return EntityEnderiophage.this.isMissingEye() && super.canUse();
             }
 
+            @Override
             public boolean canContinueToUse() {
                 return EntityEnderiophage.this.isMissingEye() && super.canContinueToUse();
             }
         });
         this.targetSelector.addGoal(1, new EntityAINearestTarget3D(this, LivingEntity.class, 15, true, true, ENDERGRADE_OR_INFECTED) {
+            @Override
             public boolean canUse() {
                 return !EntityEnderiophage.this.isMissingEye() && EntityEnderiophage.this.fleeAfterStealTime == 0 && super.canUse();
             }
 
+            @Override
             public boolean canContinueToUse() {
                 return !EntityEnderiophage.this.isMissingEye() && super.canContinueToUse();
             }
@@ -192,10 +210,12 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         builder.define(MISSING_EYE, false);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -211,6 +231,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         this.fleeAfterStealTime = 20;
     }
 
+    @Override
     public void rideTick() {
         Entity entity = this.getVehicle();
         if (this.isPassenger() && !entity.isAlive()) {
@@ -221,14 +242,14 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
             if (this.isPassenger()) {
                 attachTime++;
                 Entity mount = this.getVehicle();
-                if (mount instanceof LivingEntity) {
+                if (mount instanceof LivingEntity target) {
                     passengerIndex = mount.getPassengers().indexOf(this);
-                    this.yBodyRot = ((LivingEntity) mount).yBodyRot;
-                    this.setYRot( ((LivingEntity) mount).getYRot());
-                    this.yHeadRot = ((LivingEntity) mount).yHeadRot;
-                    this.yRotO = ((LivingEntity) mount).yHeadRot;
+                    this.yBodyRot = target.yBodyRot;
+                    this.setYRot( mount.getYRot());
+                    this.yHeadRot = target.yHeadRot;
+                    this.yRotO = target.yHeadRot;
                     float radius = mount.getBbWidth();
-                    float angle = (Maths.STARTING_ANGLE * (((LivingEntity) mount).yBodyRot + passengerIndex * 90F));
+                    float angle = (Maths.STARTING_ANGLE * (target.yBodyRot + passengerIndex * 90F));
                     double extraX = radius * Mth.sin(Mth.PI + angle);
                     double extraZ = radius * Mth.cos(angle);
                     this.setPos(mount.getX() + extraX, Math.max(mount.getY() + mount.getEyeHeight() * 0.25F, mount.getY()), mount.getZ() + extraZ);
@@ -237,7 +258,6 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
                     }
                     this.setPhagePitch(0F);
                     if (!this.level().isClientSide && attachTime > 15) {
-                        LivingEntity target = (LivingEntity) mount;
                         float dmg = 1F;
                         if (target.getHealth() > target.getMaxHealth() * 0.2F) {
                             dmg = 6F;
@@ -284,7 +304,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
                                 }
                             }
                         }
-                        if (((LivingEntity) mount).getHealth() <= 0 || this.fleeAfterStealTime > 0 || this.isMissingEye() && !(mount instanceof EnderMan) || !this.isMissingEye() && mount instanceof EnderMan) {
+                        if (target.getHealth() <= 0 || this.fleeAfterStealTime > 0 || this.isMissingEye() && !(mount instanceof EnderMan) || !this.isMissingEye() && mount instanceof EnderMan) {
                             this.removeVehicle();
                             this.setTarget(null);
                             dismountCooldown = 100;
@@ -318,22 +338,27 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
             this.setVariant(0);
         }
     }
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.ENDERIOPHAGE_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.ENDERIOPHAGE_HURT;
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
         this.playSound(AMSoundRegistry.ENDERIOPHAGE_WALK, 0.4F, 1.0F);
     }
 
+    @Override
     protected float nextStep() {
         return this.moveDist + 0.3F;
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevEnderiophageScale = this.getPhageScale();
@@ -492,6 +517,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Flying", this.isFlying());
@@ -500,6 +526,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         compound.putInt("SlowDownTicks", slowDownTicks);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFlying(compound.getBoolean("Flying"));
@@ -516,6 +543,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         this.entityData.set(MISSING_EYE, missingEye);
     }
 
+    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
@@ -616,6 +644,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         return this.level().clip(new ClipContext(Vector3d, target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() != HitResult.Type.MISS;
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -671,6 +700,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
             }
         }
 
+        @Override
         public void tick() {
             if (flightTarget) {
                 phage.getMoveControl().setWantedPosition(x, y, z, fleeAfterStealTime == 0 ? 1.3F : 1F);
@@ -702,6 +732,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             if (flightTarget) {
                 return phage.isFlying() && phage.distanceToSqr(x, y, z) > 2F;
@@ -710,6 +741,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
             }
         }
 
+        @Override
         public void start() {
             if (flightTarget) {
                 phage.setFlying(true);
@@ -719,6 +751,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
             }
         }
 
+        @Override
         public void stop() {
             this.phage.getNavigation().stop();
             super.stop();
@@ -733,11 +766,13 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
+        @Override
         public boolean canUse() {
 
             return !parentEntity.isPassenger() && parentEntity.getTarget() != null && !isBittenByPhage(parentEntity.getTarget()) && parentEntity.fleeAfterStealTime == 0;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return parentEntity.getTarget() != null && !isBittenByPhage(parentEntity.getTarget()) && !parentEntity.horizontalCollision && !parentEntity.isPassenger() && parentEntity.isFlying() && parentEntity.getMoveControl().hasWanted() && parentEntity.fleeAfterStealTime == 0 && (parentEntity.getTarget() instanceof EnderMan || !parentEntity.isMissingEye());
         }
@@ -752,9 +787,11 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
             return phageCount > 3;
         }
 
+        @Override
         public void stop() {
         }
 
+        @Override
         public void tick() {
             if (parentEntity.getTarget() != null) {
                 float width =  parentEntity.getTarget().getBbWidth() + parentEntity.getBbWidth() + 2;

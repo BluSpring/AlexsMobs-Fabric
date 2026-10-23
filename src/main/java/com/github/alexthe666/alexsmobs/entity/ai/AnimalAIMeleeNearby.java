@@ -1,11 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
 
 public class AnimalAIMeleeNearby extends Goal {
     private final Mob entity;
@@ -25,16 +25,19 @@ public class AnimalAIMeleeNearby extends Goal {
         return entity.getTarget() != null && entity.getTarget().isAlive() && !entity.isVehicle();
     }
 
+    @Override
     public void start(){
         fightStartPos = entity.getOnPos();
 
     }
 
+    @Override
     public void stop(){
         entity.getNavigation().stop();
         fightStartPos = null;
     }
 
+    @Override
     public void tick(){
         if(entity.distanceTo(entity.getTarget()) < 3F + entity.getBbWidth() + entity.getTarget().getBbWidth()){
             entity.doHurtTarget(entity.getTarget());

@@ -1,17 +1,22 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.entity.EntityBunfungus;
-import net.minecraft.world.entity.*;
+import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.phys.AABB;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
 
 public class MungusAIAlertBunfungus  extends TargetGoal {
     private static final TargetingConditions HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
@@ -28,6 +33,7 @@ public class MungusAIAlertBunfungus  extends TargetGoal {
         this.setFlags(EnumSet.of(Goal.Flag.TARGET));
     }
 
+    @Override
     public boolean canUse() {
         int i = this.mob.getLastHurtByMobTimestamp();
         LivingEntity livingentity = this.mob.getLastHurtByMob();
@@ -48,6 +54,7 @@ public class MungusAIAlertBunfungus  extends TargetGoal {
         }
     }
 
+    @Override
     public void start() {
         this.mob.setTarget(this.mob.getLastHurtByMob());
         this.targetMob = this.mob.getTarget();

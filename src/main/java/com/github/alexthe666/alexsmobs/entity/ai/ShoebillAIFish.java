@@ -1,6 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.entity.EntityShoebill;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -18,9 +22,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.EnumSet;
-import java.util.List;
-
 public class ShoebillAIFish extends Goal {
 
     private final EntityShoebill bird;
@@ -36,6 +37,7 @@ public class ShoebillAIFish extends Goal {
         this.bird = bird;
     }
 
+    @Override
     public void stop() {
         targetPos = null;
         waterPos = null;
@@ -44,6 +46,7 @@ public class ShoebillAIFish extends Goal {
         this.bird.getNavigation().stop();
     }
 
+    @Override
     public void tick() {
         if (targetPos != null && waterPos != null) {
             double dist = bird.distanceToSqr(Vec3.atCenterOf(waterPos));
@@ -77,6 +80,7 @@ public class ShoebillAIFish extends Goal {
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         return targetPos != null && bird.fishingCooldown == 0 && bird.revengeCooldown == 0 && !bird.isFlying();
     }

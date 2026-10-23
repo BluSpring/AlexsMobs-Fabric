@@ -15,10 +15,12 @@ public class RenderTasmanianDevil extends MobRenderer<EntityTasmanianDevil, Mode
         super(renderManagerIn, new ModelTasmanianDevil(), 0.3F);
     }
 
+    @Override
     protected void scale(EntityTasmanianDevil entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityTasmanianDevil entity) {
         return entity.getAnimation() == EntityTasmanianDevil.ANIMATION_HOWL && entity.getAnimationTick() < 34 ? TEXTURE_ANGRY : TEXTURE;
     }

@@ -97,14 +97,18 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         builder.define(REMOVE_SOON, false);
     }
 
+    @Override
+    @Override
     public boolean shouldRiderSit() {
         return false;
     }
 
+    @Override
     public boolean canCollideWith(Entity entity) {
         return canVehicleCollide(this, entity);
     }
 
+    @Override
     public Vec3 getRelativePortalPosition(Direction.Axis axis, BlockUtil.FoundRectangle result) {
         return LivingEntity.resetForwardDirectionOfRelativePortalPosition(super.getRelativePortalPosition(axis, result));
     }
@@ -113,6 +117,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         return 0.5D;
     }
 
+    @Override
     protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float partialTick) {
         return new Vec3(0.0D, this.getPassengersRidingOffset(), 0.0D);
     }
@@ -125,6 +130,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         this.entityData.set(BOARD_ROT, f);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -140,6 +146,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         return this.getItemStack();
     }
 
+    @Override
     public void push(Entity entityIn) {
         if (entityIn instanceof EntityStraddleboard) {
             if (entityIn.getBoundingBox().minY < this.getBoundingBox().maxY) {
@@ -155,22 +162,27 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         return this.entityData.get(REMOVE_SOON) || this.isRemoved();
     }
 
+    @Override
     public boolean canBeCollidedWith() {
         return !this.isRemoveLogic();
     }
 
+    @Override
     public boolean isPushable() {
         return !this.isRemoveLogic();
     }
 
+    @Override
     public boolean isPickable() {
         return !this.isRemoveLogic();
     }
 
+    @Override
     public boolean shouldBeSaved() {
         return !this.isRemoveLogic();
     }
 
+    @Override
     public boolean isAttackable() {
         return !this.isRemoveLogic();
     }
@@ -194,6 +206,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         this.entityData.set(COLOR, index);
     }
 
+    @Override
     public void tick() {
         super.tick();
         float boardRot = this.getBoardRot();
@@ -317,7 +330,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         float jumpGravity = gravity;
         if(jumpFor > 0){
             float jumpRunsOutIn = jumpFor < 5 ? jumpFor / 5F : 1F;
-            jumpGravity += jumpRunsOutIn + jumpRunsOutIn * 1F;
+            jumpGravity += jumpRunsOutIn + jumpRunsOutIn;
         }
         this.setDeltaMovement(vec31.x, jumpGravity, vec31.z);
     }
@@ -348,15 +361,18 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         this.setDeltaMovement(this.lxd, this.lyd, this.lzd);
     }
 
+    @Override
     public double getEyeY() {
         return this.getY() + 0.3F;
     }
 
+    @Override
     @Nullable
     public LivingEntity getControllingPassenger() {
         return getControllingPlayer();
     }
 
+    @Override
     @Nullable
     public boolean isControlledByLocalInstance() {
         return false;
@@ -381,6 +397,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         }
     }
 
+    @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
         super.onSyncedDataUpdated(entityDataAccessor);
         if (REMOVE_SOON.equals(entityDataAccessor)) {
@@ -478,6 +495,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         return getEnchantLevel(AMEnchantmentRegistry.STRADDLE_SERPENTFRIEND) > 0;
     }
 
+    @Override
     public Vec3 getDismountLocationForPassenger(LivingEntity entity) {
         return new Vec3(this.getX(), this.getY() + 2F, this.getZ());
     }

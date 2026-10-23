@@ -130,9 +130,11 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         return worldIn.getRawBrightness(pos, 0) > 8;
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this) {
+            @Override
             public boolean canUse() {
                 return super.canUse() && (EntityBaldEagle.this.getAirSupply() < 30 || EntityBaldEagle.this.getTarget() == null || !EntityBaldEagle.this.getTarget().isInWaterOrBubble() && EntityBaldEagle.this.getY() > EntityBaldEagle.this.getTarget().getY());
             }
@@ -160,29 +162,35 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, (new AnimalAIHurtByTargetNotBaby(this)));
         this.targetSelector.addGoal(4, new EntityAINearestTarget3D(this, LivingEntity.class, 55, true, true, AMEntityRegistry.buildPredicateFromTag(AMTagRegistry.BALD_EAGLE_TARGETS)) {
+            @Override
             public boolean canUse() {
                 return super.canUse() && !EntityBaldEagle.this.isLaunched() && EntityBaldEagle.this.getCommand() == 0;
             }
         });
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.BALD_EAGLE_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.BALD_EAGLE_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.BALD_EAGLE_HURT;
     }
 
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.baldEagleSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -200,6 +208,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         return super.isAlliedTo(entityIn);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.BALD_EAGLE_BREEDABLES);
     }
@@ -216,6 +225,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         }
     }
 
+    @Override
     public boolean save(CompoundTag compound) {
         String s = this.getEncodeId();
         compound.putString("id", s);
@@ -223,6 +233,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         return true;
     }
 
+    @Override
     public boolean saveAsPassenger(CompoundTag compound) {
         if (!this.isTame()) {
             return super.saveAsPassenger(compound);
@@ -234,6 +245,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("BirdSitting", this.isSitting());
@@ -243,6 +255,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         compound.putInt("LaunchTime", this.launchTime);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setOrderedToSit(compound.getBoolean("BirdSitting"));
@@ -252,6 +265,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         this.launchTime = compound.getInt("LaunchTime");
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (!this.shouldHoodedReturn() && this.hasCap() && this.isTame() && !this.isPassenger() || this.isSitting()) {
             super.travel(Vec3.ZERO);
@@ -260,6 +274,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         super.travel(vec3d);
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.attackProgress == 0 && this.entityData.get(ATTACK_TICK) == 0 && entityIn.isAlive()) {
             final double dist = this.isSitting() ? entityIn.getBbWidth() + 1 : entityIn.getBbWidth() + 5;
@@ -286,6 +301,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, sit);
     }
@@ -333,6 +349,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         this.entityData.set(TACKLING, tackling);
     }
 
+    @Override
     public void followEntity(TamableAnimal tameable, LivingEntity owner, double followSpeed) {
         if (this.distanceTo(owner) > 15) {
             this.setFlying(true);
@@ -357,6 +374,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         return source.is(DamageTypes.IN_WALL) || super.isInvulnerableTo(source);
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -444,6 +462,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
 
 
 
+    @Override
     public void rideTick() {
         Entity entity = this.getVehicle();
         if (this.isPassenger() && (!entity.isAlive() || !this.isAlive())) {
@@ -484,6 +503,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         }
     }
 
+    @Override
     public void tick() {
         super.tick();
 
@@ -494,7 +514,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         this.prevFlapAmount = flapAmount;
         this.prevSwoopProgress = swoopProgress;
         this.prevSitProgress = sitProgress;
-        float yMot = (float) -((float) this.getDeltaMovement().y * Mth.RAD_TO_DEG);
+        float yMot = -((float) this.getDeltaMovement().y * Mth.RAD_TO_DEG);
         this.birdPitch = yMot;
 
         if (isFlying()) {
@@ -639,10 +659,12 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         return AMEntityRegistry.BALD_EAGLE.create(p_241840_1_);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -725,6 +747,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         return !level().getFluidState(position).isEmpty() || position.getY() <= -64;
     }
 
+    @Override
     public void positionRider(Entity passenger, Entity.MoveFunction moveFunc) {
         if (this.hasPassenger(passenger)) {
             final float radius = 0.3F;
@@ -732,8 +755,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
             final double extraX = radius * Mth.sin(Mth.PI + angle);
             final double extraZ = radius * Mth.cos(angle);
             passenger.setYRot(this.yBodyRot + 90F);
-            if (passenger instanceof LivingEntity) {
-                LivingEntity living = (LivingEntity) passenger;
+            if (passenger instanceof LivingEntity living) {
                 living.yBodyRot = this.yBodyRot + 90F;
             }
             float extraY = 0F;
@@ -752,6 +774,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         return true;
     }
 
+    @Override
     public Vec3 getDismountLocationForPassenger(LivingEntity livingEntity) {
         return new Vec3(this.getX(), this.getBoundingBox().minY, this.getZ());
     }
@@ -765,6 +788,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         return !this.isAlive() || launchTime > 12000 || this.isRemoved();
     }
 
+    @Override
     public void remove(RemovalReason reason) {
         if (this.lastPlayerControlTime == 0 && !this.isPassenger()) {
             super.remove(reason);
@@ -841,6 +865,8 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
     }
 
 
+    @Override
+    @Override
     public float getHandOffset(){
         return 0.8F;
     }
@@ -857,6 +883,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
     }
 
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -918,6 +945,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
             this.parentEntity = bird;
         }
 
+        @Override
         public void tick() {
             if (this.operation == MoveControl.Operation.MOVE_TO) {
                 final Vec3 vector3d = new Vec3(this.wantedX - parentEntity.getX(), this.wantedY - parentEntity.getY(), this.wantedZ - parentEntity.getZ());
@@ -928,7 +956,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
                 } else {
                     parentEntity.setDeltaMovement(parentEntity.getDeltaMovement().add(vector3d.scale(this.speedModifier * 0.05D / d5)));
                     final Vec3 vector3d1 = parentEntity.getDeltaMovement();
-                    parentEntity.setYRot(-((float) Mth.atan2(vector3d1.x, vector3d1.z)) * (float) Mth.RAD_TO_DEG);
+                    parentEntity.setYRot(-((float) Mth.atan2(vector3d1.x, vector3d1.z)) * Mth.RAD_TO_DEG);
                     parentEntity.yBodyRot = parentEntity.getYRot();
                 }
             }
@@ -1006,6 +1034,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
             }
         }
 
+        @Override
         public void tick() {
             if (orbitResetCooldown > 0) {
                 orbitResetCooldown--;
@@ -1074,6 +1103,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             if (eagle.isSitting()) {
                 return false;
@@ -1085,6 +1115,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
             }
         }
 
+        @Override
         public void start() {
             if (flightTarget) {
                 eagle.setFlying(true);
@@ -1094,6 +1125,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
             }
         }
 
+        @Override
         public void stop() {
             this.eagle.getNavigation().stop();
             super.stop();
@@ -1115,15 +1147,18 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
             return eagle.getTarget() != null && !eagle.controlledFlag && !eagle.isVehicle();
         }
 
+        @Override
         public void start() {
             eagle.orbitPos = null;
         }
 
+        @Override
         public void stop() {
             circleTime = 0;
             maxCircleTime = 60 + random.nextInt(60);
         }
 
+        @Override
         public void tick() {
             final LivingEntity target = eagle.getTarget();
             boolean smallPrey = target != null && target.getBbHeight() < 1F && target.getBbWidth() < 0.7F && !(target instanceof EntityBaldEagle) || target instanceof AbstractFish;
@@ -1203,10 +1238,12 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
+        @Override
         public boolean canUse() {
             return eagle.isLaunched() && !eagle.controlledFlag && eagle.isTame() && !eagle.isPassenger() && !eagle.isVehicle() && (eagle.getTarget() == null || !eagle.getTarget().isAlive());
         }
 
+        @Override
         public void tick() {
             if (eagle.getDeltaMovement().lengthSqr() < 0.03D) {
                 seperateTime++;
@@ -1239,6 +1276,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
             }
         }
 
+        @Override
         public void stop() {
             seperateTime = 0;
         }

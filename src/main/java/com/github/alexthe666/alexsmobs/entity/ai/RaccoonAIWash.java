@@ -1,6 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityRaccoon;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -10,8 +13,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
 
 public class RaccoonAIWash extends Goal {
     private final EntityRaccoon raccoon;
@@ -26,6 +27,7 @@ public class RaccoonAIWash extends Goal {
         this.raccoon = creature;
     }
 
+    @Override
     public boolean canUse() {
         if(raccoon.getMainHandItem().isEmpty()){
             return false;
@@ -40,10 +42,12 @@ public class RaccoonAIWash extends Goal {
         return false;
     }
 
+    @Override
     public void start() {
         this.raccoon.lookForWaterBeforeEatingTimer = 1800;
     }
 
+    @Override
     public void stop() {
         targetPos = null;
         waterPos = null;
@@ -54,6 +58,7 @@ public class RaccoonAIWash extends Goal {
         this.raccoon.getNavigation().stop();
     }
 
+    @Override
     public void tick() {
         if (targetPos != null && waterPos != null) {
             double dist = this.raccoon.distanceToSqr(Vec3.atCenterOf(waterPos));
@@ -102,6 +107,7 @@ public class RaccoonAIWash extends Goal {
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         if(raccoon.getMainHandItem().isEmpty()){
             return false;

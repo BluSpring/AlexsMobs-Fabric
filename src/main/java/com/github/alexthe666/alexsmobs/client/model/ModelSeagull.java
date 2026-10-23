@@ -146,7 +146,7 @@ public class ModelSeagull extends AdvancedEntityModel<EntitySeagull> {
 			this.walk(right_leg, flapSpeed, flapDegree * 0.5F, false, 0F, -0.2F, ageInTicks, 1);
 			this.walk(left_leg, flapSpeed, flapDegree * 0.5F, true, 0F, 0.2F, ageInTicks, 1);
 		}else{
-			this.bob(body, walkSpeed * 1F, walkDegree * 1.3F, true, limbSwing, limbSwingAmount);
+			this.bob(body, walkSpeed, walkDegree * 1.3F, true, limbSwing, limbSwingAmount);
 			this.walk(right_leg, walkSpeed, walkDegree * 1.85F, false, 0F, 0.2F, limbSwing, limbSwingAmount);
 			this.walk(left_leg, walkSpeed, walkDegree * 1.85F, true, 0F, 0.2F, limbSwing, limbSwingAmount);
 			this.walk(head, walkSpeed, walkDegree * 0.4F, false, 2F, -0.01F, limbSwing, limbSwingAmount);

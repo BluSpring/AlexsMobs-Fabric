@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
@@ -11,6 +13,8 @@ import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -22,7 +26,12 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -42,11 +51,9 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
 
 public class EntityFarseer extends Monster implements IAnimatedEntity {
 
@@ -88,18 +95,22 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 70D).add(Attributes.ARMOR, 6.0D).add(Attributes.FLYING_SPEED, 0.5F).add(Attributes.ATTACK_DAMAGE, 4.5D).add(Attributes.MOVEMENT_SPEED, 0.35F);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.farseerSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public boolean isNoGravity() {
         return true;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -115,6 +126,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
         return flyingpathnavigation;
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -126,25 +138,30 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
         this.targetSelector.addGoal(2, new EntityAINearestTarget3D(this, Player.class, 3, false, true, null));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Emerged", this.hasEmerged());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setHasEmerged(compound.getBoolean("Emerged"));
     }
 
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.FARSEER_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.FARSEER_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.FARSEER_HURT;
     }
@@ -192,6 +209,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
         return this.entityData.get(LASER_DISTANCE);
     }
 
+    @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> p_32834_) {
         super.onSyncedDataUpdated(p_32834_);
         if (LASER_ENTITY_ID.equals(p_32834_)) {
@@ -228,6 +246,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
         this.entityData.set(HAS_EMERGED, Boolean.valueOf(emerged));
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevFaceCameraProgress = faceCameraProgress;
@@ -367,6 +386,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id >= 40 && id <= 43) {
@@ -477,6 +497,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
         return prevFaceCameraProgress + (faceCameraProgress - prevFaceCameraProgress) * partialTicks;
     }
 
+    @Override
     public boolean isEffectiveAi() {
         return super.isEffectiveAi() && this.getAnimation() != ANIMATION_EMERGE && this.hasEmerged();
     }
@@ -492,6 +513,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
         return this.level().clip(new ClipContext(Vector3d, target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() != HitResult.Type.MISS;
     }
 
+    @Override
     public void travel(Vec3 vec3) {
         if (this.isEffectiveAi() || this.isControlledByLocalInstance()) {
             if (this.isInWater()) {
@@ -512,6 +534,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
         this.calculateEntityAnimation(false);
     }
 
+    @Override
     public boolean isInvulnerableTo(DamageSource dmg) {
         return super.isInvulnerableTo(dmg) || this.getAnimation() == ANIMATION_EMERGE;
     }
@@ -525,6 +548,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
+        @Override
         public boolean canUse() {
             if (this.parentEntity.getNavigation().isDone() && this.parentEntity.getTarget() == null && this.parentEntity.getRandom().nextInt(4) == 0) {
                 target = getBlockInViewFarseer();
@@ -536,14 +560,17 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
             return false;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return target != null && parentEntity.getTarget() == null;
         }
 
+        @Override
         public void stop() {
             target = null;
         }
 
+        @Override
         public void tick() {
             if (target != null) {
                 this.parentEntity.getMoveControl().setWantedPosition(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D, speed);
@@ -604,6 +631,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
             return EntityFarseer.this.getTarget() != null && EntityFarseer.this.getTarget().isAlive();
         }
 
+        @Override
         public void stop() {
             this.lasersShot = 0;
             this.laserCooldown = 0;
@@ -614,6 +642,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
             EntityFarseer.this.setAngry(false);
         }
 
+        @Override
         public void tick() {
             super.tick();
             LivingEntity target = EntityFarseer.this.getTarget();
@@ -692,6 +721,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
             this.parentEntity = EntityFarseer.this;
         }
 
+        @Override
         public void tick() {
             float angle = (Maths.STARTING_ANGLE * (parentEntity.yBodyRot + 90));
             float radius = (float) Math.sin(parentEntity.tickCount * 0.2F) * 2;

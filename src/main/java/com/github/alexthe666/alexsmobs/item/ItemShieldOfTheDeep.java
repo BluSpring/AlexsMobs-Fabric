@@ -1,6 +1,5 @@
 package com.github.alexthe666.alexsmobs.item;
 
-import com.github.alexthe666.alexsmobs.AlexsMobs;
 import io.github.fabricators_of_create.porting_lib.tool.ItemAbilities;
 import io.github.fabricators_of_create.porting_lib.tool.ItemAbility;
 import io.github.fabricators_of_create.porting_lib.tool.addons.ItemAbilityItem;
@@ -24,20 +23,24 @@ public class ItemShieldOfTheDeep extends Item implements ItemAbilityItem {
         return ItemAbilities.DEFAULT_SHIELD_ACTIONS.contains(ItemAbility);
     }
 
+    @Override
     public UseAnim getUseAnimation(ItemStack p_77661_1_) {
         return UseAnim.BLOCK;
     }
 
+    @Override
     public int getUseDuration(ItemStack p_77626_1_, LivingEntity entity) {
         return 72000;
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level p_77659_1_, Player p_77659_2_, InteractionHand p_77659_3_) {
         ItemStack lvt_4_1_ = p_77659_2_.getItemInHand(p_77659_3_);
         p_77659_2_.startUsingItem(p_77659_3_);
         return InteractionResultHolder.consume(lvt_4_1_);
     }
 
+    @Override
     public boolean isValidRepairItem(ItemStack p_82789_1_, ItemStack p_82789_2_) {
         return AMItemRegistry.SERRATED_SHARK_TOOTH == p_82789_2_.getItem() || super.isValidRepairItem(p_82789_1_, p_82789_2_);
     }

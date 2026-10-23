@@ -24,12 +24,14 @@ public class RenderAlligatorSnappingTurtle
         this.addLayer(new AlligatorSnappingTurtleMossLayer(this));
     }
 
+    @Override
     protected void scale(EntityAlligatorSnappingTurtle entitylivingbaseIn, PoseStack matrixStackIn,
-            float partialTickTime) {
+                         float partialTickTime) {
         float d = entitylivingbaseIn.getTurtleScale() < 0.01F ? 1F : entitylivingbaseIn.getTurtleScale();
         matrixStackIn.scale(d, d, d);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityAlligatorSnappingTurtle entity) {
         return TEXTURE;
     }
@@ -41,9 +43,10 @@ public class RenderAlligatorSnappingTurtle
             super(p_i50928_1_);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntityAlligatorSnappingTurtle entitylivingbaseIn, float limbSwing, float limbSwingAmount,
-                float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntityAlligatorSnappingTurtle entitylivingbaseIn, float limbSwing, float limbSwingAmount,
+                           float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if (entitylivingbaseIn.getMoss() > 0) {
                 float mossAlpha = 0.15F * Mth.clamp(entitylivingbaseIn.getMoss(), 0, 10);
                 VertexConsumer mossbuffer = bufferIn.getBuffer(AMRenderTypes.entityTranslucent(TEXTURE_MOSS));

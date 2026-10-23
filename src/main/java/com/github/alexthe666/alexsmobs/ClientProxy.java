@@ -1,13 +1,148 @@
 package com.github.alexthe666.alexsmobs;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Consumer;
+
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.client.ClientLayerRegistry;
 import com.github.alexthe666.alexsmobs.client.event.ClientEvents;
 import com.github.alexthe666.alexsmobs.client.gui.GUIAnimalDictionary;
 import com.github.alexthe666.alexsmobs.client.gui.GUITransmutationTable;
-import com.github.alexthe666.alexsmobs.client.particle.*;
-import com.github.alexthe666.alexsmobs.client.render.*;
-import com.github.alexthe666.alexsmobs.client.render.item.CustomArmorRenderProperties;
+import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleBearFreddy;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleBirdSong;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleBunfungusTransformation;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleDna;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleFungusBubble;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleGusterSandShot;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleGusterSandSpin;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleHemolymph;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleInvertDig;
+import com.github.alexthe666.alexsmobs.client.particle.ParticlePlatypus;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleSimpleHeart;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleSkulkBoom;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleSmelly;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleStaticSpark;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleSunbirdFeather;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleTeethGlint;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleWhaleSplash;
+import com.github.alexthe666.alexsmobs.client.particle.ParticleWormPortal;
+import com.github.alexthe666.alexsmobs.client.render.AMRenderTypes;
+import com.github.alexthe666.alexsmobs.client.render.RenderAlligatorSnappingTurtle;
+import com.github.alexthe666.alexsmobs.client.render.RenderAnaconda;
+import com.github.alexthe666.alexsmobs.client.render.RenderAnacondaPart;
+import com.github.alexthe666.alexsmobs.client.render.RenderAnteater;
+import com.github.alexthe666.alexsmobs.client.render.RenderBaldEagle;
+import com.github.alexthe666.alexsmobs.client.render.RenderBananaSlug;
+import com.github.alexthe666.alexsmobs.client.render.RenderBison;
+import com.github.alexthe666.alexsmobs.client.render.RenderBlobfish;
+import com.github.alexthe666.alexsmobs.client.render.RenderBlueJay;
+import com.github.alexthe666.alexsmobs.client.render.RenderBoneSerpent;
+import com.github.alexthe666.alexsmobs.client.render.RenderBoneSerpentPart;
+import com.github.alexthe666.alexsmobs.client.render.RenderBunfungus;
+import com.github.alexthe666.alexsmobs.client.render.RenderCachalotEcho;
+import com.github.alexthe666.alexsmobs.client.render.RenderCachalotWhale;
+import com.github.alexthe666.alexsmobs.client.render.RenderCaiman;
+import com.github.alexthe666.alexsmobs.client.render.RenderCapuchinMonkey;
+import com.github.alexthe666.alexsmobs.client.render.RenderCatfish;
+import com.github.alexthe666.alexsmobs.client.render.RenderCentipedeBody;
+import com.github.alexthe666.alexsmobs.client.render.RenderCentipedeHead;
+import com.github.alexthe666.alexsmobs.client.render.RenderCentipedeTail;
+import com.github.alexthe666.alexsmobs.client.render.RenderCockroach;
+import com.github.alexthe666.alexsmobs.client.render.RenderCombJelly;
+import com.github.alexthe666.alexsmobs.client.render.RenderCosmaw;
+import com.github.alexthe666.alexsmobs.client.render.RenderCosmicCod;
+import com.github.alexthe666.alexsmobs.client.render.RenderCrimsonMosquito;
+import com.github.alexthe666.alexsmobs.client.render.RenderCrocodile;
+import com.github.alexthe666.alexsmobs.client.render.RenderCrow;
+import com.github.alexthe666.alexsmobs.client.render.RenderDevilsHolePupfish;
+import com.github.alexthe666.alexsmobs.client.render.RenderDropBear;
+import com.github.alexthe666.alexsmobs.client.render.RenderElephant;
+import com.github.alexthe666.alexsmobs.client.render.RenderEmu;
+import com.github.alexthe666.alexsmobs.client.render.RenderEndergrade;
+import com.github.alexthe666.alexsmobs.client.render.RenderEnderiophage;
+import com.github.alexthe666.alexsmobs.client.render.RenderFarseer;
+import com.github.alexthe666.alexsmobs.client.render.RenderFart;
+import com.github.alexthe666.alexsmobs.client.render.RenderFlutter;
+import com.github.alexthe666.alexsmobs.client.render.RenderFly;
+import com.github.alexthe666.alexsmobs.client.render.RenderFlyingFish;
+import com.github.alexthe666.alexsmobs.client.render.RenderFrilledShark;
+import com.github.alexthe666.alexsmobs.client.render.RenderFroststalker;
+import com.github.alexthe666.alexsmobs.client.render.RenderGazelle;
+import com.github.alexthe666.alexsmobs.client.render.RenderGeladaMonkey;
+import com.github.alexthe666.alexsmobs.client.render.RenderGiantSquid;
+import com.github.alexthe666.alexsmobs.client.render.RenderGorilla;
+import com.github.alexthe666.alexsmobs.client.render.RenderGrizzlyBear;
+import com.github.alexthe666.alexsmobs.client.render.RenderGust;
+import com.github.alexthe666.alexsmobs.client.render.RenderGuster;
+import com.github.alexthe666.alexsmobs.client.render.RenderHammerheadShark;
+import com.github.alexthe666.alexsmobs.client.render.RenderHemolymph;
+import com.github.alexthe666.alexsmobs.client.render.RenderHummingbird;
+import com.github.alexthe666.alexsmobs.client.render.RenderIceShard;
+import com.github.alexthe666.alexsmobs.client.render.RenderJerboa;
+import com.github.alexthe666.alexsmobs.client.render.RenderKangaroo;
+import com.github.alexthe666.alexsmobs.client.render.RenderKomodoDragon;
+import com.github.alexthe666.alexsmobs.client.render.RenderLaviathan;
+import com.github.alexthe666.alexsmobs.client.render.RenderLeafcutterAnt;
+import com.github.alexthe666.alexsmobs.client.render.RenderLobster;
+import com.github.alexthe666.alexsmobs.client.render.RenderManedWolf;
+import com.github.alexthe666.alexsmobs.client.render.RenderMantisShrimp;
+import com.github.alexthe666.alexsmobs.client.render.RenderMimicOctopus;
+import com.github.alexthe666.alexsmobs.client.render.RenderMimicube;
+import com.github.alexthe666.alexsmobs.client.render.RenderMoose;
+import com.github.alexthe666.alexsmobs.client.render.RenderMosquitoSpit;
+import com.github.alexthe666.alexsmobs.client.render.RenderMudBall;
+import com.github.alexthe666.alexsmobs.client.render.RenderMudskipper;
+import com.github.alexthe666.alexsmobs.client.render.RenderMungus;
+import com.github.alexthe666.alexsmobs.client.render.RenderMurmurBody;
+import com.github.alexthe666.alexsmobs.client.render.RenderMurmurHead;
+import com.github.alexthe666.alexsmobs.client.render.RenderOrca;
+import com.github.alexthe666.alexsmobs.client.render.RenderPlatypus;
+import com.github.alexthe666.alexsmobs.client.render.RenderPollenBall;
+import com.github.alexthe666.alexsmobs.client.render.RenderPotoo;
+import com.github.alexthe666.alexsmobs.client.render.RenderRaccoon;
+import com.github.alexthe666.alexsmobs.client.render.RenderRainFrog;
+import com.github.alexthe666.alexsmobs.client.render.RenderRattlesnake;
+import com.github.alexthe666.alexsmobs.client.render.RenderRhinoceros;
+import com.github.alexthe666.alexsmobs.client.render.RenderRoadrunner;
+import com.github.alexthe666.alexsmobs.client.render.RenderRockyRoller;
+import com.github.alexthe666.alexsmobs.client.render.RenderSandShot;
+import com.github.alexthe666.alexsmobs.client.render.RenderSeaBear;
+import com.github.alexthe666.alexsmobs.client.render.RenderSeagull;
+import com.github.alexthe666.alexsmobs.client.render.RenderSeal;
+import com.github.alexthe666.alexsmobs.client.render.RenderSharkToothArrow;
+import com.github.alexthe666.alexsmobs.client.render.RenderShoebill;
+import com.github.alexthe666.alexsmobs.client.render.RenderSkelewag;
+import com.github.alexthe666.alexsmobs.client.render.RenderSkreecher;
+import com.github.alexthe666.alexsmobs.client.render.RenderSkunk;
+import com.github.alexthe666.alexsmobs.client.render.RenderSnowLeopard;
+import com.github.alexthe666.alexsmobs.client.render.RenderSoulVulture;
+import com.github.alexthe666.alexsmobs.client.render.RenderSpectre;
+import com.github.alexthe666.alexsmobs.client.render.RenderSquidGrapple;
+import com.github.alexthe666.alexsmobs.client.render.RenderStraddleboard;
+import com.github.alexthe666.alexsmobs.client.render.RenderStraddler;
+import com.github.alexthe666.alexsmobs.client.render.RenderStradpole;
+import com.github.alexthe666.alexsmobs.client.render.RenderSugarGlider;
+import com.github.alexthe666.alexsmobs.client.render.RenderSunbird;
+import com.github.alexthe666.alexsmobs.client.render.RenderTarantulaHawk;
+import com.github.alexthe666.alexsmobs.client.render.RenderTasmanianDevil;
+import com.github.alexthe666.alexsmobs.client.render.RenderTendonSegment;
+import com.github.alexthe666.alexsmobs.client.render.RenderTerrapin;
+import com.github.alexthe666.alexsmobs.client.render.RenderTiger;
+import com.github.alexthe666.alexsmobs.client.render.RenderTossedItem;
+import com.github.alexthe666.alexsmobs.client.render.RenderToucan;
+import com.github.alexthe666.alexsmobs.client.render.RenderTriops;
+import com.github.alexthe666.alexsmobs.client.render.RenderTusklin;
+import com.github.alexthe666.alexsmobs.client.render.RenderUnderminer;
+import com.github.alexthe666.alexsmobs.client.render.RenderVineLasso;
+import com.github.alexthe666.alexsmobs.client.render.RenderVoidPortal;
+import com.github.alexthe666.alexsmobs.client.render.RenderVoidWormBody;
+import com.github.alexthe666.alexsmobs.client.render.RenderVoidWormHead;
+import com.github.alexthe666.alexsmobs.client.render.RenderVoidWormShot;
+import com.github.alexthe666.alexsmobs.client.render.RenderWarpedMosco;
+import com.github.alexthe666.alexsmobs.client.render.RenderWarpedToad;
 import com.github.alexthe666.alexsmobs.client.render.item.GhostlyPickaxeBakedModel;
 import com.github.alexthe666.alexsmobs.client.render.tile.RenderCapsid;
 import com.github.alexthe666.alexsmobs.client.render.tile.RenderEndPirateAnchor;
@@ -20,17 +155,28 @@ import com.github.alexthe666.alexsmobs.client.render.tile.RenderVoidWormBeak;
 import com.github.alexthe666.alexsmobs.client.sound.SoundBearMusicBox;
 import com.github.alexthe666.alexsmobs.client.sound.SoundLaCucaracha;
 import com.github.alexthe666.alexsmobs.client.sound.SoundWormBoss;
-import com.github.alexthe666.alexsmobs.entity.*;
+import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
+import com.github.alexthe666.alexsmobs.entity.EntityBlueJay;
+import com.github.alexthe666.alexsmobs.entity.EntityCockroach;
+import com.github.alexthe666.alexsmobs.entity.EntityGrizzlyBear;
+import com.github.alexthe666.alexsmobs.entity.EntityVoidWorm;
 import com.github.alexthe666.alexsmobs.entity.util.RainbowUtil;
 import com.github.alexthe666.alexsmobs.fabric.AddedToLevelListenerEntity;
 import com.github.alexthe666.alexsmobs.inventory.AMMenuRegistry;
-import com.github.alexthe666.alexsmobs.item.*;
+import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import com.github.alexthe666.alexsmobs.item.ItemBloodSprayer;
+import com.github.alexthe666.alexsmobs.item.ItemHemolymphBlaster;
+import com.github.alexthe666.alexsmobs.item.ItemStraddleboard;
+import com.github.alexthe666.alexsmobs.item.ItemTarantulaHawkElytra;
+import com.github.alexthe666.alexsmobs.item.ItemTendonWhip;
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -42,13 +188,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.material.Fluids;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Consumer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -95,6 +235,7 @@ public class ClientProxy extends CommonProxy {
         MenuScreens.register(AMMenuRegistry.TRANSMUTATION_TABLE, GUITransmutationTable::new);
     }
 
+    @Override
     public void init() {
         super.init();
 
@@ -106,6 +247,7 @@ public class ClientProxy extends CommonProxy {
         ClientProxy.onRegisterMenuScreens();
     }
 
+    @Override
     public void clientInit() {
         new ClientEvents();
         // Set lava to translucent render layer for lava vision effect
@@ -325,18 +467,22 @@ public class ClientProxy extends CommonProxy {
         });
     }
 
+    @Override
     public void openBookGUI(ItemStack itemStackIn) {
         Minecraft.getInstance().setScreen(new GUIAnimalDictionary(itemStackIn));
     }
 
+    @Override
     public void openBookGUI(ItemStack itemStackIn, String page) {
         Minecraft.getInstance().setScreen(new GUIAnimalDictionary(itemStackIn, page));
     }
 
+    @Override
     public Player getClientSidePlayer() {
         return Minecraft.getInstance().player;
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public Object getArmorModel(int armorId, LivingEntity entity) {
         switch (armorId) {
@@ -362,6 +508,7 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void onEntityStatus(Entity entity, byte updateKind) {
         if (updateKind == 67) {
@@ -414,6 +561,7 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+    @Override
     public void updateBiomeVisuals(int x, int z) {
         Minecraft.getInstance().levelRenderer.setBlocksDirty(x - 32, 0, z - 32, x + 32, 255, z + 32);
     }
@@ -449,29 +597,35 @@ public class ClientProxy extends CommonProxy {
         ParticleFactoryRegistry.getInstance().register(AMParticleRegistry.BIRD_SONG, ParticleBirdSong.Factory::new);
     }
 
+    @Override
     public void setRenderViewEntity(Entity entity) {
         prevPOV = Minecraft.getInstance().options.getCameraType();
         Minecraft.getInstance().setCameraEntity(entity);
         Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK);
     }
 
+    @Override
     public void resetRenderViewEntity() {
         Minecraft.getInstance().setCameraEntity(Minecraft.getInstance().player);
     }
 
+    @Override
     public int getPreviousPOV() {
         return prevPOV.ordinal();
     }
 
+    @Override
     public boolean isFarFromCamera(double x, double y, double z) {
         Minecraft lvt_1_1_ = Minecraft.getInstance();
         return lvt_1_1_.gameRenderer.getMainCamera().getPosition().distanceToSqr(x, y, z) >= 256.0D;
     }
 
+    @Override
     public void resetVoidPortalCreation(Player player) {
 
     }
 
+    @Override
     public void spawnSpecialParticle(int type) {
         if (type == 0) {
             Minecraft.getInstance().level.addParticle(AMParticleRegistry.BEAR_FREDDY,
@@ -480,26 +634,31 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+    @Override
     public void processVisualFlag(Entity entity, int flag) {
         if (entity == Minecraft.getInstance().player && flag == 87) {
             ClientEvents.renderStaticScreenFor = 60;
         }
     }
 
+    @Override
     public void setPupfishChunkForItem(int chunkX, int chunkZ) {
         this.pupfishChunkX = chunkX;
         this.pupfishChunkZ = chunkZ;
     }
 
+    @Override
     public void setDisplayTransmuteResult(int slot, ItemStack stack) {
         transmuteStacks[Mth.clamp(slot, 0, 2)] = stack;
     }
 
+    @Override
     public ItemStack getDisplayTransmuteResult(int slot) {
         ItemStack stack = transmuteStacks[Mth.clamp(slot, 0, 2)];
         return stack == null ? ItemStack.EMPTY : stack;
     }
 
+    @Override
     public int getSingingBlueJayId() {
         return singingBlueJayId;
     }

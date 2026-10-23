@@ -3,9 +3,20 @@ package com.github.alexthe666.alexsmobs.entity;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.block.BlockReptileEgg;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHurtByTargetNotBaby;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeaveWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AquaticMoveController;
+import com.github.alexthe666.alexsmobs.entity.ai.CaimanAIBellow;
+import com.github.alexthe666.alexsmobs.entity.ai.CaimanAIMelee;
+import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticAIRandomSwimming;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticPathNavigator;
+import com.github.alexthe666.alexsmobs.entity.ai.TameableAIFollowOwnerWater;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -26,11 +37,27 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreathAirGoal;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
@@ -49,7 +76,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
 public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollower {
 
@@ -88,6 +114,7 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
         builder.define(HELD_MOB_ID, -1);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(1, new MateGoal(this, 1.0D));
@@ -132,12 +159,14 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
             }
         });
         this.targetSelector.addGoal(5, new EntityAINearestTarget3D(this, LivingEntity.class, 180, false, true, AMEntityRegistry.buildPredicateFromTag(AMTagRegistry.CAIMAN_TARGETS)) {
+            @Override
             public boolean canUse() {
                 return !isBaby() && !isTame() && super.canUse();
             }
         });
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.caimanSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -147,6 +176,7 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
         return blockstate.is(Blocks.MUD) || blockstate.is(Blocks.MUDDY_MANGROVE_ROOTS) || blockstate.is(AMTagRegistry.CAIMAN_SPAWNS);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.CAIMAN_BREEDABLES);
     }
@@ -163,26 +193,32 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
         }
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 2;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return isBaby() ? AMSoundRegistry.CROCODILE_BABY : AMSoundRegistry.CAIMAN_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.CAIMAN_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.CAIMAN_HURT;
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevHoldProgress = holdProgress;
@@ -234,8 +270,7 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
                 }
                 swimTimer--;
             }
-            if (this.getTarget() instanceof WaterAnimal && !this.isTame()) {
-                WaterAnimal fish = (WaterAnimal) this.getTarget();
+            if (this.getTarget() instanceof WaterAnimal fish && !this.isTame()) {
                 CompoundTag fishNbt = new CompoundTag();
                 fish.addAdditionalSaveData(fishNbt);
                 fishNbt.putString("DeathLootTable", BuiltInLootTables.EMPTY.location().toString());
@@ -256,6 +291,7 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
         }
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -289,10 +325,12 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.ATTACK_DAMAGE, 3.0D).add(Attributes.ARMOR, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
@@ -330,6 +368,7 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, Boolean.valueOf(sit));
     }
@@ -342,6 +381,7 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
         this.entityData.set(BELLOWING, bellowing);
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if(isSitting()){
             super.travel(Vec3.ZERO);
@@ -357,6 +397,7 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
         }
     }
 
+    @Override
     public void calculateEntityAnimation(boolean flying) {
         float f1 = (float) Mth.length(this.getX() - this.xo, 0, this.getZ() - this.zo);
         float f2 = Math.min(f1 * 8.0F, 1.0F);
@@ -373,6 +414,7 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
         return !shouldLeaveWater() && swimTimer <= -1000 || bellowCooldown == 0;
     }
 
+    @Override
     public boolean shouldLeaveWater() {
         LivingEntity target = this.getTarget();
         if (target != null && !target.isInWater()) {
@@ -404,12 +446,14 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
         return this.getEyePosition().add(head);
     }
 
+    @Override
     public void push(double x, double y, double z) {
         if (this.getHeldMobId() == -1) {
             super.push(x, y, z);
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("HasEgg", this.hasEgg());
@@ -419,6 +463,7 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
         compound.putInt("BellowCooldown", this.bellowCooldown);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setHasEgg(compound.getBoolean("HasEgg"));
@@ -441,10 +486,12 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
             this.caiman = caiman;
         }
 
+        @Override
         public boolean canUse() {
             return super.canUse() && !this.caiman.hasEgg();
         }
 
+        @Override
         protected void breed() {
             ServerPlayer serverplayerentity = this.animal.getLoveCause();
             if (serverplayerentity == null && this.partner.getLoveCause() != null) {
@@ -477,22 +524,27 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
             this.caiman = caiman;
         }
 
+        @Override
         public void stop() {
             digTime = 0;
         }
 
+        @Override
         public boolean canUse() {
             return this.caiman.hasEgg() && super.canUse();
         }
 
+        @Override
         public boolean canContinueToUse() {
             return super.canContinueToUse() && this.caiman.hasEgg();
         }
 
+        @Override
         public double acceptedDistance() {
             return caiman.getBbWidth() + 0.5D;
         }
 
+        @Override
         public void tick() {
             super.tick();
             BlockPos blockpos = this.caiman.blockPosition();
@@ -508,6 +560,7 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
 
         }
 
+        @Override
         protected boolean isValidTarget(LevelReader worldIn, BlockPos pos) {
             return worldIn.isEmptyBlock(pos.above()) && BlockReptileEgg.isProperHabitat(worldIn, pos);
         }

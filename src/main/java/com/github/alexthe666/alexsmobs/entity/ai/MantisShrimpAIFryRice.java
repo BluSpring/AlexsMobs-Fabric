@@ -1,8 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityMantisShrimp;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
@@ -12,8 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.EnumSet;
 
 public class MantisShrimpAIFryRice extends MoveToBlockGoal {
 
@@ -27,6 +28,7 @@ public class MantisShrimpAIFryRice extends MoveToBlockGoal {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
+    @Override
     public void stop(){
         cookingTicks = 0;
         if(!wasLitPrior){
@@ -39,6 +41,7 @@ public class MantisShrimpAIFryRice extends MoveToBlockGoal {
         super.stop();
     }
 
+    @Override
     public void tick() {
         super.tick();
         BlockPos blockpos = this.getMoveToTarget().below();
@@ -68,10 +71,12 @@ public class MantisShrimpAIFryRice extends MoveToBlockGoal {
         return this.mantisShrimp.getMainHandItem().is(AMTagRegistry.SHRIMP_RICE_FRYABLES) && !mantisShrimp.isSitting() && super.canUse();
     }
 
+    @Override
     public boolean canContinueToUse() {
         return this.mantisShrimp.getMainHandItem().is(AMTagRegistry.SHRIMP_RICE_FRYABLES) && !mantisShrimp.isSitting() && super.canContinueToUse();
     }
 
+    @Override
     public double acceptedDistance() {
         return 3.9F;
     }

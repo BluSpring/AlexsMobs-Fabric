@@ -148,22 +148,27 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
 
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.MUNGUS_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.MUNGUS_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.MUNGUS_HURT;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.mungusSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(1, new FloatGoal(this));
@@ -178,6 +183,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         this.targetSelector.addGoal(2, new MungusAIAlertBunfungus(this, EntityBunfungus.class));
     }
 
+    @Override
     public void tick(){
         super.tick();
         if (!this.level().isClientSide && this.isAlive() && !this.isBaby() && --this.timeUntilNextEgg <= 0) {
@@ -188,6 +194,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         }
     }
 
+    @Override
     public void baseTick() {
         super.baseTick();
         this.prevSwellProgress = swellProgress;
@@ -216,6 +223,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         }
     }
 
+    @Override
     protected void tickDeath() {
         super.tickDeath();
         if (this.getMushroomCount() >= 5 && AMConfig.mungusBiomeTransformationType > 0 && !this.isBaby() && !this.entityData.get(EXPLOSION_DISABLED)) {
@@ -347,7 +355,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
             for(int k = 0; k < 4; ++k) {
                 for(int l = 0; l < 4; ++l) {
                     for(int i1 = 0; i1 < 4; ++i1) {
-                        container.getAndSetUnchecked(k, l, i1, ((ServerLevel) level()).getUncachedNoiseBiome(lvt_4_1_ + k, yChunk + l, lvt_5_1_ + i1));
+                        container.getAndSetUnchecked(k, l, i1, level().getUncachedNoiseBiome(lvt_4_1_ + k, yChunk + l, lvt_5_1_ + i1));
                     }
                 }
             }
@@ -389,6 +397,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         return false;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -414,6 +423,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         }
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if (prev) {
@@ -436,6 +446,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         builder.define(SACK_SWELL, 0);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         BlockState blockstate = this.getMushroomState();
@@ -452,6 +463,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         compound.putInt("EggTime", this.timeUntilNextEgg);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         BlockState blockstate = null;
@@ -474,6 +486,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         }
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         if (this.getBeamTarget() != null) {
@@ -508,8 +521,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
                 }
                 if (beamCounter > 200) {
                     BlockState state = level().getBlockState(t);
-                    if (state.getBlock() instanceof BonemealableBlock) {
-                        BonemealableBlock igrowable = (BonemealableBlock) state.getBlock();
+                    if (state.getBlock() instanceof BonemealableBlock igrowable) {
                         boolean flag = false;
                         if (igrowable.isValidBonemealTarget(this.level(), t, state)) {
                             for (int i = 0; i < 5; i++) {
@@ -557,10 +569,12 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         }
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.MUNGUS_BREEDABLES);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.entityData.set(ALT_ORDER_MUSHROOMS, random.nextBoolean());
@@ -647,6 +661,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
     }
 
 
+    @Override
     public boolean readyForShearing() {
         return this.isAlive() && this.getMushroomState() != null && this.getMushroomCount() > 0;
     }
@@ -707,6 +722,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
             searchLength = 20;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return destinationBlock != null && EntityMungus.this.isMushroomTarget(destinationBlock.mutable()) && isCloseToShroom(32);
         }
@@ -729,9 +745,11 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
             }
         }
 
+        @Override
         public void start() {
         }
 
+        @Override
         public void tick() {
             if (this.destinationBlock == null || !EntityMungus.this.isMushroomTarget(this.destinationBlock) || EntityMungus.this.beamCounter < 0) {
                 stop();
@@ -747,6 +765,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
             }
         }
 
+        @Override
         public void stop() {
             EntityMungus.this.setBeamTarget(null);
         }

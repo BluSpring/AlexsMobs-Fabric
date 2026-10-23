@@ -5,6 +5,9 @@ import com.github.alexthe666.alexsmobs.entity.EntitySunbird;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -13,8 +16,6 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 public class RenderSunbird extends MobRenderer<EntitySunbird, ModelSunbird> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/sunbird.png");
@@ -64,13 +65,16 @@ public class RenderSunbird extends MobRenderer<EntitySunbird, ModelSunbird> {
         }
     }
 
+    @Override
     protected void scale(EntitySunbird entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     protected int getBlockLightLevel(EntitySunbird entityIn, BlockPos partialTicks) {
         return 15;
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntitySunbird entity) {
         return TEXTURE;
     }
@@ -81,9 +85,10 @@ public class RenderSunbird extends MobRenderer<EntitySunbird, ModelSunbird> {
             super(p_i50928_1_);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntitySunbird entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntitySunbird entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             VertexConsumer scorch = bufferIn.getBuffer(AMRenderTypes.getEyesAlphaEnabled(TEXTURE_GLOW));
             float alpha = entitylivingbaseIn.getScorchProgress(partialTicks);
             this.getParentModel().renderToBuffer(matrixStackIn, scorch, 240,

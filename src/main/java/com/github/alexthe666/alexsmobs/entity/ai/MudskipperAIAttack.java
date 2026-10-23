@@ -1,14 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityMudBall;
 import com.github.alexthe666.alexsmobs.entity.EntityMudskipper;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.gameevent.GameEvent;
-
-import java.util.EnumSet;
 
 public class MudskipperAIAttack extends Goal {
     private final EntityMudskipper entity;
@@ -20,15 +21,18 @@ public class MudskipperAIAttack extends Goal {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
+    @Override
     public boolean canUse() {
         return this.entity.getTarget() != null && this.entity.getTarget().isAlive();
     }
 
+    @Override
     public void stop(){
         this.shootCooldown = 0;
         this.strafed = false;
     }
 
+    @Override
     public void tick() {
         Entity target = this.entity.getTarget();
         boolean keepFollowing = true;

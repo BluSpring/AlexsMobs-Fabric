@@ -184,18 +184,22 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         return block instanceof WoolCarpetBlock ? ((WoolCarpetBlock) block).getColor() : null;
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.ELEPHANT_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.ELEPHANT_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.ELEPHANT_DIE;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.elephantSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -204,6 +208,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         SimpleContainer animalchest = this.elephantInventory;
         this.elephantInventory = new SimpleContainer(54){
 
+            @Override
             public boolean stillValid(Player player) {
                 return EntityElephant.this.isAlive() && EntityElephant.this.portalProcess == null;
             }
@@ -219,18 +224,22 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         }
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new AdvancedPathNavigateNoTeleport(this, worldIn, true);
     }
 
+    @Override
     public int getMaxHeadYRot() {
         return super.getMaxHeadYRot();
     }
 
+    @Override
     protected boolean isImmobile() {
         return super.isImmobile() || this.isSitting() || this.getAnimation() == ANIMATION_CHARGE_PREPARE && this.getAnimationTick() < 10;
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -251,11 +260,13 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         this.targetSelector.addGoal(4, new CreatureAITargetItems(this, false));
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         Item item = stack.getItem();
         return isTame() && stack.is(AMTagRegistry.ELEPHANT_BREEDABLES);
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
         if (!isBaby()) {
             this.playSound(AMSoundRegistry.ELEPHANT_WALK, 0.2F, 1.0F);
@@ -264,6 +275,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         }
     }
 
+    @Override
     @Nullable
     public LivingEntity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
@@ -295,6 +307,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         builder.define(CARPET_COLOR, -1);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevSitProgress = sitProgress;
@@ -390,8 +403,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         }
         LivingEntity target = this.getTarget();
         double maxAttackMod = 0.0F;
-        if (this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player) {
-            Player rider = (Player) this.getControllingPassenger();
+        if (this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player rider) {
             if (rider.getLastHurtMob() != null && !this.isAlliedTo(rider.getLastHurtMob())) {
                 UUID preyUUID = rider.getLastHurtMob().getUUID();
                 if (!this.getUUID().equals(preyUUID)) {
@@ -473,6 +485,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         if (this.isBaby() && this.getEyeHeight() > this.getBbHeight()) {
@@ -537,6 +550,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         return true;
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION && !this.charging) {
             this.setAnimation(random.nextBoolean() ? ANIMATION_FLING : ANIMATION_STOMP);
@@ -545,6 +559,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
     }
 
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         boolean owner = this.isTame() && isOwnedBy(player);
@@ -612,6 +627,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         return type;
     }
 
+    @Override
     public EntityDimensions getDefaultDimensions(Pose poseIn) {
         return isTusked() && !isBaby() ? TUSKED_SIZE : super.getDefaultDimensions(poseIn);
     }
@@ -649,6 +665,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         return Items.AIR;
     }
 
+    @Override
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.isChested()) {
@@ -678,6 +695,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         return baby;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Tusked", this.isTusked());
@@ -697,7 +715,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
                 if (!itemstack.isEmpty()) {
                     CompoundTag CompoundNBT = new CompoundTag();
                     CompoundNBT.putByte("Slot", (byte) i);
-                    net.minecraft.nbt.Tag saved = (net.minecraft.nbt.Tag) itemstack.saveOptional(this.level().registryAccess());
+                    net.minecraft.nbt.Tag saved = itemstack.saveOptional(this.level().registryAccess());
                     nbttaglist.add(saved);
                 }
             }
@@ -705,6 +723,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         }
     }
 
+    @Override
     public boolean canBeAffected(MobEffectInstance potioneffectIn) {
         if (potioneffectIn.is(MobEffects.WITHER)) {
             return false;
@@ -712,6 +731,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         return super.canBeAffected(potioneffectIn);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setTame(compound.getBoolean("Tamed"), false);
@@ -766,6 +786,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         }
     }
 
+    @Override
     public void die(DamageSource cause) {
         super.die(cause);
         if (elephantInventory != null && !this.level().isClientSide) {
@@ -791,6 +812,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, Boolean.valueOf(sit));
     }
@@ -805,10 +827,10 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         this.entityData.set(CARPET_COLOR, color == null ? -1 : color.getId());
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
-        if (spawnDataIn instanceof AgeableMob.AgeableMobGroupData) {
-            AgeableMob.AgeableMobGroupData lvt_6_1_ = (AgeableMob.AgeableMobGroupData) spawnDataIn;
+        if (spawnDataIn instanceof AgeableMobGroupData lvt_6_1_) {
             if (lvt_6_1_.getGroupSize() == 0) {
                 this.setTusked(true);
             }
@@ -920,10 +942,13 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         return this.caravanHead;
     }
 
+    @Override
+    @Override
     public double getMaxDistToItem() {
         return Math.pow(this.getBbWidth() + 3.0F, 2.0F);
     }
 
+    @Override
     public void positionRider(Entity passenger, Entity.MoveFunction moveFunc) {
         if (this.isPassengerOfSameVehicle(passenger) && passenger instanceof LivingEntity && !this.touchingUnloadedChunk()) {
             float standAdd = -0.3F * standProgress;
@@ -955,6 +980,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         }
     }
 
+    @Override
     protected Vec3 getRiddenInput(Player player, Vec3 deltaIn) {
         if (player.zza != 0) {
             float f = player.zza < 0.0F ? 0.5F : 1.0F;
@@ -965,6 +991,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         return Vec3.ZERO;
     }
 
+    @Override
     protected void tickRidden(Player player, Vec3 vec3) {
         super.tickRidden(player, vec3);
         if(player.zza != 0 || player.xxa != 0){
@@ -976,6 +1003,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         }
     }
 
+    @Override
     protected float getRiddenSpeed(Player rider) {
         return (float)(this.getAttributeValue(Attributes.MOVEMENT_SPEED));
     }
@@ -987,6 +1015,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         return (double) this.getBbHeight() - (0.2F * scale) - scale * ((double) (0.1F * Mth.cos(f1 * 1.4F) * 1.4F * f));
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -1004,6 +1033,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         return super.isAlliedTo(entityIn);
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isSitting()) {
             if (this.getNavigation().getPath() != null) {
@@ -1016,7 +1046,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
 
     public void openGUI(Player playerEntity) {
         if (!this.level().isClientSide && (!this.hasPassenger(playerEntity))) {
-            ((ServerPlayer)playerEntity).openMenu( new MenuProvider() {
+            playerEntity.openMenu(new MenuProvider() {
                 @Override
                 public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_, Player p_createMenu_3_) {
                     return ChestMenu.sixRows(p_createMenu_1_, p_createMenu_2_, elephantInventory);
@@ -1057,11 +1087,13 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
             super(e, v);
         }
 
+        @Override
         public boolean canUse() {
             this.interval = EntityElephant.this.isTusked() || !EntityElephant.this.inCaravan() ? 50 : 120;
             return super.canUse();
         }
 
+        @Override
         @Nullable
         protected Vec3 getPosition() {
             return LandRandomPos.getPos(this.mob, EntityElephant.this.isTusked() || !EntityElephant.this.inCaravan() ? 25 : 10, 7);
@@ -1074,6 +1106,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
             super(EntityElephant.this);
         }
 
+        @Override
         public void start() {
             if (EntityElephant.this.isBaby() || !EntityElephant.this.isTusked()) {
                 this.alertOthers();
@@ -1083,6 +1116,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
             }
         }
 
+        @Override
         protected void alertOther(Mob mobIn, LivingEntity targetIn) {
             if (mobIn instanceof EntityElephant && (!mobIn.isBaby() || !((EntityElephant) mobIn).isTusked())) {
                 super.alertOther(mobIn, targetIn);
@@ -1096,6 +1130,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
             super(EntityElephant.this, 1.0D);
         }
 
+        @Override
         public boolean canUse() {
             return (EntityElephant.this.isBaby() || !EntityElephant.this.isTusked() || EntityElephant.this.isOnFire()) && super.canUse();
         }

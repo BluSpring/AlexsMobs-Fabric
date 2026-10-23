@@ -20,6 +20,7 @@ public class EffectMosquitoRepellent extends MobEffect {
         return duration > 0;
     }
 
+    @Override
     public String getDescriptionId() {
         return "alexsmobs.potion.mosquito_repellent";
     }

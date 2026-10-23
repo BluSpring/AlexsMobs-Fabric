@@ -113,18 +113,22 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         switchNavigator(false);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.SEAGULL_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.SEAGULL_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.SEAGULL_HURT;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Flying", this.isFlying());
@@ -141,6 +145,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFlying(compound.getBoolean("Flying"));
@@ -159,6 +164,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.ATTACK_DAMAGE, 1.0D).add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -166,6 +172,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         this.targetSelector.addGoal(2, new SeagullAIStealFromPlayers(this));
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.0D, Ingredient.fromValues(Stream.of(new Ingredient.TagValue(AMTagRegistry.SEAGULL_BREEDABLES), new Ingredient.TagValue(AMTagRegistry.SEAGULL_OFFERINGS))), false){
+            @Override
             public boolean canUse(){
                 return !EntitySeagull.this.aiItemFlag && super.canUse();
             }
@@ -178,6 +185,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         this.targetSelector.addGoal(1, new AITargetItems(this, false, false, 15, 16));
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.SEAGULL_BREEDABLES);
     }
@@ -186,14 +194,17 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         return worldIn.getRawBrightness(pos, 0) > 8 && worldIn.getFluidState(pos.below()).isEmpty();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.seagullSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -219,10 +230,14 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         builder.define(FLIGHT_LOOK_YAW, 0F);
     }
 
+    @Override
+    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
 
+    @Override
+    @Override
     public void setFlying(boolean flying) {
         if (flying && this.isBaby()) {
             flying = false;
@@ -254,6 +269,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         this.entityData.set(TREASURE_POS, Optional.ofNullable(pos));
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -273,6 +289,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevFlyProgress = flyProgress;
@@ -428,6 +445,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isSitting()) {
             if (this.getNavigation().getPath() != null) {
@@ -542,6 +560,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         return !level().getFluidState(position).isEmpty() || position.getY() <= -64;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -563,6 +582,8 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         return AMEntityRegistry.SEAGULL.create(serverWorld);
     }
 
+    @Override
+    @Override
     public void peck() {
         this.entityData.set(ATTACK_TICK, 7);
     }
@@ -617,6 +638,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             return targetEntity != null;
         }
 
+        @Override
         public void stop() {
             flightTarget = null;
             this.targetEntity = null;
@@ -661,6 +683,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
 
 
         public record Sorter(Entity theEntity) implements Comparator<Entity> {
+            @Override
             public int compare(Entity p_compare_1_, Entity p_compare_2_) {
                 final double d0 = this.theEntity.distanceToSqr(p_compare_1_);
                 final double d1 = this.theEntity.distanceToSqr(p_compare_2_);
@@ -725,6 +748,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void tick() {
             if (orbitResetCooldown > 0) {
                 orbitResetCooldown--;
@@ -788,6 +812,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             if (flightTarget) {
                 return eagle.isFlying() && eagle.distanceToSqr(x, y, z) > 5F;
@@ -796,6 +821,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void start() {
             if (flightTarget) {
                 eagle.setFlying(true);
@@ -805,6 +831,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void stop() {
             this.eagle.getNavigation().stop();
             super.stop();
@@ -819,6 +846,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             this.parentEntity = bird;
         }
 
+        @Override
         public void tick() {
             if (this.operation == MoveControl.Operation.MOVE_TO) {
                 Vec3 vector3d = new Vec3(this.wantedX - parentEntity.getX(), this.wantedY - parentEntity.getY(), this.wantedZ - parentEntity.getZ());
@@ -845,15 +873,18 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             this.executionChance = 1;
         }
 
+        @Override
         public void stop() {
             super.stop();
             ((EntitySeagull) mob).aiItemFlag = false;
         }
 
+        @Override
         public boolean canUse() {
             return super.canUse() && !((EntitySeagull) mob).isSitting() && (mob.getTarget() == null || !mob.getTarget().isAlive());
         }
 
+        @Override
         public boolean canContinueToUse() {
             return super.canContinueToUse() && !((EntitySeagull) mob).isSitting() && (mob.getTarget() == null || !mob.getTarget().isAlive());
         }

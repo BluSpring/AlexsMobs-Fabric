@@ -60,6 +60,7 @@ public class EntitySharkToothArrow extends Arrow {
         }
     }
 
+    @Override
     protected void doPostHurtEffects(LivingEntity living) {
         if (living instanceof Player) {
             this.damageShield((Player) living, (float) this.getBaseDamage());
@@ -77,6 +78,7 @@ public class EntitySharkToothArrow extends Arrow {
     }
 
 
+    @Override
     public boolean isInWater() {
         return false;
     }

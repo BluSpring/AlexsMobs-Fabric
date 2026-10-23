@@ -1,9 +1,14 @@
 package com.github.alexthe666.alexsmobs.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SimpleAnimatedParticle;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -27,18 +32,20 @@ public class ParticleDna extends SimpleAnimatedParticle {
         roll = (float) (Math.PI * 0.5F * random.nextFloat());
     }
 
+    @Override
     public int getLightColor(float p_189214_1_) {
         int lvt_2_1_ = super.getLightColor(p_189214_1_);
         int lvt_4_1_ = lvt_2_1_ >> 16 & 255;
         return 240 | lvt_4_1_ << 16;
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.oRoll = roll;
-        this.xd += (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.05F);
-        this.yd += (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.05F);
-        this.zd += (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.05F);
+        this.xd += (this.random.nextFloat() - this.random.nextFloat()) * 0.05F;
+        this.yd += (this.random.nextFloat() - this.random.nextFloat()) * 0.05F;
+        this.zd += (this.random.nextFloat() - this.random.nextFloat()) * 0.05F;
 
         float subAlpha = 1F;
         if(this.age > 5){
@@ -62,6 +69,7 @@ public class ParticleDna extends SimpleAnimatedParticle {
             this.spriteSet = spriteSet;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             ParticleDna p = new ParticleDna(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet);
             return p;

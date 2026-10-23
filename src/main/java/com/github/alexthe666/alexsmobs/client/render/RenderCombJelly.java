@@ -4,6 +4,8 @@ import com.github.alexthe666.alexsmobs.client.model.ModelCombJelly;
 import com.github.alexthe666.alexsmobs.entity.EntityCombJelly;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -11,8 +13,6 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-
-import org.jetbrains.annotations.Nullable;
 
 public class RenderCombJelly extends MobRenderer<EntityCombJelly, ModelCombJelly> {
     private static final ResourceLocation TEXTURE_0 = ResourceLocation.parse("alexsmobs:textures/entity/comb_jelly_blue.png");
@@ -25,14 +25,17 @@ public class RenderCombJelly extends MobRenderer<EntityCombJelly, ModelCombJelly
         this.addLayer(new RainbowLayer(this));
     }
 
+    @Override
     protected void scale(EntityCombJelly jelly, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(jelly.getJellyScale(), jelly.getJellyScale(), jelly.getJellyScale());
     }
 
+    @Override
     protected float getFlipDegrees(EntityCombJelly jelly) {
         return 0.0F;
     }
 
+    @Override
     @Nullable
     protected RenderType getRenderType(EntityCombJelly jelly, boolean normal, boolean invis, boolean outline) {
         ResourceLocation resourcelocation = this.getTextureLocation(jelly);
@@ -46,6 +49,7 @@ public class RenderCombJelly extends MobRenderer<EntityCombJelly, ModelCombJelly
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityCombJelly entity) {
         return entity.getVariant() == 0 ? TEXTURE_0 : entity.getVariant() == 1 ? TEXTURE_1 : TEXTURE_2;
     }
@@ -56,6 +60,7 @@ public class RenderCombJelly extends MobRenderer<EntityCombJelly, ModelCombJelly
             super(render);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityCombJelly entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             VertexConsumer rainbow = AMRenderTypes.createMergedVertexConsumer(bufferIn.getBuffer(AMRenderTypes.COMBJELLY_RAINBOW_GLINT), bufferIn.getBuffer(RenderType.entityCutoutNoCull(TEXTURE_OVERLAY)));
             STRIPES_MODEL.setupAnim(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);

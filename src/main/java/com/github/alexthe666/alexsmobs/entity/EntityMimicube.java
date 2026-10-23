@@ -19,7 +19,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -43,6 +47,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -77,6 +82,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
     }
 
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.mimicubeSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -88,11 +94,13 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
 
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         this.entityData.set(ATTACK_TICK, 5);
         return true;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new AnimalAIWanderRanged(this, 60, 1.0D, 10, 7));
         this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -134,6 +142,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         this.level().addFreshEntity(tridententity);
     }
 
+    @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
         if (this.getMainHandItem().getItem() instanceof TridentItem) {
             attackEntityWithRangedAttackTrident(target, distanceFactor);
@@ -157,10 +166,12 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         return ProjectileUtil.getMobArrow(this, arrowStack, distanceFactor, null);
     }
 
+    @Override
     public boolean canFireProjectileWeapon(ProjectileWeaponItem p_230280_1_) {
         return p_230280_1_ == Items.BOW;
     }
 
+    @Override
     public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
         switch (slotIn) {
             case HEAD -> {
@@ -188,6 +199,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         }
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         super.handleEntityEvent(id);
@@ -199,10 +211,12 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         }
     }
 
+    @Override
     public boolean isBlocking() {
         return this.getMainHandItem().canPerformAction(ItemAbilities.SHIELD_BLOCK) || this.getOffhandItem().canPerformAction(ItemAbilities.SHIELD_BLOCK);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         Entity trueSource = source.getEntity();
         if (trueSource != null && trueSource instanceof LivingEntity attacker) {
@@ -227,6 +241,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         return copy;
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.squishFactor += (this.squishAmount - this.squishFactor) * 0.5F;
@@ -331,6 +346,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
 
     }
 
+    @Override
     protected float getEquipmentDropChance(EquipmentSlot slotIn) {
         return 0;
     }
@@ -343,6 +359,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         return AMSoundRegistry.MIMICUBE_JUMP;
     }
 
+    @Override
     public void jumpFromGround() {
         Vec3 vector3d = this.getDeltaMovement();
         this.setDeltaMovement(vector3d.x, this.getJumpPower(), vector3d.z);
@@ -383,6 +400,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
             this.operation = MoveControl.Operation.MOVE_TO;
         }
 
+        @Override
         public void tick() {
             if (this.mob.onGround()) {
                 this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
@@ -404,10 +422,12 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         }
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.MIMICUBE_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.MIMICUBE_HURT;
     }

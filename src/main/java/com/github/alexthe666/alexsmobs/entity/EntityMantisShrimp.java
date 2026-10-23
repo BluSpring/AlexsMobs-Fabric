@@ -1,10 +1,23 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.stream.Stream;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeaveWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalSwimMoveControllerSink;
+import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
+import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
+import com.github.alexthe666.alexsmobs.entity.ai.MantisShrimpAIBreakBlocks;
+import com.github.alexthe666.alexsmobs.entity.ai.MantisShrimpAIFryRice;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticAIRandomSwimming;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticPathNavigator;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -26,11 +39,24 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
@@ -54,10 +80,6 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.phys.Vec3;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
-import java.util.stream.Stream;
 
 public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, IFollower {
 
@@ -95,15 +117,18 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         switchNavigator(false);
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.MANTIS_SHRIMP_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.MANTIS_SHRIMP_HURT;
     }
 
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -117,6 +142,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
     }
 
     //killEntity
+    @Override
     public void awardKillScore(Entity entity, int score, DamageSource src) {
         if(entity instanceof LivingEntity living){
             if(living.getType() == EntityType.SHULKER){
@@ -147,14 +173,17 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.1D).add(Attributes.ARMOR, 8D).add(Attributes.FOLLOW_RANGE, 32.0D).add(Attributes.ATTACK_DAMAGE, 3.0D).add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !this.isTame();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.mantisShrimpSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new MantisShrimpAIFryRice(this));
         this.goalSelector.addGoal(0, new MantisShrimpAIBreakBlocks(this));
@@ -171,6 +200,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, new EntityAINearestTarget3D(this, LivingEntity.class, 120, false, true, AMEntityRegistry.buildPredicateFromTag(AMTagRegistry.MANTIS_SHRIMP_TARGETS)) {
+            @Override
             public boolean canUse() {
                 return EntityMantisShrimp.this.getCommand() != 3 && !EntityMantisShrimp.this.isSitting() && super.canUse();
             }
@@ -190,6 +220,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         }
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isSitting()) {
             if (this.getNavigation().getPath() != null) {
@@ -232,11 +263,13 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         builder.define(MOISTNESS, Integer.valueOf(60000));
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         Item item = stack.getItem();
         return isTame() && stack.is(AMTagRegistry.MANTIS_SHRIMP_BREEDABLES);
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         this.punch();
         return true;
@@ -274,6 +307,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         return this.entityData.get(SITTING);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, Boolean.valueOf(sit));
     }
@@ -294,6 +328,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         this.entityData.set(MOISTNESS, p_211137_1_);
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (this.isNoAi()) {
@@ -316,6 +351,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         }
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -380,6 +416,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         return type;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("MantisShrimpSitting", this.isSitting());
@@ -388,6 +425,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         compound.putInt("Variant", this.getVariant());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setOrderedToSit(compound.getBoolean("MantisShrimpSitting"));
@@ -396,6 +434,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         this.setMoistness(compound.getInt("Moisture"));
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         if (this.isBaby() && this.getEyeHeight() > this.getBbHeight()) {
@@ -428,8 +467,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
 
         if (this.entityData.get(PUNCH_TICK) > 0) {
             if (this.entityData.get(PUNCH_TICK) == 2 && this.getTarget() != null && this.distanceTo(this.getTarget()) < 2.8D) {
-                if (this.getTarget() instanceof AbstractFish && !this.isTame()) {
-                    AbstractFish fish = (AbstractFish) this.getTarget();
+                if (this.getTarget() instanceof AbstractFish fish && !this.isTame()) {
                     CompoundTag fishNbt = new CompoundTag();
                     fish.addAdditionalSaveData(fishNbt);
                     fishNbt.putString("DeathLootTable", BuiltInLootTables.EMPTY.location().toString());
@@ -470,6 +508,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         }
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -548,10 +587,12 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         }
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         int i;
@@ -599,6 +640,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         return this.getCommand() == 1;
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
@@ -629,6 +671,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
             this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         }
 
+        @Override
         public boolean canUse() {
             LivingEntity lvt_1_1_ = this.tameable.getOwner();
             if (lvt_1_1_ == null) {
@@ -647,6 +690,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             if (this.tameable.getNavigation().isDone()) {
                 return false;
@@ -659,18 +703,21 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
             }
         }
 
+        @Override
         public void start() {
             this.timeToRecalcPath = 0;
             this.oldWaterCost = this.tameable.getPathfindingMalus(PathType.WATER);
             this.tameable.setPathfindingMalus(PathType.WATER, 0.0F);
         }
 
+        @Override
         public void stop() {
             this.owner = null;
             this.tameable.getNavigation().stop();
             this.tameable.setPathfindingMalus(PathType.WATER, this.oldWaterCost);
         }
 
+        @Override
         public void tick() {
 
             this.tameable.getLookControl().setLookAt(this.owner, 10.0F, (float) this.tameable.getMaxHeadXRot());

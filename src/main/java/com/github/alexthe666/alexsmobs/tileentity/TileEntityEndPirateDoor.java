@@ -2,13 +2,14 @@ package com.github.alexthe666.alexsmobs.tileentity;
 
 import com.github.alexthe666.alexsmobs.block.BlockEndPirateDoor;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -49,7 +50,7 @@ public class TileEntityEndPirateDoor extends BlockEntity {
         }
         if(opened && openProgress == 0F || !opened && openProgress == 1F){
             this.level.gameEvent(GameEvent.BLOCK_ACTIVATE, this.getBlockPos(), GameEvent.Context.of(this.getBlockState()));
-            this.level.playSound((Player)null, this.getBlockPos(), AMSoundRegistry.END_PIRATE_DOOR, SoundSource.BLOCKS, 1F, 1F);
+            this.level.playSound(null, this.getBlockPos(), AMSoundRegistry.END_PIRATE_DOOR, SoundSource.BLOCKS, 1F, 1F);
         }
         if(opened && openProgress < 1F){
             openProgress += 0.25F;

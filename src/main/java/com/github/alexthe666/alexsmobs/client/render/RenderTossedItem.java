@@ -6,6 +6,8 @@ import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.joml.Quaternionf;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -15,7 +17,6 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
-import org.joml.Quaternionf;
 
 public class RenderTossedItem extends EntityRenderer<EntityTossedItem> {
     public static final ResourceLocation DART_TEXTURE = ResourceLocation
@@ -36,7 +37,7 @@ public class RenderTossedItem extends EntityRenderer<EntityTossedItem> {
             MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
         if (entityIn.isDart()) {
-            matrixStackIn.translate(0.0D, (double) -0.15F, 0.0D);
+            matrixStackIn.translate(0.0D, -0.15F, 0.0D);
             matrixStackIn.mulPose(
                     Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 180F));
             matrixStackIn.pushPose();

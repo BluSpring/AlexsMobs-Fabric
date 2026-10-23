@@ -16,11 +16,13 @@ public class RenderHummingbird extends MobRenderer<EntityHummingbird, ModelHummi
         super(renderManagerIn, new ModelHummingbird(), 0.15F);
     }
 
+    @Override
     protected void scale(EntityHummingbird entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.75F, 0.75F, 0.75F);
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityHummingbird entity) {
         return entity.getVariant() == 0 ? TEXTURE_0 : entity.getVariant() == 1 ? TEXTURE_1 : TEXTURE_2;
     }

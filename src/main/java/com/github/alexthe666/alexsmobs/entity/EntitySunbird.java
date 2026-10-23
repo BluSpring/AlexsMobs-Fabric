@@ -1,5 +1,12 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
@@ -10,6 +17,8 @@ import com.github.alexthe666.alexsmobs.misc.AMPointOfInterestRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.base.Predicates;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -21,7 +30,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -45,14 +60,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class EntitySunbird extends Animal implements FlyingAnimal {
 
@@ -93,18 +100,22 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
         return true;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.sunbirdSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.SUNBIRD_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.SUNBIRD_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.SUNBIRD_HURT;
     }
@@ -114,33 +125,38 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
         return false;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(3, new RandomFlyGoal(this));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 32F));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
     }
 
+    @Override
     public float getLightLevelDependentMagicValue() {
         return 1.0F;
     }
 
+    @Override
     public boolean isNoGravity() {
         return true;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if (prev) {
             if (source.getEntity() != null) {
-                if (source.getEntity() instanceof LivingEntity) {
-                    LivingEntity hurter = (LivingEntity) source.getEntity();
+                if (source.getEntity() instanceof LivingEntity hurter) {
                     if (hurter.hasEffect(AMEffectRegistry.SUNBIRD_BLESSING)) {
                         hurter.removeEffect(AMEffectRegistry.SUNBIRD_BLESSING);
                     }
@@ -152,6 +168,7 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
         return prev;
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isInWater()) {
             this.moveRelative(0.02F, travelVector);
@@ -179,6 +196,7 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
         this.calculateEntityAnimation(false);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevBirdPitch = this.birdPitch;
@@ -274,6 +292,7 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
     }
 
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("BeaconPosX")) {
@@ -286,6 +305,7 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         BlockPos blockpos = this.beaconPos;
@@ -341,6 +361,7 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
             this.parentEntity = sunbird;
         }
 
+        @Override
         public void tick() {
             if (this.operation == MoveControl.Operation.MOVE_TO) {
                 Vec3 vector3d = new Vec3(this.wantedX - parentEntity.getX(), this.wantedY - parentEntity.getY(), this.wantedZ - parentEntity.getZ());
@@ -388,6 +409,7 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
+        @Override
         public boolean canUse() {
             MoveControl movementcontroller = this.parentEntity.getMoveControl();
             if (!movementcontroller.hasWanted() || target == null) {
@@ -404,14 +426,17 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
             return false;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return target != null && parentEntity.distanceToSqr(Vec3.atCenterOf(target)) > 2.4D && parentEntity.getMoveControl().hasWanted() && !parentEntity.horizontalCollision;
         }
 
+        @Override
         public void stop() {
             target = null;
         }
 
+        @Override
         public void tick() {
             if (target == null) {
                 if (parentEntity.beaconPos != null) {

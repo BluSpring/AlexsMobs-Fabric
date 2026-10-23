@@ -14,15 +14,18 @@ public class CrocodileAIMelee extends MeleeAttackGoal {
         this.crocodile = crocodile;
     }
 
+    @Override
     public boolean canUse() {
 
         return super.canUse() && crocodile.getPassengers().isEmpty();
     }
 
+    @Override
     public boolean canContinueToUse() {
         return super.canContinueToUse() && crocodile.getPassengers().isEmpty();
     }
 
+    @Override
     protected void checkAndPerformAttack(LivingEntity enemy) {
         this.checkAndPerformAttack(enemy, this.mob.distanceToSqr(enemy));
     }
@@ -38,7 +41,7 @@ public class CrocodileAIMelee extends MeleeAttackGoal {
     }
 
     protected double getAttackReachSqr(LivingEntity target) {
-        return (double)(this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + target.getBbWidth());
+        return this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + target.getBbWidth();
     }
 
 }

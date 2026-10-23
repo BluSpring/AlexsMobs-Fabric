@@ -4,7 +4,11 @@ import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAISwimBottom;
 import com.github.alexthe666.alexsmobs.entity.ai.AquaticMoveController;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -20,7 +24,13 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
@@ -35,15 +45,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketable {
 
@@ -66,6 +72,7 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
     }
 
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.blobfishSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -74,10 +81,12 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 8D).add(Attributes.MOVEMENT_SPEED, 0.25F);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new WaterBoundPathNavigation(this, worldIn);
     }
 
+    @Override
     protected void handleAirSupply(int p_209207_1_) {
         if (this.isAlive() && !this.isInWaterOrBubble() && !isSlimed()) {
             this.setAirSupply(p_209207_1_ - 1);
@@ -94,14 +103,17 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
         return p_213348_2_.height() * 0.65F;
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.hasCustomName() || this.fromBucket() || isSlimed();
     }
 
+    @Override
     public boolean removeWhenFarAway(double p_213397_1_) {
         return !this.fromBucket() && !this.hasCustomName();
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 4;
     }
@@ -115,6 +127,7 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
         builder.define(SLIMED, false);
     }
 
+    @Override
     public EntityDimensions getDefaultDimensions(Pose poseIn) {
         return super.getDefaultDimensions(poseIn).scale(this.getBlobfishScale());
     }
@@ -135,6 +148,7 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
         return SoundEvents.BUCKET_FILL_FISH;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("FromBucket", this.fromBucket());
@@ -143,6 +157,7 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
         compound.putFloat("BlobfishScale", this.getBlobfishScale());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFromBucket(compound.getBoolean("FromBucket"));
@@ -188,6 +203,7 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
         this.entityData.set(SLIMED, slimed);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new TryFindWaterGoal(this));
@@ -195,6 +211,7 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
         this.goalSelector.addGoal(3, new AnimalAISwimBottom(this, 1F, 7));
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -227,10 +244,12 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
         return Bucketable.bucketMobPickup(player, hand, this).orElse(super.mobInteract(player, hand));
     }
 
+    @Override
     protected SoundEvent getSwimSound() {
         return SoundEvents.FISH_SWIM;
     }
 
+    @Override
     protected void playStepSound(BlockPos p_180429_1_, BlockState p_180429_2_) {
     }
 
@@ -270,18 +289,20 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
         }
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setBlobfishScale(0.75F + random.nextFloat() * 0.5F);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevSquishFactor = this.squishFactor;
         this.squishFactor += (this.squishAmount - this.squishFactor) * 0.5F;
 
-        final float f2 = (float) -((float) this.getDeltaMovement().y * 2.2F * Mth.RAD_TO_DEG);
+        final float f2 = -((float) this.getDeltaMovement().y * 2.2F * Mth.RAD_TO_DEG);
         this.setXRot(f2);
         if (!isInWater()) {
             if (this.onGround()) {
@@ -309,10 +330,12 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
         this.squishAmount *= 0.6F;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.COD_DEATH;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return SoundEvents.COD_HURT;
     }

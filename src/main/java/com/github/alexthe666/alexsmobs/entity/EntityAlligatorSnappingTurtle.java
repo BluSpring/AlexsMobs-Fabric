@@ -89,14 +89,17 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
         this.setPathfindingMalus(PathType.WATER_BORDER, 0.0F);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.ALLIGATOR_SNAPPING_TURTLE_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.ALLIGATOR_SNAPPING_TURTLE_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.ALLIGATOR_SNAPPING_TURTLE_HURT;
     }
@@ -107,6 +110,7 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
         return spawnBlock && pos.getY() < worldIn.getSeaLevel() + 4;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.alligatorSnappingTurtleSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -115,10 +119,12 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 18.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.7D).add(Attributes.ARMOR, 8D).add(Attributes.FOLLOW_RANGE, 16.0D).add(Attributes.ATTACK_DAMAGE, 4.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
+    @Override
     public float getScale() {
         return this.isBaby() ? 0.3F : 1.0F;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.3D, false));
         this.goalSelector.addGoal(2, new AnimalAIFindWater(this));
@@ -128,25 +134,30 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this) {
+            @Override
             public boolean canContinueToUse() {
                 return chaseTime >= 0 && super.canContinueToUse();
             }
         }));
         this.targetSelector.addGoal(2, new EntityAINearestTarget3D(this, LivingEntity.class, 2, false, true, TARGET_PRED) {
+            @Override
             protected AABB getTargetSearchArea(double targetDistance) {
                 return this.mob.getBoundingBox().inflate(0.5D, 2D, 0.5D);
             }
         });
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.ALLIGATOR_SNAPPING_TURTLE_BREEDABLES);
     }
 
+    @Override
     public boolean onClimbable() {
         return this.isBesideClimbableBlock();
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         return true;
     }
@@ -162,6 +173,7 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
         builder.define(LUNGE_FLAG, false);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevOpenMouthProgress = openMouthProgress;
@@ -242,11 +254,13 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
         }
     }
 
+    @Override
     @Nullable
     public LivingEntity getTarget() {
         return this.chaseTime < 0 ? null : super.getTarget();
     }
 
+    @Override
     public void setTarget(@Nullable LivingEntity entitylivingbaseIn) {
         if (this.chaseTime >= 0) {
             super.setTarget(entitylivingbaseIn);
@@ -255,11 +269,13 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
         }
     }
 
+    @Override
     @Nullable
     public LivingEntity getLastHurtByMob() {
         return this.chaseTime < 0 ? null : super.getLastHurtByMob();
     }
 
+    @Override
     public void setLastHurtByMob(@Nullable LivingEntity entitylivingbaseIn) {
         if (this.chaseTime >= 0) {
             super.setLastHurtByMob(entitylivingbaseIn);
@@ -268,6 +284,7 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
         }
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setMoss(random.nextInt(6));
@@ -284,8 +301,10 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
     }
 
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new SemiAquaticPathNavigator(EntityAlligatorSnappingTurtle.this, worldIn) {
+            @Override
             public boolean isStableDestination(BlockPos pos) {
                 return this.level.getBlockState(pos).getFluidState().isEmpty();
             }
@@ -312,6 +331,7 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
 
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Waiting", this.isWaiting());
@@ -322,6 +342,7 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
         compound.putInt("WaitTime2", this.timeUntilWait);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setWaiting(compound.getBoolean("Waiting"));
@@ -357,6 +378,7 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
 //        return false; // Alligator Snapping Turtle can breathe underwater
 //    }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         return worldIn.getFluidState(pos.below()).isEmpty() && worldIn.getFluidState(pos).is(FluidTags.WATER) ? 10.0F : super.getWalkTargetValue(pos, worldIn);
     }
@@ -377,10 +399,12 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
     }
 
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -399,6 +423,7 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
 
     }
 
+    @Override
     public boolean readyForShearing() {
         return this.isAlive() && this.getMoss() > 0;
     }

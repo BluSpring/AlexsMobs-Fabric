@@ -109,6 +109,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
 
     }
 
+    @Override
     public void setTarget(@Nullable LivingEntity entitylivingbaseIn) {
         if(entitylivingbaseIn instanceof Player && ((Player) entitylivingbaseIn).isCreative()){
             return;
@@ -116,6 +117,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         super.setTarget(entitylivingbaseIn);
     }
 
+    @Override
     @Nullable
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return this.isQueen() ? QUEEN_LOOT : super.getDefaultLootTable();
@@ -133,6 +135,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         }
     }
 
+    @Override
     public boolean canCollideWith(Entity entity) {
         return !(entity instanceof EntityAnteater) && super.canCollideWith(entity);
     }
@@ -145,6 +148,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         return Block.isFaceFull(reader.getBlockState(pos).getCollisionShape(reader, pos, CollisionContext.of(entityIn)), direction);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new ReturnToHiveGoal());
@@ -155,10 +159,11 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         this.goalSelector.addGoal(6, new AnimalAIWanderRanged(this, 30, 1.0D, 25, 7));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(1, (new AngerGoal(this)).setAlertOthers(new Class[0]));
+        this.targetSelector.addGoal(1, (new AngerGoal(this)).setAlertOthers());
         this.targetSelector.addGoal(2, new ResetUniversalAngerTargetGoal<>(this, true));
     }
 
+    @Override
     public EntityDimensions getDefaultDimensions(Pose poseIn) {
         return isQueen() && !isBaby() ? QUEEN_SIZE : super.getDefaultDimensions(poseIn);
     }
@@ -167,10 +172,12 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         return false;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -178,22 +185,27 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         return this.entityData.get(ATTACHED_FACE);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new WallClimberNavigation(this, worldIn);
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return isQueen() ? AMSoundRegistry.LEAFCUTTER_ANT_QUEEN_HURT : AMSoundRegistry.LEAFCUTTER_ANT_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return isQueen() ? AMSoundRegistry.LEAFCUTTER_ANT_QUEEN_HURT : AMSoundRegistry.LEAFCUTTER_ANT_HURT;
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
 
     }
 
+    @Override
     public void push(Entity entity) {
         if(!(entity instanceof EntityAnteater)){
             super.push(entity);
@@ -208,6 +220,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         }
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -244,6 +257,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         return type;
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 48) {
@@ -259,6 +273,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
 
     }
 
+    @Override
     public void tick() {
         this.prevAttachChangeProgress = this.attachChangeProgress;
         super.tick();
@@ -360,10 +375,12 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         }
     }
 
+    @Override
     protected void onInsideBlock(BlockState state) {
 
     }
 
+    @Override
     public boolean onClimbable() {
         return this.isBesideClimbableBlock();
     }
@@ -383,26 +400,32 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         this.entityData.set(CLIMBING, b0);
     }
 
+    @Override
     public int getRemainingPersistentAngerTime() {
         return this.entityData.get(ANGER_TIME);
     }
 
+    @Override
     public void setRemainingPersistentAngerTime(int time) {
         this.entityData.set(ANGER_TIME, time);
     }
 
+    @Override
     public UUID getPersistentAngerTarget() {
         return this.lastHurtBy;
     }
 
+    @Override
     public void setPersistentAngerTarget(@Nullable UUID target) {
         this.lastHurtBy = target;
     }
 
+    @Override
     public void startPersistentAngerTimer() {
         this.setRemainingPersistentAngerTime(ANGRY_TIMER.sample(this.random));
     }
 
+    @Override
     protected void customServerAiStep() {
         if (!this.level().isClientSide) {
             this.updatePersistentAnger((ServerLevel)this.level(), false);
@@ -422,6 +445,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         builder.define(ANGER_TIME, 0);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setAntScale(0.75F + random.nextFloat() * 0.3F);
@@ -478,6 +502,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         this.entityData.set(QUEEN, Boolean.valueOf(queen));
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(ATTACHED_FACE, Direction.from3DDataValue(compound.getByte("AttachFace")));
@@ -508,6 +533,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putByte("AttachFace", (byte) this.entityData.get(ATTACHED_FACE).get3DDataValue());
@@ -632,6 +658,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         animationTick = tick;
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         this.setAnimation(ANIMATION_BITE);
         return true;
@@ -678,22 +705,26 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
             return false;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return hivePos != null && EntityLeafcutterAnt.this.distanceToSqr(Vec3.upFromBottomCenterOf(hivePos, 1)) > 1F;
         }
 
+        @Override
         public void stop() {
             this.hivePos = null;
             this.searchCooldown = 20;
             this.approachTime = 0;
         }
 
+        @Override
         public void start() {
             this.searchCooldown = 20;
             this.approachTime = 0;
             moveToCooldown = 10 + random.nextInt(10);
         }
 
+        @Override
         public void tick() {
             if(moveToCooldown > 0){
                 moveToCooldown--;
@@ -703,8 +734,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
                 double dist = EntityLeafcutterAnt.this.distanceToSqr(Vec3.upFromBottomCenterOf(hivePos, 1));
                 if (dist < 1.2F && EntityLeafcutterAnt.this.getBlockPosBelowThatAffectsMyMovement().equals(hivePos)) {
                     BlockEntity tileentity = EntityLeafcutterAnt.this.level().getBlockEntity(hivePos);
-                    if (tileentity instanceof TileEntityLeafcutterAnthill) {
-                        TileEntityLeafcutterAnthill beehivetileentity = (TileEntityLeafcutterAnthill) tileentity;
+                    if (tileentity instanceof TileEntityLeafcutterAnthill beehivetileentity) {
                         beehivetileentity.tryEnterHive(EntityLeafcutterAnt.this, EntityLeafcutterAnt.this.hasLeaf());
                     }
                 }
@@ -756,10 +786,12 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
         /**
          * Returns whether an in-progress EntityAIBase should continue executing
          */
+        @Override
         public boolean canContinueToUse() {
             return EntityLeafcutterAnt.this.isAngry() && super.canContinueToUse();
         }
 
+        @Override
         protected void alertOther(Mob mobIn, LivingEntity targetIn) {
             if (mobIn instanceof EntityLeafcutterAnt && this.mob.hasLineOfSight(targetIn)) {
                 mobIn.setTarget(targetIn);

@@ -27,18 +27,22 @@ public class HummingbirdAIPollinate  extends MoveToBlockGoal {
         this.bird = bird;
     }
 
+    @Override
     public boolean canUse() {
         return !bird.isBaby() && bird.pollinateCooldown == 0 && super.canUse();
     }
 
+    @Override
     public void stop() {
         idleAtFlowerTime = 0;
     }
 
+    @Override
     public double acceptedDistance() {
         return 3D;
     }
 
+    @Override
     public void tick() {
         super.tick();
         BlockPos blockpos = this.getMoveToTarget();
@@ -78,6 +82,7 @@ public class HummingbirdAIPollinate  extends MoveToBlockGoal {
         return blockpos.distSqr(AMBlockPos.fromCoords(positionVec.x(), blockpos.getY(), positionVec.z())) < distance * distance;
     }
 
+    @Override
     protected boolean isReachedTarget() {
         return this.isAboveDestinationBear;
     }

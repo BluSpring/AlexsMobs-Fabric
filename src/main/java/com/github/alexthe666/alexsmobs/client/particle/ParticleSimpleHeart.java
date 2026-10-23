@@ -1,9 +1,14 @@
 package com.github.alexthe666.alexsmobs.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -11,19 +16,21 @@ public class ParticleSimpleHeart extends TextureSheetParticle {
 
     protected ParticleSimpleHeart(ClientLevel world, double x, double y, double z) {
         super(world, x, y, z);
-        this.xd *= (double)0.01F;
-        this.yd *= (double)0.01F;
-        this.zd *= (double)0.01F;
+        this.xd *= 0.01F;
+        this.yd *= 0.01F;
+        this.zd *= 0.01F;
         this.yd += 0.1D;
         this.quadSize *= 2F;
         this.lifetime = 32;
         this.hasPhysics = false;
     }
 
+    @Override
     public float getQuadSize(float scaleFactor) {
         return this.quadSize * Mth.clamp(((float)this.age + scaleFactor) / (float)this.lifetime * 16.0F, 0.0F, 1.0F);
     }
 
+    @Override
     public void tick() {
         this.xo = this.x;
         this.yo = this.y;
@@ -37,12 +44,12 @@ public class ParticleSimpleHeart extends TextureSheetParticle {
                 this.zd *= 1.1D;
             }
 
-            this.xd *= (double)0.86F;
-            this.yd *= (double)0.86F;
-            this.zd *= (double)0.86F;
+            this.xd *= 0.86F;
+            this.yd *= 0.86F;
+            this.zd *= 0.86F;
             if (this.onGround) {
-                this.xd *= (double)0.7F;
-                this.zd *= (double)0.7F;
+                this.xd *= 0.7F;
+                this.zd *= 0.7F;
             }
 
         }
@@ -61,6 +68,7 @@ public class ParticleSimpleHeart extends TextureSheetParticle {
             this.spriteSet = spriteSet;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             ParticleSimpleHeart heartparticle = new ParticleSimpleHeart(worldIn, x, y, z);
             heartparticle.pickSprite(this.spriteSet);

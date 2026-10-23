@@ -27,18 +27,22 @@ public class GorillaAIForageLeaves extends MoveToBlockGoal {
         this.gorilla = gorilla;
     }
 
+    @Override
     public boolean canUse() {
         return !gorilla.isBaby() && gorilla.getMainHandItem().isEmpty() && super.canUse();
     }
 
+    @Override
     public void stop() {
         idleAtLeavesTime = 0;
     }
 
+    @Override
     public double acceptedDistance() {
         return 2D;
     }
 
+    @Override
     public void tick() {
         super.tick();
         BlockPos blockpos = this.getMoveToTarget();
@@ -77,6 +81,7 @@ public class GorillaAIForageLeaves extends MoveToBlockGoal {
         return blockpos.distSqr(AMBlockPos.fromCoords(positionVec.x(), blockpos.getY(), positionVec.z())) < distance * distance;
     }
 
+    @Override
     protected boolean isReachedTarget() {
         return this.isAboveDestinationBear;
     }

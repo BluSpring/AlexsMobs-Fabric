@@ -1,10 +1,14 @@
 package com.github.alexthe666.alexsmobs.world;
 
+import java.util.Iterator;
+import java.util.Random;
+
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityLeafcutterAnt;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityLeafcutterAnthill;
 import com.mojang.serialization.Codec;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -13,9 +17,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-
-import java.util.Iterator;
-import java.util.Random;
 
 public class FeatureLeafcutterAnthill extends Feature<NoneFeatureConfiguration> {
 
@@ -60,8 +61,7 @@ public class FeatureLeafcutterAnthill extends Feature<NoneFeatureConfiguration> 
         if (context.level().getBlockState(heightPos.above(outOfGround + 1)).getBlock() != AMBlockRegistry.LEAFCUTTER_ANTHILL && context.level().getBlockState(heightPos.above(outOfGround - 1)).getBlock() != AMBlockRegistry.LEAFCUTTER_ANTHILL) {
             context.level().setBlock(heightPos.above(outOfGround), AMBlockRegistry.LEAFCUTTER_ANTHILL.defaultBlockState(), 4);
             BlockEntity tileentity = context.level().getBlockEntity(heightPos.above(outOfGround));
-            if (tileentity instanceof TileEntityLeafcutterAnthill) {
-                TileEntityLeafcutterAnthill beehivetileentity = (TileEntityLeafcutterAnthill)tileentity;
+            if (tileentity instanceof TileEntityLeafcutterAnthill beehivetileentity) {
                 int j = 3 + chunkSeedRandom.nextInt(3);
                 if(beehivetileentity.hasNoAnts()){
                     for(int k = 0; k < j; ++k) {

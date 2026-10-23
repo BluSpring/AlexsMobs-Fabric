@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.block;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.entity.EntityLeafcutterAnt;
 import com.github.alexthe666.alexsmobs.entity.EntityManedWolf;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
@@ -7,12 +9,14 @@ import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityLeafcutterAnthill;
 import com.mojang.serialization.MapCodec;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +24,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -36,9 +39,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 
-import org.jetbrains.annotations.Nullable;
-import java.util.List;
-
 public class BlockLeafcutterAnthill extends BaseEntityBlock {
     public static final MapCodec<BlockLeafcutterAnthill> CODEC = simpleCodec(p -> new BlockLeafcutterAnthill());
 
@@ -53,8 +53,7 @@ public class BlockLeafcutterAnthill extends BaseEntityBlock {
 
     @Override
     public ItemInteractionResult useItemOn(ItemStack heldItem, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        if (worldIn.getBlockEntity(pos) instanceof TileEntityLeafcutterAnthill) {
-            TileEntityLeafcutterAnthill hill = (TileEntityLeafcutterAnthill) worldIn.getBlockEntity(pos);
+        if (worldIn.getBlockEntity(pos) instanceof TileEntityLeafcutterAnthill hill) {
             if (heldItem.getItem() == AMItemRegistry.GONGYLIDIA && hill.hasQueen()) {
                 hill.releaseQueens();
                 if (!player.isCreative()) {
@@ -67,15 +66,16 @@ public class BlockLeafcutterAnthill extends BaseEntityBlock {
     }
 
 
+    @Override
     public RenderShape getRenderShape(BlockState p_149645_1_) {
         return RenderShape.MODEL;
     }
 
+    @Override
     public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
         if (!worldIn.isClientSide && player.isCreative() && worldIn.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
             BlockEntity tileentity = worldIn.getBlockEntity(pos);
-            if (tileentity instanceof TileEntityLeafcutterAnthill) {
-                TileEntityLeafcutterAnthill anthivetileentity = (TileEntityLeafcutterAnthill) tileentity;
+            if (tileentity instanceof TileEntityLeafcutterAnthill anthivetileentity) {
                 ItemStack itemstack = new ItemStack(this);
                 boolean flag = !anthivetileentity.hasNoAnts();
                 if (!flag) {
@@ -95,11 +95,11 @@ public class BlockLeafcutterAnthill extends BaseEntityBlock {
         return super.playerWillDestroy(worldIn, pos, state, player);
     }
 
+    @Override
     public void fallOn(Level worldIn, BlockState state, BlockPos pos, Entity entityIn, float fallDistance) {
         if (entityIn instanceof LivingEntity && !(entityIn instanceof EntityManedWolf)) {
             this.angerNearbyAnts(worldIn, (LivingEntity) entityIn, pos);
-            if (!worldIn.isClientSide && worldIn.getBlockEntity(pos) instanceof TileEntityLeafcutterAnthill) {
-                TileEntityLeafcutterAnthill beehivetileentity = (TileEntityLeafcutterAnthill) worldIn.getBlockEntity(pos);
+            if (!worldIn.isClientSide && worldIn.getBlockEntity(pos) instanceof TileEntityLeafcutterAnthill beehivetileentity) {
                 beehivetileentity.angerAnts((LivingEntity) entityIn, worldIn.getBlockState(pos), BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
                 if(entityIn instanceof ServerPlayer){
                     AMAdvancementTriggerRegistry.STOMP_LEAFCUTTER_ANTHILL.trigger((ServerPlayer)entityIn);
@@ -109,10 +109,10 @@ public class BlockLeafcutterAnthill extends BaseEntityBlock {
         super.fallOn(worldIn, state, pos, entityIn, fallDistance);
     }
 
+    @Override
     public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
         super.playerDestroy(worldIn, player, pos, state, te, stack);
-        if (!worldIn.isClientSide && te instanceof TileEntityLeafcutterAnthill) {
-            TileEntityLeafcutterAnthill beehivetileentity = (TileEntityLeafcutterAnthill) te;
+        if (!worldIn.isClientSide && te instanceof TileEntityLeafcutterAnthill beehivetileentity) {
             if (stack.getEnchantments().getLevel(worldIn.holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH)) == 0) {
                 beehivetileentity.angerAnts(player, state, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
                 worldIn.updateNeighbourForOutputSignal(pos, this);
@@ -155,6 +155,7 @@ public class BlockLeafcutterAnthill extends BaseEntityBlock {
         return new TileEntityLeafcutterAnthill(pos, state);
     }
 
+    @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152180_, BlockState p_152181_, BlockEntityType<T> p_152182_) {
         return p_152180_.isClientSide ? null : createTickerHelper(p_152182_, AMTileEntityRegistry.LEAFCUTTER_ANTHILL, TileEntityLeafcutterAnthill::serverTick);

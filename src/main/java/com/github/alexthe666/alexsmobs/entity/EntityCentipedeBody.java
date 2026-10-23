@@ -1,8 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.message.MessageHurtMultipart;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -12,7 +19,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
@@ -24,12 +35,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Predicate;
 
 public class EntityCentipedeBody extends Mob implements IHurtableMultipart {
 
@@ -52,6 +57,7 @@ public class EntityCentipedeBody extends Mob implements IHurtableMultipart {
         return false;
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.getParent() != null;
     }
@@ -62,6 +68,7 @@ public class EntityCentipedeBody extends Mob implements IHurtableMultipart {
         return  source.is(DamageTypes.IN_WALL)  || super.isInvulnerableTo(source);
     }
 
+    @Override
     public boolean isNoGravity() {
         return false;
     }
@@ -95,6 +102,7 @@ public class EntityCentipedeBody extends Mob implements IHurtableMultipart {
         this.setParent(parent);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.getParentId() != null) {
@@ -108,6 +116,7 @@ public class EntityCentipedeBody extends Mob implements IHurtableMultipart {
         compound.putFloat("PartRadius", radius);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.hasUUID("ParentUUID")) {
@@ -178,6 +187,7 @@ public class EntityCentipedeBody extends Mob implements IHurtableMultipart {
         return true;
     }
 
+    @Override
     public void pushEntities() {
         final List<Entity> entities = this.level().getEntities(this, this.getBoundingBox().expandTowards(0.2D, 0.0D, 0.2D));
         final Entity parent = this.getParent();
@@ -186,6 +196,7 @@ public class EntityCentipedeBody extends Mob implements IHurtableMultipart {
         }
     }
 
+    @Override
     public boolean startRiding(Entity entityIn) {
         if(!(entityIn instanceof AbstractMinecart || entityIn instanceof Boat)){
             return super.startRiding(entityIn);
@@ -242,6 +253,7 @@ public class EntityCentipedeBody extends Mob implements IHurtableMultipart {
         return avg;
     }
 
+    @Override
     public float getXRot() {
         return this.entityData.get(BODY_XROT);
     }

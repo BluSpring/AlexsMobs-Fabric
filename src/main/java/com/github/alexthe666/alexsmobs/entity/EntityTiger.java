@@ -1,9 +1,17 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.UUID;
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIPanicBaby;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
+import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
+import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
+import com.github.alexthe666.alexsmobs.entity.ai.MovementControllerCustomCollisions;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
@@ -12,6 +20,8 @@ import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.citadel.server.entity.collision.ICustomCollisions;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -29,10 +39,21 @@ import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
@@ -56,11 +77,6 @@ import net.minecraft.world.level.pathfinder.PathfindingContext;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
-import java.util.UUID;
-import java.util.function.Predicate;
 
 public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedEntity, NeutralMob, ITargetsDroppedItems {
 
@@ -113,18 +129,22 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 50D).add(Attributes.ATTACK_DAMAGE, 12.0D).add(Attributes.MOVEMENT_SPEED, 0.25F).add(Attributes.FOLLOW_RANGE, 86).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.tigerSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         return worldIn.getFluidState(pos.below()).isEmpty() && worldIn.getFluidState(pos).is(FluidTags.WATER) ? 0.0F : super.getWalkTargetValue(pos, worldIn);
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return !worldIn.containsAnyLiquid(this.getBoundingBox());
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("TigerSitting", this.isSitting());
@@ -132,6 +152,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         compound.putBoolean("White", this.isWhite());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setSitting(compound.getBoolean("TigerSitting"));
@@ -152,6 +173,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         builder.define(LAST_SCARED_MOB_ID, -1);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new AnimalAIPanicBaby(this, 1.25D));
@@ -165,6 +187,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         this.targetSelector.addGoal(2, (new AngerGoal(this)));
         this.targetSelector.addGoal(3, new AttackPlayerGoal());
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, LivingEntity.class, 220, false, false, AMEntityRegistry.buildPredicateFromTag(AMTagRegistry.TIGER_TARGETS)) {
+            @Override
             public boolean canUse() {
                 return !EntityTiger.this.isBaby() && super.canUse();
             }
@@ -172,24 +195,29 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         this.targetSelector.addGoal(5, new ResetUniversalAngerTargetGoal<>(this, true));
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return isStealth() ? super.getAmbientSound() : getRemainingPersistentAngerTime() > 0 ? AMSoundRegistry.TIGER_ANGRY : AMSoundRegistry.TIGER_IDLE;
     }
 
+    @Override
     public int getAmbientSoundInterval() {
         return getRemainingPersistentAngerTime() > 0 ? 40 : 80;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.TIGER_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.TIGER_HURT;
     }
 
 
 
+    @Override
     protected float getWaterSlowDown() {
         return 0.99F;
     }
@@ -198,6 +226,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         return !isSitting() && !isSleeping() && !this.isHolding();
     }
 
+    @Override
     public double getVisibilityPercent(@Nullable Entity lookingEntity) {
         if (this.isStealth()) {
             return 0.2D;
@@ -205,6 +234,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         return super.getVisibilityPercent(lookingEntity);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.TIGER_BREEDABLES);
     }
@@ -216,6 +246,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         super.awardKillScore(entity, score, src);
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (!this.shouldMove()) {
             if (this.getNavigation().getPath() != null) {
@@ -226,6 +257,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         super.travel(vec3d);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new Navigator(this, worldIn);
     }
@@ -270,6 +302,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         this.entityData.set(HOLDING, running);
     }
 
+    @Override
     public boolean isSleeping() {
         return this.entityData.get(SLEEPING);
     }
@@ -278,32 +311,39 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         this.entityData.set(SLEEPING, sleeping);
     }
 
+    @Override
     public int getRemainingPersistentAngerTime() {
         return this.entityData.get(ANGER_TIME);
     }
 
+    @Override
     public void setRemainingPersistentAngerTime(int time) {
         this.entityData.set(ANGER_TIME, time);
     }
 
+    @Override
     public UUID getPersistentAngerTarget() {
         return this.lastHurtBy;
     }
 
+    @Override
     public void setPersistentAngerTarget(@Nullable UUID target) {
         this.lastHurtBy = target;
     }
 
+    @Override
     public void startPersistentAngerTimer() {
         this.setRemainingPersistentAngerTime(ANGRY_TIMER.sample(this.random));
     }
 
+    @Override
     protected void customServerAiStep() {
         if (!this.level().isClientSide) {
             this.updatePersistentAnger((ServerLevel) this.level(), false);
         }
     }
 
+    @Override
     public boolean isColliding(BlockPos pos, BlockState blockstate) {
         return !(blockstate.getBlock() == Blocks.BAMBOO || blockstate.is(BlockTags.LEAVES)) && super.isColliding(pos, blockstate);
     }
@@ -312,6 +352,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         return ICustomCollisions.getAllowedMovementForEntity(this, vec3);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevSitProgress = sitProgress;
@@ -436,12 +477,12 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         final boolean prev = super.hurt(source, amount);
         if (prev) {
             if (source.getEntity() != null) {
-                if (source.getEntity() instanceof LivingEntity) {
-                    LivingEntity hurter = (LivingEntity) source.getEntity();
+                if (source.getEntity() instanceof LivingEntity hurter) {
                     if (hurter.hasEffect(AMEffectRegistry.TIGERS_BLESSING)) {
                         hurter.removeEffect(AMEffectRegistry.TIGERS_BLESSING);
                     }
@@ -452,10 +493,12 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         return prev;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -513,6 +556,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         animationTick = tick;
     }
 
+    @Override
     public void push(Entity entityIn) {
         if (!this.isHolding() || entityIn != this.getTarget()) {
             super.push(entityIn);
@@ -531,6 +575,8 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         return stack.has(DataComponents.FOOD) && stack.get(DataComponents.FOOD) != null && stack.getItem() != Items.ROTTEN_FLESH;
     }
 
+    @Override
+    @Override
     public double getMaxDistToItem() {
         return 3.0D;
     }
@@ -553,6 +599,8 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         }
     }
 
+    @Override
+    @Override
     public void onFindTarget(ItemEntity e) {
         this.dontSitFlag = true;
         this.setSitting(false);
@@ -569,6 +617,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         return 0.1F;
     }
 
+    @Override
     public void jumpFromGround() {
         if (!this.isSleeping() && !this.isSitting()) {
             super.jumpFromGround();
@@ -577,6 +626,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
 
     static class TigerNodeEvaluator extends WalkNodeEvaluator {
         // evaluateBlockPathType signature changed in 1.21
+        @Override
         public PathType getPathType(PathfindingContext context, int x, int y, int z) {
             BlockPos pos = new BlockPos(x, y, z);
             PathType typeIn = super.getPathType(context, x, y, z);
@@ -591,6 +641,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
             super(mob, world, 1.2F);
         }
 
+        @Override
         protected PathFinder createPathFinder(int i) {
             this.nodeEvaluator = new TigerNodeEvaluator();
             return new PathFinder(this.nodeEvaluator, i);
@@ -611,6 +662,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
             return tiger.getTarget() != null && tiger.getTarget().isAlive();
         }
 
+        @Override
         public void tick() {
             if (jumpAttemptCooldown > 0) {
                 jumpAttemptCooldown--;
@@ -670,6 +722,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
             }
         }
 
+        @Override
         public void stop() {
             tiger.setStealth(false);
             tiger.setRunning(false);
@@ -683,6 +736,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
             super(EntityTiger.this, Player.class, 100, false, true, NO_BLESSING_EFFECT);
         }
 
+        @Override
         public boolean canUse() {
             if (EntityTiger.this.isBaby()) {
                 return false;
@@ -691,6 +745,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
             }
         }
 
+        @Override
         protected double getFollowDistance() {
             return 4.0D;
         }
@@ -701,10 +756,12 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
             super(beeIn);
         }
 
+        @Override
         public boolean canContinueToUse() {
             return EntityTiger.this.isAngry() && super.canContinueToUse();
         }
 
+        @Override
         public void start() {
             super.start();
             if (EntityTiger.this.isBaby()) {
@@ -714,6 +771,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
 
         }
 
+        @Override
         protected void alertOther(Mob mobIn, LivingEntity targetIn) {
             if (!mobIn.isBaby()) {
                 super.alertOther(mobIn, targetIn);

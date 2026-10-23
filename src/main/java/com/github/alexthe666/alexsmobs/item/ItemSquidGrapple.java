@@ -28,14 +28,17 @@ public class ItemSquidGrapple extends Item {
         super(properties);
     }
 
+    @Override
     public int getUseDuration(ItemStack p_40680_, LivingEntity entity) {
         return 72000;
     }
 
+    @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.BOW;
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level p_40672_, Player p_40673_, InteractionHand p_40674_) {
         ItemStack itemstack = p_40673_.getItemInHand(p_40674_);
         p_40673_.startUsingItem(p_40674_);
@@ -43,10 +46,12 @@ public class ItemSquidGrapple extends Item {
         return InteractionResultHolder.pass(itemstack);
     }
 
+    @Override
     public void onUseTick(Level worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
 
     }
 
+    @Override
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity livingEntityIn, int i) {
         if(livingEntityIn.isFallFlying()){
             return;
@@ -54,14 +59,11 @@ public class ItemSquidGrapple extends Item {
         livingEntityIn.playSound(AMSoundRegistry.GIANT_SQUID_TENTACLE,1.0F, 1.0F + (livingEntityIn.getRandom().nextFloat() - livingEntityIn.getRandom().nextFloat()) * 0.2F);
         livingEntityIn.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
         if (!worldIn.isClientSide) {
-            boolean left = false;
-            if (livingEntityIn.getUsedItemHand() == InteractionHand.OFF_HAND && livingEntityIn.getMainArm() == HumanoidArm.RIGHT || livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND && livingEntityIn.getMainArm() == HumanoidArm.LEFT) {
-                left = true;
-            }
+            boolean left = livingEntityIn.getUsedItemHand() == InteractionHand.OFF_HAND && livingEntityIn.getMainArm() == HumanoidArm.RIGHT || livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND && livingEntityIn.getMainArm() == HumanoidArm.LEFT;
             int power = this.getUseDuration(stack, livingEntityIn) - i;
             EntitySquidGrapple hook = new EntitySquidGrapple(worldIn, livingEntityIn, !left);
             Vec3 vector3d = livingEntityIn.getViewVector(1.0F);
-            hook.shoot((double) vector3d.x(), (double) vector3d.y(), (double) vector3d.z(), getPowerForTime(power) * 3, 1);
+            hook.shoot(vector3d.x(), vector3d.y(), vector3d.z(), getPowerForTime(power) * 3, 1);
             hook.setXRot(livingEntityIn.getXRot());
             hook.setYRot(livingEntityIn.getYRot());
             if (!worldIn.isClientSide) {
@@ -73,6 +75,7 @@ public class ItemSquidGrapple extends Item {
         }
     }
 
+    @Override
     public boolean isValidRepairItem(ItemStack s, ItemStack s1) {
         return s1.is(AMItemRegistry.LOST_TENTACLE);
     }

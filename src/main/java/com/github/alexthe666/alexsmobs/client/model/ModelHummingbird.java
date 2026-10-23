@@ -139,6 +139,7 @@ public class ModelHummingbird extends AdvancedEntityModel<EntityHummingbird> {
         return ImmutableList.of(root, body, head, wingL, wingL_r1, wingR, wingR_r1, tail, legL, legR);
     }
 
+    @Override
     public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.young) {
             float f = 1.75F;

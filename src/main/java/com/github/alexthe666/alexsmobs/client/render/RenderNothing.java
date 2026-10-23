@@ -20,6 +20,7 @@ public class RenderNothing extends LivingEntityRenderer {
 
     }
 
+    @Override
     protected boolean shouldShowName(LivingEntity entity) {
         return super.shouldShowName(entity) && (entity.shouldShowName() || entity.hasCustomName() && entity == this.entityRenderDispatcher.crosshairPickEntity);
     }

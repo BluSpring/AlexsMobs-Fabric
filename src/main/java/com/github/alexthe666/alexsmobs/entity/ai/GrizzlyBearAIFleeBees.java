@@ -1,17 +1,18 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.entity.EntityGrizzlyBear;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.google.common.base.Predicate;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
-import java.util.List;
 
 public class GrizzlyBearAIFleeBees extends Goal {
     private final double farSpeed;
@@ -24,6 +25,7 @@ public class GrizzlyBearAIFleeBees extends Goal {
 
     public GrizzlyBearAIFleeBees(EntityGrizzlyBear entityIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
         this.avoidTargetSelector = new Predicate<Bee>() {
+            @Override
             public boolean apply(@Nullable Bee p_apply_1_) {
                 return p_apply_1_.isAlive() && GrizzlyBearAIFleeBees.this.entity.getSensing().hasLineOfSight(p_apply_1_) && !GrizzlyBearAIFleeBees.this.entity.isAlliedTo(p_apply_1_) && p_apply_1_.getRemainingPersistentAngerTime() > 0;
             }
@@ -35,6 +37,7 @@ public class GrizzlyBearAIFleeBees extends Goal {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
+    @Override
     public boolean canUse() {
         if (this.entity.isTame()) {
             return false;
@@ -45,7 +48,7 @@ public class GrizzlyBearAIFleeBees extends Goal {
         if(this.entity.isSitting()){
             return false;
         }
-        List<Bee> beeEntities = this.entity.level().getEntitiesOfClass(Bee.class, this.entity.getBoundingBox().inflate((double) avoidDistance, 8.0D, (double) avoidDistance), this.avoidTargetSelector);
+        List<Bee> beeEntities = this.entity.level().getEntitiesOfClass(Bee.class, this.entity.getBoundingBox().inflate(avoidDistance, 8.0D, avoidDistance), this.avoidTargetSelector);
         if (beeEntities.isEmpty()) {
             return false;
         } else {
@@ -62,19 +65,23 @@ public class GrizzlyBearAIFleeBees extends Goal {
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         return !entity.getNavigation().isDone();
     }
 
+    @Override
     public void start() {
         entity.getNavigation().moveTo(this.path, farSpeed);
     }
 
+    @Override
     public void stop() {
         this.entity.getNavigation().stop();
         this.closestLivingEntity = null;
     }
 
+    @Override
     public void tick() {
         if(closestLivingEntity != null && closestLivingEntity.getRemainingPersistentAngerTime() <= 0){
             this.stop();

@@ -37,10 +37,12 @@ public class RenderTerrapin extends MobRenderer<EntityTerrapin, ModelTerrapin> {
         this.addLayer(new TurtleOverlayLayer(this, 2));
     }
 
+    @Override
     protected void scale(EntityTerrapin entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityTerrapin entity) {
         if(entity.isKoopa()){
             return TerrapinTypes.KOOPA.getTexture();
@@ -48,6 +50,7 @@ public class RenderTerrapin extends MobRenderer<EntityTerrapin, ModelTerrapin> {
         return entity.getTurtleType().getTexture();
     }
 
+    @Override
     protected void setupRotations(EntityTerrapin entity, PoseStack stack, float pitchIn, float yawIn, float partialTickTime, float tickDelta) {
         if (this.isShaking(entity)) {
             yawIn += (float)(Math.cos((double)entity.tickCount * 3.25D) * Math.PI * (double)0.4F);
@@ -70,7 +73,7 @@ public class RenderTerrapin extends MobRenderer<EntityTerrapin, ModelTerrapin> {
             stack.mulPose(Axis.YP.rotationDegrees(((float)entity.tickCount + partialTickTime) * -75.0F));
         } else if (pose == Pose.SLEEPING) {
         } else if (isEntityUpsideDown(entity)) {
-            stack.translate(0.0D, (double)(entity.getBbHeight() + 0.1F), 0.0D);
+            stack.translate(0.0D, entity.getBbHeight() + 0.1F, 0.0D);
             stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
         }
     }
@@ -84,6 +87,7 @@ public class RenderTerrapin extends MobRenderer<EntityTerrapin, ModelTerrapin> {
             this.layer = layer;
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource buffer, int packedLightIn, EntityTerrapin turtle, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if(turtle.getTurtleType() == TerrapinTypes.OVERLAY && !turtle.isKoopa()){
                 ResourceLocation tex = layer == 0 ? this.getTextureLocation(turtle) : layer == 1 ? SHELL_TEXTURES[turtle.getShellType() % SHELL_TEXTURES.length] : SKIN_PATTERN_TEXTURES[turtle.getSkinType() % SKIN_PATTERN_TEXTURES.length];

@@ -16,10 +16,12 @@ public class RenderRainFrog extends MobRenderer<EntityRainFrog, ModelRainFrog> {
         super(renderManagerIn, new ModelRainFrog(), 0.2F);
     }
 
+    @Override
     protected void scale(EntityRainFrog entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.9F, 0.9F, 0.9F);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityRainFrog entity) {
         return entity.getVariant() == 2 ? TEXTURE_2 : entity.getVariant() == 1 ? TEXTURE_1 : TEXTURE_0;
     }

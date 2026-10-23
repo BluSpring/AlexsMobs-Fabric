@@ -22,10 +22,12 @@ public class RenderRhinoceros extends MobRenderer<EntityRhinoceros, ModelRhinoce
         this.addLayer(new PotionLayer(this));
     }
 
+    @Override
     protected void scale(EntityRhinoceros rabbit, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(1.1F, 1.1F, 1.1F);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityRhinoceros entity) {
         return entity.isAngry() ? TEXTURE_ANGRY : TEXTURE;
     }
@@ -35,9 +37,10 @@ public class RenderRhinoceros extends MobRenderer<EntityRhinoceros, ModelRhinoce
             super(parent);
         }
 
+        @Override
         public void render(PoseStack p_225628_1_, MultiBufferSource p_225628_2_, int p_225628_3_,
-                EntityRhinoceros rhino, float p_225628_5_, float p_225628_6_, float p_225628_7_, float p_225628_8_,
-                float p_225628_9_, float p_225628_10_) {
+                           EntityRhinoceros rhino, float p_225628_5_, float p_225628_6_, float p_225628_7_, float p_225628_8_,
+                           float p_225628_9_, float p_225628_10_) {
             int color = rhino.getPotionColor();
             if (color != -1 && !rhino.isInvisible()) {
                 float r = (float) (color >> 16 & 255) / 255.0F;

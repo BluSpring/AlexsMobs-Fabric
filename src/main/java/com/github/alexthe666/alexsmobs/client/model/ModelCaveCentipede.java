@@ -265,7 +265,7 @@ public class ModelCaveCentipede<T extends LivingEntity> extends AdvancedEntityMo
                 this.swing(rightLegBodyB, walkSpeed, walkDegree, false, offset + 0.5F, 0F, limbSwing, limbSwingAmount);
                 this.flap(rightLegBodyB2, walkSpeed, walkDegree * 0.5F, false, offset + 0.5F, 0.1F, limbSwing, limbSwingAmount);
                 this.body.rotationPointY += (float)(Math.sin( (double)(limbSwing * walkSpeed) - walkOffset) * (double)limbSwingAmount * (double)walkDegree - (double)(limbSwingAmount * walkDegree) );
-                this.body.rotationPointY += (float)(Math.sin( (double)(ageInTicks * 0.1) - walkOffset) * (double)0.01 );
+                this.body.rotationPointY += (float)(Math.sin( (ageInTicks * 0.1) - walkOffset) * 0.01);
 
             }
 
@@ -283,7 +283,7 @@ public class ModelCaveCentipede<T extends LivingEntity> extends AdvancedEntityMo
                 this.swing(rightLegTailB, walkSpeed, walkDegree, false, offset + 0.5F, 0F, limbSwing, limbSwingAmount);
                 this.flap(rightLegTailB2, walkSpeed, walkDegree * 0.5F, false, offset + 0.5F, 0.1F, limbSwing, limbSwingAmount);
                 this.tail.rotationPointY += (float)(Math.sin( (double)(limbSwing * walkSpeed) - walkOffset) * (double)limbSwingAmount * (double)walkDegree - (double)(limbSwingAmount * walkDegree) );
-                this.tail.rotationPointY += (float)(Math.sin( (double)(ageInTicks * 0.1) - walkOffset) * (double)0.01 );
+                this.tail.rotationPointY += (float)(Math.sin( (ageInTicks * 0.1) - walkOffset) * 0.01);
                 this.swing(leftTail, walkSpeed, walkDegree * 0.2F, true, offset + 1F, 0F, limbSwing, limbSwingAmount);
                 this.swing(rightTail, walkSpeed, walkDegree * 0.2F, false, offset + 1F, 0F, limbSwing, limbSwingAmount);
                 this.walk(leftTail, idleSpeed, idleDegree, true, offset + 1.5F, -0.5F, ageInTicks, 1);

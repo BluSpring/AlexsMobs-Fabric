@@ -22,6 +22,7 @@ public class LayerTigerEyes  extends RenderLayer<EntityTiger, ModelTiger> {
         super(render);
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityTiger tiger, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if(!tiger.isSleeping()){
             long roundedTime = tiger.level().getDayTime() % 24000;

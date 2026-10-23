@@ -1,8 +1,13 @@
 package com.github.alexthe666.alexsmobs.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SimpleAnimatedParticle;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -19,12 +24,13 @@ public class ParticleSmelly extends SimpleAnimatedParticle {
         this.setSpriteFromAge(sprites);
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.oRoll = roll;
-        this.xd += (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.05F);
-        this.yd += (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.05F);
-        this.zd += (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.05F);
+        this.xd += (this.random.nextFloat() - this.random.nextFloat()) * 0.05F;
+        this.yd += (this.random.nextFloat() - this.random.nextFloat()) * 0.05F;
+        this.zd += (this.random.nextFloat() - this.random.nextFloat()) * 0.05F;
         this.setSpriteFromAge(this.sprites);
     }
 
@@ -41,6 +47,7 @@ public class ParticleSmelly extends SimpleAnimatedParticle {
             this.spriteSet = spriteSet;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             ParticleSmelly p = new ParticleSmelly(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet);
             return p;

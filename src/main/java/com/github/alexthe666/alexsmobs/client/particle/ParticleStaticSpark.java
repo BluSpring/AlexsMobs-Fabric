@@ -1,9 +1,13 @@
 package com.github.alexthe666.alexsmobs.client.particle;
 
-import com.github.alexthe666.alexsmobs.client.render.AMRenderTypes;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -17,12 +21,9 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 public class ParticleStaticSpark extends Particle {
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[] {
@@ -53,6 +54,7 @@ public class ParticleStaticSpark extends Particle {
         this.size = this.random.nextFloat() * 0.2F + 0.2F;
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.xd *= 0.97D;
@@ -68,11 +70,12 @@ public class ParticleStaticSpark extends Particle {
         }
     }
 
+    @Override
     public void render(VertexConsumer vertexConsumer, Camera camera, float partialTick) {
         Vec3 vec3 = camera.getPosition();
-        float f = (float) (Mth.lerp((double) partialTick, this.xo, this.x) - vec3.x());
-        float f1 = (float) (Mth.lerp((double) partialTick, this.yo, this.y) - vec3.y());
-        float f2 = (float) (Mth.lerp((double) partialTick, this.zo, this.z) - vec3.z());
+        float f = (float) (Mth.lerp(partialTick, this.xo, this.x) - vec3.x());
+        float f1 = (float) (Mth.lerp(partialTick, this.yo, this.y) - vec3.y());
+        float f2 = (float) (Mth.lerp(partialTick, this.zo, this.z) - vec3.z());
         Quaternionf quaternion;
         if (this.roll == 0.0F) {
             quaternion = camera.rotation();
@@ -138,8 +141,9 @@ public class ParticleStaticSpark extends Particle {
 
     @Environment(EnvType.CLIENT)
     public static class Factory implements ParticleProvider<SimpleParticleType> {
+        @Override
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z,
-                double xSpeed, double ySpeed, double zSpeed) {
+                                       double xSpeed, double ySpeed, double zSpeed) {
             return new ParticleStaticSpark(worldIn, x, y, z, xSpeed, ySpeed, zSpeed);
         }
     }

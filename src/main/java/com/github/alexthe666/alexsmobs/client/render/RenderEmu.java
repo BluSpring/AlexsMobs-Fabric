@@ -18,11 +18,13 @@ public class RenderEmu extends MobRenderer<EntityEmu, ModelEmu> {
         super(renderManagerIn, new ModelEmu(), 0.45F);
     }
 
+    @Override
     protected void scale(EntityEmu entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.85F, 0.85F, 0.85F);
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityEmu entity) {
         if(entity.getVariant() == 2){
             return entity.isBaby() ? TEXTURE_BLONDE_BABY : TEXTURE_BLONDE;

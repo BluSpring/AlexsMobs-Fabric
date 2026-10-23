@@ -6,12 +6,12 @@ import com.github.alexthe666.alexsmobs.client.model.ModelEndPirateAnchorWinch;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityEndPirateAnchorWinch;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.AABB;
 
 public class RenderEndPirateAnchorWinch<T extends TileEntityEndPirateAnchorWinch> implements BlockEntityRenderer<T> {
 
@@ -99,10 +99,12 @@ public class RenderEndPirateAnchorWinch<T extends TileEntityEndPirateAnchorWinch
         }
     }
 
+    @Override
     public boolean shouldRenderOffScreen(T entity) {
         return true;
     }
 
+    @Override
     public int getViewDistance() {
         return 256;
     }

@@ -7,11 +7,13 @@ import com.github.alexthe666.alexsmobs.message.MessageUpdateTransmutablesToDispl
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityTransmutationTable;
 import com.mojang.serialization.MapCodec;
+import io.github.fabricators_of_create.porting_lib.blocks.extensions.PlayerDestroyBlock;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
@@ -21,7 +23,12 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -34,9 +41,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import io.github.fabricators_of_create.porting_lib.blocks.extensions.PlayerDestroyBlock;
-import org.jetbrains.annotations.Nullable;
 
 public class BlockTransmutationTable extends BaseEntityBlock implements AMSpecialRenderBlock, PlayerDestroyBlock {
     public static final MapCodec<BlockTransmutationTable> CODEC = simpleCodec(p -> new BlockTransmutationTable());
@@ -59,6 +63,7 @@ public class BlockTransmutationTable extends BaseEntityBlock implements AMSpecia
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
+    @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return state.getValue(FACING).getAxis() == Direction.Axis.Z ? NS_AABB : EW_AABB;
     }
@@ -69,18 +74,22 @@ public class BlockTransmutationTable extends BaseEntityBlock implements AMSpecia
         return new TileEntityTransmutationTable(pos, state);
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
+    @Override
     public BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
+    @Override
     public BlockState mirror(BlockState state, Mirror mirrorIn) {
         return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
@@ -93,8 +102,7 @@ public class BlockTransmutationTable extends BaseEntityBlock implements AMSpecia
             player.openMenu(state.getMenuProvider(level, pos));
             player.awardStat(Stats.INTERACT_WITH_LOOM);
             BlockEntity te = level.getBlockEntity(pos);
-            if(te instanceof TileEntityTransmutationTable){
-                TileEntityTransmutationTable table = (TileEntityTransmutationTable)te;
+            if(te instanceof TileEntityTransmutationTable table){
 
                 AlexsMobs.sendMSGToAll(new MessageUpdateTransmutablesToDisplay(player.getId(), table.getPossibility(0), table.getPossibility(1), table.getPossibility(2)));
 
@@ -103,6 +111,7 @@ public class BlockTransmutationTable extends BaseEntityBlock implements AMSpecia
         }
     }
 
+    @Override
     public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
         BlockEntity te = level.getBlockEntity(pos);
         return new SimpleMenuProvider((i, inv, player) -> {
@@ -110,6 +119,7 @@ public class BlockTransmutationTable extends BaseEntityBlock implements AMSpecia
         }, CONTAINER_TITLE);
     }
 
+    @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152180_, BlockState p_152181_, BlockEntityType<T> p_152182_) {
         return createTickerHelper(p_152182_, AMTileEntityRegistry.TRANSMUTATION_TABLE, TileEntityTransmutationTable::commonTick);

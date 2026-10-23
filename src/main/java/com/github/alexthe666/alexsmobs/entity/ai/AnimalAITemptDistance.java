@@ -1,13 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.Ingredient;
-
-import java.util.EnumSet;
 
 public class AnimalAITemptDistance extends Goal {
     private final TargetingConditions targetingConditions;
@@ -33,6 +33,7 @@ public class AnimalAITemptDistance extends Goal {
         this.targetingConditions = TargetingConditions.forNonCombat().range(distance).ignoreLineOfSight().copy().selector(this::shouldFollow);
     }
 
+    @Override
     public boolean canUse() {
         if (this.calmDown > 0) {
             --this.calmDown;
@@ -47,6 +48,7 @@ public class AnimalAITemptDistance extends Goal {
         return this.items.test(p_148139_.getMainHandItem()) || this.items.test(p_148139_.getOffhandItem());
     }
 
+    @Override
     public boolean canContinueToUse() {
         if (this.canScare()) {
             if (this.mob.distanceToSqr(this.player) < 36.0D) {
@@ -63,8 +65,8 @@ public class AnimalAITemptDistance extends Goal {
                 this.pz = this.player.getZ();
             }
 
-            this.pRotX = (double)this.player.getXRot();
-            this.pRotY = (double)this.player.getYRot();
+            this.pRotX = this.player.getXRot();
+            this.pRotY = this.player.getYRot();
         }
 
         return this.canUse();
@@ -74,6 +76,7 @@ public class AnimalAITemptDistance extends Goal {
         return this.canScare;
     }
 
+    @Override
     public void start() {
         this.px = this.player.getX();
         this.py = this.player.getY();
@@ -81,6 +84,7 @@ public class AnimalAITemptDistance extends Goal {
         this.isRunning = true;
     }
 
+    @Override
     public void stop() {
         this.player = null;
         this.mob.getNavigation().stop();
@@ -88,6 +92,7 @@ public class AnimalAITemptDistance extends Goal {
         this.isRunning = false;
     }
 
+    @Override
     public void tick() {
         this.mob.getLookControl().setLookAt(this.player, (float)(this.mob.getMaxHeadYRot() + 20), (float)this.mob.getMaxHeadXRot());
         if (this.mob.distanceToSqr(this.player) < 6.25D) {

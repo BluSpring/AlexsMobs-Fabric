@@ -1,10 +1,17 @@
 package com.github.alexthe666.alexsmobs.client.render;
 
+import static net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;
+
 import com.github.alexthe666.alexsmobs.client.model.ModelFarseer;
 import com.github.alexthe666.alexsmobs.entity.EntityFarseer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,20 +21,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-
-import org.jetbrains.annotations.Nullable;
-
-import static net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;
 
 public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
     private static final ResourceLocation TEXTURE = ResourceLocation
@@ -55,6 +54,7 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
         this.addLayer(new LayerOverlay());
     }
 
+    @Override
     public boolean shouldRender(EntityFarseer livingEntityIn, Frustum camera, double camX, double camY, double camZ) {
         if (super.shouldRender(livingEntityIn, camera, camX, camY, camZ)) {
             return true;
@@ -279,12 +279,13 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
 
             matrixStackIn.mulPose(Axis.YP.rotationDegrees(f * this.getFlipDegrees(farseer) * invCameraAmount));
         } else if (isEntityUpsideDown(farseer)) {
-            matrixStackIn.translate(0.0D, (double) (farseer.getBbHeight() + 0.1F), 0.0D);
+            matrixStackIn.translate(0.0D, farseer.getBbHeight() + 0.1F, 0.0D);
             matrixStackIn.mulPose(Axis.ZP.rotationDegrees(180.0F));
         }
 
     }
 
+    @Override
     @Nullable
     protected RenderType getRenderType(EntityFarseer farseer, boolean normal, boolean invis, boolean outline) {
         ResourceLocation resourcelocation = this.getTextureLocation(farseer);
@@ -297,6 +298,7 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityFarseer entity) {
         return entity.isAngry() ? TEXTURE_ANGRY : TEXTURE;
     }
@@ -307,9 +309,10 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
             super(RenderFarseer.this);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntityFarseer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntityFarseer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             if (entitylivingbaseIn.getAnimation() == EntityFarseer.ANIMATION_EMERGE) {
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(TEXTURE_CLAWS));
                 this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn,

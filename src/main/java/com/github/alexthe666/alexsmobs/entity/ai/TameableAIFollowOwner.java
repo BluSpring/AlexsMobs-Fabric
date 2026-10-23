@@ -16,10 +16,12 @@ public class TameableAIFollowOwner extends FollowOwnerGoal {
         this.tameable = tameable;
     }
 
+    @Override
     public boolean canUse(){
         return super.canUse() && follower.shouldFollow() && !isInCombat();
     }
 
+    @Override
     public boolean canContinueToUse(){
         return super.canContinueToUse() && follower.shouldFollow() && !isInCombat();
     }

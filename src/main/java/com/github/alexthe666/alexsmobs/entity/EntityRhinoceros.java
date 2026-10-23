@@ -114,6 +114,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
         builder.define(ANGRY, false);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -130,6 +131,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
             return !this.trusts(entity.getUUID());
         }));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Raider.class, 50, true, true, null){
+            @Override
             public boolean canUse(){
                 return super.canUse() && !EntityRhinoceros.this.isBaby();
             }
@@ -138,10 +140,12 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
         this.targetSelector.addGoal(4, (new AnimalAIHurtByTargetNotBaby(this)));
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new AdvancedPathNavigateNoTeleport(this, worldIn, true);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.rhinocerosSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -213,6 +217,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
         }
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
         if (!isBaby()) {
             this.playSound(AMSoundRegistry.ELEPHANT_WALK, 0.2F, 1.2F);
@@ -221,18 +226,22 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
         }
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.RHINOCEROS_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.RHINOCEROS_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.RHINOCEROS_HURT;
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.RHINOCEROS_BREEDABLES);
     }
@@ -301,13 +310,13 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
 
     private List<UUID> getTrustedUUIDs() {
         List<UUID> list = Lists.newArrayList();
-        list.add((UUID)((Optional)this.entityData.get(DATA_TRUSTED_ID_0)).orElse((UUID)null));
-        list.add((UUID)((Optional)this.entityData.get(DATA_TRUSTED_ID_1)).orElse((UUID)null));
+        list.add((UUID)((Optional)this.entityData.get(DATA_TRUSTED_ID_0)).orElse(null));
+        list.add((UUID)((Optional)this.entityData.get(DATA_TRUSTED_ID_1)).orElse(null));
         return list;
     }
 
     private void addTrustedUUID(@Nullable UUID p_28516_) {
-        if (((Optional)this.entityData.get(DATA_TRUSTED_ID_0)).isPresent()) {
+        if (this.entityData.get(DATA_TRUSTED_ID_0).isPresent()) {
             this.entityData.set(DATA_TRUSTED_ID_1, Optional.ofNullable(p_28516_));
         } else {
             this.entityData.set(DATA_TRUSTED_ID_0, Optional.ofNullable(p_28516_));
@@ -386,6 +395,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
         }
     }
 
+    @Override
     public boolean doHurtTarget(Entity entity) {
         if(this.getAnimation() == NO_ANIMATION){
             this.setAnimation(random.nextBoolean() ? ANIMATION_SLASH : ANIMATION_FLING);
@@ -394,12 +404,14 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
         return false;
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (entityIn instanceof TamableAnimal tamableAnimal && tamableAnimal.getOwnerUUID() != null && trusts(tamableAnimal.getOwnerUUID())) {
             return true;
         }
         return super.isAlliedTo(entityIn) || trusts(entityIn.getUUID());
     }
+    @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         List<UUID> list = this.getTrustedUUIDs();
@@ -421,6 +433,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
         tag.putInt("InflictedCount", this.getInflictedCount());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         ListTag listtag = tag.getList("Trusted", 11);
@@ -436,6 +449,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
     }
 
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -487,6 +501,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
             super(EntityRhinoceros.this, Player.class, 80, true, true, null);
         }
 
+        @Override
         public boolean canUse() {
             if (EntityRhinoceros.this.isBaby() || EntityRhinoceros.this.isInLove() || EntityRhinoceros.this.trustsAny()) {
                 return false;
@@ -495,6 +510,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
             }
         }
 
+        @Override
         protected double getFollowDistance() {
             return 3.0D;
         }
@@ -514,6 +530,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
             super(EntityRhinoceros.this, entities, 10, b, b2, pred);
         }
 
+        @Override
         public boolean canUse() {
             if (this.randomInterval > 0 && this.mob.getRandom().nextInt(this.randomInterval) != 0 || this.mob.isBaby()) {
                 return false;
@@ -524,8 +541,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
                     UUID uuid = (UUID)var1.next();
                     if (uuid != null && EntityRhinoceros.this.level() instanceof ServerLevel) {
                         Entity entity = ((ServerLevel)EntityRhinoceros.this.level()).getEntity(uuid);
-                        if (entity instanceof LivingEntity) {
-                            LivingEntity livingentity = (LivingEntity)entity;
+                        if (entity instanceof LivingEntity livingentity) {
                             this.trusted = livingentity;
                             this.trustedLastHurtBy = livingentity.getLastHurtByMob();
                             this.trustedLastHurt = livingentity.getLastHurtMob();
@@ -545,6 +561,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
             }
         }
 
+        @Override
         public void start() {
             if(this.trustedLastHurtBy != null){
                 this.setTarget(this.trustedLastHurtBy);
@@ -569,14 +586,17 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
             super(EntityRhinoceros.this, 1.0D, true, timr, () -> false);
         }
 
+        @Override
         public void start() {
             super.start();
         }
 
+        @Override
         public boolean canUse() {
             return super.canUse() && this.canRhinoWander();
         }
 
+        @Override
         public boolean canContinueToUse() {
             return super.canContinueToUse() && this.canRhinoWander();
         }

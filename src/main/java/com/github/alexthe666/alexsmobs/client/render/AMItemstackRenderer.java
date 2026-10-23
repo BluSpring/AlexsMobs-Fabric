@@ -1,9 +1,29 @@
 package com.github.alexthe666.alexsmobs.client.render;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
-import com.github.alexthe666.alexsmobs.client.model.*;
-import com.github.alexthe666.alexsmobs.entity.*;
+import com.github.alexthe666.alexsmobs.client.model.ModelEndPirateAnchor;
+import com.github.alexthe666.alexsmobs.client.model.ModelEndPirateAnchorWinch;
+import com.github.alexthe666.alexsmobs.client.model.ModelEndPirateShipWheel;
+import com.github.alexthe666.alexsmobs.client.model.ModelMysteriousWorm;
+import com.github.alexthe666.alexsmobs.client.model.ModelShieldOfTheDeep;
+import com.github.alexthe666.alexsmobs.client.model.ModelTransmutationTable;
+import com.github.alexthe666.alexsmobs.entity.EntityBaldEagle;
+import com.github.alexthe666.alexsmobs.entity.EntityBlobfish;
+import com.github.alexthe666.alexsmobs.entity.EntityCockroach;
+import com.github.alexthe666.alexsmobs.entity.EntityCosmaw;
+import com.github.alexthe666.alexsmobs.entity.EntityElephant;
+import com.github.alexthe666.alexsmobs.entity.EntityGiantSquid;
+import com.github.alexthe666.alexsmobs.entity.EntityLaviathan;
+import com.github.alexthe666.alexsmobs.entity.EntityMimicOctopus;
+import com.github.alexthe666.alexsmobs.entity.EntityMurmur;
+import com.github.alexthe666.alexsmobs.entity.EntityUnderminer;
+import com.github.alexthe666.alexsmobs.entity.EntityVoidWorm;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.item.ItemStinkRay;
 import com.github.alexthe666.alexsmobs.item.ItemTabIcon;
@@ -15,10 +35,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
+import org.joml.Quaternionf;
+
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -35,12 +56,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
-import org.joml.Quaternionf;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 
@@ -435,11 +450,7 @@ public class AMItemstackRenderer implements BuiltinItemRendererRegistry.DynamicI
                 }
             }
             if (fakeEntity instanceof EntityBaldEagle) {
-                if (flags == 98) {
-                    ((EntityBaldEagle) fakeEntity).setCap(true);
-                } else {
-                    ((EntityBaldEagle) fakeEntity).setCap(false);
-                }
+                ((EntityBaldEagle) fakeEntity).setCap(flags == 98);
             }
             if (fakeEntity instanceof EntityVoidWorm) {
                 matrixStackIn.translate(0, 0.5F, 0);

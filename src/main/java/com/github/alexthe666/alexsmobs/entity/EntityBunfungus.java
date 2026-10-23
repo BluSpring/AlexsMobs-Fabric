@@ -2,13 +2,18 @@ package com.github.alexthe666.alexsmobs.entity;
 
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeapRandomly;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
+import com.github.alexthe666.alexsmobs.entity.ai.BunfungusAIBeg;
+import com.github.alexthe666.alexsmobs.entity.ai.BunfungusAIMelee;
+import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -25,7 +30,11 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -76,24 +85,29 @@ public class EntityBunfungus extends PathfinderMob implements IAnimatedEntity {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 80.0D).add(Attributes.ATTACK_DAMAGE, 8.0D).add(Attributes.FOLLOW_RANGE, 32.0D).add(Attributes.MOVEMENT_SPEED, 0.21F);
     }
 
+    @Override
     public void playAmbientSound() {
         if(!this.isSleeping()){
             super.playAmbientSound();
         }
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.BUNFUNGUS_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.BUNFUNGUS_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.BUNFUNGUS_HURT;
     }
 
+    @Override
     public boolean removeWhenFarAway(double p_27598_) {
         return false;
     }
@@ -102,34 +116,41 @@ public class EntityBunfungus extends PathfinderMob implements IAnimatedEntity {
         return worldIn.getBlockState(pos.below()).canOcclude();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.mungusSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new GroundPathNavigatorWide(this, worldIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new BunfungusAIMelee(this));
         this.goalSelector.addGoal(2, new BunfungusAIBeg(this, 1.0D));
         this.goalSelector.addGoal(3, new AnimalAIWanderRanged(this, 60, 1.0D, 16, 7){
+            @Override
             public boolean canUse(){
                 return super.canUse() && EntityBunfungus.this.canUseComplexAI();
             }
         });
         this.goalSelector.addGoal(4, new AnimalAILeapRandomly(this, 60, 7){
+            @Override
             public boolean canUse(){
                 return super.canUse() && EntityBunfungus.this.canUseComplexAI();
             }
         });
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 10.0F){
+            @Override
             public boolean canUse(){
                 return super.canUse() && EntityBunfungus.this.canUseComplexAI();
             }
         });
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this){
+            @Override
             public boolean canUse(){
                 return super.canUse() && EntityBunfungus.this.canUseComplexAI();
             }
@@ -144,6 +165,7 @@ public class EntityBunfungus extends PathfinderMob implements IAnimatedEntity {
         return !this.isRabbitForm() && !this.isSleeping();
     }
 
+    @Override
     protected float getWaterSlowDown() {
         return 0.98F;
     }
@@ -158,13 +180,16 @@ public class EntityBunfungus extends PathfinderMob implements IAnimatedEntity {
         builder.define(TRANSFORMS_IN, 0);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevJumpProgress = jumpProgress;
@@ -324,6 +349,7 @@ public class EntityBunfungus extends PathfinderMob implements IAnimatedEntity {
         }
     }
 
+    @Override
     public boolean isSleeping() {
         return this.entityData.get(SLEEPING);
     }
@@ -364,6 +390,7 @@ public class EntityBunfungus extends PathfinderMob implements IAnimatedEntity {
         this.entityData.set(TRANSFORMS_IN, time);
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         final ItemStack itemstack = player.getItemInHand(hand);
         final InteractionResult type = super.mobInteract(player, hand);
@@ -381,6 +408,7 @@ public class EntityBunfungus extends PathfinderMob implements IAnimatedEntity {
         return type;
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (!this.isRabbitForm() && !this.isSleeping()) {
             super.travel(travelVector);

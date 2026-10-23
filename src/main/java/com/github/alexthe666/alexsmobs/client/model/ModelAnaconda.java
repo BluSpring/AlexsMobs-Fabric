@@ -72,8 +72,7 @@ public class ModelAnaconda<T extends LivingEntity> extends AdvancedEntityModel<T
             this.part.rotationPointX += Mth.sin(limbSwing) * 2.0F * limbSwingAmount;
             this.walk(part, 0.7F, 0.2F, false, 1F, 0.05F, ageInTicks, strangle * 0.2F);
             this.walk(jaw, 0.7F, 0.4F, true, 1F, -0.05F, ageInTicks, strangle * 0.2F);
-        }else if(entity instanceof EntityAnacondaPart){ //body
-            EntityAnacondaPart partEntity = (EntityAnacondaPart)entity;
+        }else if(entity instanceof EntityAnacondaPart partEntity){ //body
             //int i = Mth.clamp(partEntity.getBodyIndex(), 0 , 6);
             float f = 1.01F;
             if(partEntity.getBodyIndex() % 2 == 1){

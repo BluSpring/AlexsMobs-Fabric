@@ -1,12 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityJerboa;
+
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.EnumSet;
 
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 
@@ -24,6 +25,7 @@ public class JerboaAIBeg extends Goal {
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
+    @Override
     public boolean canUse() {
         if (this.delayTemptCounter > 0) {
             --this.delayTemptCounter;
@@ -47,14 +49,17 @@ public class JerboaAIBeg extends Goal {
     }
 
 
+    @Override
     public boolean canContinueToUse() {
         return this.jerboa.getMainHandItem().isEmpty() && this.canUse() && !this.jerboa.isInLove();
     }
 
+    @Override
     public void start() {
         this.isRunning = true;
     }
 
+    @Override
     public void stop() {
         this.closestPlayer = null;
         this.jerboa.getNavigation().stop();
@@ -63,6 +68,7 @@ public class JerboaAIBeg extends Goal {
         this.isRunning = false;
     }
 
+    @Override
     public void tick() {
         this.jerboa.getLookControl().setLookAt(this.closestPlayer, (float)(this.jerboa.getMaxHeadYRot() + 20), (float)this.jerboa.getMaxHeadXRot());
         if (this.jerboa.distanceToSqr(this.closestPlayer) < 12D) {

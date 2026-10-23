@@ -1,15 +1,16 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityHummingbird;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
 
 public class HummingbirdAIWander extends Goal {
     private final EntityHummingbird fly;
@@ -28,18 +29,22 @@ public class HummingbirdAIWander extends Goal {
         this.speed = speed;
     }
 
+    @Override
     public boolean canUse() {
         return fly.hummingStill > 10 && fly.getRandom().nextInt(chance) == 0 && !fly.getMoveControl().hasWanted();
     }
 
+    @Override
     public void stop() {
         moveToPoint = null;
     }
 
+    @Override
     public boolean canContinueToUse() {
         return moveToPoint != null && fly.distanceToSqr(moveToPoint) > 0.85D;
     }
 
+    @Override
     public void start() {
         moveToPoint = this.getRandomLocation();
         if (moveToPoint != null) {
@@ -47,6 +52,7 @@ public class HummingbirdAIWander extends Goal {
         }
     }
 
+    @Override
     public void tick() {
         if (moveToPoint != null) {
             fly.getMoveControl().setWantedPosition(moveToPoint.x, moveToPoint.y, moveToPoint.z, speed);

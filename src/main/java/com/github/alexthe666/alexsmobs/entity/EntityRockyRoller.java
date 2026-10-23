@@ -1,5 +1,8 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import com.github.alexthe666.alexsmobs.entity.ai.AdvancedPathNavigateNoTeleport;
@@ -8,6 +11,7 @@ import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.server.entity.collision.ICustomCollisions;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -20,10 +24,18 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -31,7 +43,12 @@ import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Fallable;
 import net.minecraft.world.level.block.PointedDripstoneBlock;
@@ -43,9 +60,6 @@ import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.EnumSet;
-import java.util.List;
 
 public class EntityRockyRoller extends Monster implements ICustomCollisions {
 
@@ -67,6 +81,7 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
         this.moveControl = new MovementControllerCustomCollisions(this);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.rockyRollerSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -81,10 +96,12 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.ARMOR, 20.0D).add(Attributes.FOLLOW_RANGE, 20.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.7F).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.MOVEMENT_SPEED, 0.25F).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new Navigator(this, worldIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new AIMelee());
@@ -104,18 +121,22 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
         builder.define(ROLLING, false);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.ROCKY_ROLLER_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.ROCKY_ROLLER_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.ROCKY_ROLLER_HURT;
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevRollProgress = rollProgress;
@@ -284,21 +305,26 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
         return source.equals("fallingStalactite") || super.isInvulnerableTo(source);
     }
 
+    @Override
     public int getMaxFallDistance() {
         return super.getMaxFallDistance() * 2;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     public boolean canBeCollidedWith() {
         return this.isAlive();
     }
 
+    @Override
     public void push(Entity entity) {
         entity.setDeltaMovement(entity.getDeltaMovement().add(this.getDeltaMovement()));
     }
@@ -308,6 +334,7 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
         return blockstate.getBlock() instanceof PointedDripstoneBlock;
     }
 
+    @Override
     public boolean isColliding(BlockPos pos, BlockState blockstate) {
         return !(blockstate.getBlock() instanceof PointedDripstoneBlock) && super.isColliding(pos, blockstate);
     }
@@ -316,6 +343,7 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
         return ICustomCollisions.getAllowedMovementForEntity(this, vec3);
     }
 
+    @Override
     public boolean hurt(DamageSource dmg, float amount) {
         if (!this.isMoving() && !dmg.is(DamageTypes.MAGIC) && dmg.getDirectEntity() instanceof LivingEntity livingentity && !(livingentity instanceof EntityRockyRoller)) {
             if (!dmg.is(DamageTypes.EXPLOSION) && !livingentity.hurtMarked) {
@@ -339,6 +367,7 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.JUMP));
         }
 
+        @Override
         public boolean canUse() {
             if (this.rockyRoller.onGround()) {
                 if (rockyRoller.isRolling() || rockyRoller.rollCooldown > 0 || rockyRoller.getTarget() != null && rockyRoller.getTarget().isAlive()) {
@@ -363,14 +392,17 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
             return false;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return false;
         }
 
+        @Override
         public void start() {
             this.rockyRoller.rollFor(30 + random.nextInt(30));
         }
 
+        @Override
         public boolean isInterruptable() {
             return false;
         }
@@ -390,6 +422,7 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
             return EntityRockyRoller.this.getTarget() != null && EntityRockyRoller.this.getTarget().isAlive() && !EntityRockyRoller.this.isRolling();
         }
 
+        @Override
         public void tick() {
             LivingEntity enemy = EntityRockyRoller.this.getTarget();
             double d0 = this.validRollDistance(enemy);
@@ -412,6 +445,7 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
             }
         }
 
+        @Override
         public void stop() {
             super.stop();
             rollTimeout = 0;
@@ -455,6 +489,7 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
             super(mob, world, true);
         }
 
+        @Override
         protected PathFinder createPathFinder(int i) {
             this.nodeEvaluator = new RockyRollerNodeEvaluator();
             return new PathFinder(this.nodeEvaluator, i);

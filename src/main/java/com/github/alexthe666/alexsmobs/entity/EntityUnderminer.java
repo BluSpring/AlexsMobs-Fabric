@@ -1,5 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.EtherealMoveController;
@@ -9,6 +14,9 @@ import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import io.github.fabricators_of_create.porting_lib.blocks.extensions.CustomSoundTypeBlock;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,10 +34,21 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -49,13 +68,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
-
-import io.github.fabricators_of_create.porting_lib.blocks.extensions.CustomSoundTypeBlock;
-import org.jetbrains.annotations.Nullable;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
 
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 
@@ -104,18 +116,21 @@ public class EntityUnderminer extends PathfinderMob {
             }
 
             final int i = iServerWorld.getMaxLocalRawBrightness(pos);
-            return i > random.nextInt(j) ? false : checkMobSpawnRules(entityType, iServerWorld, reason, pos, random);
+            return i <= random.nextInt(j) && checkMobSpawnRules(entityType, iServerWorld, reason, pos, random);
         }
     }
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !requiresCustomPersistence() && !this.hasCustomName();
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.hasCustomName() || lastGivenStack != null;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.underminerSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -131,6 +146,7 @@ public class EntityUnderminer extends PathfinderMob {
         builder.define(VARIANT, 0);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Dwarf", this.isDwarf());
@@ -143,6 +159,7 @@ public class EntityUnderminer extends PathfinderMob {
         }
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setDwarf(compound.getBoolean("Dwarf"));
@@ -155,19 +172,23 @@ public class EntityUnderminer extends PathfinderMob {
         }
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.UNDERMINER_IDLE;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.UNDERMINER_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.UNDERMINER_HURT;
     }
 
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
@@ -204,9 +225,10 @@ public class EntityUnderminer extends PathfinderMob {
         this.getEntityData().set(TARGETED_BLOCK_POS, Optional.ofNullable(beamTarget));
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, (double)1.2F, true));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2F, true));
         this.goalSelector.addGoal(2, new MineGoal());
         this.goalSelector.addGoal(3, new MonsterAIWalkThroughHallsOfStructure(this, 0.5D, 60, StructureTags.MINESHAFT, 50));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -228,6 +250,7 @@ public class EntityUnderminer extends PathfinderMob {
     }
 
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -244,6 +267,7 @@ public class EntityUnderminer extends PathfinderMob {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(AMItemRegistry.GHOSTLY_PICKAXE));
     }
 
+    @Override
     protected float getEquipmentDropChance(EquipmentSlot slot) {
         if(slot == EquipmentSlot.MAINHAND){
             return 0.5F;
@@ -251,6 +275,7 @@ public class EntityUnderminer extends PathfinderMob {
         return super.getEquipmentDropChance(slot);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnData) {
         spawnData = super.finalizeSpawn(level, difficultyInstance, mobSpawnType, spawnData);
@@ -270,6 +295,7 @@ public class EntityUnderminer extends PathfinderMob {
     }
 
 
+    @Override
     public void tick() {
         this.noPhysics = true;
         super.tick();
@@ -322,18 +348,22 @@ public class EntityUnderminer extends PathfinderMob {
         }
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
+    @Override
     public boolean canPickUpLoot() {
         return true;
     }
 
+    @Override
     public boolean wantsToPickUp(ItemStack stack) {
         return stack.is(AMTagRegistry.UNDERMINER_ORES);
     }
 
+    @Override
     protected void pickUpItem(ItemEntity itemEntity) {
         ItemStack itemstack = itemEntity.getItem();
         if (itemstack.is(AMTagRegistry.UNDERMINER_ORES)) {
@@ -350,10 +380,12 @@ public class EntityUnderminer extends PathfinderMob {
 
     }
 
+    @Override
     public void jumpFromGround() {
         // Empty override to prevent jumping
     }
 
+    @Override
     public boolean isNoGravity() {
         return true;
     }
@@ -372,13 +404,16 @@ public class EntityUnderminer extends PathfinderMob {
         });
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     public float getLightLevelDependentMagicValue() {
         return 1.0F;
     }
@@ -423,15 +458,18 @@ public class EntityUnderminer extends PathfinderMob {
         return state.is(ConventionalBlockTags.ORES);
     }
 
+    @Override
     public void aiStep() {
         this.updateSwingTime();
         super.aiStep();
     }
 
+    @Override
     public boolean isAttackable() {
         return !this.isFullyHidden() && super.isAttackable();
     }
 
+    @Override
     public boolean skipAttackInteraction(Entity entity) {
         return this.isFullyHidden() || super.skipAttackInteraction(entity);
     }
@@ -506,12 +544,14 @@ public class EntityUnderminer extends PathfinderMob {
             return minePretendPos != null && EntityUnderminer.this.hasPick() && !EntityUnderminer.this.isHiding() && !EntityUnderminer.this.mineAIFlag && minePretendStartState != null && minePretendStartState.equals(level().getBlockState(minePretendPos)) && mineTime < 200;
         }
 
+        @Override
         public void start() {
             if (minePretendPos != null) {
                 minePretendStartState = EntityUnderminer.this.level().getBlockState(minePretendPos);
             }
         }
 
+        @Override
         public void stop() {
             if(minePretendPos != null && minePretendStartState != null && !minePretendStartState.equals(level().getBlockState(minePretendPos))){
                 for(ServerPlayer serverplayerentity : EntityUnderminer.this.level().getEntitiesOfClass(ServerPlayer.class, EntityUnderminer.this.getBoundingBox().inflate(12.0D, 12.0D, 12.0D))) {
@@ -531,6 +571,7 @@ public class EntityUnderminer extends PathfinderMob {
             }
         }
 
+        @Override
         public void tick() {
             if (minePretendPos != null && minePretendStartState != null) {
                 mineTime++;

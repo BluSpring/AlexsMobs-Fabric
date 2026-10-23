@@ -4,6 +4,9 @@ import com.github.alexthe666.alexsmobs.entity.EntityIceShard;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -11,8 +14,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 public class RenderIceShard extends EntityRenderer<EntityIceShard> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/ice_shard.png");
@@ -21,8 +22,9 @@ public class RenderIceShard extends EntityRenderer<EntityIceShard> {
         super(renderManagerIn);
     }
 
+    @Override
     public void render(EntityIceShard p_225623_1_, float p_225623_2_, float p_225623_3_, PoseStack p_225623_4_,
-            MultiBufferSource p_225623_5_, int p_225623_6_) {
+                       MultiBufferSource p_225623_5_, int p_225623_6_) {
         p_225623_4_.pushPose();
         p_225623_4_.mulPose(
                 Axis.YP.rotationDegrees(Mth.lerp(p_225623_3_, p_225623_1_.yRotO, p_225623_1_.getYRot()) - 90.0F));

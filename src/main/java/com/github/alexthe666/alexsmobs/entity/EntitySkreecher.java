@@ -1,11 +1,18 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -20,11 +27,22 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
@@ -44,12 +62,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Predicate;
 
 public class EntitySkreecher extends Monster {
 
@@ -75,6 +87,7 @@ public class EntitySkreecher extends Monster {
         switchNavigator(false);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -85,6 +98,7 @@ public class EntitySkreecher extends Monster {
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, LivingEntity.class, 30F));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new EntityAINearestTarget3D(this, Player.class, true) {
+            @Override
             protected AABB getTargetSearchArea(double targetDistance) {
                 AABB bb = this.mob.getBoundingBox().inflate(16, 1F, 16);
                 return new AABB(bb.minX, -64, bb.minZ, bb.maxX, 320, bb.maxZ);
@@ -92,6 +106,7 @@ public class EntitySkreecher extends Monster {
         });
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.skreecherSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -101,6 +116,7 @@ public class EntitySkreecher extends Monster {
         return worldIn.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(worldIn, pos, random) && isOnSculk;
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 1;
     }
@@ -130,14 +146,17 @@ public class EntitySkreecher extends Monster {
         builder.define(CLAPPING, false);
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.SKREECHER_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.SKREECHER_HURT;
     }
 
+    @Override
     public boolean hurt(DamageSource source, float value){
         this.setClinging(false);
         this.setClapping(false);
@@ -145,6 +164,7 @@ public class EntitySkreecher extends Monster {
         return super.hurt(source, value);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevClapProgress = clapProgress;
@@ -242,7 +262,7 @@ public class EntitySkreecher extends Monster {
                         Warden warden = EntityType.WARDEN.create(this.level());
 
                         warden.moveTo(this.getX(), spawnAt.getY() + 1, this.getZ(), this.getYRot(), 0.0F);
-                        warden.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.TRIGGERED, (SpawnGroupData)null);
+                        warden.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.TRIGGERED, null);
                         warden.setAttackTarget(this);
                         warden.increaseAngerAt(this, 79, false);
                         this.level().addFreshEntity(warden);
@@ -272,6 +292,7 @@ public class EntitySkreecher extends Monster {
         }
     }
 
+    @Override
     public boolean dampensVibrations() {
         return true;
     }
@@ -289,6 +310,7 @@ public class EntitySkreecher extends Monster {
         return this.level().getEntitiesOfClass(Warden.class, angerBox);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Clinging", this.isClinging());
@@ -297,6 +319,7 @@ public class EntitySkreecher extends Monster {
         compound.putInt("ClingCooldown", this.clingCooldown);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setClinging(compound.getBoolean("Clinging"));
@@ -306,6 +329,7 @@ public class EntitySkreecher extends Monster {
     }
 
 
+    @Override
     public EntityDimensions getDefaultDimensions(Pose poseIn) {
         return isClinging() ? super.getDefaultDimensions(poseIn) : GROUND_SIZE.scale(this.getScale());
     }
@@ -343,6 +367,7 @@ public class EntitySkreecher extends Monster {
 
     protected PathNavigation createScreecherNavigation(Level level) {
         FlyingPathNavigation flyingpathnavigation = new FlyingPathNavigation(this, level) {
+            @Override
             public boolean isStableDestination(BlockPos pos) {
                 int airAbove = 0;
                 while(level().getBlockState(pos).isAir() && airAbove < MAX_DIST_TO_CEILING + 2){
@@ -376,10 +401,12 @@ public class EntitySkreecher extends Monster {
         }
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -391,6 +418,7 @@ public class EntitySkreecher extends Monster {
         this.entityData.set(DIST_TO_CEILING, dist);
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isClinging() && this.fluidHeight.isEmpty()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -417,6 +445,7 @@ public class EntitySkreecher extends Monster {
             super(EntitySkreecher.this, 1D, 25);
         }
 
+        @Override
         @Nullable
         protected Vec3 getPosition() {
             if (EntitySkreecher.this.isClinging()) {
@@ -434,14 +463,17 @@ public class EntitySkreecher extends Monster {
             }
         }
 
+        @Override
         public boolean canUse() {
             return super.canUse();
         }
 
+        @Override
         public boolean canContinueToUse() {
             return super.canContinueToUse();
         }
 
+        @Override
         public void stop() {
             super.stop();
             this.wantedX = 0;
@@ -449,6 +481,7 @@ public class EntitySkreecher extends Monster {
             this.wantedZ = 0;
         }
 
+        @Override
         public void start() {
             this.stillTicks = 0;
             this.mob.getNavigation().moveTo(this.wantedX, this.wantedY, this.wantedZ, this.speedModifier);
@@ -463,6 +496,7 @@ public class EntitySkreecher extends Monster {
             this.parentEntity = EntitySkreecher.this;
         }
 
+        @Override
         public void tick() {
             if (this.operation == MoveControl.Operation.MOVE_TO) {
                 Vec3 vector3d = new Vec3(this.wantedX - parentEntity.getX(), this.wantedY - parentEntity.getY(), this.wantedZ - parentEntity.getZ());
@@ -497,10 +531,12 @@ public class EntitySkreecher extends Monster {
             return EntitySkreecher.this.getTarget() != null && EntitySkreecher.this.getTarget().isAlive() && EntitySkreecher.this.clingCooldown <= 0;
         }
 
+        @Override
         public void start(){
             EntitySkreecher.this.playSound(AMSoundRegistry.SKREECHER_DETECT, EntitySkreecher.this.getSoundVolume() * 6F, EntitySkreecher.this.getVoicePitch());
         }
 
+        @Override
         public void tick(){
             LivingEntity target = EntitySkreecher.this.getTarget();
             if(target != null){

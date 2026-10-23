@@ -19,6 +19,7 @@ public class OrcaAIMeleeJump extends JumpGoal {
         this.dolphin = dolphin;
     }
 
+    @Override
     public boolean canUse() {
         if (this.dolphin.getTarget() == null || !dolphin.shouldUseJumpAttack(this.dolphin.getTarget()) || this.dolphin.onGround() || !dolphin.isInWater() || dolphin.jumpCooldown > 0) {
             return false;
@@ -27,15 +28,18 @@ public class OrcaAIMeleeJump extends JumpGoal {
             return true;
         }
     }
+    @Override
     public boolean canContinueToUse() {
         final double d0 = this.dolphin.getDeltaMovement().y;
         return dolphin.getTarget() != null && dolphin.jumpCooldown > 0 && (!(d0 * d0 < (double) 0.03F) || this.dolphin.getXRot() == 0.0F || !(Math.abs(this.dolphin.getXRot()) < 10.0F) || !this.dolphin.isInWater()) && !this.dolphin.onGround();
     }
 
+    @Override
     public boolean isInterruptable() {
         return false;
     }
 
+    @Override
     public void start() {
         LivingEntity target = this.dolphin.getTarget();
         if(target != null){
@@ -49,7 +53,7 @@ public class OrcaAIMeleeJump extends JumpGoal {
                 //double d1 = Math.signum(target.getY() - this.dolphin.getY());
                 final double d2 = (target.getZ() - this.dolphin.getZ()) * 0.3 * smoothZ;
                 final float up = 1F + dolphin.getRandom().nextFloat() * 0.8F;
-                this.dolphin.setDeltaMovement(this.dolphin.getDeltaMovement().add((double) d0 * 0.3D, up, (double) d2 * 0.3D));
+                this.dolphin.setDeltaMovement(this.dolphin.getDeltaMovement().add(d0 * 0.3D, up, d2 * 0.3D));
                 this.dolphin.getNavigation().stop();
                 this.dolphin.jumpCooldown = dolphin.getRandom().nextInt(32) + 64;
             }else{
@@ -59,11 +63,13 @@ public class OrcaAIMeleeJump extends JumpGoal {
         }
     }
 
+    @Override
     public void stop() {
         this.dolphin.setXRot(0.0F);
         this.attackCooldown = 0;
     }
 
+    @Override
     public void tick() {
         boolean flag = this.inWater;
         if (!flag) {

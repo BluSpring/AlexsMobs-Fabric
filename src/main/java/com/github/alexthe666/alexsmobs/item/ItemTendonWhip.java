@@ -49,6 +49,7 @@ public class ItemTendonWhip extends SwordItem implements ILeftClick, ReequipAnim
         return false;
     }
 
+    @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity entity, LivingEntity player) {
         launchTendonsAt(stack, player, entity);
         return super.hurtEnemy(stack, entity, player);
@@ -58,6 +59,8 @@ public class ItemTendonWhip extends SwordItem implements ILeftClick, ReequipAnim
         return player.getAttackStrengthScale(0.5F) > 0.9F;
     }
 
+    @Override
+    @Override
     public boolean onLeftClick(ItemStack stack, LivingEntity playerIn){
         if(stack.is(AMItemRegistry.TENDON_WHIP) && (!(playerIn instanceof Player) || isCharged((Player)playerIn, stack))){
             Level worldIn = playerIn.level();
@@ -119,6 +122,7 @@ public class ItemTendonWhip extends SwordItem implements ILeftClick, ReequipAnim
         return !ItemStack.isSameItem(oldStack, newStack);
     }
 
+    @Override
     public boolean isValidRepairItem(ItemStack pickaxe, ItemStack stack) {
         return stack.is(AMItemRegistry.ELASTIC_TENDON);
     }

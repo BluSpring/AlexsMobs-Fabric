@@ -14,11 +14,13 @@ public class RenderBoneSerpent extends MobRenderer<EntityBoneSerpent, ModelBoneS
         super(renderManagerIn, new ModelBoneSerpentHead(), 0.3F);
     }
 
+    @Override
     protected void scale(EntityBoneSerpent entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
       //  matrixStackIn.scale(1.2F, 1.2F, 1.2F);
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityBoneSerpent entity) {
         return TEXTURE;
     }

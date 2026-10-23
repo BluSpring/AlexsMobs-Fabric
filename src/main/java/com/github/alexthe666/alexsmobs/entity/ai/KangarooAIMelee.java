@@ -22,10 +22,12 @@ public class KangarooAIMelee extends MeleeAttackGoal {
         this.kangaroo = kangaroo;
     }
 
+    @Override
     public boolean canUse() {
         return super.canUse();
     }
 
+    @Override
     public void tick() {
         boolean dontSuper = false;
         LivingEntity target = kangaroo.getTarget();
@@ -73,10 +75,12 @@ public class KangarooAIMelee extends MeleeAttackGoal {
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         return waterPos != null && this.kangaroo.getTarget() != null || super.canContinueToUse();
     }
 
+    @Override
     public void stop() {
         super.stop();
         waterCheckTick = 0;
@@ -103,6 +107,7 @@ public class KangarooAIMelee extends MeleeAttackGoal {
         return blockpos;
     }
 
+    @Override
     protected void checkAndPerformAttack(LivingEntity enemy) {
         this.checkAndPerformAttack(enemy, this.mob.distanceToSqr(enemy));
     }
@@ -112,7 +117,7 @@ public class KangarooAIMelee extends MeleeAttackGoal {
         if (distToEnemySqr <= d0) {
             if(kangaroo.isInWater()){
                 float f1 = kangaroo.getYRot() * Mth.DEG_TO_RAD;
-                kangaroo.setDeltaMovement(kangaroo.getDeltaMovement().add((double)(-Mth.sin(f1) * 0.3F), 0.0D, (double)(Mth.cos(f1) * 0.3F)));
+                kangaroo.setDeltaMovement(kangaroo.getDeltaMovement().add(-Mth.sin(f1) * 0.3F, 0.0D, Mth.cos(f1) * 0.3F));
                 enemy.knockback(1F, enemy.getX() - kangaroo.getX(), enemy.getZ() - kangaroo.getZ());
 
             }
@@ -132,7 +137,7 @@ public class KangarooAIMelee extends MeleeAttackGoal {
     }
 
     protected double getAttackReachSqr(LivingEntity target) {
-        return (double)(this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + target.getBbWidth());
+        return this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + target.getBbWidth();
     }
 
 }

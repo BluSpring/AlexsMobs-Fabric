@@ -61,14 +61,14 @@ public class LayerMimicubeHelmet extends RenderLayer<EntityMimicube, ModelMimicu
         return resourcelocation;
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityMimicube cube,
-            float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
-            float headPitch) {
+                       float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
+                       float headPitch) {
         matrixStackIn.pushPose();
         ItemStack itemstack = cube.getItemBySlot(EquipmentSlot.HEAD);
         float helmetSwap = Mth.lerp(partialTicks, cube.prevHelmetSwapProgress, cube.helmetSwapProgress) * 0.2F;
-        if (itemstack.getItem() instanceof ArmorItem) {
-            ArmorItem armoritem = (ArmorItem) itemstack.getItem();
+        if (itemstack.getItem() instanceof ArmorItem armoritem) {
             if (armoritem.getEquipmentSlot() == EquipmentSlot.HEAD) {
                 HumanoidModel a = defaultBipedModel;
                 a = getArmorModelHook(cube, itemstack, EquipmentSlot.HEAD, a);

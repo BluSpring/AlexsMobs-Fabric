@@ -90,6 +90,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new TemptGoal(this, 1.0D, Ingredient.of(AMTagRegistry.RAIN_FROG_BREEDABLES), false));
@@ -107,6 +108,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         return spawnBlock && worldIn.getLevelData() != null && (worldIn.getLevelData().isThundering() || worldIn.getLevelData().isRaining());
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.rainFrogSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -160,6 +162,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         this.entityData.set(DANCE_TIME, Integer.valueOf(danceTime));
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.RAIN_FROG_BREEDABLES);
     }
@@ -184,6 +187,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         builder.define(DISTURBED, false);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevBurrowProgress = burrowProgress;
@@ -253,6 +257,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         }
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if (prev && source.getDirectEntity() instanceof LivingEntity) {
@@ -264,10 +269,12 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         return prev;
     }
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !requiresCustomPersistence();
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.isDisturbed();
     }
@@ -277,22 +284,26 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         return source.is(DamageTypes.IN_WALL)  || super.isInvulnerableTo(source);
     }
 
+    @Override
     public boolean isSleeping() {
         return this.isBurrowed();
     }
 
+    @Override
     public void calculateEntityAnimation(boolean flying) {
         float f1 = (float)Mth.length(this.getX() - this.xo, 0, this.getZ() - this.zo);
         float f2 = Math.min(f1 * 128.0F, 1.0F);
         this.walkAnimation.update(f2, 0.4F);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setVariant(random.nextInt(3));
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setDisturbed(compound.getBoolean("Disturbed"));
@@ -300,6 +311,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         this.weatherCooldown = compound.getInt("WeatherCooldown");
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Disturbed", isDisturbed());
@@ -307,6 +319,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         compound.putInt("WeatherCooldown", this.weatherCooldown);
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -327,6 +340,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         return type;
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isBurrowed() || this.getDanceTime() > 0) {
             if (this.getNavigation().getPath() != null) {
@@ -382,6 +396,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         weatherCooldown = time + 24000;
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public void setRecordPlayingNearby(BlockPos pos, boolean isPartying) {
         AlexsMobs.sendMSGToServer(new MessageStartDancing(this.getId(), isPartying, pos));
@@ -404,18 +419,22 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
         this.jukeboxPosition = pos;
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return getStanceTime() > 0 ? AMSoundRegistry.RAIN_FROG_HURT : AMSoundRegistry.RAIN_FROG_IDLE;
     }
 
+    @Override
     public int getAmbientSoundInterval() {
         return getStanceTime() > 0 ? 10 : 80;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.RAIN_FROG_HURT;
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.RAIN_FROG_HURT;
     }
@@ -456,6 +475,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
             return blockpos;
         }
 
+        @Override
         public void tick() {
             if (EntityRainFrog.this.isBurrowed()) {
                 burrowedTime++;
@@ -474,6 +494,7 @@ public class EntityRainFrog extends Animal implements ITargetsDroppedItems,IDanc
             }
         }
 
+        @Override
         public void stop() {
             EntityRainFrog.this.setBurrowed(false);
             EntityRainFrog.this.burrowCooldown = 120 + random.nextInt(1200);

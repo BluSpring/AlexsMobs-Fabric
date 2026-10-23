@@ -1,10 +1,15 @@
 package com.github.alexthe666.alexsmobs.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -16,9 +21,9 @@ public class ParticleBunfungusTransformation  extends TextureSheetParticle {
         this.friction = 0.96F;
         this.sprites = p_107490_;
         float f = 2.5F;
-        this.xd *= (double)0.1F;
-        this.yd *= (double)0.1F;
-        this.zd *= (double)0.1F;
+        this.xd *= 0.1F;
+        this.yd *= 0.1F;
+        this.zd *= 0.1F;
         this.xd += p_107487_;
         this.yd += p_107488_;
         this.zd += p_107489_;
@@ -29,14 +34,17 @@ public class ParticleBunfungusTransformation  extends TextureSheetParticle {
         this.setAlpha((float) (Math.random() * 0.3F + 0.7F));
     }
 
+    @Override
     public ParticleRenderType getRenderType() {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
+    @Override
     public float getQuadSize(float p_107504_) {
         return this.quadSize * Mth.clamp(((float)this.age + p_107504_) / (float)this.lifetime * 32.0F, 0.0F, 1.0F);
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (!this.removed) {
@@ -62,6 +70,7 @@ public class ParticleBunfungusTransformation  extends TextureSheetParticle {
             this.sprites = p_107528_;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType p_107539_, ClientLevel p_107540_, double p_107541_, double p_107542_, double p_107543_, double p_107544_, double p_107545_, double p_107546_) {
             ParticleBunfungusTransformation particle = new ParticleBunfungusTransformation(p_107540_, p_107541_, p_107542_, p_107543_, p_107544_, p_107545_, p_107546_, this.sprites);
             particle.setColor(0.427451F, 0.4470588F, 0.5764706F);

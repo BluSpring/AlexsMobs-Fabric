@@ -31,27 +31,33 @@ public class ElephantAIForageLeaves extends MoveToBlockGoal {
         this.elephant = elephant;
     }
 
+    @Override
     public boolean canUse() {
         return !elephant.isBaby() && elephant.getControllingPassenger() == null && elephant.getControllingVillager() == null && elephant.getMainHandItem().isEmpty() && !elephant.aiItemFlag && super.canUse();
     }
 
+    @Override
     public void stop() {
         idleAtLeavesTime = 0;
     }
 
+    @Override
     public void start() {
         super.start();
         moveCooldown = 30 + elephant.getRandom().nextInt(50);
     }
 
+    @Override
     public double acceptedDistance() {
         return 4D;
     }
 
+    @Override
     public boolean shouldRecalculatePath() {
         return moveCooldown == 0;
     }
 
+    @Override
     public void tick() {
         if (moveCooldown > 0) {
             moveCooldown--;
@@ -93,6 +99,7 @@ public class ElephantAIForageLeaves extends MoveToBlockGoal {
     @Override
     protected void moveMobToBlock() {}
 
+    @Override
     protected int nextStartTick(PathfinderMob p_203109_1_) {
         return 100 + p_203109_1_.getRandom().nextInt(200);
     }
@@ -101,6 +108,7 @@ public class ElephantAIForageLeaves extends MoveToBlockGoal {
         return blockpos.distSqr(new BlockPos((int) positionVec.x(), blockpos.getY(), (int) positionVec.z())) < distance * distance;
     }
 
+    @Override
     protected boolean isReachedTarget() {
         return this.isAboveDestinationBear;
     }
