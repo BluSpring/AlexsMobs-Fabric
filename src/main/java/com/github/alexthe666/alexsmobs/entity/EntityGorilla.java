@@ -1,13 +1,24 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AdvancedPathNavigateNoTeleport;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIRideParent;
+import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
+import com.github.alexthe666.alexsmobs.entity.ai.GorillaAIChargeLooker;
+import com.github.alexthe666.alexsmobs.entity.ai.GorillaAIFollowCaravan;
+import com.github.alexthe666.alexsmobs.entity.ai.GorillaAIForageLeaves;
+import com.github.alexthe666.alexsmobs.entity.ai.TameableAITempt;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -28,10 +39,24 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
@@ -53,10 +78,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.List;
-import java.util.UUID;
 
 public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITargetsDroppedItems {
     public static final Animation ANIMATION_BREAKBLOCK_R = Animation.create(20);

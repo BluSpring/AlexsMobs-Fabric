@@ -4,8 +4,9 @@ import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.mixin.LivingEntityAccessor;
 import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
+import net.neoforged.neoforge.network.PacketDistributor;
+
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 public class FlyingFishBootsUtil {
 

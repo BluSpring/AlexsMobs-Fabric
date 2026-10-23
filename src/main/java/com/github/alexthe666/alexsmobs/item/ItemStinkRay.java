@@ -1,8 +1,13 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityFart;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -17,10 +22,6 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 public class ItemStinkRay extends Item {
 

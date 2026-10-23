@@ -1,6 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -15,10 +20,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import java.util.List;
 
 public class EntityGust extends Entity {
     protected static final EntityDataAccessor<Boolean> VERTICAL = SynchedEntityData.defineId(EntityGust.class, EntityDataSerializers.BOOLEAN);

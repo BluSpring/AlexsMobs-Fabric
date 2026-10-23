@@ -1,14 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.entity.EntitySquidGrapple;
 import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-
-import java.util.UUID;
 
 public class SquidGrappleUtil {
 

@@ -6,6 +6,10 @@ import com.github.alexthe666.alexsmobs.config.BiomeConfig;
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
+import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
+import net.neoforged.neoforge.common.world.ModifiableStructureInfo;
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceLocation;
@@ -16,9 +20,6 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
-import net.neoforged.neoforge.common.world.ModifiableStructureInfo;
-import org.apache.commons.lang3.tuple.Pair;
 
 public class AMWorldRegistry {
 

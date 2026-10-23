@@ -1,19 +1,20 @@
 package com.github.alexthe666.alexsmobs.client.render;
 
+import static net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;
+
 import com.github.alexthe666.alexsmobs.client.model.ModelStraddleboard;
 import com.github.alexthe666.alexsmobs.entity.EntityStraddleboard;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.joml.Quaternionf;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import org.joml.Quaternionf;
-
-import static net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;
 
 public class RenderStraddleboard extends EntityRenderer<EntityStraddleboard> {
     private static final ResourceLocation TEXTURE_OVERLAY = ResourceLocation

@@ -1,15 +1,16 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.entity.EntityTendonSegment;
 import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
+import net.neoforged.neoforge.network.PacketDistributor;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.PacketDistributor;
-
-import java.util.UUID;
 
 public class TendonWhipUtil {
 

@@ -1,12 +1,13 @@
 package com.github.alexthe666.alexsmobs.mixin;
 
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BrewingStandBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BrewingStandBlockEntity;
 
 @Mixin(BrewingStandBlockEntity.class)
 public class MixinBrewingStandBlockEntity {

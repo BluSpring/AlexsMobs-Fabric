@@ -1,18 +1,19 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
+import java.awt.Color;
+import java.util.Locale;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.item.ItemRainbowJelly;
 import com.github.alexthe666.alexsmobs.misc.AMSimplexNoise;
 import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
+import net.neoforged.neoforge.network.PacketDistributor;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.PacketDistributor;
-
-import java.awt.*;
-import java.util.Locale;
 
 public class RainbowUtil {
 

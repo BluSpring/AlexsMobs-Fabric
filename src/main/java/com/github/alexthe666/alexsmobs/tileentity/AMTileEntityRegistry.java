@@ -2,10 +2,11 @@ package com.github.alexthe666.alexsmobs.tileentity;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class AMTileEntityRegistry {
 

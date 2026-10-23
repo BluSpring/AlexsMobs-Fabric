@@ -1,6 +1,12 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.EnumMap;
+import java.util.List;
+import java.util.function.Supplier;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -8,11 +14,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.neoforged.neoforge.registries.DeferredRegister;
-
-import java.util.EnumMap;
-import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * Armor material helper class for NeoForge 1.21.

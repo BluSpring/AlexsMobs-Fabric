@@ -1,13 +1,14 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityBunfungus;
+
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-
-import java.util.EnumSet;
 
 public class BunfungusAIBeg extends Goal {
     private static final TargetingConditions ENTITY_PREDICATE = TargetingConditions.forNonCombat().range(32D);

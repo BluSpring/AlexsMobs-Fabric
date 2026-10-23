@@ -1,17 +1,18 @@
 package com.github.alexthe666.alexsmobs.tileentity;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.block.BlockEndPirateAnchor;
 import com.google.common.collect.Lists;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import java.util.List;
 
 public class TileEntityEndPirateAnchor extends BlockEntity {
 

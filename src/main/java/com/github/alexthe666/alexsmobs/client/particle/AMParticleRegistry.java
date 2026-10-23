@@ -1,11 +1,12 @@
 package com.github.alexthe666.alexsmobs.client.particle;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class AMParticleRegistry {
 

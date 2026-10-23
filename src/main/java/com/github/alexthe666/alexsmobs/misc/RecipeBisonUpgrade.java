@@ -1,9 +1,10 @@
 package com.github.alexthe666.alexsmobs.misc;
 
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
+
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;

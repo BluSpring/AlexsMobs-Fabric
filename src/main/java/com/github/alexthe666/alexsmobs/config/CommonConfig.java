@@ -1,9 +1,9 @@
 package com.github.alexthe666.alexsmobs.config;
 
+import java.util.List;
+
 import com.google.common.collect.Lists;
 import net.neoforged.neoforge.common.ModConfigSpec;
-
-import java.util.List;
 
 public class CommonConfig {
 

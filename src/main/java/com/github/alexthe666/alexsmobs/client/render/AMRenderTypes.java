@@ -7,12 +7,13 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexMultiConsumer;
+import org.joml.Matrix4f;
+
 import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix4f;
 
 public class AMRenderTypes extends RenderType {
 

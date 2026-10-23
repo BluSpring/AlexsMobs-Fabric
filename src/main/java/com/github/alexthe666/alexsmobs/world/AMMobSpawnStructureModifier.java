@@ -2,13 +2,14 @@ package com.github.alexthe666.alexsmobs.world;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.core.Holder;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.common.world.ModifiableStructureInfo;
 import net.neoforged.neoforge.common.world.StructureModifier;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.levelgen.structure.Structure;
 
 public class AMMobSpawnStructureModifier implements StructureModifier {
     public static final DeferredRegister<MapCodec<? extends StructureModifier>> STRUCTURE_MODIFIER_SERIALIZERS = 

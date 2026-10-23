@@ -3,17 +3,7 @@ package com.github.alexthe666.alexsmobs.item;
 import java.util.List;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
-import com.github.alexthe666.alexsmobs.entity.EntityAnaconda;
-import com.github.alexthe666.alexsmobs.entity.EntityAnacondaPart;
-import com.github.alexthe666.alexsmobs.entity.EntityBoneSerpent;
-import com.github.alexthe666.alexsmobs.entity.EntityBoneSerpentPart;
-import com.github.alexthe666.alexsmobs.entity.EntityCentipedeBody;
-import com.github.alexthe666.alexsmobs.entity.EntityCentipedeHead;
-import com.github.alexthe666.alexsmobs.entity.EntityCentipedeTail;
-import com.github.alexthe666.alexsmobs.entity.EntityMurmur;
-import com.github.alexthe666.alexsmobs.entity.EntityMurmurHead;
-import com.github.alexthe666.alexsmobs.entity.EntityVoidWorm;
-import com.github.alexthe666.alexsmobs.entity.EntityVoidWormPart;
+import com.github.alexthe666.alexsmobs.entity.*;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;

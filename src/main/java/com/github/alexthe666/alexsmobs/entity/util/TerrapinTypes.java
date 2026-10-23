@@ -1,9 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
+import java.util.Locale;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-
-import java.util.Locale;
 
 public enum TerrapinTypes {
 

@@ -1,12 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityCaiman;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForgeMod;
 
-import java.util.EnumSet;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.Vec3;
 
 public class CaimanAIBellow extends Goal {
 
