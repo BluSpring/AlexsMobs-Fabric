@@ -1,0 +1,3 @@
+[submodule "Citadel"]
+	path = Citadel
+	url = https://github.com/BluSpring/Citadel-Fabric.git
