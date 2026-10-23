@@ -1,6 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
@@ -17,11 +21,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-
-import org.jetbrains.annotations.Nullable;
-import java.util.UUID;
 
 public class EntityFart extends Entity {
     private UUID ownerUUID;
@@ -73,7 +75,7 @@ public class EntityFart extends Entity {
     }
 
     protected void onEntityHit(EntityHitResult result) {
-        if (result.getEntity() instanceof LivingEntity living) {
+        if (result.getEntity() instanceof LivingEntity living && !this.level().isClientSide()) {
             living.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 300, 0));
             for(int i = 0; i < 10 + random.nextInt(6); i++){
                 level().addParticle(AMParticleRegistry.SMELLY, living.getRandomX(1.0F), living.getRandomY(), living.getRandomZ(1.0F), 0, 0, 0);
