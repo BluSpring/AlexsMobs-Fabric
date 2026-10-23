@@ -1,13 +1,25 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFleeAdult;
+import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
+import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
+import com.github.alexthe666.alexsmobs.entity.ai.KomodoDragonAIBreed;
+import com.github.alexthe666.alexsmobs.entity.ai.KomodoDragonAIJostle;
+import com.github.alexthe666.alexsmobs.entity.ai.TameableAIFollowOwner;
+import com.github.alexthe666.alexsmobs.entity.ai.TameableAITempt;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingKnockBackEvent;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -16,7 +28,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
@@ -27,10 +38,23 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
@@ -48,11 +72,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
 
-import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingKnockBackEvent;
-import org.jetbrains.annotations.Nullable;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Predicate;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 
 public class EntityKomodoDragon extends TamableAnimal implements ITargetsDroppedItems, IFollower {
 
@@ -375,7 +395,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
                 this.usePlayerItem(player, hand, itemstack);
                 this.setSaddled(true);
                 return InteractionResult.SUCCESS;
-            }else if(itemstack.is(net.minecraft.world.item.Items.SHEARS) && this.isSaddled()){
+            }else if(itemstack.is(ConventionalItemTags.SHEAR_TOOLS) && this.isSaddled()){
                 this.setSaddled(false);
                 this.spawnAtLocation(Items.SADDLE);
                 return InteractionResult.SUCCESS;

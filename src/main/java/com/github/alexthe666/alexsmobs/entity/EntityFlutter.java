@@ -71,6 +71,8 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
+
 public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAnimal {
 
     private static final EntityDataAccessor<Float> FLUTTER_PITCH = SynchedEntityData.defineId(EntityFlutter.class, EntityDataSerializers.FLOAT);
@@ -436,7 +438,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             if (item == Items.FLOWER_POT && !this.isPotted()) {
                 this.setPotted(true);
                 return InteractionResult.SUCCESS;
-            } else if (itemstack.is(net.minecraft.world.item.Items.SHEARS) && this.isPotted()) {
+            } else if (itemstack.is(ConventionalItemTags.SHEAR_TOOLS) && this.isPotted()) {
                 this.setPotted(false);
                 this.spawnAtLocation(Items.FLOWER_POT);
                 return InteractionResult.SUCCESS;
