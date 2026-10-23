@@ -285,7 +285,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
                 this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
             } else {
                 this.gameEvent(GameEvent.EAT);
-                this.playSound(SoundEvents.GENERIC_EAT, this.getSoundVolume(), this.getVoicePitch());
+                this.playSound(this.getMainHandItem().getEatingSound(), this.getSoundVolume(), this.getVoicePitch());
                 this.heal(5);
             }
             this.usePlayerItem(player, hand, itemstack);
