@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 public class ItemStraddleboard extends Item {
 
     private static final Predicate<Entity> ENTITY_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
-    public static final int DEFAULT_COLOR = 0xADC3D7;
+    public static final int DEFAULT_COLOR = 0xFFADC3D7;
 
     public ItemStraddleboard(Item.Properties properties) {
         super(properties);
