@@ -1,8 +1,11 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.entity.EntitySquidGrapple;
 import com.github.alexthe666.alexsmobs.entity.util.SquidGrappleUtil;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -18,8 +21,6 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.List;
 
 public class ItemSquidGrapple extends Item {
 
@@ -68,7 +69,7 @@ public class ItemSquidGrapple extends Item {
             }
             EquipmentSlot slot = livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
             stack.hurtAndBreak(1, livingEntityIn, slot);
-            SquidGrappleUtil.onFireHook(livingEntityIn, hook.getUUID());
+            SquidGrappleUtil.onFireHook(livingEntityIn, hook);
         }
     }
 

@@ -1,12 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
-import com.github.alexthe666.alexsmobs.AlexsMobs;
+import com.github.alexthe666.alexsmobs.attachment.AMAttachmentRegistry;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.mixin.LivingEntityAccessor;
-import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
-import com.github.alexthe666.citadel.server.message.PropertiesMessage;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
+
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -16,38 +13,16 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-
 public class FlyingFishBootsUtil {
 
-    private static final String BOOST_TICKS = "FlyingFishBoostAlexsMobs";
     private static final int MIN_BOOST_TIME = 35;
 
     public static void setBoostTicks(LivingEntity entity, int ticks) {
-        CompoundTag lassoedTag = CitadelEntityData.getOrCreateCitadelTag(entity);
-        lassoedTag.putInt(BOOST_TICKS, ticks);
-
-        CitadelEntityData.setCitadelTag(entity, lassoedTag);
-        if (!entity.level().isClientSide) {
-            var packet = new PropertiesMessage("CitadelPatreonConfig", lassoedTag, entity.getId());
-            for (ServerPlayer p : PlayerLookup.tracking(entity)) {
-                ServerPlayNetworking.send(p, packet);
-            }
-
-            if (entity instanceof ServerPlayer p)
-                ServerPlayNetworking.send(p, packet);
-        } else {
-            AlexsMobs.sendMSGToServer(new PropertiesMessage("CitadelPatreonConfig", lassoedTag, entity.getId()));
-        }
+        entity.setAttached(AMAttachmentRegistry.FLYING_FISH_BOOST, ticks);
     }
 
     public static int getBoostTicks(LivingEntity entity) {
-        CompoundTag lassoedTag = CitadelEntityData.getOrCreateCitadelTag(entity);
-        if (lassoedTag.contains(BOOST_TICKS)) {
-            return lassoedTag.getInt(BOOST_TICKS);
-        }
-        return 0;
+        return entity.getAttachedOrElse(AMAttachmentRegistry.FLYING_FISH_BOOST, 0);
     }
 
     public static boolean isWearing(LivingEntity entity) {

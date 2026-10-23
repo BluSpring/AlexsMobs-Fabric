@@ -1,55 +1,31 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
-import com.github.alexthe666.alexsmobs.AlexsMobs;
+import java.awt.Color;
+import java.util.Locale;
+
+import com.github.alexthe666.alexsmobs.attachment.AMAttachmentRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.item.ItemRainbowJelly;
 import com.github.alexthe666.alexsmobs.misc.AMSimplexNoise;
-import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
-import com.github.alexthe666.citadel.server.message.PropertiesMessage;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
-import java.awt.*;
-import java.util.Locale;
-
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-
 public class RainbowUtil {
 
-    private static final String RAINBOW_TYPE = "RainbowTypeAlexsMobs";
-
-    public static void setRainbowType(LivingEntity fabulous, int type) {
-        CompoundTag tag = CitadelEntityData.getOrCreateCitadelTag(fabulous);
-        tag.putInt(RAINBOW_TYPE, type);
-        CitadelEntityData.setCitadelTag(fabulous, tag);
-        var packet = new PropertiesMessage("CitadelPatreonConfig", tag, fabulous.getId());
-        if (!fabulous.level().isClientSide) {
-            for (ServerPlayer p : PlayerLookup.tracking(fabulous)) {
-                ServerPlayNetworking.send(p, packet);
-            }
-
-            if (fabulous instanceof ServerPlayer p)
-                ServerPlayNetworking.send(p, packet);
-        } else {
-            AlexsMobs.sendMSGToServer(new PropertiesMessage("CitadelPatreonConfig", tag, fabulous.getId()));
-        }
+    public static void setRainbowType(LivingEntity fabulous, @Nullable ItemRainbowJelly.RainbowType type) {
+        fabulous.setAttached(AMAttachmentRegistry.RAINBOW_TYPE, type);
     }
 
-    public static int getRainbowType(LivingEntity entity) {
-        CompoundTag lassoedTag = CitadelEntityData.getOrCreateCitadelTag(entity);
-        if (lassoedTag.contains(RAINBOW_TYPE)) {
-            return lassoedTag.getInt(RAINBOW_TYPE);
-        }
-        return 0;
+    public static @Nullable ItemRainbowJelly.RainbowType getRainbowType(LivingEntity entity) {
+        return entity.getAttached(AMAttachmentRegistry.RAINBOW_TYPE);
     }
 
-    public static int getRainbowTypeFromStack(ItemStack stack){
+    public static ItemRainbowJelly.RainbowType getRainbowTypeFromStack(ItemStack stack){
         String name = stack.getDisplayName().getString().toLowerCase(Locale.ROOT);
-        return ItemRainbowJelly.RainbowType.getFromString(name).ordinal() + 1;
+        return ItemRainbowJelly.RainbowType.getFromString(name);
     }
 
     public static int calculateGlassColor(BlockPos pos) {

@@ -1,12 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
-import com.github.alexthe666.alexsmobs.AlexsMobs;
+import com.github.alexthe666.alexsmobs.attachment.AMAttachmentRegistry;
 import com.github.alexthe666.alexsmobs.fabric.ForcedPoseEntity;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
-import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
-import com.github.alexthe666.citadel.server.message.PropertiesMessage;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
+
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -15,53 +12,24 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-
 public class RockyChestplateUtil {
 
-    private static final String ROCKY_ROLL_TICKS = "RockyRollTicksAlexsMobs";
-    private static final String ROCKY_ROLL_TIMESTAMP = "RockyRollTimestampAlexsMobs";
-    private static final String ROCKY_X = "RockyRollXAlexsMobs";
-    private static final String ROCKY_Y = "RockyRollYAlexsMobs";
-    private static final String ROCKY_Z = "RockyRollZAlexsMobs";
     private static final int MAX_ROLL_TICKS = 30;
 
     public static void rollFor(LivingEntity roller, int ticks) {
-        CompoundTag lassoedTag = CitadelEntityData.getOrCreateCitadelTag(roller);
-        lassoedTag.putInt(ROCKY_ROLL_TICKS, ticks);
+        roller.setAttached(AMAttachmentRegistry.ROCKY_ROLL_TICKS, ticks);
         if(ticks == MAX_ROLL_TICKS){
-            lassoedTag.putInt(ROCKY_ROLL_TIMESTAMP, roller.tickCount);
-        }
-        CitadelEntityData.setCitadelTag(roller, lassoedTag);
-        var packet = new PropertiesMessage("CitadelPatreonConfig", lassoedTag, roller.getId());
-        if (!roller.level().isClientSide) {
-            for (ServerPlayer p : PlayerLookup.tracking(roller)) {
-                ServerPlayNetworking.send(p, packet);
-            }
-
-            if (roller instanceof ServerPlayer p)
-                ServerPlayNetworking.send(p, packet);
-        } else {
-            AlexsMobs.sendMSGToServer(new PropertiesMessage("CitadelPatreonConfig", lassoedTag, roller.getId()));
+            roller.setAttached(AMAttachmentRegistry.ROCKY_ROLL_TIMESTAMP, roller.tickCount);
         }
     }
 
     public static int getRollingTicksLeft(LivingEntity entity) {
-        CompoundTag lassoedTag = CitadelEntityData.getOrCreateCitadelTag(entity);
-        if (lassoedTag.contains(ROCKY_ROLL_TICKS)) {
-            return lassoedTag.getInt(ROCKY_ROLL_TICKS);
-        }
-        return 0;
+        return entity.getAttachedOrElse(AMAttachmentRegistry.ROCKY_ROLL_TICKS, 0);
     }
 
 
     public static int getRollingTimestamp(LivingEntity entity) {
-        CompoundTag lassoedTag = CitadelEntityData.getOrCreateCitadelTag(entity);
-        if (lassoedTag.contains(ROCKY_ROLL_TIMESTAMP)) {
-            return lassoedTag.getInt(ROCKY_ROLL_TIMESTAMP);
-        }
-        return 0;
+        return entity.getAttachedOrElse(AMAttachmentRegistry.ROCKY_ROLL_TIMESTAMP, 0);
     }
 
 
@@ -77,12 +45,9 @@ public class RockyChestplateUtil {
         if(roller.isInWaterOrBubble()){
             roller.setDeltaMovement(roller.getDeltaMovement().add(0, -0.015F, 0));
         }
-        CompoundTag tag = CitadelEntityData.getOrCreateCitadelTag(roller);
-        boolean update = false;
         int rollCounter = getRollingTicksLeft(roller);
         if(rollCounter == 0){
-            if(roller.isSprinting()  && !roller.isShiftKeyDown() && (!(roller instanceof Player) || !((Player) roller).getAbilities().flying) && canRollAgain(roller) && !roller.isPassenger()){
-                update = true;
+            if(roller.isSprinting()  && !roller.isShiftKeyDown() && (!(roller instanceof Player player) || !player.getAbilities().flying) && canRollAgain(roller) && !roller.isPassenger()){
                 rollFor(roller, MAX_ROLL_TICKS);
             }
             if(roller instanceof ForcedPoseEntity forcedPose &&  forcedPose.alexsmobs$getForcedPose() == Pose.SWIMMING){
@@ -92,7 +57,7 @@ public class RockyChestplateUtil {
             if(roller instanceof ForcedPoseEntity forcedPose){
                 forcedPose.alexsmobs$setForcedPose(Pose.SWIMMING);
             }
-            if(!roller.level().isClientSide){
+            if(!roller.level().isClientSide()){
                 for (Entity entity : roller.level().getEntitiesOfClass(LivingEntity.class, roller.getBoundingBox().inflate(1.0F))) {
                     if (!roller.isAlliedTo(entity) && !entity.isAlliedTo(roller) && entity != roller) {
                         entity.hurt(entity.damageSources().mobAttack(roller), 2.0F + roller.getRandom().nextFloat() * 1.0F);
@@ -113,22 +78,8 @@ public class RockyChestplateUtil {
                 rollFor(roller, rollCounter - 1);
             }
             if((roller instanceof Player && ((Player) roller).getAbilities().flying || roller.isShiftKeyDown()) && canRollAgain(roller)){
-                rollCounter = 0;
                 rollFor(roller, 0);
             }
-            if(rollCounter == 0){
-                update = true;
-            }
-        }
-        if (!roller.level().isClientSide && update) {
-            CitadelEntityData.setCitadelTag(roller, tag);
-            var packet = new PropertiesMessage("CitadelPatreonConfig", tag, roller.getId());
-            for (ServerPlayer p : PlayerLookup.tracking(roller)) {
-                ServerPlayNetworking.send(p, packet);
-            }
-
-            if (roller instanceof ServerPlayer p)
-                ServerPlayNetworking.send(p, packet);
         }
     }
 

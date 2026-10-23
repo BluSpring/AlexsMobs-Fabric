@@ -1,5 +1,10 @@
 package com.github.alexthe666.alexsmobs;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.function.Supplier;
+
+import com.github.alexthe666.alexsmobs.attachment.AMAttachmentRegistry;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.component.AMDataComponentRegistry;
@@ -12,16 +17,33 @@ import com.github.alexthe666.alexsmobs.event.ServerEvents;
 import com.github.alexthe666.alexsmobs.inventory.AMMenuRegistry;
 import com.github.alexthe666.alexsmobs.item.AMArmorMaterial;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
-import com.github.alexthe666.alexsmobs.message.*;
-import com.github.alexthe666.alexsmobs.misc.*;
+import com.github.alexthe666.alexsmobs.message.MessageCrowDismount;
+import com.github.alexthe666.alexsmobs.message.MessageCrowMountPlayer;
+import com.github.alexthe666.alexsmobs.message.MessageHurtMultipart;
+import com.github.alexthe666.alexsmobs.message.MessageInteractMultipart;
+import com.github.alexthe666.alexsmobs.message.MessageKangarooEat;
+import com.github.alexthe666.alexsmobs.message.MessageKangarooInventorySync;
+import com.github.alexthe666.alexsmobs.message.MessageMosquitoDismount;
+import com.github.alexthe666.alexsmobs.message.MessageMosquitoMountPlayer;
+import com.github.alexthe666.alexsmobs.message.MessageMungusBiomeChange;
+import com.github.alexthe666.alexsmobs.message.MessageSendVisualFlagFromServer;
+import com.github.alexthe666.alexsmobs.message.MessageSetPupfishChunkOnClient;
+import com.github.alexthe666.alexsmobs.message.MessageStartDancing;
+import com.github.alexthe666.alexsmobs.message.MessageSwingArm;
+import com.github.alexthe666.alexsmobs.message.MessageSyncEntityPos;
+import com.github.alexthe666.alexsmobs.message.MessageTarantulaHawkSting;
+import com.github.alexthe666.alexsmobs.message.MessageTransmuteFromMenu;
+import com.github.alexthe666.alexsmobs.message.MessageUpdateCapsid;
+import com.github.alexthe666.alexsmobs.message.MessageUpdateEagleControls;
+import com.github.alexthe666.alexsmobs.message.MessageUpdateTransmutablesToDisplay;
+import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
+import com.github.alexthe666.alexsmobs.misc.AMCreativeTabRegistry;
+import com.github.alexthe666.alexsmobs.misc.AMLootRegistry;
+import com.github.alexthe666.alexsmobs.misc.AMPointOfInterestRegistry;
+import com.github.alexthe666.alexsmobs.misc.AMRecipeRegistry;
+import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.world.AMFeatureRegistry;
-
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
-
 import com.github.alexthe666.alexsmobs.world.AMWorldRegistry;
 import io.github.fabricators_of_create.porting_lib.config.ConfigRegistry;
 import io.github.fabricators_of_create.porting_lib.config.ModConfig;
@@ -29,9 +51,10 @@ import io.github.fabricators_of_create.porting_lib.config.ModConfigEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.function.Supplier;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -88,6 +111,7 @@ public class AlexsMobs implements ModInitializer {
         AMLootRegistry.register();
         AMCreativeTabRegistry.DEF_REG.register();
         AMAdvancementTriggerRegistry.DEF_REG.register();
+        AMAttachmentRegistry.init();
 
         ServerLifecycleEvents.SERVER_STARTING.register(s -> server = s);
         ServerLifecycleEvents.SERVER_STOPPING.register(s -> server = null);

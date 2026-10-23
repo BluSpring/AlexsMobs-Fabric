@@ -1,5 +1,13 @@
 package com.github.alexthe666.alexsmobs.event;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
@@ -7,30 +15,42 @@ import com.github.alexthe666.alexsmobs.component.AMDataComponentRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import com.github.alexthe666.alexsmobs.effect.EffectClinging;
-import com.github.alexthe666.alexsmobs.entity.*;
+import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
+import com.github.alexthe666.alexsmobs.entity.EntityBaldEagle;
+import com.github.alexthe666.alexsmobs.entity.EntityBunfungus;
+import com.github.alexthe666.alexsmobs.entity.EntityElephant;
+import com.github.alexthe666.alexsmobs.entity.EntityEmu;
+import com.github.alexthe666.alexsmobs.entity.EntityEndergrade;
+import com.github.alexthe666.alexsmobs.entity.EntityFly;
+import com.github.alexthe666.alexsmobs.entity.EntityFlyingFish;
+import com.github.alexthe666.alexsmobs.entity.EntityGiantSquid;
+import com.github.alexthe666.alexsmobs.entity.EntityJerboa;
+import com.github.alexthe666.alexsmobs.entity.EntityMimicOctopus;
+import com.github.alexthe666.alexsmobs.entity.EntityMoose;
+import com.github.alexthe666.alexsmobs.entity.EntitySeaBear;
+import com.github.alexthe666.alexsmobs.entity.EntitySeal;
+import com.github.alexthe666.alexsmobs.entity.EntitySnowLeopard;
+import com.github.alexthe666.alexsmobs.entity.EntityTiger;
 import com.github.alexthe666.alexsmobs.entity.util.FlyingFishBootsUtil;
 import com.github.alexthe666.alexsmobs.entity.util.RainbowUtil;
 import com.github.alexthe666.alexsmobs.entity.util.RockyChestplateUtil;
 import com.github.alexthe666.alexsmobs.entity.util.VineLassoUtil;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.item.ILeftClick;
-import com.github.alexthe666.alexsmobs.item.ItemGhostlyPickaxe;
 import com.github.alexthe666.alexsmobs.message.MessageSwingArm;
 import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.alexsmobs.misc.EmeraldsForItemsTrade;
 import com.github.alexthe666.alexsmobs.misc.ItemsForEmeraldsTrade;
+import com.github.alexthe666.alexsmobs.mixin.AbstractArrowAccessor;
 import com.github.alexthe666.alexsmobs.world.AMWorldData;
 import com.github.alexthe666.alexsmobs.world.BeachedCachalotWhaleSpawner;
-import com.github.alexthe666.alexsmobs.mixin.AbstractArrowAccessor;
-import com.github.alexthe666.alexsmobs.mixin.NoiseBasedChunkGeneratorAccessor;
 import io.github.fabricators_of_create.porting_lib.client_events.event.client.ComputeFovModifierEvent;
 import io.github.fabricators_of_create.porting_lib.entity.events.EntityEvents;
 import io.github.fabricators_of_create.porting_lib.entity.events.EntityStruckByLightningEvent;
 import io.github.fabricators_of_create.porting_lib.entity.events.ProjectileImpactEvent;
 import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingChangeTargetEvent;
 import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingDamageEvent;
-import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingDeathEvent;
 import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingDropsEvent;
 import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingEntityUseItemEvent;
 import io.github.fabricators_of_create.porting_lib.entity.events.player.AttackEntityEvent;
@@ -65,26 +85,37 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NonTameRandomTargetGoal;
-import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.Dolphin;
+import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.animal.Ocelot;
+import net.minecraft.world.entity.animal.PolarBear;
+import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ClipContext;
@@ -95,13 +126,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.phys.*;
-
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -433,10 +464,10 @@ public class ServerEvents {
                     event.setCancellationResult(InteractionResult.SUCCESS);
                 }
             }
-            if (RainbowUtil.getRainbowType(living) > 0 && (event.getItemStack().getItem() == Items.SPONGE)) {
+            if (RainbowUtil.getRainbowType(living) != null && (event.getItemStack().getItem() == Items.SPONGE)) {
                 event.setCanceled(true);
                 event.setCancellationResult(InteractionResult.SUCCESS);
-                RainbowUtil.setRainbowType(living, 0);
+                RainbowUtil.setRainbowType(living, null);
                 if (!event.getEntity().isCreative()) {
                     event.getItemStack().shrink(1);
                 }
@@ -478,9 +509,9 @@ public class ServerEvents {
         if (stack.isEmpty()) {
             stack = event.getEntity().getItemBySlot(EquipmentSlot.MAINHAND);
         }
-        if (RainbowUtil.getRainbowType(event.getEntity()) > 0 && (stack.is(Items.SPONGE))) {
+        if (RainbowUtil.getRainbowType(event.getEntity()) != null && (stack.is(Items.SPONGE))) {
             event.getEntity().swing(InteractionHand.MAIN_HAND);
-            RainbowUtil.setRainbowType(event.getEntity(), 0);
+            RainbowUtil.setRainbowType(event.getEntity(), null);
             if (!event.getEntity().isCreative()) {
                 stack.shrink(1);
             }
