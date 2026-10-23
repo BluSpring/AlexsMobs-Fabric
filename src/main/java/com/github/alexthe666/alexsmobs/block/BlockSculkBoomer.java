@@ -3,6 +3,8 @@ package com.github.alexthe666.alexsmobs.block;
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntitySculkBoomer;
 import com.mojang.serialization.MapCodec;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -22,7 +24,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.level.material.MapColor;
-import org.jetbrains.annotations.Nullable;
 
 public class BlockSculkBoomer extends BaseEntityBlock {
     public static final MapCodec<BlockSculkBoomer> CODEC = simpleCodec(p -> new BlockSculkBoomer());
@@ -77,13 +78,13 @@ public class BlockSculkBoomer extends BaseEntityBlock {
         return new TileEntitySculkBoomer(pos, state);
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_222100_, BlockState p_222101_, BlockEntityType<T> p_222102_) {
         return createTickerHelper(p_222102_, AMTileEntityRegistry.SCULK_BOOMER, TileEntitySculkBoomer::commonTick);
     }
 
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     public <T extends BlockEntity> GameEventListener getListener(ServerLevel p_222092_, T p_222093_) {
         return p_222093_ instanceof TileEntitySculkBoomer ? (TileEntitySculkBoomer)p_222093_ : null;
     }

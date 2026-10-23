@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.client.render.layer;
 
+import java.util.Map;
+
 import com.github.alexthe666.alexsmobs.client.model.ModelMimicube;
 import com.github.alexthe666.alexsmobs.client.render.AMColorUtil;
 import com.github.alexthe666.alexsmobs.client.render.RenderMimicube;
@@ -8,6 +10,8 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -19,13 +23,12 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
-
-import java.util.Map;
 
 public class LayerMimicubeHelmet extends RenderLayer<EntityMimicube, ModelMimicube> {
 
@@ -39,8 +42,8 @@ public class LayerMimicubeHelmet extends RenderLayer<EntityMimicube, ModelMimicu
         defaultBipedModel = new HumanoidModel(renderManagerIn.bakeLayer(ModelLayers.ARMOR_STAND_OUTER_ARMOR));
     }
 
-    public static ResourceLocation getArmorResource(net.minecraft.world.entity.Entity entity, ItemStack stack,
-            EquipmentSlot slot, @org.jetbrains.annotations.Nullable String type) {
+    public static ResourceLocation getArmorResource(Entity entity, ItemStack stack,
+                                                    EquipmentSlot slot, @Nullable String type) {
         ArmorItem item = (ArmorItem) stack.getItem();
         ResourceLocation materialName = item.getMaterial().unwrapKey().get().location();
         String domain = materialName.getNamespace();

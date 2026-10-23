@@ -1,12 +1,27 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeaveWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalSwimMoveControllerSink;
+import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
+import com.github.alexthe666.alexsmobs.entity.ai.MudskipperAIAttack;
+import com.github.alexthe666.alexsmobs.entity.ai.MudskipperAIDisplay;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticAIRandomSwimming;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticPathNavigator;
+import com.github.alexthe666.alexsmobs.entity.ai.TameableAIFollowOwnerWater;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -20,11 +35,24 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
@@ -33,9 +61,8 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -45,11 +72,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
-
-import org.jetbrains.annotations.NotNull;
-import java.util.Optional;
-import java.util.UUID;
 
 public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiAquatic, Bucketable {
 
@@ -287,16 +309,16 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         this.entityData.set(MOUTH_TICKS, time);
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     public UUID getDisplayingPartnerUUID() {
         return this.entityData.get(DISPLAYER_UUID).orElse(null);
     }
 
-    public void setDisplayingPartnerUUID(@org.jetbrains.annotations.Nullable UUID uniqueId) {
+    public void setDisplayingPartnerUUID(@Nullable UUID uniqueId) {
         this.entityData.set(DISPLAYER_UUID, Optional.ofNullable(uniqueId));
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     public Entity getDisplayingPartner() {
         UUID id = getDisplayingPartnerUUID();
         if (id != null && !this.level().isClientSide) {
@@ -305,7 +327,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         return null;
     }
 
-    public void setDisplayingPartner(@org.jetbrains.annotations.Nullable Entity jostlingPartner) {
+    public void setDisplayingPartner(@Nullable Entity jostlingPartner) {
         if (jostlingPartner == null) {
             this.setDisplayingPartnerUUID(null);
         } else {

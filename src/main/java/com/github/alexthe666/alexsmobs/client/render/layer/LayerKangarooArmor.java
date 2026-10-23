@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.client.render.layer;
 
+import java.util.Map;
+
 import com.github.alexthe666.alexsmobs.client.model.ModelKangaroo;
 import com.github.alexthe666.alexsmobs.client.render.AMColorUtil;
 import com.github.alexthe666.alexsmobs.client.render.RenderKangaroo;
@@ -10,6 +12,9 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -26,15 +31,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
-
-import io.github.fabricators_of_create.porting_lib.item.extensions.EquipmentItem;
-import org.joml.Quaternionf;
-
-import java.util.Map;
 
 public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaroo> {
 
@@ -49,7 +48,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
     }
 
     public static ResourceLocation getArmorResource(net.minecraft.world.entity.Entity entity, ItemStack stack,
-            EquipmentSlot slot, @org.jetbrains.annotations.Nullable String type) {
+            EquipmentSlot slot, @Nullable String type) {
         ArmorItem item = (ArmorItem) stack.getItem();
         ResourceLocation materialName = item.getMaterial().unwrapKey().get().location();
         String domain = materialName.getNamespace();

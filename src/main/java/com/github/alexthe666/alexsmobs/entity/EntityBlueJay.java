@@ -1,13 +1,26 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.BlueJayAIMelee;
+import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
+import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
+import com.github.alexthe666.alexsmobs.entity.ai.FlightMoveController;
+import com.github.alexthe666.alexsmobs.entity.ai.FlyingAITempt;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.base.Predicate;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -24,11 +37,21 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
@@ -49,11 +72,9 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
 
@@ -488,16 +509,16 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         this.entityData.set(CREST_TARGET, crestTarget);
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     public UUID getLastFeederUUID() {
         return this.entityData.get(LAST_FEEDER_UUID).orElse(null);
     }
 
-    public void setLastFeederUUID(@org.jetbrains.annotations.Nullable UUID uniqueId) {
+    public void setLastFeederUUID(@Nullable UUID uniqueId) {
         this.entityData.set(LAST_FEEDER_UUID, Optional.ofNullable(uniqueId));
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     public Entity getLastFeeder() {
         UUID id = getLastFeederUUID();
         if (id != null && !this.level().isClientSide) {
@@ -506,7 +527,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return null;
     }
 
-    public void setLastFeeder(@org.jetbrains.annotations.Nullable Entity feeder) {
+    public void setLastFeeder(@Nullable Entity feeder) {
         if (feeder == null) {
             this.setLastFeederUUID(null);
         } else {
@@ -514,16 +535,16 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         }
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     public UUID getRaccoonUUID() {
         return this.entityData.get(RACCOON_UUID).orElse(null);
     }
 
-    public void setRaccoonUUID(@org.jetbrains.annotations.Nullable UUID uniqueId) {
+    public void setRaccoonUUID(@Nullable UUID uniqueId) {
         this.entityData.set(RACCOON_UUID, Optional.ofNullable(uniqueId));
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     public Entity getRaccoon() {
         UUID id = getRaccoonUUID();
         if (id != null && !this.level().isClientSide) {
@@ -532,7 +553,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return null;
     }
 
-    public void setRaccoon(@org.jetbrains.annotations.Nullable Entity feeder) {
+    public void setRaccoon(@Nullable Entity feeder) {
         if (feeder == null) {
             this.setRaccoonUUID(null);
         } else {
@@ -667,7 +688,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             }
         }
 
-        @org.jetbrains.annotations.Nullable
+        @Nullable
         protected Vec3 getPosition() {
             Vec3 vector3d = EntityBlueJay.this.position();
 
@@ -726,7 +747,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             this.theNearestAttackableTargetSorter = new AIScatter.Sorter(EntityBlueJay.this);
             this.targetEntitySelector = new Predicate<Entity>() {
                 @Override
-                public boolean apply(@org.jetbrains.annotations.Nullable Entity e) {
+                public boolean apply(@Nullable Entity e) {
                     return e.isAlive() && e.getType().is(AMTagRegistry.SCATTERS_CROWS) || e instanceof Player && !((Player) e).isCreative();
                 }
             };

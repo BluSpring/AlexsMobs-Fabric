@@ -2,6 +2,8 @@ package com.github.alexthe666.alexsmobs.item;
 
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityFlutter;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -20,8 +22,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.BlockHitResult;
-
-import org.jetbrains.annotations.Nullable;
 
 public class ItemFlutterPot extends Item implements DispensibleContainerItem {
 
@@ -62,7 +62,7 @@ public class ItemFlutterPot extends Item implements DispensibleContainerItem {
     }
 
     @Override
-    public boolean emptyContents(@org.jetbrains.annotations.Nullable Player p_150821_, Level p_150822_, BlockPos p_150823_, @org.jetbrains.annotations.Nullable BlockHitResult p_150824_) {
+    public boolean emptyContents(@Nullable Player p_150821_, Level p_150822_, BlockPos p_150823_, @Nullable BlockHitResult p_150824_) {
         return false;
     }
 }
