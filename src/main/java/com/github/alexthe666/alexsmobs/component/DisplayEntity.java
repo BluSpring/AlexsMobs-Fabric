@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -17,6 +18,14 @@ public record DisplayEntity(
     int flags,
     Optional<Float> scale
 ) {
+    public static DisplayEntity of(EntityType<?> entityType) {
+        return new DisplayEntity(entityType, 0, Optional.empty());
+    }
+
+    public static DisplayEntity of(Holder<EntityType<?>> entityType) {
+        return of(entityType.value());
+    }
+
     public static final Codec<DisplayEntity> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entity_type")
