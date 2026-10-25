@@ -2,22 +2,23 @@ package com.github.alexthe666.alexsmobs.message;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.IHurtableMultipart;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class MessageHurtMultipart implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<MessageHurtMultipart> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "hurt_multipart"));
+    public static final CustomPacketPayload.Type<MessageHurtMultipart> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(AlexsMobs.MODID, "hurt_multipart"));
     public static final StreamCodec<FriendlyByteBuf, MessageHurtMultipart> CODEC = StreamCodec.ofMember(MessageHurtMultipart::write, MessageHurtMultipart::read);
 
     public int part;
@@ -62,7 +63,7 @@ public class MessageHurtMultipart implements CustomPacketPayload {
                 Entity part = player.level().getEntity(message.part);
                 Entity parent = player.level().getEntity(message.parent);
                 Registry<DamageType> registry = player.level().registryAccess().registry(Registries.DAMAGE_TYPE).get();
-                DamageType dmg = registry.get(ResourceLocation.parse(message.damageType));
+                DamageType dmg = registry.get(Identifier.parse(message.damageType));
                 if (dmg != null) {
                     Holder<DamageType> holder = registry.getHolder(registry.getId(dmg)).orElse(null);
                     if (holder != null) {

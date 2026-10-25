@@ -1,11 +1,12 @@
 package com.github.alexthe666.alexsmobs.misc;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvent;
 
 public class AMSoundRegistry {
 
@@ -442,6 +443,6 @@ public class AMSoundRegistry {
     public static final DeferredHolder<SoundEvent, SoundEvent> END_PIRATE_DOOR = createSoundEvent("end_pirate_door");
     
     private static DeferredHolder<SoundEvent, SoundEvent> createSoundEvent(final String soundName) {
-        return DEF_REG.register(soundName, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, soundName)));
+        return DEF_REG.register(soundName, () -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(AlexsMobs.MODID, soundName)));
     }
 }

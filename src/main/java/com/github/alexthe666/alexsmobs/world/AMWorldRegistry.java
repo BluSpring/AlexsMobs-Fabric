@@ -6,9 +6,13 @@ import com.github.alexthe666.alexsmobs.config.BiomeConfig;
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
+import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
+import net.neoforged.neoforge.common.world.ModifiableStructureInfo;
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -16,9 +20,6 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
-import net.neoforged.neoforge.common.world.ModifiableStructureInfo;
-import org.apache.commons.lang3.tuple.Pair;
 
 public class AMWorldRegistry {
 
@@ -37,8 +38,8 @@ public class AMWorldRegistry {
         }
     }
 
-    private static ResourceLocation getBiomeName(Holder<Biome> biome) {
-        return biome.unwrap().map((resourceKey) -> resourceKey.location(), (noKey) -> null);
+    private static Identifier getBiomeName(Holder<Biome> biome) {
+        return biome.unwrap().map((resourceKey) -> resourceKey.identifier(), (noKey) -> null);
     }
 
     public static boolean testBiome(Pair<String, SpawnBiomeData> entry, Holder<Biome> biome) {

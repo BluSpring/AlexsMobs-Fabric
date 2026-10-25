@@ -1,6 +1,6 @@
 package com.github.alexthe666.alexsmobs.item;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.*;
@@ -12,12 +12,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 
 public class ItemAnimalDictionary extends Item {
@@ -34,7 +34,7 @@ public class ItemAnimalDictionary extends Item {
             CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, itemStackIn);
             serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
         }
-        if (playerIn.level().isClientSide && target.getEncodeId() != null && target.getEncodeId().contains(AlexsMobs.MODID + ":")) {
+        if (playerIn.level().isClientSide() && target.getEncodeId() != null && target.getEncodeId().contains(AlexsMobs.MODID + ":")) {
             usedOnEntity = true;
             String id = target.getEncodeId().replace(AlexsMobs.MODID + ":", "");
             if(target instanceof EntityBoneSerpent || target instanceof EntityBoneSerpentPart){
@@ -58,24 +58,24 @@ public class ItemAnimalDictionary extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+    public InteractionResult use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack itemStackIn = playerIn.getItemInHand(handIn);
         if (!usedOnEntity) {
             if (playerIn instanceof ServerPlayer serverplayerentity) {
                 CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, itemStackIn);
                 serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
             }
-            if (worldIn.isClientSide) {
+            if (worldIn.isClientSide()) {
                 AlexsMobs.PROXY.openBookGUI(itemStackIn);
             }
         }
         usedOnEntity = false;
 
-        return new InteractionResultHolder(InteractionResult.PASS, itemStackIn);
+        return InteractionResult.PASS;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(Component.translatable("item.alexsmobs.animal_dictionary.desc").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+        builder.accept(Component.translatable("item.alexsmobs.animal_dictionary.desc").withStyle(ChatFormatting.GRAY));
     }
 }

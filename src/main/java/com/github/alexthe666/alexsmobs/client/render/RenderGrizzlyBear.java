@@ -13,16 +13,16 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderGrizzlyBear extends MobRenderer<EntityGrizzlyBear, ModelGrizzlyBear> {
-    private static final ResourceLocation TEXTURE = ResourceLocation
+    private static final Identifier TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/grizzly_bear.png");
-    private static final ResourceLocation TEXTURE_SNOWY = ResourceLocation
+    private static final Identifier TEXTURE_SNOWY = Identifier
             .parse("alexsmobs:textures/entity/grizzly_bear_snowy.png");
-    public static final ResourceLocation TEXTURE_FREDDY = ResourceLocation
+    public static final Identifier TEXTURE_FREDDY = Identifier
             .parse("alexsmobs:textures/entity/grizzly_bear_freddy.png");
-    private static final ResourceLocation TEXTURE_FREDDY_EYES = ResourceLocation
+    private static final Identifier TEXTURE_FREDDY_EYES = Identifier
             .parse("alexsmobs:textures/entity/grizzly_bear_freddy_eyes.png");
 
     public RenderGrizzlyBear(EntityRendererProvider.Context renderManagerIn) {
@@ -43,7 +43,7 @@ public class RenderGrizzlyBear extends MobRenderer<EntityGrizzlyBear, ModelGrizz
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityGrizzlyBear entity) {
+    public Identifier getTextureLocation(EntityGrizzlyBear entity) {
         return entity.isFreddy() ? TEXTURE_FREDDY : TEXTURE;
     }
 

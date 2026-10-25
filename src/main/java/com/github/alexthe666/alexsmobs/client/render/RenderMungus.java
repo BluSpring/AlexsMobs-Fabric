@@ -22,7 +22,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,14 +30,14 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class RenderMungus extends MobRenderer<EntityMungus, ModelMungus> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/mungus.png");
-    private static final ResourceLocation BEAM_TEXTURE = ResourceLocation
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/mungus.png");
+    private static final Identifier BEAM_TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/mungus_beam.png");
-    private static final ResourceLocation TEXTURE_BEAM_OVERLAY = ResourceLocation
+    private static final Identifier TEXTURE_BEAM_OVERLAY = Identifier
             .parse("alexsmobs:textures/entity/mungus_beam_overlay.png");
-    private static final ResourceLocation TEXTURE_SACK_OVERLAY = ResourceLocation
+    private static final Identifier TEXTURE_SACK_OVERLAY = Identifier
             .parse("alexsmobs:textures/entity/mungus_sack.png");
-    private static final ResourceLocation TEXTURE_SHOES = ResourceLocation
+    private static final Identifier TEXTURE_SHOES = Identifier
             .parse("alexsmobs:textures/entity/mungus_shoes.png");
     private static final RenderType beamType = AMRenderTypes.getEyesNoFog(BEAM_TEXTURE);
 
@@ -200,7 +200,7 @@ public class RenderMungus extends MobRenderer<EntityMungus, ModelMungus> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityMungus entity) {
+    public Identifier getTextureLocation(EntityMungus entity) {
         return TEXTURE;
     }
 

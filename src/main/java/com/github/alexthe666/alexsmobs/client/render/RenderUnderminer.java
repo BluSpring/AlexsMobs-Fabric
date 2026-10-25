@@ -23,20 +23,20 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class RenderUnderminer extends MobRenderer<EntityUnderminer, EntityModel<EntityUnderminer>> {
-    private static final ResourceLocation TEXTURE_DWARF = ResourceLocation
+    private static final Identifier TEXTURE_DWARF = Identifier
             .parse("alexsmobs:textures/entity/underminer_dwarf.png");
-    private static final ResourceLocation TEXTURE_0 = ResourceLocation
+    private static final Identifier TEXTURE_0 = Identifier
             .parse("alexsmobs:textures/entity/underminer_0.png");
-    private static final ResourceLocation TEXTURE_1 = ResourceLocation
+    private static final Identifier TEXTURE_1 = Identifier
             .parse("alexsmobs:textures/entity/underminer_1.png");
-    public static final List<ResourceLocation> BREAKING_LOCATIONS = IntStream.range(0, 10)
-            .mapToObj((destroyStage) -> ResourceLocation
+    public static final List<Identifier> BREAKING_LOCATIONS = IntStream.range(0, 10)
+            .mapToObj((destroyStage) -> Identifier
                     .parse("alexsmobs:textures/block/ghostly_pickaxe/destroy_stage_" + destroyStage + ".png"))
             .collect(Collectors.toList());
     private static final ModelUnderminerDwarf DWARF_MODEL = new ModelUnderminerDwarf();
@@ -128,12 +128,12 @@ public class RenderUnderminer extends MobRenderer<EntityUnderminer, EntityModel<
     @Override
     @Nullable
     protected RenderType getRenderType(EntityUnderminer farseer, boolean normal, boolean invis, boolean outline) {
-        ResourceLocation resourcelocation = this.getTextureLocation(farseer);
+        Identifier resourcelocation = this.getTextureLocation(farseer);
         return outline ? RenderType.outline(resourcelocation) : AMRenderTypes.getUnderminer(resourcelocation);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityUnderminer entity) {
+    public Identifier getTextureLocation(EntityUnderminer entity) {
         return entity.isDwarf() ? TEXTURE_DWARF : entity.getVariant() == 0 ? TEXTURE_0 : TEXTURE_1;
     }
 

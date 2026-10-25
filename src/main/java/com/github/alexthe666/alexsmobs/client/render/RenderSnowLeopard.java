@@ -5,11 +5,11 @@ import com.github.alexthe666.alexsmobs.entity.EntitySnowLeopard;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderSnowLeopard extends MobRenderer<EntitySnowLeopard, ModelSnowLeopard> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/snow_leopard.png");
-    private static final ResourceLocation TEXTURE_SLEEPING = ResourceLocation.parse("alexsmobs:textures/entity/snow_leopard_sleeping.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/snow_leopard.png");
+    private static final Identifier TEXTURE_SLEEPING = Identifier.parse("alexsmobs:textures/entity/snow_leopard_sleeping.png");
 
     public RenderSnowLeopard(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelSnowLeopard(), 0.4F);
@@ -22,7 +22,7 @@ public class RenderSnowLeopard extends MobRenderer<EntitySnowLeopard, ModelSnowL
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntitySnowLeopard entity) {
+    public Identifier getTextureLocation(EntitySnowLeopard entity) {
         return entity.isSleeping() ? TEXTURE_SLEEPING : TEXTURE;
     }
 }

@@ -10,11 +10,11 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.LightLayer;
 
 public class LayerRaccoonEyes extends RenderLayer<EntityRaccoon, ModelRaccoon> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/raccoon_eyes.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/raccoon_eyes.png");
 
     public LayerRaccoonEyes(RenderRaccoon render) {
         super(render);

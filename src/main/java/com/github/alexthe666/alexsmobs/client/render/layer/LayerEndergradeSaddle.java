@@ -9,10 +9,10 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class LayerEndergradeSaddle extends RenderLayer<EntityEndergrade, ModelEndergrade> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/endergrade_saddle.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/endergrade_saddle.png");
 
     public LayerEndergradeSaddle(RenderEndergrade renderGrizzlyBear) {
         super(renderGrizzlyBear);

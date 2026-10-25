@@ -1,16 +1,17 @@
 package com.github.alexthe666.alexsmobs.config;
 
-import com.github.alexthe666.alexsmobs.AlexsMobs;
-import com.github.alexthe666.citadel.config.biome.SpawnBiomeConfig;
-import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
-import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.github.alexthe666.alexsmobs.AlexsMobs;
+import com.github.alexthe666.citadel.config.biome.SpawnBiomeConfig;
+import com.github.alexthe666.citadel.config.biome.SpawnBiomeData;
+import org.apache.commons.lang3.tuple.Pair;
+
+import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.biome.Biome;
 
 public class BiomeConfig {
 	public static final Pair<String, SpawnBiomeData> grizzlyBear = Pair.of("alexsmobs:grizzly_bear_spawns", DefaultBiomes.ALL_FOREST);
@@ -114,7 +115,7 @@ public class BiomeConfig {
                if(obj instanceof Pair){
 				   String id = (String)((Pair) obj).getLeft();
 				   SpawnBiomeData data = (SpawnBiomeData)((Pair) obj).getRight();
-				   biomeConfigValues.put(id, SpawnBiomeConfig.create(ResourceLocation.parse(id), data));
+				   biomeConfigValues.put(id, SpawnBiomeConfig.create(Identifier.parse(id), data));
                }
             }
         }catch (Exception e){
@@ -124,7 +125,7 @@ public class BiomeConfig {
 		init = true;
     }
 
-    public static boolean test(Pair<String, SpawnBiomeData> entry, Holder<Biome> biome, ResourceLocation name){
+    public static boolean test(Pair<String, SpawnBiomeData> entry, Holder<Biome> biome, Identifier name){
     	if(!init){
     		return false;
 		}
@@ -132,7 +133,7 @@ public class BiomeConfig {
 	}
 
 	public static boolean test(Pair<String, SpawnBiomeData> spawns, Holder<Biome> biome) {
-		ResourceLocation key = biome.unwrapKey().map(k -> k.location()).orElse(null);
+		Identifier key = biome.unwrapKey().map(k -> k.location()).orElse(null);
 		return test(spawns, biome, key);
 	}
 }

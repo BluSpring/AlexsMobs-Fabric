@@ -11,14 +11,14 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderFrilledShark extends MobRenderer<EntityFrilledShark, ModelFrilledShark> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/frilled_shark.png");
-    private static final ResourceLocation TEXTURE_DEPRESSURIZED = ResourceLocation.parse("alexsmobs:textures/entity/frilled_shark_depressurized.png");
-    private static final ResourceLocation TEXTURE_KAIJU = ResourceLocation.parse("alexsmobs:textures/entity/frilled_shark_kaiju.png");
-    private static final ResourceLocation TEXTURE_KAIJU_DEPRESSURIZED = ResourceLocation.parse("alexsmobs:textures/entity/frilled_shark_kaiju_depressurized.png");
-    private static final ResourceLocation TEXTURE_TEETH = ResourceLocation.parse("alexsmobs:textures/entity/frilled_shark_teeth.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/frilled_shark.png");
+    private static final Identifier TEXTURE_DEPRESSURIZED = Identifier.parse("alexsmobs:textures/entity/frilled_shark_depressurized.png");
+    private static final Identifier TEXTURE_KAIJU = Identifier.parse("alexsmobs:textures/entity/frilled_shark_kaiju.png");
+    private static final Identifier TEXTURE_KAIJU_DEPRESSURIZED = Identifier.parse("alexsmobs:textures/entity/frilled_shark_kaiju_depressurized.png");
+    private static final Identifier TEXTURE_TEETH = Identifier.parse("alexsmobs:textures/entity/frilled_shark_teeth.png");
 
     public RenderFrilledShark(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelFrilledShark(), 0.4F);
@@ -31,7 +31,7 @@ public class RenderFrilledShark extends MobRenderer<EntityFrilledShark, ModelFri
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityFrilledShark entity) {
+    public Identifier getTextureLocation(EntityFrilledShark entity) {
         return entity.isKaiju() ? (entity.isDepressurized() ? TEXTURE_KAIJU_DEPRESSURIZED : TEXTURE_KAIJU) : (entity.isDepressurized() ? TEXTURE_DEPRESSURIZED : TEXTURE);
     }
 

@@ -6,10 +6,10 @@ import com.github.alexthe666.alexsmobs.entity.EntityCrow;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderCrow extends MobRenderer<EntityCrow, ModelCrow> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/crow.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/crow.png");
 
     public RenderCrow(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelCrow(), 0.2F);
@@ -22,7 +22,7 @@ public class RenderCrow extends MobRenderer<EntityCrow, ModelCrow> {
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityCrow entity) {
+    public Identifier getTextureLocation(EntityCrow entity) {
         return TEXTURE;
     }
 }

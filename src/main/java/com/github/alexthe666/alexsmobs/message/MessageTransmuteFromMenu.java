@@ -7,11 +7,11 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 
 public class MessageTransmuteFromMenu implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<MessageTransmuteFromMenu> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "transmute_from_menu"));
+    public static final CustomPacketPayload.Type<MessageTransmuteFromMenu> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(AlexsMobs.MODID, "transmute_from_menu"));
     public static final StreamCodec<FriendlyByteBuf, MessageTransmuteFromMenu> CODEC = StreamCodec.ofMember(MessageTransmuteFromMenu::write, MessageTransmuteFromMenu::read);
 
     private int playerId;

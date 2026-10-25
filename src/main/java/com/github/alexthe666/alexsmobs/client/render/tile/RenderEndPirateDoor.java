@@ -10,13 +10,13 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.phys.AABB;
 
 public class RenderEndPirateDoor<T extends TileEntityEndPirateDoor> implements BlockEntityRenderer<T> {
 
-    private static final ResourceLocation TEXTURE = ResourceLocation
+    private static final Identifier TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/end_pirate/door.png");
     private static final ModelEndPirateDoor DOOR_MODEL = new ModelEndPirateDoor();
 

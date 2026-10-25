@@ -2,17 +2,18 @@ package com.github.alexthe666.alexsmobs.message;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.item.ILeftClick;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class MessageSwingArm implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<MessageSwingArm> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "swing_arm"));
+    public static final CustomPacketPayload.Type<MessageSwingArm> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(AlexsMobs.MODID, "swing_arm"));
     public static final StreamCodec<FriendlyByteBuf, MessageSwingArm> CODEC = StreamCodec.ofMember(MessageSwingArm::write, MessageSwingArm::read);
     public static final MessageSwingArm INSTANCE = new MessageSwingArm();
 

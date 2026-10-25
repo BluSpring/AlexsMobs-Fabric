@@ -17,7 +17,7 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,7 +25,7 @@ import net.minecraft.world.entity.LivingEntity;
 public abstract class LayerVoidWormGlow<T extends LivingEntity> extends RenderLayer<T, EntityModel<T>> {
 
     private final ResourceManager resourceManager;
-    private final Object2BooleanMap<ResourceLocation> mcmetaData;
+    private final Object2BooleanMap<Identifier> mcmetaData;
     private EntityModel<T> layerModel;
     private final EntityModel bodyModel = new ModelVoidWormBody(1.001F);
     private final EntityModel tailModel = new ModelVoidWormTail(1.001F);
@@ -41,7 +41,7 @@ public abstract class LayerVoidWormGlow<T extends LivingEntity> extends RenderLa
     @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, T worm, float limbSwing,
             float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        ResourceLocation texture = getGlowTexture(worm);
+        Identifier texture = getGlowTexture(worm);
         boolean special = isSpecialRenderer(texture);
 
         if (isGlowing(worm) || special) {
@@ -60,13 +60,13 @@ public abstract class LayerVoidWormGlow<T extends LivingEntity> extends RenderLa
         }
     }
 
-    public abstract ResourceLocation getGlowTexture(LivingEntity worm);
+    public abstract Identifier getGlowTexture(LivingEntity worm);
 
     public abstract boolean isGlowing(LivingEntity livingEntity);
 
     public abstract float getAlpha(LivingEntity livingEntity);
 
-    private boolean isSpecialRenderer(ResourceLocation resourceLocation) {
+    private boolean isSpecialRenderer(Identifier resourceLocation) {
         if (mcmetaData.containsKey(resourceLocation)) {
             return mcmetaData.getBoolean(resourceLocation);
         }

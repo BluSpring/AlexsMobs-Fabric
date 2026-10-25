@@ -63,7 +63,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -89,7 +89,6 @@ public class ClientProxy extends CommonProxy {
 
     @OnlyIn(Dist.CLIENT)
     public static void onItemColors(RegisterColorHandlersEvent.Item event) {
-
         AlexsMobs.LOGGER.info("loaded in item colorizer");
         if (AMItemRegistry.STRADDLEBOARD.isBound()) {
             event.register((stack, colorIn) -> colorIn < 1 ? -1 : ((ItemStraddleboard) stack.getItem()).getColor(stack),
@@ -255,38 +254,38 @@ public class ClientProxy extends CommonProxy {
         EntityRenderers.register(AMEntityRegistry.CAIMAN.get(), RenderCaiman::new);
         EntityRenderers.register(AMEntityRegistry.TRIOPS.get(), RenderTriops::new);
         try {
-            ItemProperties.register(AMItemRegistry.BLOOD_SPRAYER.get(), ResourceLocation.withDefaultNamespace("empty"),
+            ItemProperties.register(AMItemRegistry.BLOOD_SPRAYER.get(), Identifier.withDefaultNamespace("empty"),
                     (stack, p_239428_1_, p_239428_2_, j) -> {
                         return !ItemBloodSprayer.isUsable(stack)
                                 || p_239428_2_ instanceof Player && ((Player) p_239428_2_).getCooldowns()
                                 .isOnCooldown(AMItemRegistry.BLOOD_SPRAYER.get()) ? 1.0F : 0.0F;
                     });
             ItemProperties.register(AMItemRegistry.HEMOLYMPH_BLASTER.get(),
-                    ResourceLocation.withDefaultNamespace("empty"), (stack, p_239428_1_, p_239428_2_, j) -> {
+                    Identifier.withDefaultNamespace("empty"), (stack, p_239428_1_, p_239428_2_, j) -> {
                         return !ItemHemolymphBlaster.isUsable(stack)
                                 || p_239428_2_ instanceof Player && ((Player) p_239428_2_).getCooldowns()
                                 .isOnCooldown(AMItemRegistry.HEMOLYMPH_BLASTER.get()) ? 1.0F : 0.0F;
                     });
             ItemProperties.register(AMItemRegistry.TARANTULA_HAWK_ELYTRA.get(),
-                    ResourceLocation.withDefaultNamespace("broken"), (stack, p_239428_1_, p_239428_2_, j) -> {
+                    Identifier.withDefaultNamespace("broken"), (stack, p_239428_1_, p_239428_2_, j) -> {
                         return ItemTarantulaHawkElytra.isUsable(stack) ? 0.0F : 1.0F;
                     });
             ItemProperties.register(AMItemRegistry.SHIELD_OF_THE_DEEP.get(),
-                    ResourceLocation.withDefaultNamespace("blocking"), (stack, p_239421_1_, p_239421_2_, j) -> {
+                    Identifier.withDefaultNamespace("blocking"), (stack, p_239421_1_, p_239421_2_, j) -> {
                         return p_239421_2_ != null && p_239421_2_.isUsingItem() && p_239421_2_.getUseItem() == stack
                                 ? 1.0F
                                 : 0.0F;
                     });
-            ItemProperties.register(AMItemRegistry.SOMBRERO.get(), ResourceLocation.withDefaultNamespace("silly"),
+            ItemProperties.register(AMItemRegistry.SOMBRERO.get(), Identifier.withDefaultNamespace("silly"),
                     (stack, p_239421_1_, p_239421_2_, j) -> {
                         return AlexsMobs.isAprilFools() ? 1.0F : 0.0F;
                     });
-            ItemProperties.register(AMItemRegistry.TENDON_WHIP.get(), ResourceLocation.withDefaultNamespace("active"),
+            ItemProperties.register(AMItemRegistry.TENDON_WHIP.get(), Identifier.withDefaultNamespace("active"),
                     (stack, p_239421_1_, holder, j) -> {
                         return ItemTendonWhip.isActive(stack, holder) ? 1.0F : 0.0F;
                     });
             ItemProperties.register(AMItemRegistry.PUPFISH_LOCATOR.get(),
-                    ResourceLocation.withDefaultNamespace("in_chunk"), (stack, world, entity, j) -> {
+                    Identifier.withDefaultNamespace("in_chunk"), (stack, world, entity, j) -> {
                         int x = pupfishChunkX * 16;
                         int z = pupfishChunkZ * 16;
                         if (entity != null && entity.getX() >= x && entity.getX() <= x + 16 && entity.getZ() >= z
@@ -296,7 +295,7 @@ public class ClientProxy extends CommonProxy {
                         return 0.0F;
                     });
             ItemProperties.register(AMItemRegistry.SKELEWAG_SWORD.get(),
-                    ResourceLocation.withDefaultNamespace("blocking"), (stack, p_239421_1_, p_239421_2_, j) -> {
+                    Identifier.withDefaultNamespace("blocking"), (stack, p_239421_1_, p_239421_2_, j) -> {
                         return p_239421_2_ != null && p_239421_2_.isUsingItem() && p_239421_2_.getUseItem() == stack
                                 ? 1.0F
                                 : 0.0F;

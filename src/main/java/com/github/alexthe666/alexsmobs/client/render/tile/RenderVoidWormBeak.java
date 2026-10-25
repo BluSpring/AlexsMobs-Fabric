@@ -9,11 +9,11 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderVoidWormBeak<T extends TileEntityVoidWormBeak> implements BlockEntityRenderer<T> {
 
-    private static final ResourceLocation TEXTURE = ResourceLocation
+    private static final Identifier TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/void_worm/void_worm_beak.png");
     private static final ModelVoidWormBeak HEAD_MODEL = new ModelVoidWormBeak();
 

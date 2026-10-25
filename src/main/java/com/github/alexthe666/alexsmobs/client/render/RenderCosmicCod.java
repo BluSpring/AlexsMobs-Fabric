@@ -6,11 +6,11 @@ import com.github.alexthe666.alexsmobs.entity.EntityCosmicCod;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderCosmicCod extends MobRenderer<EntityCosmicCod, EntityModel<EntityCosmicCod>> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/cosmic_cod.png");
-    private static final ResourceLocation TEXTURE_EYES = ResourceLocation.parse("alexsmobs:textures/entity/cosmic_cod_eyes.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/cosmic_cod.png");
+    private static final Identifier TEXTURE_EYES = Identifier.parse("alexsmobs:textures/entity/cosmic_cod_eyes.png");
 
     public RenderCosmicCod(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelCosmicCod(), 0.25F);
@@ -18,7 +18,7 @@ public class RenderCosmicCod extends MobRenderer<EntityCosmicCod, EntityModel<En
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityCosmicCod entity) {
+    public Identifier getTextureLocation(EntityCosmicCod entity) {
         return TEXTURE;
     }
 }

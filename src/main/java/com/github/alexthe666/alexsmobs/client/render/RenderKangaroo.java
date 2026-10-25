@@ -9,10 +9,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderKangaroo extends MobRenderer<EntityKangaroo, ModelKangaroo> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/kangaroo.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/kangaroo.png");
 
     public RenderKangaroo(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelKangaroo(), 0.5F);
@@ -35,7 +35,7 @@ public class RenderKangaroo extends MobRenderer<EntityKangaroo, ModelKangaroo> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityKangaroo entity) {
+    public Identifier getTextureLocation(EntityKangaroo entity) {
         return TEXTURE;
     }
 }

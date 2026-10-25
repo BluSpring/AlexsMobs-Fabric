@@ -27,8 +27,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -77,8 +77,8 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntityCockroach extends Animal implements Shearable, IShearable, ITargetsDroppedItems {
 
-    public static final ResourceKey<LootTable> MARACA_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("alexsmobs", "entities/cockroach_maracas"));
-    public static final ResourceKey<LootTable> MARACA_HEADLESS_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("alexsmobs", "entities/cockroach_maracas_headless"));
+    public static final ResourceKey<LootTable> MARACA_LOOT = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("alexsmobs", "entities/cockroach_maracas"));
+    public static final ResourceKey<LootTable> MARACA_HEADLESS_LOOT = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("alexsmobs", "entities/cockroach_maracas_headless"));
     protected static final EntityDimensions STAND_SIZE = EntityDimensions.fixed(0.7F, 0.9F);
     private static final EntityDataAccessor<Boolean> DANCING = SynchedEntityData.defineId(EntityCockroach.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> HEADLESS = SynchedEntityData.defineId(EntityCockroach.class, EntityDataSerializers.BOOLEAN);
@@ -390,7 +390,7 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
     public Entity getNearestMusician() {
         final UUID id = getNearestMusicianId();
         if (id != null && !this.level().isClientSide) {
-            return ((ServerLevel) level()).getEntity(id);
+            return level().getEntity(id);
         }
         return null;
     }

@@ -6,13 +6,13 @@ import com.github.alexthe666.alexsmobs.entity.EntityGorilla;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderGorilla extends MobRenderer<EntityGorilla, ModelGorilla> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/gorilla.png");
-    private static final ResourceLocation TEXTURE_SILVERBACK = ResourceLocation.parse("alexsmobs:textures/entity/gorilla_silverback.png");
-    private static final ResourceLocation TEXTURE_DK = ResourceLocation.parse("alexsmobs:textures/entity/gorilla_dk.png");
-    private static final ResourceLocation TEXTURE_FUNKY = ResourceLocation.parse("alexsmobs:textures/entity/gorilla_funky.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/gorilla.png");
+    private static final Identifier TEXTURE_SILVERBACK = Identifier.parse("alexsmobs:textures/entity/gorilla_silverback.png");
+    private static final Identifier TEXTURE_DK = Identifier.parse("alexsmobs:textures/entity/gorilla_dk.png");
+    private static final Identifier TEXTURE_FUNKY = Identifier.parse("alexsmobs:textures/entity/gorilla_funky.png");
 
     public RenderGorilla(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelGorilla(), 0.7F);
@@ -25,7 +25,7 @@ public class RenderGorilla extends MobRenderer<EntityGorilla, ModelGorilla> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityGorilla entity) {
+    public Identifier getTextureLocation(EntityGorilla entity) {
         return entity.isFunkyKong() ? TEXTURE_FUNKY : entity.isDonkeyKong() ? TEXTURE_DK : entity.isSilverback() ? TEXTURE_SILVERBACK : TEXTURE;
     }
 }

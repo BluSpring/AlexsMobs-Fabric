@@ -1,25 +1,25 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
-
 import java.util.Locale;
+
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.RandomSource;
 
 public enum TerrapinTypes {
 
-    GREEN(ResourceLocation.parse("alexsmobs:textures/entity/terrapin/terrapin_green.png"), 8.0F),
-    BLACK(ResourceLocation.parse("alexsmobs:textures/entity/terrapin/terrapin_black.png"), 11.0F),
-    BROWN(ResourceLocation.parse("alexsmobs:textures/entity/terrapin/terrapin_brown.png"), 10.0F),
-    KOOPA(ResourceLocation.parse("alexsmobs:textures/entity/terrapin/terrapin_koopa.png"), 0.05F),
-    PAINTED(ResourceLocation.parse("alexsmobs:textures/entity/terrapin/terrapin_painted.png"), 8.0F),
-    RED_EARED(ResourceLocation.parse("alexsmobs:textures/entity/terrapin/terrapin_red_eared.png"), 13.0F),
-    OVERLAY(ResourceLocation.parse("alexsmobs:textures/entity/terrapin/overlay/terrapin_with_overlays.png"), 9.0F);
+    GREEN(Identifier.parse("alexsmobs:textures/entity/terrapin/terrapin_green.png"), 8.0F),
+    BLACK(Identifier.parse("alexsmobs:textures/entity/terrapin/terrapin_black.png"), 11.0F),
+    BROWN(Identifier.parse("alexsmobs:textures/entity/terrapin/terrapin_brown.png"), 10.0F),
+    KOOPA(Identifier.parse("alexsmobs:textures/entity/terrapin/terrapin_koopa.png"), 0.05F),
+    PAINTED(Identifier.parse("alexsmobs:textures/entity/terrapin/terrapin_painted.png"), 8.0F),
+    RED_EARED(Identifier.parse("alexsmobs:textures/entity/terrapin/terrapin_red_eared.png"), 13.0F),
+    OVERLAY(Identifier.parse("alexsmobs:textures/entity/terrapin/overlay/terrapin_with_overlays.png"), 9.0F);
 
-    private final ResourceLocation texture;
+    private final Identifier texture;
     private final float weight;
     private static final int[] DEFAULT_COLORS = new int[]{0xab4935, 0xc2a629, 0x363533, 0xebe9e1, 0x60a372, 0xc29b72};
 
-    TerrapinTypes(ResourceLocation texture, float weight) {
+    TerrapinTypes(Identifier texture, float weight) {
         this.texture = texture;
         this.weight = weight;
     }
@@ -41,7 +41,7 @@ public enum TerrapinTypes {
         return TerrapinTypes.values()[randomIndex];
     }
 
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         return texture;
     }
 

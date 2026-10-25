@@ -5,10 +5,10 @@ import com.github.alexthe666.alexsmobs.entity.EntityGazelle;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderGazelle extends MobRenderer<EntityGazelle, ModelGazelle> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/gazelle.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/gazelle.png");
 
     public RenderGazelle(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelGazelle(), 0.4F);
@@ -21,7 +21,7 @@ public class RenderGazelle extends MobRenderer<EntityGazelle, ModelGazelle> {
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityGazelle entity) {
+    public Identifier getTextureLocation(EntityGazelle entity) {
         return TEXTURE;
     }
 }

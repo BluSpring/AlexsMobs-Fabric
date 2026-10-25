@@ -7,8 +7,8 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
@@ -34,7 +34,7 @@ public class SealAIDiveForItems extends Goal {
     private BlockPos digPos;
     private boolean returnToPlayer = false;
     private int digTime = 0;
-    public static final ResourceKey<LootTable> SEAL_REWARD = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("alexsmobs", "gameplay/seal_reward"));
+    public static final ResourceKey<LootTable> SEAL_REWARD = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("alexsmobs", "gameplay/seal_reward"));
 
     public SealAIDiveForItems(EntitySeal seal) {
         this.seal = seal;

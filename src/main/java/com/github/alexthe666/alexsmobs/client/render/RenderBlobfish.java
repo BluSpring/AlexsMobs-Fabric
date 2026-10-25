@@ -7,11 +7,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderBlobfish extends MobRenderer<EntityBlobfish, EntityModel<EntityBlobfish>> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/blobfish.png");
-    private static final ResourceLocation TEXTURE_DEPRESSURIZED = ResourceLocation.parse("alexsmobs:textures/entity/blobfish_depressurized.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/blobfish.png");
+    private static final Identifier TEXTURE_DEPRESSURIZED = Identifier.parse("alexsmobs:textures/entity/blobfish_depressurized.png");
     private final ModelBlobfish modelFish = new ModelBlobfish();
     private final ModelBlobfishDepressurized modelDepressurized = new ModelBlobfishDepressurized();
 
@@ -31,7 +31,7 @@ public class RenderBlobfish extends MobRenderer<EntityBlobfish, EntityModel<Enti
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityBlobfish entity) {
+    public Identifier getTextureLocation(EntityBlobfish entity) {
         return entity.isDepressurized() ? TEXTURE_DEPRESSURIZED : TEXTURE;
     }
 }

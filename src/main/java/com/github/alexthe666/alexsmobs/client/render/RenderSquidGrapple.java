@@ -20,7 +20,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
@@ -29,7 +29,7 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
 public class RenderSquidGrapple extends EntityRenderer<EntitySquidGrapple> {
-    private static final ResourceLocation SQUID_TEXTURE = ResourceLocation
+    private static final Identifier SQUID_TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/giant_squid.png");
     private static final ModelSquidGrapple SQUID_MODEL = new ModelSquidGrapple();
     private static final float TENTACLES_COLOR_R = 181F / 255F;
@@ -142,7 +142,7 @@ public class RenderSquidGrapple extends EntityRenderer<EntitySquidGrapple> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntitySquidGrapple entity) {
+    public Identifier getTextureLocation(EntitySquidGrapple entity) {
         return SQUID_TEXTURE;
     }
 

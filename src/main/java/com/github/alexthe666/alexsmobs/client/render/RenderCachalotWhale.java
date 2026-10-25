@@ -8,13 +8,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderCachalotWhale extends MobRenderer<EntityCachalotWhale, ModelCachalotWhale> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/cachalot/cachalot_whale.png");
-    private static final ResourceLocation TEXTURE_SLEEPING = ResourceLocation.parse("alexsmobs:textures/entity/cachalot/cachalot_whale_sleeping.png");
-    private static final ResourceLocation TEXTURE_ALBINO = ResourceLocation.parse("alexsmobs:textures/entity/cachalot/cachalot_whale_albino.png");
-    private static final ResourceLocation TEXTURE_ALBINO_SLEEPING = ResourceLocation.parse("alexsmobs:textures/entity/cachalot/cachalot_whale_albino_sleeping.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/cachalot/cachalot_whale.png");
+    private static final Identifier TEXTURE_SLEEPING = Identifier.parse("alexsmobs:textures/entity/cachalot/cachalot_whale_sleeping.png");
+    private static final Identifier TEXTURE_ALBINO = Identifier.parse("alexsmobs:textures/entity/cachalot/cachalot_whale_albino.png");
+    private static final Identifier TEXTURE_ALBINO_SLEEPING = Identifier.parse("alexsmobs:textures/entity/cachalot/cachalot_whale_albino_sleeping.png");
 
     public RenderCachalotWhale(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelCachalotWhale(), 4.2F);
@@ -40,7 +40,7 @@ public class RenderCachalotWhale extends MobRenderer<EntityCachalotWhale, ModelC
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityCachalotWhale entity) {
+    public Identifier getTextureLocation(EntityCachalotWhale entity) {
         if(entity.isAlbino()){
             return entity.isSleeping() || entity.isBeached() ? TEXTURE_ALBINO_SLEEPING : TEXTURE_ALBINO;
         }else {

@@ -2,22 +2,27 @@ package com.github.alexthe666.alexsmobs.misc;
 
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.component.AMDataComponentRegistry;
+import com.mojang.serialization.MapCodec;
 
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.Level;
 
 public class RecipeBisonUpgrade extends CustomRecipe {
+    public static final RecipeBisonUpgrade INSTANCE = new RecipeBisonUpgrade();
+    public static final MapCodec<RecipeBisonUpgrade> CODEC = MapCodec.unit(INSTANCE);
+    public static final StreamCodec<RegistryFriendlyByteBuf, RecipeBisonUpgrade> STREAM_CODEC = StreamCodec.unit(INSTANCE);
 
-    public RecipeBisonUpgrade(CraftingBookCategory category) {
-        super(category);
+    public RecipeBisonUpgrade() {
+        super();
     }
 
 
@@ -34,8 +39,8 @@ public class RecipeBisonUpgrade extends CustomRecipe {
             for (int j = 0; j < container.size(); ++j) {
                 ItemStack itemstack1 = container.getItem(j);
                 boolean notFurred = !itemstack1.has(AMDataComponentRegistry.BISON_FUR);
-                Equipable equipable = Equipable.get(itemstack1);
-                if (!itemstack1.isEmpty() && notFurred && (itemstack1.getEquipmentSlot() == EquipmentSlot.FEET || (equipable != null && equipable.getEquipmentSlot() == EquipmentSlot.FEET))) {
+                Equippable equipable = itemstack1.get(DataComponents.EQUIPPABLE);
+                if (!itemstack1.isEmpty() && notFurred && (itemstack1.getEquipmentSlot() == EquipmentSlot.FEET || (equipable != null && equipable.slot() == EquipmentSlot.FEET))) {
                     boots = itemstack1;
                 }
             }
@@ -54,17 +59,17 @@ public class RecipeBisonUpgrade extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput container, HolderLookup.Provider registries) {
+    public ItemStack assemble(CraftingInput container) {
         return createBoots(container);
     }
 
-    @Override
-    public boolean canCraftInDimensions(int x, int y) {
-        return x * y >= 2;
-    }
+//    @Override
+//    public boolean canCraftInDimensions(int x, int y) {
+//        return x * y >= 2;
+//    }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends CustomRecipe> getSerializer() {
         return AMRecipeRegistry.BISON_UPGRADE.get();
     }
 }

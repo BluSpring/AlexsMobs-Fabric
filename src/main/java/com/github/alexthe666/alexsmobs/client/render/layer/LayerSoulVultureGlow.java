@@ -8,13 +8,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class LayerSoulVultureGlow extends RenderLayer<EntitySoulVulture, ModelSoulVulture> {
-    private static final ResourceLocation TEXTURE_GLOW = ResourceLocation.parse("alexsmobs:textures/entity/soul_vulture/soul_vulture_glow.png");
-    private static final ResourceLocation TEXTURE_0 = ResourceLocation.parse("alexsmobs:textures/entity/soul_vulture/soul_vulture_flames_0.png");
-    private static final ResourceLocation TEXTURE_1 = ResourceLocation.parse("alexsmobs:textures/entity/soul_vulture/soul_vulture_flames_1.png");
-    private static final ResourceLocation TEXTURE_2 = ResourceLocation.parse("alexsmobs:textures/entity/soul_vulture/soul_vulture_flames_2.png");
+    private static final Identifier TEXTURE_GLOW = Identifier.parse("alexsmobs:textures/entity/soul_vulture/soul_vulture_glow.png");
+    private static final Identifier TEXTURE_0 = Identifier.parse("alexsmobs:textures/entity/soul_vulture/soul_vulture_flames_0.png");
+    private static final Identifier TEXTURE_1 = Identifier.parse("alexsmobs:textures/entity/soul_vulture/soul_vulture_flames_1.png");
+    private static final Identifier TEXTURE_2 = Identifier.parse("alexsmobs:textures/entity/soul_vulture/soul_vulture_flames_2.png");
 
     public LayerSoulVultureGlow(RenderSoulVulture renderSoulVulture) {
         super(renderSoulVulture);
@@ -28,7 +28,7 @@ public class LayerSoulVultureGlow extends RenderLayer<EntitySoulVulture, ModelSo
         }
     }
 
-    private ResourceLocation getFlames(int tickCount) {
+    private Identifier getFlames(int tickCount) {
         final int i = tickCount / 3 % 3;
         return switch (i) {
             case 2 -> TEXTURE_2;

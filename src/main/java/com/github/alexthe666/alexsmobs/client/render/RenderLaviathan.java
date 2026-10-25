@@ -17,7 +17,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,14 +25,14 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
 public class RenderLaviathan extends MobRenderer<EntityLaviathan, ModelLaviathan> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/laviathan.png");
-    private static final ResourceLocation TEXTURE_GLOW = ResourceLocation
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/laviathan.png");
+    private static final Identifier TEXTURE_GLOW = Identifier
             .parse("alexsmobs:textures/entity/laviathan_glow.png");
-    private static final ResourceLocation TEXTURE_OBSIDIAN = ResourceLocation
+    private static final Identifier TEXTURE_OBSIDIAN = Identifier
             .parse("alexsmobs:textures/entity/laviathan_obsidian.png");
-    private static final ResourceLocation TEXTURE_GEAR = ResourceLocation
+    private static final Identifier TEXTURE_GEAR = Identifier
             .parse("alexsmobs:textures/entity/laviathan_gear.png");
-    private static final ResourceLocation TEXTURE_HELMET = ResourceLocation
+    private static final Identifier TEXTURE_HELMET = Identifier
             .parse("alexsmobs:textures/entity/laviathan_helmet.png");
     private static final float REINS_COLOR_R = 98F / 255F;
     private static final float REINS_COLOR_G = 77F / 255F;
@@ -112,7 +112,7 @@ public class RenderLaviathan extends MobRenderer<EntityLaviathan, ModelLaviathan
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityLaviathan entity) {
+    public Identifier getTextureLocation(EntityLaviathan entity) {
         return entity.isObsidian() ? TEXTURE_OBSIDIAN : TEXTURE;
     }
 

@@ -1,14 +1,15 @@
 package com.github.alexthe666.alexsmobs.client.model.layered;
 
 import com.github.alexthe666.alexsmobs.client.model.ModelWanderingVillagerRider;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.minecraft.resources.Identifier;
 
 @OnlyIn(Dist.CLIENT)
 public class AMModelLayers {
@@ -48,7 +49,7 @@ public class AMModelLayers {
     }
 
     private static ModelLayerLocation createLocation(String model, String layer) {
-        return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath("alexsmobs", model), layer);
+        return new ModelLayerLocation(Identifier.fromNamespaceAndPath("alexsmobs", model), layer);
     }
 
 

@@ -10,11 +10,11 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class LayerTusklinGear extends RenderLayer<EntityTusklin, ModelTusklin> {
-    private static final ResourceLocation TEXTURE_SADDLE = ResourceLocation.parse("alexsmobs:textures/entity/tusklin_saddle.png");
-    private static final ResourceLocation TEXTURE_SHOES = ResourceLocation.parse("alexsmobs:textures/entity/tusklin_hooves.png");
+    private static final Identifier TEXTURE_SADDLE = Identifier.parse("alexsmobs:textures/entity/tusklin_saddle.png");
+    private static final Identifier TEXTURE_SHOES = Identifier.parse("alexsmobs:textures/entity/tusklin_hooves.png");
 
     public LayerTusklinGear(RenderTusklin render) {
         super(render);

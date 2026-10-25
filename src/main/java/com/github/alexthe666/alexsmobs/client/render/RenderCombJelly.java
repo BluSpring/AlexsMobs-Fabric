@@ -13,13 +13,13 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderCombJelly extends MobRenderer<EntityCombJelly, ModelCombJelly> {
-    private static final ResourceLocation TEXTURE_0 = ResourceLocation.parse("alexsmobs:textures/entity/comb_jelly_blue.png");
-    private static final ResourceLocation TEXTURE_1 = ResourceLocation.parse("alexsmobs:textures/entity/comb_jelly_green.png");
-    private static final ResourceLocation TEXTURE_2 = ResourceLocation.parse("alexsmobs:textures/entity/comb_jelly_red.png");
-    private static final ResourceLocation TEXTURE_OVERLAY = ResourceLocation.parse("alexsmobs:textures/entity/comb_jelly_overlay.png");
+    private static final Identifier TEXTURE_0 = Identifier.parse("alexsmobs:textures/entity/comb_jelly_blue.png");
+    private static final Identifier TEXTURE_1 = Identifier.parse("alexsmobs:textures/entity/comb_jelly_green.png");
+    private static final Identifier TEXTURE_2 = Identifier.parse("alexsmobs:textures/entity/comb_jelly_red.png");
+    private static final Identifier TEXTURE_OVERLAY = Identifier.parse("alexsmobs:textures/entity/comb_jelly_overlay.png");
     private static final ModelCombJelly STRIPES_MODEL = new ModelCombJelly(0.05F);
     public RenderCombJelly(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelCombJelly(0.0F), 0.3F);
@@ -39,7 +39,7 @@ public class RenderCombJelly extends MobRenderer<EntityCombJelly, ModelCombJelly
     @Override
     @Nullable
     protected RenderType getRenderType(EntityCombJelly jelly, boolean normal, boolean invis, boolean outline) {
-        ResourceLocation resourcelocation = this.getTextureLocation(jelly);
+        Identifier resourcelocation = this.getTextureLocation(jelly);
         if (invis) {
             return RenderType.itemEntityTranslucentCull(resourcelocation);
         } else if (normal) {
@@ -51,7 +51,7 @@ public class RenderCombJelly extends MobRenderer<EntityCombJelly, ModelCombJelly
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityCombJelly entity) {
+    public Identifier getTextureLocation(EntityCombJelly entity) {
         return entity.getVariant() == 0 ? TEXTURE_0 : entity.getVariant() == 1 ? TEXTURE_1 : TEXTURE_2;
     }
 

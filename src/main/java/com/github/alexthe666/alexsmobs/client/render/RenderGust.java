@@ -10,11 +10,11 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
 public class RenderGust extends EntityRenderer<EntityGust> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/guster.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/guster.png");
     private final ModelGuster model = new ModelGuster();
 
     public RenderGust(EntityRendererProvider.Context renderManagerIn) {
@@ -43,7 +43,7 @@ public class RenderGust extends EntityRenderer<EntityGust> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityGust entity) {
+    public Identifier getTextureLocation(EntityGust entity) {
         return TEXTURE;
     }
 }

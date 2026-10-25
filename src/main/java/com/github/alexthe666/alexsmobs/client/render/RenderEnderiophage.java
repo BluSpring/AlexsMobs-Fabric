@@ -13,15 +13,15 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderEnderiophage extends MobRenderer<EntityEnderiophage, ModelEnderiophage> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/enderiophage.png");
-    private static final ResourceLocation TEXTURE_GLOW = ResourceLocation.parse("alexsmobs:textures/entity/enderiophage_glow.png");
-    private static final ResourceLocation TEXTURE_OVERWORLD = ResourceLocation.parse("alexsmobs:textures/entity/enderiophage_overworld.png");
-    private static final ResourceLocation TEXTURE_OVERWORLD_GLOW = ResourceLocation.parse("alexsmobs:textures/entity/enderiophage_overworld_glow.png");
-    private static final ResourceLocation TEXTURE_NETHER = ResourceLocation.parse("alexsmobs:textures/entity/enderiophage_nether.png");
-    private static final ResourceLocation TEXTURE_NETHER_GLOW = ResourceLocation.parse("alexsmobs:textures/entity/enderiophage_nether_glow.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/enderiophage.png");
+    private static final Identifier TEXTURE_GLOW = Identifier.parse("alexsmobs:textures/entity/enderiophage_glow.png");
+    private static final Identifier TEXTURE_OVERWORLD = Identifier.parse("alexsmobs:textures/entity/enderiophage_overworld.png");
+    private static final Identifier TEXTURE_OVERWORLD_GLOW = Identifier.parse("alexsmobs:textures/entity/enderiophage_overworld_glow.png");
+    private static final Identifier TEXTURE_NETHER = Identifier.parse("alexsmobs:textures/entity/enderiophage_nether.png");
+    private static final Identifier TEXTURE_NETHER_GLOW = Identifier.parse("alexsmobs:textures/entity/enderiophage_nether_glow.png");
 
     public RenderEnderiophage(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelEnderiophage(), 0.5F);
@@ -31,7 +31,7 @@ public class RenderEnderiophage extends MobRenderer<EntityEnderiophage, ModelEnd
     @Nullable
     @Override
     protected RenderType getRenderType(EntityEnderiophage p_230496_1_, boolean p_230496_2_, boolean p_230496_3_, boolean p_230496_4_) {
-        ResourceLocation resourcelocation = this.getTextureLocation(p_230496_1_);
+        Identifier resourcelocation = this.getTextureLocation(p_230496_1_);
         if (p_230496_3_) {
             return RenderType.itemEntityTranslucentCull(resourcelocation);
         } else if (p_230496_2_) {
@@ -49,7 +49,7 @@ public class RenderEnderiophage extends MobRenderer<EntityEnderiophage, ModelEnd
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityEnderiophage entity) {
+    public Identifier getTextureLocation(EntityEnderiophage entity) {
         return entity.getVariant() == 2 ? TEXTURE_NETHER : entity.getVariant() == 1 ? TEXTURE_OVERWORLD : TEXTURE;
     }
 

@@ -1,7 +1,7 @@
 package com.github.alexthe666.alexsmobs.effect;
 
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,7 +16,7 @@ public class EffectPowerDown extends MobEffect {
 
     protected EffectPowerDown() {
         super(MobEffectCategory.NEUTRAL, 0x00000);
-        this.addAttributeModifier(Attributes.MOVEMENT_SPEED, ResourceLocation.parse("alexsmobs:power_down_speed"), -1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        this.addAttributeModifier(Attributes.MOVEMENT_SPEED, Identifier.parse("alexsmobs:power_down_speed"), -1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
     }
 
     @Override

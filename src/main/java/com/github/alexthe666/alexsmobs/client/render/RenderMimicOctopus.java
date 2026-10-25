@@ -18,28 +18,28 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class RenderMimicOctopus extends MobRenderer<EntityMimicOctopus, ModelMimicOctopus> {
-    private static final ResourceLocation TEXTURE = ResourceLocation
+    private static final Identifier TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/mimic_octopus.png");
-    private static final ResourceLocation TEXTURE_OVERLAY = ResourceLocation
+    private static final Identifier TEXTURE_OVERLAY = Identifier
             .parse("alexsmobs:textures/entity/mimic_octopus_overlay.png");
-    private static final ResourceLocation TEXTURE_CREEPER = ResourceLocation
+    private static final Identifier TEXTURE_CREEPER = Identifier
             .parse("alexsmobs:textures/entity/mimic_octopus_creeper.png");
-    private static final ResourceLocation TEXTURE_GUARDIAN = ResourceLocation
+    private static final Identifier TEXTURE_GUARDIAN = Identifier
             .parse("alexsmobs:textures/entity/mimic_octopus_guardian.png");
-    private static final ResourceLocation TEXTURE_PUFFERFISH = ResourceLocation
+    private static final Identifier TEXTURE_PUFFERFISH = Identifier
             .parse("alexsmobs:textures/entity/mimic_octopus_pufferfish.png");
-    private static final ResourceLocation TEXTURE_MIMICUBE = ResourceLocation
+    private static final Identifier TEXTURE_MIMICUBE = Identifier
             .parse("alexsmobs:textures/entity/mimic_octopus_mimicube.png");
-    private static final ResourceLocation TEXTURE_EYES = ResourceLocation
+    private static final Identifier TEXTURE_EYES = Identifier
             .parse("alexsmobs:textures/entity/mimic_octopus_eyes.png");
-    private static final ResourceLocation GUARDIAN_BEAM_TEXTURE = ResourceLocation
+    private static final Identifier GUARDIAN_BEAM_TEXTURE = Identifier
             .withDefaultNamespace("textures/entity/guardian_beam.png");
     private static final RenderType BEAM_RENDER_TYPE = RenderType.entityCutoutNoCull(GUARDIAN_BEAM_TEXTURE);
 
@@ -169,7 +169,7 @@ public class RenderMimicOctopus extends MobRenderer<EntityMimicOctopus, ModelMim
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityMimicOctopus entity) {
+    public Identifier getTextureLocation(EntityMimicOctopus entity) {
         return TEXTURE;
     }
 
@@ -248,7 +248,7 @@ public class RenderMimicOctopus extends MobRenderer<EntityMimicOctopus, ModelMim
                     getOverlayCoords(entitylivingbaseIn, 0), -1);
         }
 
-        public ResourceLocation getFor(EntityMimicOctopus.MimicState state) {
+        public Identifier getFor(EntityMimicOctopus.MimicState state) {
             if (state == EntityMimicOctopus.MimicState.CREEPER) {
                 return TEXTURE_CREEPER;
             }

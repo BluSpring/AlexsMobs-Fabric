@@ -37,7 +37,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -51,25 +51,25 @@ public class AMItemstackRenderer extends BlockEntityWithoutLevelRenderer {
 
     public static int ticksExisted = 0;
     private static final ModelShieldOfTheDeep SHIELD_OF_THE_DEEP_MODEL = new ModelShieldOfTheDeep();
-    private static final ResourceLocation SHIELD_OF_THE_DEEP_TEXTURE = ResourceLocation
+    private static final Identifier SHIELD_OF_THE_DEEP_TEXTURE = Identifier
             .parse("alexsmobs:textures/armor/shield_of_the_deep.png");
     private static final ModelMysteriousWorm MYTERIOUS_WORM_MODEL = new ModelMysteriousWorm();
-    private static final ResourceLocation MYTERIOUS_WORM_TEXTURE = ResourceLocation
+    private static final Identifier MYTERIOUS_WORM_TEXTURE = Identifier
             .parse("alexsmobs:textures/item/mysterious_worm_model.png");
     private static final ModelEndPirateAnchor ANCHOR_MODEL = new ModelEndPirateAnchor();
-    private static final ResourceLocation ANCHOR_TEXTURE = ResourceLocation
+    private static final Identifier ANCHOR_TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/end_pirate/anchor.png");
     private static final ModelEndPirateAnchorWinch WINCH_MODEL = new ModelEndPirateAnchorWinch();
-    private static final ResourceLocation WINCH_TEXTURE = ResourceLocation
+    private static final Identifier WINCH_TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/end_pirate/anchor_winch.png");
     private static final ModelEndPirateShipWheel SHIP_WHEEL_MODEL = new ModelEndPirateShipWheel();
-    private static final ResourceLocation SHIP_WHEEL_TEXTURE = ResourceLocation
+    private static final Identifier SHIP_WHEEL_TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/end_pirate/ship_wheel.png");
-    private static final ResourceLocation TRANSMUTATION_TABLE_TEXTURE = ResourceLocation
+    private static final Identifier TRANSMUTATION_TABLE_TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/farseer/transmutation_table.png");
-    private static final ResourceLocation TRANSMUTATION_TABLE_GLOW_TEXTURE = ResourceLocation
+    private static final Identifier TRANSMUTATION_TABLE_GLOW_TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/farseer/transmutation_table_glow.png");
-    private static final ResourceLocation TRANSMUTATION_TABLE_OVERLAY = ResourceLocation
+    private static final Identifier TRANSMUTATION_TABLE_OVERLAY = Identifier
             .parse("alexsmobs:textures/entity/farseer/transmutation_table_overlay.png");
     private static final ModelTransmutationTable TRANSMUTATION_TABLE_MODEL = new ModelTransmutationTable(0F);
     private static final ModelTransmutationTable TRANSMUTATION_TABLE_OVERLAY_MODEL = new ModelTransmutationTable(0.01F);
@@ -99,27 +99,27 @@ public class AMItemstackRenderer extends BlockEntityWithoutLevelRenderer {
         if (DIMENSIONAL_CARVER_SHARDS == null || DIMENSIONAL_CARVER_SHARDS.isEmpty()) {
             DIMENSIONAL_CARVER_SHARDS = Util.make(Lists.newArrayList(), (list) -> {
                 list.add(new ItemStack(
-                        BuiltInRegistries.ITEM.get(ResourceLocation.parse("alexsmobs:dimensional_carver_shard_0"))));
+                        BuiltInRegistries.ITEM.get(Identifier.parse("alexsmobs:dimensional_carver_shard_0"))));
                 list.add(new ItemStack(
-                        BuiltInRegistries.ITEM.get(ResourceLocation.parse("alexsmobs:dimensional_carver_shard_1"))));
+                        BuiltInRegistries.ITEM.get(Identifier.parse("alexsmobs:dimensional_carver_shard_1"))));
                 list.add(new ItemStack(
-                        BuiltInRegistries.ITEM.get(ResourceLocation.parse("alexsmobs:dimensional_carver_shard_2"))));
+                        BuiltInRegistries.ITEM.get(Identifier.parse("alexsmobs:dimensional_carver_shard_2"))));
                 list.add(new ItemStack(
-                        BuiltInRegistries.ITEM.get(ResourceLocation.parse("alexsmobs:dimensional_carver_shard_3"))));
+                        BuiltInRegistries.ITEM.get(Identifier.parse("alexsmobs:dimensional_carver_shard_3"))));
                 list.add(new ItemStack(
-                        BuiltInRegistries.ITEM.get(ResourceLocation.parse("alexsmobs:dimensional_carver_shard_4"))));
+                        BuiltInRegistries.ITEM.get(Identifier.parse("alexsmobs:dimensional_carver_shard_4"))));
                 list.add(new ItemStack(
-                        BuiltInRegistries.ITEM.get(ResourceLocation.parse("alexsmobs:dimensional_carver_shard_5"))));
+                        BuiltInRegistries.ITEM.get(Identifier.parse("alexsmobs:dimensional_carver_shard_5"))));
                 list.add(new ItemStack(
-                        BuiltInRegistries.ITEM.get(ResourceLocation.parse("alexsmobs:dimensional_carver_shard_6"))));
+                        BuiltInRegistries.ITEM.get(Identifier.parse("alexsmobs:dimensional_carver_shard_6"))));
                 list.add(new ItemStack(
-                        BuiltInRegistries.ITEM.get(ResourceLocation.parse("alexsmobs:dimensional_carver_shard_7"))));
+                        BuiltInRegistries.ITEM.get(Identifier.parse("alexsmobs:dimensional_carver_shard_7"))));
                 list.add(new ItemStack(
-                        BuiltInRegistries.ITEM.get(ResourceLocation.parse("alexsmobs:dimensional_carver_shard_8"))));
+                        BuiltInRegistries.ITEM.get(Identifier.parse("alexsmobs:dimensional_carver_shard_8"))));
                 list.add(new ItemStack(
-                        BuiltInRegistries.ITEM.get(ResourceLocation.parse("alexsmobs:dimensional_carver_shard_9"))));
+                        BuiltInRegistries.ITEM.get(Identifier.parse("alexsmobs:dimensional_carver_shard_9"))));
                 list.add(new ItemStack(
-                        BuiltInRegistries.ITEM.get(ResourceLocation.parse("alexsmobs:dimensional_carver_shard_10"))));
+                        BuiltInRegistries.ITEM.get(Identifier.parse("alexsmobs:dimensional_carver_shard_10"))));
             });
         }
         return DIMENSIONAL_CARVER_SHARDS;

@@ -11,10 +11,10 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderStraddler extends MobRenderer<EntityStraddler, ModelStraddler> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/straddler.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/straddler.png");
     private static final ModelStradpole STRADPOLE_MODEL = new ModelStradpole();
 
     public RenderStraddler(EntityRendererProvider.Context renderManagerIn) {
@@ -28,7 +28,7 @@ public class RenderStraddler extends MobRenderer<EntityStraddler, ModelStraddler
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityStraddler entity) {
+    public Identifier getTextureLocation(EntityStraddler entity) {
         return TEXTURE;
     }
 

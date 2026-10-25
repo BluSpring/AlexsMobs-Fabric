@@ -19,10 +19,10 @@ public class AMBannerRegistry {
     }
 
     public static void bootstrap(BootstrapContext<BannerPattern> context) {
-        context.register(BEAR, new BannerPattern(BEAR.location(), BEAR.location().getPath()));
-        context.register(AUSTRALIA_0, new BannerPattern(AUSTRALIA_0.location(), AUSTRALIA_0.location().getPath()));
-        context.register(AUSTRALIA_1, new BannerPattern(AUSTRALIA_1.location(), AUSTRALIA_1.location().getPath()));
-        context.register(NEW_MEXICO, new BannerPattern(NEW_MEXICO.location(), NEW_MEXICO.location().getPath()));
-        context.register(BRAZIL, new BannerPattern(BRAZIL.location(), BRAZIL.location().getPath()));
+        context.register(BEAR, new BannerPattern(BEAR.identifier(), BEAR.identifier().getPath()));
+        context.register(AUSTRALIA_0, new BannerPattern(AUSTRALIA_0.identifier(), AUSTRALIA_0.identifier().getPath()));
+        context.register(AUSTRALIA_1, new BannerPattern(AUSTRALIA_1.identifier(), AUSTRALIA_1.identifier().getPath()));
+        context.register(NEW_MEXICO, new BannerPattern(NEW_MEXICO.identifier(), NEW_MEXICO.identifier().getPath()));
+        context.register(BRAZIL, new BannerPattern(BRAZIL.identifier(), BRAZIL.identifier().getPath()));
     }
 }

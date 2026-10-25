@@ -7,8 +7,8 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
@@ -28,8 +28,8 @@ import net.minecraft.world.phys.Vec3;
 
 public class PlatypusAIDigForItems extends Goal {
 
-    public static final ResourceKey<LootTable> PLATYPUS_REWARD = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("alexsmobs", "gameplay/platypus_reward"));
-    public static final ResourceKey<LootTable> PLATYPUS_REWARD_CHARGED = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("alexsmobs", "gameplay/platypus_supercharged_reward"));
+    public static final ResourceKey<LootTable> PLATYPUS_REWARD = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("alexsmobs", "gameplay/platypus_reward"));
+    public static final ResourceKey<LootTable> PLATYPUS_REWARD_CHARGED = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("alexsmobs", "gameplay/platypus_supercharged_reward"));
     private EntityPlatypus platypus;
     private BlockPos digPos;
     private int generatePosCooldown = 0;

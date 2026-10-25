@@ -37,7 +37,7 @@ public class ItemShieldOfTheDeep extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level p_77659_1_, Player p_77659_2_, InteractionHand p_77659_3_) {
+    public InteractionResult use(Level p_77659_1_, Player p_77659_2_, InteractionHand p_77659_3_) {
         ItemStack lvt_4_1_ = p_77659_2_.getItemInHand(p_77659_3_);
         p_77659_2_.startUsingItem(p_77659_3_);
         return InteractionResultHolder.consume(lvt_4_1_);

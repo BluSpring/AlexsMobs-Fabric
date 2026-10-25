@@ -9,10 +9,10 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class LayerCentipedeHeadEyes extends RenderLayer<EntityCentipedeHead, AdvancedEntityModel<EntityCentipedeHead>> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/cave_centipede_eyes.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/cave_centipede_eyes.png");
 
     public LayerCentipedeHeadEyes(RenderCentipedeHead render) {
         super(render);

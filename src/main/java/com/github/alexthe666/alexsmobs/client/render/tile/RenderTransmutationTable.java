@@ -19,15 +19,15 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderTransmutationTable<T extends TileEntityTransmutationTable> implements BlockEntityRenderer<T> {
 
-        private static final ResourceLocation TEXTURE = ResourceLocation
+        private static final Identifier TEXTURE = Identifier
                         .parse("alexsmobs:textures/entity/farseer/transmutation_table.png");
-        private static final ResourceLocation OVERLAY = ResourceLocation
+        private static final Identifier OVERLAY = Identifier
                         .parse("alexsmobs:textures/entity/farseer/transmutation_table_overlay.png");
-        private static final ResourceLocation GLOW_TEXTURE = ResourceLocation
+        private static final Identifier GLOW_TEXTURE = Identifier
                         .parse("alexsmobs:textures/entity/farseer/transmutation_table_glow.png");
         private static final ModelTransmutationTable MODEL = new ModelTransmutationTable(0F);
         private static final ModelTransmutationTable OVERLAY_MODEL = new ModelTransmutationTable(0.01F);

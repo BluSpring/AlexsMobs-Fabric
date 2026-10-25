@@ -8,9 +8,8 @@ import com.github.alexthe666.alexsmobs.AlexsMobs;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,7 +37,7 @@ public class ItemTarantulaHawkElytra extends ArmorItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+    public InteractionResult use(Level worldIn, Player playerIn, InteractionHand handIn) {
         return super.use(worldIn, playerIn, handIn);
     }
 
@@ -67,7 +66,7 @@ public class ItemTarantulaHawkElytra extends ArmorItem {
 
     @Override
     @Nullable
-    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
+    public Identifier getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
         return AlexsMobs.prefix("textures/armor/tarantula_hawk_elytra.png");
     }
 }

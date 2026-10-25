@@ -14,11 +14,11 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
 public class RenderIceShard extends EntityRenderer<EntityIceShard> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/ice_shard.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/ice_shard.png");
 
     public RenderIceShard(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn);
@@ -79,7 +79,7 @@ public class RenderIceShard extends EntityRenderer<EntityIceShard> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityIceShard entity) {
+    public Identifier getTextureLocation(EntityIceShard entity) {
         return TEXTURE;
     }
 }

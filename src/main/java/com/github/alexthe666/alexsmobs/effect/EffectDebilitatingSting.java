@@ -7,7 +7,7 @@ import com.github.alexthe666.alexsmobs.entity.EntityTarantulaHawk;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -31,7 +31,7 @@ public class EffectDebilitatingSting extends MobEffect {
 
     protected EffectDebilitatingSting() {
         super(MobEffectCategory.NEUTRAL, 0XFFF385);
-        this.addAttributeModifier(Attributes.MOVEMENT_SPEED, ResourceLocation.parse("alexsmobs:debilitating_sting_speed"), -1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        this.addAttributeModifier(Attributes.MOVEMENT_SPEED, Identifier.parse("alexsmobs:debilitating_sting_speed"), -1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
     }
 
     @Override

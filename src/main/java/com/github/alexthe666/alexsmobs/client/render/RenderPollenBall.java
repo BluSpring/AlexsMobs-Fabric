@@ -9,11 +9,11 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
 public class RenderPollenBall extends EntityRenderer<EntityPollenBall> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/pollen_ball.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/pollen_ball.png");
     private static final ModelPollenBall MODEL_POLLEN_BALL = new ModelPollenBall();
 
     public RenderPollenBall(EntityRendererProvider.Context renderManager) {
@@ -21,7 +21,7 @@ public class RenderPollenBall extends EntityRenderer<EntityPollenBall> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityPollenBall entity) {
+    public Identifier getTextureLocation(EntityPollenBall entity) {
         return TEXTURE;
     }
 

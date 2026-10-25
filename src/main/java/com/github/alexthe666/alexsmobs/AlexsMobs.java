@@ -38,6 +38,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -46,7 +47,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 
 @Mod(AlexsMobs.MODID)
@@ -162,7 +163,7 @@ public class AlexsMobs {
     }
 
     public static <MSG extends CustomPacketPayload> void sendMSGToServer(MSG message) {
-        PacketDistributor.sendToServer(message);
+        ClientPacketDistributor.sendToServer(message);
     }
 
     public static <MSG extends CustomPacketPayload> void sendMSGToAll(MSG message) {
@@ -186,13 +187,13 @@ public class AlexsMobs {
         event.enqueueWork(PROXY::clientInit);
     }
     
-    public static ResourceLocation prefix(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+    public static Identifier prefix(String path) {
+        return Identifier.fromNamespaceAndPath(MODID, path);
     }
 
     // Safe dist proxy helper - uses Supplier to avoid loading client classes on dedicated server
     private static <T> T unsafeRunForDist(Supplier<Supplier<T>> clientTarget, Supplier<Supplier<T>> serverTarget) {
-        return switch (FMLEnvironment.dist) {
+        return switch (FMLEnvironment.getDist()) {
             case CLIENT -> clientTarget.get().get();
             case DEDICATED_SERVER -> serverTarget.get().get();
         };

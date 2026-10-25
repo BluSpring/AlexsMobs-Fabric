@@ -13,15 +13,15 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderGuster extends MobRenderer<EntityGuster, ModelGuster> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/guster.png");
-    private static final ResourceLocation TEXTURE_GOOGLY = ResourceLocation.parse("alexsmobs:textures/entity/guster_silly.png");
-    private static final ResourceLocation TEXTURE_EYES = ResourceLocation.parse("alexsmobs:textures/entity/guster_eye.png");
-    private static final ResourceLocation TEXTURE_RED = ResourceLocation.parse("alexsmobs:textures/entity/guster_red.png");
-    private static final ResourceLocation TEXTURE_SOUL = ResourceLocation.parse("alexsmobs:textures/entity/guster_soul.png");
-    private static final ResourceLocation TEXTURE_SOUL_EYES = ResourceLocation.parse("alexsmobs:textures/entity/guster_eye_soul.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/guster.png");
+    private static final Identifier TEXTURE_GOOGLY = Identifier.parse("alexsmobs:textures/entity/guster_silly.png");
+    private static final Identifier TEXTURE_EYES = Identifier.parse("alexsmobs:textures/entity/guster_eye.png");
+    private static final Identifier TEXTURE_RED = Identifier.parse("alexsmobs:textures/entity/guster_red.png");
+    private static final Identifier TEXTURE_SOUL = Identifier.parse("alexsmobs:textures/entity/guster_soul.png");
+    private static final Identifier TEXTURE_SOUL_EYES = Identifier.parse("alexsmobs:textures/entity/guster_eye_soul.png");
 
     public RenderGuster(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelGuster(), 0.25F);
@@ -31,7 +31,7 @@ public class RenderGuster extends MobRenderer<EntityGuster, ModelGuster> {
     @Override
     @Nullable
     protected RenderType getRenderType(EntityGuster p_230496_1_, boolean p_230496_2_, boolean p_230496_3_, boolean p_230496_4_) {
-        ResourceLocation resourcelocation = this.getTextureLocation(p_230496_1_);
+        Identifier resourcelocation = this.getTextureLocation(p_230496_1_);
         if (p_230496_3_) {
             return RenderType.entityTranslucent(resourcelocation);
         } else if (p_230496_2_) {
@@ -43,7 +43,7 @@ public class RenderGuster extends MobRenderer<EntityGuster, ModelGuster> {
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityGuster entity) {
+    public Identifier getTextureLocation(EntityGuster entity) {
         return entity.isGooglyEyes() ? TEXTURE_GOOGLY : entity.getVariant() == 2 ? TEXTURE_SOUL : entity.getVariant() == 1 ? TEXTURE_RED : TEXTURE;
     }
 

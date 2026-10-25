@@ -1,6 +1,6 @@
 package com.github.alexthe666.alexsmobs.effect;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,7 +11,7 @@ public class EffectKnockbackResistance extends MobEffect {
 
     public EffectKnockbackResistance() {
         super(MobEffectCategory.BENEFICIAL, 0X865337);
-        this.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, ResourceLocation.parse("alexsmobs:knockback_resistance"), 0.5D, AttributeModifier.Operation.ADD_VALUE);
+        this.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, Identifier.parse("alexsmobs:knockback_resistance"), 0.5D, AttributeModifier.Operation.ADD_VALUE);
     }
 
     @Override

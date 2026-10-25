@@ -8,11 +8,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderAnteater extends MobRenderer<EntityAnteater, ModelAnteater> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/anteater.png");
-    private static final ResourceLocation TEXTURE_PETER = ResourceLocation.parse("alexsmobs:textures/entity/anteater_peter.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/anteater.png");
+    private static final Identifier TEXTURE_PETER = Identifier.parse("alexsmobs:textures/entity/anteater_peter.png");
 
     public RenderAnteater(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelAnteater(), 0.45F);
@@ -34,7 +34,7 @@ public class RenderAnteater extends MobRenderer<EntityAnteater, ModelAnteater> {
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityAnteater entity) {
+    public Identifier getTextureLocation(EntityAnteater entity) {
         return entity.isPeter() ? TEXTURE_PETER : TEXTURE;
     }
 }

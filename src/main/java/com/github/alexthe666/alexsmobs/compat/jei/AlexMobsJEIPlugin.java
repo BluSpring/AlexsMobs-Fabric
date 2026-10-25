@@ -12,19 +12,20 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 
 @JeiPlugin
 public class AlexMobsJEIPlugin implements IModPlugin {
-    public static final ResourceLocation MOD = ResourceLocation.parse("alexsmobs:alexsmobs");
+    public static final Identifier MOD = Identifier.parse("alexsmobs:alexsmobs");
     @Nullable
     private IRecipeCategory<CapsidRecipe> capsidCategory;
 
     public static final RecipeType<CapsidRecipe> CAPID_RECIPE_TYPE = RecipeType.create("alexsmobs", "capsid", CapsidRecipe.class);
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return MOD;
     }
 

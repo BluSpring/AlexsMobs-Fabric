@@ -5,10 +5,10 @@ import com.github.alexthe666.alexsmobs.entity.EntityTriops;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderTriops extends MobRenderer<EntityTriops, ModelTriops> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/triops.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/triops.png");
 
     public RenderTriops(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelTriops(), 0.2F);
@@ -24,7 +24,7 @@ public class RenderTriops extends MobRenderer<EntityTriops, ModelTriops> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityTriops entity) {
+    public Identifier getTextureLocation(EntityTriops entity) {
         return TEXTURE;
     }
 }

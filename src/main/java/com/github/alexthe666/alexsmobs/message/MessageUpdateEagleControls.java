@@ -2,16 +2,17 @@ package com.github.alexthe666.alexsmobs.message;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityBaldEagle;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class MessageUpdateEagleControls implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<MessageUpdateEagleControls> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "update_eagle_controls"));
+    public static final CustomPacketPayload.Type<MessageUpdateEagleControls> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(AlexsMobs.MODID, "update_eagle_controls"));
     public static final StreamCodec<FriendlyByteBuf, MessageUpdateEagleControls> CODEC = StreamCodec.ofMember(MessageUpdateEagleControls::write, MessageUpdateEagleControls::read);
 
     public int eagleId;

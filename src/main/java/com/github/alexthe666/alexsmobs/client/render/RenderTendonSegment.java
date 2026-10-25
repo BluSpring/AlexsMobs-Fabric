@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
@@ -26,7 +26,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class RenderTendonSegment extends EntityRenderer<EntityTendonSegment> {
 
-    private static final ResourceLocation CLAW_TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/tendon_whip_claw.png");
+    private static final Identifier CLAW_TEXTURE = Identifier.parse("alexsmobs:textures/entity/tendon_whip_claw.png");
     private static final ModelTendonClaw CLAW_MODEL = new ModelTendonClaw();
 
     public RenderTendonSegment(EntityRendererProvider.Context renderManagerIn) {
@@ -147,7 +147,7 @@ public class RenderTendonSegment extends EntityRenderer<EntityTendonSegment> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityTendonSegment entity) {
+    public Identifier getTextureLocation(EntityTendonSegment entity) {
         return null;
     }
 

@@ -14,7 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -77,7 +77,7 @@ public class EntityCachalotPart extends PartEntity<EntityCachalotWhale> {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if(this.level().isClientSide && this.getParent() != null && !this.getParent().isInvulnerableTo(source)){
-            ResourceLocation key = this.level().registryAccess().registry(Registries.DAMAGE_TYPE).get().getKey(source.type());
+            Identifier key = this.level().registryAccess().registry(Registries.DAMAGE_TYPE).get().getKey(source.type());
             if(key != null){
                 AlexsMobs.sendMSGToServer(new MessageHurtMultipart(this.getId(), this.getParent().getId(), amount, key.toString()));
             }

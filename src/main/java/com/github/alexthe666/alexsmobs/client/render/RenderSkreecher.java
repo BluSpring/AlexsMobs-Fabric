@@ -9,11 +9,11 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderSkreecher extends MobRenderer<EntitySkreecher, ModelSkreecher> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/skreecher.png");
-    private static final ResourceLocation TEXTURE_GLOW = ResourceLocation
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/skreecher.png");
+    private static final Identifier TEXTURE_GLOW = Identifier
             .parse("alexsmobs:textures/entity/skreecher_glow.png");
 
     public RenderSkreecher(EntityRendererProvider.Context renderManagerIn) {
@@ -26,7 +26,7 @@ public class RenderSkreecher extends MobRenderer<EntitySkreecher, ModelSkreecher
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntitySkreecher entity) {
+    public Identifier getTextureLocation(EntitySkreecher entity) {
         return TEXTURE;
     }
 

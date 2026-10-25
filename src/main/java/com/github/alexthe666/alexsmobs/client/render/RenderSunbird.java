@@ -17,11 +17,11 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderSunbird extends MobRenderer<EntitySunbird, ModelSunbird> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/sunbird.png");
-    private static final ResourceLocation TEXTURE_GLOW = ResourceLocation
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/sunbird.png");
+    private static final Identifier TEXTURE_GLOW = Identifier
             .parse("alexsmobs:textures/entity/sunbird_glow.png");
 
     public RenderSunbird(EntityRendererProvider.Context renderManagerIn) {
@@ -77,7 +77,7 @@ public class RenderSunbird extends MobRenderer<EntitySunbird, ModelSunbird> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntitySunbird entity) {
+    public Identifier getTextureLocation(EntitySunbird entity) {
         return TEXTURE;
     }
 

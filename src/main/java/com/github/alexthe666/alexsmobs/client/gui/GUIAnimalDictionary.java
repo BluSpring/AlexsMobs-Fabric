@@ -10,14 +10,14 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
 
 @OnlyIn(Dist.CLIENT)
 public class GUIAnimalDictionary extends GuiBasicBook {
 
-    private static final ResourceLocation ROOT = ResourceLocation.parse("alexsmobs:book/animal_dictionary/root.json");
+    private static final Identifier ROOT = Identifier.parse("alexsmobs:book/animal_dictionary/root.json");
 
     public GUIAnimalDictionary(ItemStack bookStack) {
         super(bookStack, Component.translatable("animal_dictionary.title"));
@@ -47,12 +47,12 @@ public class GUIAnimalDictionary extends GuiBasicBook {
     }
 
     @Override
-    public ResourceLocation getRootPage() {
+    public Identifier getRootPage() {
         return ROOT;
     }
 
     @Override
-    public ResourceLocation getTextFileDirectory() {
-        return ResourceLocation.parse("alexsmobs:book/animal_dictionary/");
+    public Identifier getTextFileDirectory() {
+        return Identifier.parse("alexsmobs:book/animal_dictionary/");
     }
 }

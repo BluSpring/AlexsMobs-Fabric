@@ -4,18 +4,18 @@ import com.github.alexthe666.alexsmobs.client.model.ModelRoadrunner;
 import com.github.alexthe666.alexsmobs.entity.EntityRoadrunner;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderRoadrunner extends MobRenderer<EntityRoadrunner, ModelRoadrunner> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/roadrunner.png");
-    private static final ResourceLocation TEXTURE_MEEP = ResourceLocation.parse("alexsmobs:textures/entity/roadrunner_meep.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/roadrunner.png");
+    private static final Identifier TEXTURE_MEEP = Identifier.parse("alexsmobs:textures/entity/roadrunner_meep.png");
 
     public RenderRoadrunner(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelRoadrunner(), 0.3F);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityRoadrunner entity) {
+    public Identifier getTextureLocation(EntityRoadrunner entity) {
         return entity.isMeep() ? TEXTURE_MEEP : TEXTURE;
     }
 }

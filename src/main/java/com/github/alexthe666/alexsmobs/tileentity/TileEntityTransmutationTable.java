@@ -1,18 +1,25 @@
 package com.github.alexthe666.alexsmobs.tileentity;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.message.MessageUpdateTransmutablesToDisplay;
 import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.TransmutationData;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -27,13 +34,11 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-import java.util.*;
-
 public class TileEntityTransmutationTable  extends BlockEntity {
 
-    private static final ResourceLocation COMMON_ITEMS = ResourceLocation.fromNamespaceAndPath("alexsmobs", "gameplay/transmutation_table_common");
-    private static final ResourceLocation UNCOMMON_ITEMS = ResourceLocation.fromNamespaceAndPath("alexsmobs", "gameplay/transmutation_table_uncommon");
-    private static final ResourceLocation RARE_ITEMS = ResourceLocation.fromNamespaceAndPath("alexsmobs", "gameplay/transmutation_table_rare");
+    private static final Identifier COMMON_ITEMS = Identifier.fromNamespaceAndPath("alexsmobs", "gameplay/transmutation_table_common");
+    private static final Identifier UNCOMMON_ITEMS = Identifier.fromNamespaceAndPath("alexsmobs", "gameplay/transmutation_table_uncommon");
+    private static final Identifier RARE_ITEMS = Identifier.fromNamespaceAndPath("alexsmobs", "gameplay/transmutation_table_rare");
     public int ticksExisted;
     private int totalTransmuteCount = 0;
     private final Map<UUID, TransmutationData> playerToData = new HashMap<>();
@@ -50,7 +55,7 @@ public class TileEntityTransmutationTable  extends BlockEntity {
         entity.tick();
     }
 
-    private static ItemStack createFromLootTable(Player player, ResourceLocation loc) {
+    private static ItemStack createFromLootTable(Player player, Identifier loc) {
         if(player.level().isClientSide){
             return ItemStack.EMPTY;
         }else{
@@ -126,7 +131,7 @@ public class TileEntityTransmutationTable  extends BlockEntity {
         if(player == null || player.level().isClientSide || !(player.level() instanceof ServerLevel)){
             return;
         }
-        ResourceLocation loot;
+        Identifier loot;
         int safeIndex = Mth.clamp(i, 0, 2);
         switch (safeIndex){
             default:

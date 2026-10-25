@@ -8,14 +8,14 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 
 public class LayerBasicGlow<T extends LivingEntity> extends RenderLayer<T, EntityModel<T>> {
-    private final ResourceLocation texture;
+    private final Identifier texture;
     private final RenderType renderType;
 
-    public LayerBasicGlow(RenderLayerParent<T, EntityModel<T>> renderer, ResourceLocation texture) {
+    public LayerBasicGlow(RenderLayerParent<T, EntityModel<T>> renderer, Identifier texture) {
         super(renderer);
         this.texture = texture;
         this.renderType = RenderType.eyes(texture);

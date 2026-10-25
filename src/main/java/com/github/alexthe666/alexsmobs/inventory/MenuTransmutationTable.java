@@ -6,7 +6,7 @@ import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.message.MessageTransmuteFromMenu;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityTransmutationTable;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -43,7 +43,7 @@ public class MenuTransmutationTable extends AbstractContainerMenu {
         this.addSlot(transmuteSlot = new Slot(this.container, 0, 83, 83) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                ResourceLocation name = BuiltInRegistries.ITEM.getKey(stack.getItem());
+                Identifier name = BuiltInRegistries.ITEM.getKey(stack.getItem());
                 return stack.getMaxStackSize() > 1 && (name == null || !AMConfig.transmutationBlacklist.contains(name.toString()));
             }
         });

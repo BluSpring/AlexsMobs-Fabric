@@ -30,7 +30,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -122,7 +122,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
                 String[] split = str.split("\\|");
                 if (split.length >= 2) {
                     FEEDING_DATA.put(split[0], split[1]);
-                    FEEDING_STACKS.add(new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse(split[0]))));
+                    FEEDING_STACKS.add(new ItemStack(BuiltInRegistries.ITEM.get(Identifier.parse(split[0]))));
                 }
             }
         }
@@ -167,10 +167,10 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
 
     @Nullable
     private BlockState getSaplingFor(ItemStack stack) {
-        ResourceLocation name = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        Identifier name = BuiltInRegistries.ITEM.getKey(stack.getItem());
         if (!stack.isEmpty() && name != null && FEEDING_DATA.containsKey(name.toString())) {
             String str = FEEDING_DATA.get(name.toString());
-            Block block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(str));
+            Block block = BuiltInRegistries.BLOCK.get(Identifier.parse(str));
             if (block != null) {
                 return block.defaultBlockState();
             }

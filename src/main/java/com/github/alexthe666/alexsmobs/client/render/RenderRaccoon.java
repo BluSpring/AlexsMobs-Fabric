@@ -10,14 +10,14 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 
 public class RenderRaccoon extends MobRenderer<EntityRaccoon, ModelRaccoon> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/raccoon.png");
-    private static final ResourceLocation TEXTURE_RIGBY = ResourceLocation
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/raccoon.png");
+    private static final Identifier TEXTURE_RIGBY = Identifier
             .parse("alexsmobs:textures/entity/raccoon_rigby.png");
-    private static final ResourceLocation TEXTURE_BANDANA = ResourceLocation
+    private static final Identifier TEXTURE_BANDANA = Identifier
             .parse("alexsmobs:textures/entity/raccoon_bandana.png");
 
     public RenderRaccoon(EntityRendererProvider.Context renderManagerIn) {
@@ -33,7 +33,7 @@ public class RenderRaccoon extends MobRenderer<EntityRaccoon, ModelRaccoon> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityRaccoon entity) {
+    public Identifier getTextureLocation(EntityRaccoon entity) {
         return entity.isRigby() ? TEXTURE_RIGBY : TEXTURE;
     }
 

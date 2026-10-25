@@ -35,7 +35,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -53,8 +53,8 @@ public class AMAdvancementProvider extends AdvancementProvider {
     public static class AMEntityAdvancementGenerator implements AdvancementGenerator {
         private AdvancementHolder meetEntity(Consumer<AdvancementHolder> consumer, Holder<EntityType<?>> entityTypeHolder, AdvancementHolder parent) {
             EntityType<?> entityType = entityTypeHolder.value();
-            ResourceLocation entityId = entityType.builtInRegistryHolder().key().location();
-            ResourceLocation id = entityId.withPrefix("alexsmobs/");
+            Identifier entityId = entityType.builtInRegistryHolder().key().identifier();
+            Identifier id = entityId.withPrefix("alexsmobs/");
             ItemStack icon = new ItemStack(AMItemRegistry.TAB_ICON.get());
             icon.set(AMDataComponentRegistry.DISPLAY_ENTITY, DisplayEntity.of(entityType));
 
@@ -128,7 +128,7 @@ public class AMAdvancementProvider extends AdvancementProvider {
         }
 
         private AdvancementHolder tameEntity(Consumer<AdvancementHolder> output, EntityType<?> entityType, int flags, AdvancementHolder parent, String suffix, UnaryOperator<EntityPredicate.Builder> entityBuilderMutator) {
-            ResourceLocation entityId = entityType.builtInRegistryHolder().key().location();
+            Identifier entityId = entityType.builtInRegistryHolder().key().identifier();
             String path = "tame_" + entityId.getPath() + suffix;
             return add(output, path, builder ->
                 builder
@@ -162,7 +162,7 @@ public class AMAdvancementProvider extends AdvancementProvider {
         }
 
         private AdvancementHolder acquireItem(Consumer<AdvancementHolder> output, Item item, ItemStack display, AdvancementType type, AdvancementHolder parent) {
-            return acquireItem(output, item.builtInRegistryHolder().key().location().getPath(), type, item, display, parent);
+            return acquireItem(output, item.builtInRegistryHolder().key().identifier().getPath(), type, item, display, parent);
         }
 
         private AdvancementHolder acquireItem(Consumer<AdvancementHolder> output, String path, AdvancementType type, Holder<Item> item, ItemStack display, AdvancementHolder parent) {
@@ -186,7 +186,7 @@ public class AMAdvancementProvider extends AdvancementProvider {
         }
 
         private AdvancementHolder killEntity(Consumer<AdvancementHolder> output, EntityType<?> entityType, ItemStack display, AdvancementType type, AdvancementHolder parent) {
-            String path = entityType.builtInRegistryHolder().key().location().getPath() + "_kill";
+            String path = entityType.builtInRegistryHolder().key().identifier().getPath() + "_kill";
             return add(output, path, AdvancementType.TASK, display, builder -> builder
                 .parent(parent)
                 .addCriterion("ex", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity()
@@ -197,7 +197,7 @@ public class AMAdvancementProvider extends AdvancementProvider {
         }
 
         private AdvancementHolder acquireEffect(Consumer<AdvancementHolder> output, Holder<MobEffect> effect, ItemStack display, AdvancementType type, AdvancementHolder parent) {
-            return add(output, effect.unwrapKey().orElseThrow().location().getPath(), type, display, builder ->
+            return add(output, effect.unwrapKey().orElseThrow().identifier().getPath(), type, display, builder ->
                 builder
                     .parent(parent)
                     .addCriterion("all_effects", EffectsChangedTrigger.TriggerInstance.hasEffects(MobEffectsPredicate.Builder.effects()
@@ -235,7 +235,7 @@ public class AMAdvancementProvider extends AdvancementProvider {
             return new DisplayInfo(icon, title, description, Optional.empty(), type, true, true, false);
         }
 
-        private AdvancementHolder register(Consumer<AdvancementHolder> consumer, ResourceLocation id, Advancement.Builder builder) {
+        private AdvancementHolder register(Consumer<AdvancementHolder> consumer, Identifier id, Advancement.Builder builder) {
             var holder = builder.build(id);
             consumer.accept(holder);
 

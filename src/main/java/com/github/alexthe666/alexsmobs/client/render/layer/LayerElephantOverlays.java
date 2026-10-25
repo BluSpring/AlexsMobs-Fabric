@@ -10,15 +10,15 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 
 public class LayerElephantOverlays extends RenderLayer<EntityElephant, ModelElephant> {
 
-    private static final ResourceLocation[] ELEPHANT_DECOR_TEXTURES = new ResourceLocation[]{ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/white.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/orange.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/magenta.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/light_blue.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/yellow.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/lime.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/pink.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/gray.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/light_gray.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/cyan.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/purple.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/blue.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/brown.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/green.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/red.png"), ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/black.png")};
-    private static final ResourceLocation TRADER_TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/elephant/decor/trader.png");
+    private static final Identifier[] ELEPHANT_DECOR_TEXTURES = new Identifier[]{Identifier.parse("alexsmobs:textures/entity/elephant/decor/white.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/orange.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/magenta.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/light_blue.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/yellow.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/lime.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/pink.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/gray.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/light_gray.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/cyan.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/purple.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/blue.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/brown.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/green.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/red.png"), Identifier.parse("alexsmobs:textures/entity/elephant/decor/black.png")};
+    private static final Identifier TRADER_TEXTURE = Identifier.parse("alexsmobs:textures/entity/elephant/decor/trader.png");
 
-    private static final ResourceLocation TEXTURE_CHEST = ResourceLocation.parse("alexsmobs:textures/entity/elephant/elephant_chest.png");
+    private static final Identifier TEXTURE_CHEST = Identifier.parse("alexsmobs:textures/entity/elephant/elephant_chest.png");
     private final ModelElephant model = new ModelElephant(0.5F);
 
     public LayerElephantOverlays(RenderElephant renderElephant) {
@@ -33,7 +33,7 @@ public class LayerElephantOverlays extends RenderLayer<EntityElephant, ModelElep
         }
         DyeColor lvt_11_1_ = elephant.getColor();
         if(lvt_11_1_ != null || elephant.isTrader()) {
-            ResourceLocation lvt_12_3_;
+            Identifier lvt_12_3_;
             if (!elephant.isTrader()) {
                 lvt_12_3_ = ELEPHANT_DECOR_TEXTURES[lvt_11_1_.getId()];
             }else{

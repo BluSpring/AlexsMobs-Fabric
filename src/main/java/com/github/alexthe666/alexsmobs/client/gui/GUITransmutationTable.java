@@ -5,11 +5,11 @@ import com.github.alexthe666.alexsmobs.inventory.MenuTransmutationTable;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 public class GUITransmutationTable extends AbstractContainerScreen<MenuTransmutationTable> {
-    public static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/gui/transmutation_table.png");
+    public static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/gui/transmutation_table.png");
     private int tickCount = 0;
     private ButtonTransmute transmuteBtn1;
     private ButtonTransmute transmuteBtn2;

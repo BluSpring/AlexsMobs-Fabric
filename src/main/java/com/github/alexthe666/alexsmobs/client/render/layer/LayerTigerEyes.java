@@ -10,13 +10,13 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.LightLayer;
 
 public class LayerTigerEyes  extends RenderLayer<EntityTiger, ModelTiger> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/tiger/tiger_eyes.png");
-    private static final ResourceLocation TEXTURE_WHITE = ResourceLocation.parse("alexsmobs:textures/entity/tiger/tiger_white_eyes.png");
-    private static final ResourceLocation TEXTURE_ANGRY = ResourceLocation.parse("alexsmobs:textures/entity/tiger/tiger_angry_eyes.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/tiger/tiger_eyes.png");
+    private static final Identifier TEXTURE_WHITE = Identifier.parse("alexsmobs:textures/entity/tiger/tiger_white_eyes.png");
+    private static final Identifier TEXTURE_ANGRY = Identifier.parse("alexsmobs:textures/entity/tiger/tiger_angry_eyes.png");
 
     public LayerTigerEyes(RenderTiger render) {
         super(render);

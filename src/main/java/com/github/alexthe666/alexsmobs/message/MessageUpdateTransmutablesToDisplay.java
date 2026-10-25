@@ -1,16 +1,17 @@
 package com.github.alexthe666.alexsmobs.message;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class MessageUpdateTransmutablesToDisplay implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<MessageUpdateTransmutablesToDisplay> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "update_transmutables_display"));
+    public static final CustomPacketPayload.Type<MessageUpdateTransmutablesToDisplay> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(AlexsMobs.MODID, "update_transmutables_display"));
     public static final StreamCodec<RegistryFriendlyByteBuf, MessageUpdateTransmutablesToDisplay> CODEC = StreamCodec.ofMember(MessageUpdateTransmutablesToDisplay::write, MessageUpdateTransmutablesToDisplay::read);
 
     private int playerId;

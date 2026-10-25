@@ -150,7 +150,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
             if(living.getType() == EntityType.SHULKER){
                 CompoundTag fishNbt = new CompoundTag();
                 living.addAdditionalSaveData(fishNbt);
-                fishNbt.putString("DeathLootTable", BuiltInLootTables.EMPTY.location().toString());
+                fishNbt.putString("DeathLootTable", BuiltInLootTables.EMPTY.identifier().toString());
                 living.readAdditionalSaveData(fishNbt);
                 living.spawnAtLocation(Items.SHULKER_SHELL);
             }
@@ -472,7 +472,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
                 if (this.getTarget() instanceof AbstractFish fish && !this.isTame()) {
                     CompoundTag fishNbt = new CompoundTag();
                     fish.addAdditionalSaveData(fishNbt);
-                    fishNbt.putString("DeathLootTable", BuiltInLootTables.EMPTY.location().toString());
+                    fishNbt.putString("DeathLootTable", BuiltInLootTables.EMPTY.identifier().toString());
                     fish.readAdditionalSaveData(fishNbt);
                 }
                 this.getTarget().knockback(1.7F, this.getX() - this.getTarget().getX(), this.getZ() - this.getTarget().getZ());

@@ -5,11 +5,11 @@ import com.github.alexthe666.alexsmobs.client.render.layer.LayerTusklinGear;
 import com.github.alexthe666.alexsmobs.entity.EntityTusklin;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderTusklin extends MobRenderer<EntityTusklin, ModelTusklin> {
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/tusklin.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/tusklin.png");
 
     public RenderTusklin(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelTusklin(), 1.0F);
@@ -22,7 +22,7 @@ public class RenderTusklin extends MobRenderer<EntityTusklin, ModelTusklin> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityTusklin tusklin) {
+    public Identifier getTextureLocation(EntityTusklin tusklin) {
         return TEXTURE;
     }
 }

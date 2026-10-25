@@ -6,8 +6,8 @@ import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantment;
 
@@ -24,7 +24,7 @@ public class AMEnchantmentRegistry {
     public static final ResourceKey<Enchantment> STRADDLE_BOARDRETURN = createKey("board_return");
     
     private static ResourceKey<Enchantment> createKey(String name) {
-        return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, name));
+        return ResourceKey.create(Registries.ENCHANTMENT, Identifier.fromNamespaceAndPath(AlexsMobs.MODID, name));
     }
     
     public static void init() {

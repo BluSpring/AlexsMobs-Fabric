@@ -8,15 +8,15 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderCatfish extends MobRenderer<EntityCatfish, EntityModel<EntityCatfish>> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/catfish_small.png");
-    private static final ResourceLocation TEXTURE_MEDIUM = ResourceLocation.parse("alexsmobs:textures/entity/catfish_medium.png");
-    private static final ResourceLocation TEXTURE_LARGE = ResourceLocation.parse("alexsmobs:textures/entity/catfish_large.png");
-    private static final ResourceLocation TEXTURE_SPIT = ResourceLocation.parse("alexsmobs:textures/entity/catfish_small_spit.png");
-    private static final ResourceLocation TEXTURE_SPIT_MEDIUM = ResourceLocation.parse("alexsmobs:textures/entity/catfish_medium_spit.png");
-    private static final ResourceLocation TEXTURE_SPIT_LARGE = ResourceLocation.parse("alexsmobs:textures/entity/catfish_large_spit.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/catfish_small.png");
+    private static final Identifier TEXTURE_MEDIUM = Identifier.parse("alexsmobs:textures/entity/catfish_medium.png");
+    private static final Identifier TEXTURE_LARGE = Identifier.parse("alexsmobs:textures/entity/catfish_large.png");
+    private static final Identifier TEXTURE_SPIT = Identifier.parse("alexsmobs:textures/entity/catfish_small_spit.png");
+    private static final Identifier TEXTURE_SPIT_MEDIUM = Identifier.parse("alexsmobs:textures/entity/catfish_medium_spit.png");
+    private static final Identifier TEXTURE_SPIT_LARGE = Identifier.parse("alexsmobs:textures/entity/catfish_large_spit.png");
     private final ModelCatfishSmall modelSmall = new ModelCatfishSmall();
     private final ModelCatfishMedium modelMedium = new ModelCatfishMedium();
     private final ModelCatfishLarge modelLarge = new ModelCatfishLarge();
@@ -37,7 +37,7 @@ public class RenderCatfish extends MobRenderer<EntityCatfish, EntityModel<Entity
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityCatfish entity) {
+    public Identifier getTextureLocation(EntityCatfish entity) {
         if(entity.getCatfishSize() == 2){
             return entity.isSpitting() ? TEXTURE_SPIT_LARGE : TEXTURE_LARGE;
         }

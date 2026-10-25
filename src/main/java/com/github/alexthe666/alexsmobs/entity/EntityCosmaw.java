@@ -289,7 +289,7 @@ public class EntityCosmaw extends TamableAnimal implements ITargetsDroppedItems,
                     if (this.getTarget() instanceof EntityCosmicCod fish && !this.isTame()) {
                         CompoundTag fishNbt = new CompoundTag();
                         fish.addAdditionalSaveData(fishNbt);
-                        fishNbt.putString("DeathLootTable", BuiltInLootTables.EMPTY.location().toString());
+                        fishNbt.putString("DeathLootTable", BuiltInLootTables.EMPTY.identifier().toString());
                         fish.readAdditionalSaveData(fishNbt);
                     }
                     this.getTarget().hurt(this.damageSources().mobAttack(this), (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE));

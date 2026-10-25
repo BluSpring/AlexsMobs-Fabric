@@ -9,13 +9,13 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
 public class RenderWarpedMosco extends MobRenderer<EntityWarpedMosco, ModelWarpedMosco> {
-    private static final ResourceLocation TEXTURE = ResourceLocation
+    private static final Identifier TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/warped_mosco.png");
-    private static final ResourceLocation TEXTURE_EYES = ResourceLocation
+    private static final Identifier TEXTURE_EYES = Identifier
             .parse("alexsmobs:textures/entity/warped_mosco_glow.png");
 
     public RenderWarpedMosco(EntityRendererProvider.Context renderManagerIn) {
@@ -24,7 +24,7 @@ public class RenderWarpedMosco extends MobRenderer<EntityWarpedMosco, ModelWarpe
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityWarpedMosco entity) {
+    public Identifier getTextureLocation(EntityWarpedMosco entity) {
         return TEXTURE;
     }
 

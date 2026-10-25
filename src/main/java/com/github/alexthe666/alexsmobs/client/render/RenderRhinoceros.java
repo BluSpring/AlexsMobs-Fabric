@@ -8,13 +8,13 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderRhinoceros extends MobRenderer<EntityRhinoceros, ModelRhinoceros> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/rhinoceros.png");
-    private static final ResourceLocation TEXTURE_ANGRY = ResourceLocation
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/rhinoceros.png");
+    private static final Identifier TEXTURE_ANGRY = Identifier
             .parse("alexsmobs:textures/entity/rhinoceros_angry.png");
-    private static final ResourceLocation TEXTURE_POTION = ResourceLocation
+    private static final Identifier TEXTURE_POTION = Identifier
             .parse("alexsmobs:textures/entity/rhinoceros_potion.png");
 
     public RenderRhinoceros(EntityRendererProvider.Context renderManagerIn) {
@@ -28,7 +28,7 @@ public class RenderRhinoceros extends MobRenderer<EntityRhinoceros, ModelRhinoce
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityRhinoceros entity) {
+    public Identifier getTextureLocation(EntityRhinoceros entity) {
         return entity.isAngry() ? TEXTURE_ANGRY : TEXTURE;
     }
 

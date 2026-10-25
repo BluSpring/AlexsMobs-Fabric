@@ -2,14 +2,15 @@ package com.github.alexthe666.alexsmobs.misc;
 
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import com.mojang.serialization.MapCodec;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -18,8 +19,12 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 
 public class RecipeMimicreamRepair extends CustomRecipe {
-    public RecipeMimicreamRepair(CraftingBookCategory category) {
-        super(category);
+    public static final RecipeMimicreamRepair INSTANCE = new RecipeMimicreamRepair();
+    public static final MapCodec<RecipeMimicreamRepair> CODEC = MapCodec.unit(INSTANCE);
+    public static final StreamCodec<RegistryFriendlyByteBuf, RecipeMimicreamRepair> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+
+    public RecipeMimicreamRepair() {
+        super();
     }
 
     /**
@@ -50,7 +55,7 @@ public class RecipeMimicreamRepair extends CustomRecipe {
     }
 
     public boolean isBlacklisted(ItemStack stack) {
-        ResourceLocation name = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        Identifier name = BuiltInRegistries.ITEM.getKey(stack.getItem());
         return name != null && AMConfig.mimicreamBlacklist.contains(name.toString());
     }
 
@@ -58,7 +63,7 @@ public class RecipeMimicreamRepair extends CustomRecipe {
      * Returns an Item that is the result of this recipe
      */
     @Override
-    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registries) {
+    public ItemStack assemble(CraftingInput inv) {
         ItemStack damageableStack = ItemStack.EMPTY;
         int mimicreamCount = 0;
 
@@ -99,8 +104,8 @@ public class RecipeMimicreamRepair extends CustomRecipe {
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inv.getItem(i);
-            if (itemstack.hasCraftingRemainingItem()) {
-                nonnulllist.set(i, itemstack.getCraftingRemainingItem());
+            if (itemstack.getCraftingRemainder() != null) {
+                nonnulllist.set(i, itemstack.getCraftingRemainder().create());
             } else if (itemstack.isDamageableItem()) {
                 ItemStack itemstack1 = itemstack.copy();
                 itemstack1.setCount(1);
@@ -113,15 +118,15 @@ public class RecipeMimicreamRepair extends CustomRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends CustomRecipe> getSerializer() {
         return AMRecipeRegistry.MIMICREAM_RECIPE.get();
     }
 
     /**
      * Used to determine if this recipe can fit in a grid of the given width/height
      */
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width >= 3 && height >= 3;
-    }
+//    @Override
+//    public boolean canCraftInDimensions(int width, int height) {
+//        return width >= 3 && height >= 3;
+//    }
 }

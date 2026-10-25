@@ -44,7 +44,7 @@ public class ItemPocketSand extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player livingEntityIn, InteractionHand handIn) {
+    public InteractionResult use(Level worldIn, Player livingEntityIn, InteractionHand handIn) {
         ItemStack itemstack = livingEntityIn.getItemInHand(handIn);
         ItemStack ammo = findAmmo(livingEntityIn);
         if(livingEntityIn.isCreative()){

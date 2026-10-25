@@ -13,17 +13,17 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public class LayerLeafcutterAntLeaf extends RenderLayer<EntityLeafcutterAnt, AdvancedEntityModel<EntityLeafcutterAnt>> {
 
-    private static final ResourceLocation TEXTURE_0 = ResourceLocation
+    private static final Identifier TEXTURE_0 = Identifier
             .parse("alexsmobs:textures/entity/leafcutter_ant_leaf_0.png");
-    private static final ResourceLocation TEXTURE_1 = ResourceLocation
+    private static final Identifier TEXTURE_1 = Identifier
             .parse("alexsmobs:textures/entity/leafcutter_ant_leaf_1.png");
-    private static final ResourceLocation TEXTURE_2 = ResourceLocation
+    private static final Identifier TEXTURE_2 = Identifier
             .parse("alexsmobs:textures/entity/leafcutter_ant_leaf_2.png");
 
     public LayerLeafcutterAntLeaf(RenderLeafcutterAnt render) {
@@ -37,7 +37,7 @@ public class LayerLeafcutterAntLeaf extends RenderLayer<EntityLeafcutterAnt, Adv
         if (entitylivingbaseIn.hasLeaf() && !entitylivingbaseIn.isQueen()
                 && this.getParentModel() instanceof ModelLeafcutterAnt) {
             final int leafType = entitylivingbaseIn.getId() % 3;
-            final ResourceLocation res = switch (leafType) {
+            final Identifier res = switch (leafType) {
                 case 2 -> TEXTURE_2;
                 case 1 -> TEXTURE_1;
                 default -> TEXTURE_0;

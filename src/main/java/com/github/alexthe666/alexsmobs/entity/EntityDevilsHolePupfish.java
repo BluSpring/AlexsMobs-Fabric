@@ -26,8 +26,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -75,7 +75,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal, Bucketable {
 
-    public static final ResourceKey<LootTable> PUPFISH_REWARD = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("alexsmobs", "gameplay/pupfish_reward"));
+    public static final ResourceKey<LootTable> PUPFISH_REWARD = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("alexsmobs", "gameplay/pupfish_reward"));
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(EntityDevilsHolePupfish.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> PUPFISH_SCALE = SynchedEntityData.defineId(EntityDevilsHolePupfish.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> FEEDING_TIME = SynchedEntityData.defineId(EntityDevilsHolePupfish.class, EntityDataSerializers.INT);
@@ -200,7 +200,7 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
         }
         BlockPos feedingPos = this.entityData.get(FEEDING_POS).orElse(null);
         if(feedingPos == null){
-            float f2 = (float) -((float) this.getDeltaMovement().y * 2.2F * (double) Mth.RAD_TO_DEG);
+            float f2 = (float) -(this.getDeltaMovement().y * 2.2F * (double) Mth.RAD_TO_DEG);
             this.setXRot(f2);
         }else if(this.getFeedingTime() > 0){
             Vec3 face = Vec3.atCenterOf(feedingPos).subtract(this.position());

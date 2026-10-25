@@ -13,13 +13,13 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class LayerAnteaterTongueItem extends RenderLayer<EntityAnteater, ModelAnteater> {
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/leafcutter_ant.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/leafcutter_ant.png");
     private final ModelLeafcutterAnt ANT_MODEL = new ModelLeafcutterAnt();
 
     public LayerAnteaterTongueItem(RenderAnteater render) {

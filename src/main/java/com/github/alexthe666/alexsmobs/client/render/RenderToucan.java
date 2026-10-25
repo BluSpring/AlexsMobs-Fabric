@@ -14,18 +14,18 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class RenderToucan extends MobRenderer<EntityToucan, ModelToucan> {
-    private static final ResourceLocation TEXTURE_0 = ResourceLocation.parse("alexsmobs:textures/entity/toucan/toucan_0.png");
-    private static final ResourceLocation TEXTURE_1 = ResourceLocation.parse("alexsmobs:textures/entity/toucan/toucan_1.png");
-    private static final ResourceLocation TEXTURE_2 = ResourceLocation.parse("alexsmobs:textures/entity/toucan/toucan_2.png");
-    private static final ResourceLocation TEXTURE_3 = ResourceLocation.parse("alexsmobs:textures/entity/toucan/toucan_3.png");
-    private static final ResourceLocation TEXTURE_GOLDEN = ResourceLocation.parse("alexsmobs:textures/entity/toucan/toucan_gold.png");
-    private static final ResourceLocation TEXTURE_SAM = ResourceLocation.parse("alexsmobs:textures/entity/toucan/toucan_sam.png");
+    private static final Identifier TEXTURE_0 = Identifier.parse("alexsmobs:textures/entity/toucan/toucan_0.png");
+    private static final Identifier TEXTURE_1 = Identifier.parse("alexsmobs:textures/entity/toucan/toucan_1.png");
+    private static final Identifier TEXTURE_2 = Identifier.parse("alexsmobs:textures/entity/toucan/toucan_2.png");
+    private static final Identifier TEXTURE_3 = Identifier.parse("alexsmobs:textures/entity/toucan/toucan_3.png");
+    private static final Identifier TEXTURE_GOLDEN = Identifier.parse("alexsmobs:textures/entity/toucan/toucan_gold.png");
+    private static final Identifier TEXTURE_SAM = Identifier.parse("alexsmobs:textures/entity/toucan/toucan_sam.png");
 
     public RenderToucan(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelToucan(), 0.2F);
@@ -39,7 +39,7 @@ public class RenderToucan extends MobRenderer<EntityToucan, ModelToucan> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityToucan entity) {
+    public Identifier getTextureLocation(EntityToucan entity) {
         if(entity.isSam()){
             return TEXTURE_SAM;
         }

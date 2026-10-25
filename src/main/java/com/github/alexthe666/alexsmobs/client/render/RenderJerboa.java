@@ -5,11 +5,11 @@ import com.github.alexthe666.alexsmobs.entity.EntityJerboa;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderJerboa extends MobRenderer<EntityJerboa, ModelJerboa> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/jerboa.png");
-    private static final ResourceLocation TEXTURE_SLEEPING = ResourceLocation.parse("alexsmobs:textures/entity/jerboa_sleeping.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/jerboa.png");
+    private static final Identifier TEXTURE_SLEEPING = Identifier.parse("alexsmobs:textures/entity/jerboa_sleeping.png");
 
     public RenderJerboa(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelJerboa(), 0.1F);
@@ -22,7 +22,7 @@ public class RenderJerboa extends MobRenderer<EntityJerboa, ModelJerboa> {
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityJerboa entity) {
+    public Identifier getTextureLocation(EntityJerboa entity) {
         return entity.isSleeping() ? TEXTURE_SLEEPING : TEXTURE;
     }
 }

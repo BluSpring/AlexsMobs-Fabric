@@ -32,7 +32,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -274,7 +274,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
     }
 
     public Holder<MobEffect> getPotionEffectHolder() {
-        return BuiltInRegistries.MOB_EFFECT.wrapAsHolder(BuiltInRegistries.MOB_EFFECT.get(ResourceLocation.parse(this.getAppliedPotionId())));
+        return BuiltInRegistries.MOB_EFFECT.wrapAsHolder(BuiltInRegistries.MOB_EFFECT.get(Identifier.parse(this.getAppliedPotionId())));
     }
 
     public int getPotionDuration() {
@@ -483,7 +483,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
         }else{
             if(potion.getEffects().size() >= 1){
                 MobEffectInstance first = potion.getEffects().get(0);
-                ResourceLocation loc = BuiltInRegistries.MOB_EFFECT.getKey(first.getEffect().value());
+                Identifier loc = BuiltInRegistries.MOB_EFFECT.getKey(first.getEffect().value());
                 if(loc != null){
                     this.setAppliedPotionId(loc.toString());
                     this.setPotionLevel(first.getAmplifier());
@@ -540,7 +540,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
                 while(var1.hasNext()) {
                     UUID uuid = (UUID)var1.next();
                     if (uuid != null && EntityRhinoceros.this.level() instanceof ServerLevel) {
-                        Entity entity = ((ServerLevel)EntityRhinoceros.this.level()).getEntity(uuid);
+                        Entity entity = EntityRhinoceros.this.level().getEntity(uuid);
                         if (entity instanceof LivingEntity livingentity) {
                             this.trusted = livingentity;
                             this.trustedLastHurtBy = livingentity.getLastHurtByMob();

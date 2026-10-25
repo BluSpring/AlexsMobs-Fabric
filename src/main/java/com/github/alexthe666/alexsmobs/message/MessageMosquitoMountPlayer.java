@@ -4,16 +4,17 @@ import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityBaldEagle;
 import com.github.alexthe666.alexsmobs.entity.EntityCrimsonMosquito;
 import com.github.alexthe666.alexsmobs.entity.EntityEnderiophage;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class MessageMosquitoMountPlayer implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<MessageMosquitoMountPlayer> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "mosquito_mount_player"));
+    public static final CustomPacketPayload.Type<MessageMosquitoMountPlayer> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(AlexsMobs.MODID, "mosquito_mount_player"));
     public static final StreamCodec<FriendlyByteBuf, MessageMosquitoMountPlayer> CODEC = StreamCodec.ofMember(MessageMosquitoMountPlayer::write, MessageMosquitoMountPlayer::read);
 
     public int rider;

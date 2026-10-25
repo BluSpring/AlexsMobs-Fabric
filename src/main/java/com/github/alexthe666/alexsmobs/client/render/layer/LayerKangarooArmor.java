@@ -26,7 +26,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -38,7 +38,7 @@ import net.minecraft.world.item.component.DyedItemColor;
 
 public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaroo> {
 
-    private static final Map<String, ResourceLocation> ARMOR_TEXTURE_RES_MAP = Maps.newHashMap();
+    private static final Map<String, Identifier> ARMOR_TEXTURE_RES_MAP = Maps.newHashMap();
     private final HumanoidModel defaultBipedModel;
     private final RenderKangaroo renderer;
 
@@ -48,19 +48,19 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
         this.renderer = render;
     }
 
-    public static ResourceLocation getArmorResource(Entity entity, ItemStack stack,
+    public static Identifier getArmorResource(Entity entity, ItemStack stack,
                                                     EquipmentSlot slot, @Nullable String type) {
         ArmorItem item = (ArmorItem) stack.getItem();
-        ResourceLocation materialName = item.getMaterial().unwrapKey().get().location();
+        Identifier materialName = item.getMaterial().unwrapKey().get().identifier();
         String domain = materialName.getNamespace();
         String texture = materialName.getPath();
         String s1 = String.format("%s:textures/models/armor/%s_layer_%d%s.png", domain, texture, (1),
                 type == null ? "" : String.format("_%s", type));
 
-        ResourceLocation resourcelocation = ARMOR_TEXTURE_RES_MAP.get(s1);
+        Identifier resourcelocation = ARMOR_TEXTURE_RES_MAP.get(s1);
 
         if (resourcelocation == null) {
-            resourcelocation = ResourceLocation.parse(s1);
+            resourcelocation = Identifier.parse(s1);
             ARMOR_TEXTURE_RES_MAP.put(s1, resourcelocation);
         }
 
@@ -182,7 +182,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
 
     private void renderChestplate(EntityKangaroo entity, PoseStack matrixStackIn, MultiBufferSource bufferIn,
             int packedLightIn, boolean glintIn, HumanoidModel modelIn, float red, float green, float blue,
-            ResourceLocation armorResource, boolean notAVanillaModel) {
+            Identifier armorResource, boolean notAVanillaModel) {
         VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn,
                 RenderType.entityCutoutNoCull(armorResource), false, glintIn);
         renderer.getModel().copyPropertiesTo(modelIn);
@@ -228,7 +228,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
 
     private void renderHelmet(EntityKangaroo entity, PoseStack matrixStackIn, MultiBufferSource bufferIn,
             int packedLightIn, boolean glintIn, HumanoidModel modelIn, float red, float green, float blue,
-            ResourceLocation armorResource, boolean notAVanillaModel) {
+            Identifier armorResource, boolean notAVanillaModel) {
         VertexConsumer ivertexbuilder = ItemRenderer.getFoilBuffer(bufferIn,
                 RenderType.entityCutoutNoCull(armorResource), false, glintIn);
         renderer.getModel().copyPropertiesTo(modelIn);

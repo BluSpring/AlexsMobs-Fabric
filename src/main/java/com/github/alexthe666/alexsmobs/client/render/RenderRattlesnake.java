@@ -5,10 +5,10 @@ import com.github.alexthe666.alexsmobs.entity.EntityRattlesnake;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderRattlesnake extends MobRenderer<EntityRattlesnake, ModelRattlesnake> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/rattlesnake.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/rattlesnake.png");
 
     public RenderRattlesnake(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelRattlesnake(), 0.2F);
@@ -20,7 +20,7 @@ public class RenderRattlesnake extends MobRenderer<EntityRattlesnake, ModelRattl
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityRattlesnake entity) {
+    public Identifier getTextureLocation(EntityRattlesnake entity) {
         return TEXTURE;
     }
 }

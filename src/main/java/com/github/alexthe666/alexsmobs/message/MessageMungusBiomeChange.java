@@ -1,8 +1,13 @@
 package com.github.alexthe666.alexsmobs.message;
 
+import java.lang.reflect.Field;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.EntityMungus;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
@@ -11,8 +16,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -20,13 +25,9 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.PalettedContainer;
-import net.neoforged.fml.util.ObfuscationReflectionHelper;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
-
-import java.lang.reflect.Field;
 
 public class MessageMungusBiomeChange implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<MessageMungusBiomeChange> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(AlexsMobs.MODID, "mungus_biome_change"));
+    public static final CustomPacketPayload.Type<MessageMungusBiomeChange> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(AlexsMobs.MODID, "mungus_biome_change"));
     public static final StreamCodec<FriendlyByteBuf, MessageMungusBiomeChange> CODEC = StreamCodec.ofMember(MessageMungusBiomeChange::write, MessageMungusBiomeChange::read);
 
     public int mungusID;
@@ -63,7 +64,7 @@ public class MessageMungusBiomeChange implements CustomPacketPayload {
             if (player != null && player.level() != null) {
                 Entity entity = player.level().getEntity(message.mungusID);
                 Registry<Biome> registry = player.level().registryAccess().registryOrThrow(Registries.BIOME);
-                Biome biome = registry.get(ResourceLocation.parse(message.biomeOption));
+                Biome biome = registry.get(Identifier.parse(message.biomeOption));
                 ResourceKey<Biome> resourceKey = registry.getResourceKey(biome).orElse(null);
                 Holder<Biome> holder = resourceKey != null ? registry.getHolder(resourceKey).orElse(null) : null;
                 if (AMConfig.mungusBiomeTransformationType == 2) {

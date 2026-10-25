@@ -1,10 +1,11 @@
 package com.github.alexthe666.alexsmobs.misc;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
-import net.minecraft.advancements.CriterionTrigger;
-import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.core.registries.Registries;
 
 public class AMAdvancementTriggerRegistry {
 
@@ -24,9 +25,7 @@ public class AMAdvancementTriggerRegistry {
     public static final DeferredHolder<CriterionTrigger<?>, AMAdvancementTrigger> ELEPHANT_SWAG = DEF_REG.register("elephant_swag", AMAdvancementTrigger::new);
     public static final DeferredHolder<CriterionTrigger<?>, AMAdvancementTrigger> SKUNK_SPRAY = DEF_REG.register("skunk_spray", AMAdvancementTrigger::new);
 
-    // init() is no longer needed as triggers are registered via DeferredRegister
     public static void init(){
-        // Registry triggers are now handled by DeferredRegister in AlexsMobs constructor
     }
 
 }

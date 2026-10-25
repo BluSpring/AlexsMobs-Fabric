@@ -16,8 +16,8 @@ import net.neoforged.neoforge.event.EventHooks;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
@@ -36,7 +36,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class AnteaterAIRaidNest extends MoveToBlockGoal {
 
-    public static final ResourceKey<LootTable> ANTEATER_REWARD = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("alexsmobs", "gameplay/anteater_reward"));
+    public static final ResourceKey<LootTable> ANTEATER_REWARD = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("alexsmobs", "gameplay/anteater_reward"));
     private final EntityAnteater anteater;
     private int idleAtHiveTime = 0;
     private boolean isAboveDestinationAnteater;

@@ -17,16 +17,16 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderSeal extends MobRenderer<EntitySeal, ModelSeal> {
-    private static final ResourceLocation TEXTURE_BROWN_0 = ResourceLocation.parse("alexsmobs:textures/entity/seal/seal_brown_0.png");
-    private static final ResourceLocation TEXTURE_BROWN_1 = ResourceLocation.parse("alexsmobs:textures/entity/seal/seal_brown_1.png");
-    private static final ResourceLocation TEXTURE_ARCTIC_0 = ResourceLocation.parse("alexsmobs:textures/entity/seal/seal_arctic_0.png");
-    private static final ResourceLocation TEXTURE_ARCTIC_1 = ResourceLocation.parse("alexsmobs:textures/entity/seal/seal_arctic_1.png");
-    private static final ResourceLocation TEXTURE_ARCTIC_BABY = ResourceLocation.parse("alexsmobs:textures/entity/seal/seal_arctic_baby.png");
-    private static final ResourceLocation TEXTURE_TEARS = ResourceLocation.parse("alexsmobs:textures/entity/seal/seal_crying.png");
-    private static final ResourceLocation TEXTURE_TONGUE = ResourceLocation.parse("alexsmobs:textures/entity/seal/seal_tongue.png");
+    private static final Identifier TEXTURE_BROWN_0 = Identifier.parse("alexsmobs:textures/entity/seal/seal_brown_0.png");
+    private static final Identifier TEXTURE_BROWN_1 = Identifier.parse("alexsmobs:textures/entity/seal/seal_brown_1.png");
+    private static final Identifier TEXTURE_ARCTIC_0 = Identifier.parse("alexsmobs:textures/entity/seal/seal_arctic_0.png");
+    private static final Identifier TEXTURE_ARCTIC_1 = Identifier.parse("alexsmobs:textures/entity/seal/seal_arctic_1.png");
+    private static final Identifier TEXTURE_ARCTIC_BABY = Identifier.parse("alexsmobs:textures/entity/seal/seal_arctic_baby.png");
+    private static final Identifier TEXTURE_TEARS = Identifier.parse("alexsmobs:textures/entity/seal/seal_crying.png");
+    private static final Identifier TEXTURE_TONGUE = Identifier.parse("alexsmobs:textures/entity/seal/seal_tongue.png");
 
     public RenderSeal(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelSeal(), 0.45F);
@@ -40,7 +40,7 @@ public class RenderSeal extends MobRenderer<EntitySeal, ModelSeal> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntitySeal entity) {
+    public Identifier getTextureLocation(EntitySeal entity) {
         if(entity.isArctic()){
             return entity.isBaby() ? TEXTURE_ARCTIC_BABY : entity.getVariant() == 1 ? TEXTURE_ARCTIC_1 : TEXTURE_ARCTIC_0;
         }

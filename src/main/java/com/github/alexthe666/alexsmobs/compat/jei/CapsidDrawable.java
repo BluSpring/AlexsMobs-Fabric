@@ -1,11 +1,11 @@
 package com.github.alexthe666.alexsmobs.compat.jei;
 import mezz.jei.api.gui.drawable.IDrawable;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class CapsidDrawable implements IDrawable {
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("alexsmobs", "textures/gui/capsid_jei_representation.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("alexsmobs", "textures/gui/capsid_jei_representation.png");
     @Override
     public int getWidth() {
         return 125;

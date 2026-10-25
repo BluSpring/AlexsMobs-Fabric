@@ -10,14 +10,14 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class RenderSeagull extends MobRenderer<EntitySeagull, ModelSeagull> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/seagull.png");
-    private static final ResourceLocation TEXTURE_WINGULL = ResourceLocation.parse("alexsmobs:textures/entity/seagull_wingull.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/seagull.png");
+    private static final Identifier TEXTURE_WINGULL = Identifier.parse("alexsmobs:textures/entity/seagull_wingull.png");
 
     public RenderSeagull(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelSeagull(), 0.2F);
@@ -29,7 +29,7 @@ public class RenderSeagull extends MobRenderer<EntitySeagull, ModelSeagull> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntitySeagull entity) {
+    public Identifier getTextureLocation(EntitySeagull entity) {
         return entity.isWingull() ? TEXTURE_WINGULL : TEXTURE;
     }
 

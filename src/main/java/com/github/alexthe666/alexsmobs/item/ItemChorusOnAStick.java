@@ -16,7 +16,7 @@ public class ItemChorusOnAStick extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (player.getVehicle() instanceof EntityEndergrade endergrade) {
             if (endergrade.boost()) {

@@ -23,7 +23,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -31,21 +31,21 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
-    private static final ResourceLocation TEXTURE = ResourceLocation
+    private static final Identifier TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/farseer/farseer.png");
-    private static final ResourceLocation TEXTURE_ANGRY = ResourceLocation
+    private static final Identifier TEXTURE_ANGRY = Identifier
             .parse("alexsmobs:textures/entity/farseer/farseer_angry.png");
-    private static final ResourceLocation TEXTURE_CLAWS = ResourceLocation
+    private static final Identifier TEXTURE_CLAWS = Identifier
             .parse("alexsmobs:textures/entity/farseer/farseer_claws.png");
-    private static final ResourceLocation TEXTURE_EYE = ResourceLocation
+    private static final Identifier TEXTURE_EYE = Identifier
             .parse("alexsmobs:textures/entity/farseer/farseer_eye.png");
-    private static final ResourceLocation TEXTURE_SCARS = ResourceLocation
+    private static final Identifier TEXTURE_SCARS = Identifier
             .parse("alexsmobs:textures/entity/farseer/farseer_scars.png");
-    private static final ResourceLocation[] PORTAL_TEXTURES = new ResourceLocation[] {
-            ResourceLocation.parse("alexsmobs:textures/entity/farseer/portal_0.png"),
-            ResourceLocation.parse("alexsmobs:textures/entity/farseer/portal_1.png"),
-            ResourceLocation.parse("alexsmobs:textures/entity/farseer/portal_2.png"),
-            ResourceLocation.parse("alexsmobs:textures/entity/farseer/portal_3.png") };
+    private static final Identifier[] PORTAL_TEXTURES = new Identifier[] {
+            Identifier.parse("alexsmobs:textures/entity/farseer/portal_0.png"),
+            Identifier.parse("alexsmobs:textures/entity/farseer/portal_1.png"),
+            Identifier.parse("alexsmobs:textures/entity/farseer/portal_2.png"),
+            Identifier.parse("alexsmobs:textures/entity/farseer/portal_3.png") };
     private static final float HALF_SQRT_3 = (float) (Math.sqrt(3.0D) / 2.0D);
     private static final ModelFarseer EYE_MODEL = new ModelFarseer(0.1f);
     private static final ModelFarseer SCARS_MODEL = new ModelFarseer(0.05f);
@@ -290,7 +290,7 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
     @Override
     @Nullable
     protected RenderType getRenderType(EntityFarseer farseer, boolean normal, boolean invis, boolean outline) {
-        ResourceLocation resourcelocation = this.getTextureLocation(farseer);
+        Identifier resourcelocation = this.getTextureLocation(farseer);
         if (invis || farseer.getAnimation() == EntityFarseer.ANIMATION_EMERGE) {
             return RenderType.itemEntityTranslucentCull(resourcelocation);
         } else if (normal) {
@@ -301,7 +301,7 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityFarseer entity) {
+    public Identifier getTextureLocation(EntityFarseer entity) {
         return entity.isAngry() ? TEXTURE_ANGRY : TEXTURE;
     }
 

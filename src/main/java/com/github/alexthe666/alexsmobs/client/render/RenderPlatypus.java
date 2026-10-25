@@ -10,11 +10,11 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderPlatypus extends MobRenderer<EntityPlatypus, ModelPlatypus> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/platypus.png");
-    private static final ResourceLocation TEXTURE_PERRY = ResourceLocation.parse("alexsmobs:textures/entity/platypus_perry.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/platypus.png");
+    private static final Identifier TEXTURE_PERRY = Identifier.parse("alexsmobs:textures/entity/platypus_perry.png");
 
     public RenderPlatypus(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelPlatypus(), 0.45F);
@@ -27,12 +27,12 @@ public class RenderPlatypus extends MobRenderer<EntityPlatypus, ModelPlatypus> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityPlatypus entity) {
+    public Identifier getTextureLocation(EntityPlatypus entity) {
         return entity.isPerry() ? TEXTURE_PERRY : TEXTURE;
     }
 
     static class FedoraLayer extends RenderLayer<EntityPlatypus, ModelPlatypus> {
-        private final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/platypus_fedora.png");
+        private final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/platypus_fedora.png");
 
         public FedoraLayer(RenderPlatypus renderGrizzlyBear) {
             super(renderGrizzlyBear);

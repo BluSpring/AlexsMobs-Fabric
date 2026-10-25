@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
@@ -27,7 +27,7 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
 public class RenderVineLasso extends EntityRenderer<EntityVineLasso> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/vine_lasso.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/vine_lasso.png");
 
     private static final float VINES_COLOR_R = 96F / 255F;
     private static final float VINES_COLOR_G = 143F / 255F;
@@ -180,7 +180,7 @@ public class RenderVineLasso extends EntityRenderer<EntityVineLasso> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityVineLasso entity) {
+    public Identifier getTextureLocation(EntityVineLasso entity) {
         return TEXTURE;
     }
 

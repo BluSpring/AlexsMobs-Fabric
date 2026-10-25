@@ -9,14 +9,14 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.AABB;
 
 public class RenderEndPirateAnchor<T extends TileEntityEndPirateAnchor> implements BlockEntityRenderer<T> {
 
-    protected static final ResourceLocation TEXTURE_ANCHOR = ResourceLocation
+    protected static final Identifier TEXTURE_ANCHOR = Identifier
             .parse("alexsmobs:textures/entity/end_pirate/anchor.png");
-    protected static final ResourceLocation TEXTURE_ANCHOR_GLOW = ResourceLocation
+    protected static final Identifier TEXTURE_ANCHOR_GLOW = Identifier
             .parse("alexsmobs:textures/entity/end_pirate/anchor_glow.png");
     protected static final ModelEndPirateAnchor ANCHOR_MODEL = new ModelEndPirateAnchor();
 

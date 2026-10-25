@@ -10,12 +10,12 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.projectile.LlamaSpit;
 
 public class RenderMosquitoSpit extends EntityRenderer<EntityMosquitoSpit> {
-    private static final ResourceLocation SPIT_TEXTURE = ResourceLocation
+    private static final Identifier SPIT_TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/mosquito_spit.png");
     private final LlamaSpitModel<LlamaSpit> model;
 
@@ -42,7 +42,7 @@ public class RenderMosquitoSpit extends EntityRenderer<EntityMosquitoSpit> {
      * Returns the location of an entity's texture.
      */
     @Override
-    public ResourceLocation getTextureLocation(EntityMosquitoSpit entity) {
+    public Identifier getTextureLocation(EntityMosquitoSpit entity) {
         return SPIT_TEXTURE;
     }
 }

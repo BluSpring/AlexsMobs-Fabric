@@ -1,6 +1,6 @@
 package com.github.alexthe666.alexsmobs.effect;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,7 +11,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class EffectFleetFooted extends MobEffect {
 
-    private static final ResourceLocation SPRINT_JUMP_SPEED_MODIFIER = ResourceLocation.parse("alexsmobs:fleetfooted_speed_bonus");
+    private static final Identifier SPRINT_JUMP_SPEED_MODIFIER = Identifier.parse("alexsmobs:fleetfooted_speed_bonus");
     private static final AttributeModifier SPRINT_JUMP_SPEED_BONUS = new AttributeModifier(SPRINT_JUMP_SPEED_MODIFIER, 0.2F, AttributeModifier.Operation.ADD_VALUE);
     private int lastDuration = -1;
     private int removeEffectAfter = 0;

@@ -9,12 +9,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderCrocodile extends MobRenderer<EntityCrocodile, ModelCrocodile> {
-    private static final ResourceLocation TEXTURE_0 = ResourceLocation.parse("alexsmobs:textures/entity/crocodile_0.png");
-    private static final ResourceLocation TEXTURE_1 = ResourceLocation.parse("alexsmobs:textures/entity/crocodile_1.png");
-    private static final ResourceLocation TEXTURE_CROWN = ResourceLocation.parse("alexsmobs:textures/entity/crocodile_crown.png");
+    private static final Identifier TEXTURE_0 = Identifier.parse("alexsmobs:textures/entity/crocodile_0.png");
+    private static final Identifier TEXTURE_1 = Identifier.parse("alexsmobs:textures/entity/crocodile_1.png");
+    private static final Identifier TEXTURE_CROWN = Identifier.parse("alexsmobs:textures/entity/crocodile_crown.png");
 
     public RenderCrocodile(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelCrocodile(), 0.8F);
@@ -28,7 +28,7 @@ public class RenderCrocodile extends MobRenderer<EntityCrocodile, ModelCrocodile
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityCrocodile entity) {
+    public Identifier getTextureLocation(EntityCrocodile entity) {
         return entity.isDesert() ? TEXTURE_1 : TEXTURE_0;
     }
 

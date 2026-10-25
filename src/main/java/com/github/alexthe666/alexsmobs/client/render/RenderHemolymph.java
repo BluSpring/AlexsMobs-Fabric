@@ -14,11 +14,11 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
 public class RenderHemolymph extends EntityRenderer<EntityHemolymph> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/hemolymph.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/hemolymph.png");
 
     public RenderHemolymph(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn);
@@ -80,7 +80,7 @@ public class RenderHemolymph extends EntityRenderer<EntityHemolymph> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityHemolymph entity) {
+    public Identifier getTextureLocation(EntityHemolymph entity) {
         return TEXTURE;
     }
 }

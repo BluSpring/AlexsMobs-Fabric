@@ -11,7 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import org.apache.logging.log4j.Level;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.RandomSource;
@@ -29,9 +29,9 @@ public class CapsidRecipeManager extends SimpleJsonResourceReloadListener {
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonElement> jsonMap, ResourceManager resourceManager, ProfilerFiller profile) {
+    protected void apply(Map<Identifier, JsonElement> jsonMap, ResourceManager resourceManager, ProfilerFiller profile) {
         this.capsidRecipes.clear();
-        ImmutableMap.Builder<ResourceLocation, CapsidRecipe> builder = ImmutableMap.builder();
+        ImmutableMap.Builder<Identifier, CapsidRecipe> builder = ImmutableMap.builder();
         AlexsMobs.LOGGER.log(Level.ALL, "Loading in capsid_recipes jsons...");
         jsonMap.forEach((resourceLocation, jsonElement) -> {
             try {
@@ -41,7 +41,7 @@ public class CapsidRecipeManager extends SimpleJsonResourceReloadListener {
                 AlexsMobs.LOGGER.error("Couldn't parse capsid recipe {}", resourceLocation, exception);
             }
         });
-        ImmutableMap<ResourceLocation, CapsidRecipe> immutablemap = builder.build();
+        ImmutableMap<Identifier, CapsidRecipe> immutablemap = builder.build();
         immutablemap.forEach((resourceLocation, capsidRecipe) -> {
             capsidRecipes.add(capsidRecipe);
         });

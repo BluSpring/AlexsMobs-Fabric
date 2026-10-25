@@ -13,31 +13,31 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
 public class RenderVoidPortal extends EntityRenderer<EntityVoidPortal> {
-    private static final ResourceLocation TEXTURE_0 = ResourceLocation
+    private static final Identifier TEXTURE_0 = Identifier
             .parse("alexsmobs:textures/entity/void_worm/portal/portal_idle_0.png");
-    private static final ResourceLocation TEXTURE_1 = ResourceLocation
+    private static final Identifier TEXTURE_1 = Identifier
             .parse("alexsmobs:textures/entity/void_worm/portal/portal_idle_1.png");
-    private static final ResourceLocation TEXTURE_2 = ResourceLocation
+    private static final Identifier TEXTURE_2 = Identifier
             .parse("alexsmobs:textures/entity/void_worm/portal/portal_idle_2.png");
-    private static final ResourceLocation TEXTURE_SHATTERED_0 = ResourceLocation
+    private static final Identifier TEXTURE_SHATTERED_0 = Identifier
             .parse("alexsmobs:textures/entity/void_worm/portal/shattered/portal_idle_0.png");
-    private static final ResourceLocation TEXTURE_SHATTERED_1 = ResourceLocation
+    private static final Identifier TEXTURE_SHATTERED_1 = Identifier
             .parse("alexsmobs:textures/entity/void_worm/portal/shattered/portal_idle_1.png");
-    private static final ResourceLocation TEXTURE_SHATTERED_2 = ResourceLocation
+    private static final Identifier TEXTURE_SHATTERED_2 = Identifier
             .parse("alexsmobs:textures/entity/void_worm/portal/shattered/portal_idle_2.png");
-    private static final ResourceLocation[] TEXTURE_PROGRESS = new ResourceLocation[10];
-    private static final ResourceLocation[] TEXTURE_SHATTERED_PROGRESS = new ResourceLocation[10];
+    private static final Identifier[] TEXTURE_PROGRESS = new Identifier[10];
+    private static final Identifier[] TEXTURE_SHATTERED_PROGRESS = new Identifier[10];
 
     public RenderVoidPortal(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn);
         for (int i = 0; i < 10; i++) {
-            TEXTURE_PROGRESS[i] = ResourceLocation
+            TEXTURE_PROGRESS[i] = Identifier
                     .parse("alexsmobs:textures/entity/void_worm/portal/portal_grow_" + i + ".png");
-            TEXTURE_SHATTERED_PROGRESS[i] = ResourceLocation
+            TEXTURE_SHATTERED_PROGRESS[i] = Identifier
                     .parse("alexsmobs:textures/entity/void_worm/portal/shattered/portal_grow_" + i + ".png");
         }
     }
@@ -67,7 +67,7 @@ public class RenderVoidPortal extends EntityRenderer<EntityVoidPortal> {
 
     private void renderPortal(EntityVoidPortal entityIn, PoseStack matrixStackIn, MultiBufferSource bufferIn,
             boolean shattered) {
-        ResourceLocation tex;
+        Identifier tex;
         if (entityIn.getLifespan() < 20) {
             tex = getGrowingTexture((int) ((entityIn.getLifespan() * 0.5F) % 10), shattered);
         } else if (entityIn.tickCount < 20) {
@@ -96,7 +96,7 @@ public class RenderVoidPortal extends EntityRenderer<EntityVoidPortal> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityVoidPortal entity) {
+    public Identifier getTextureLocation(EntityVoidPortal entity) {
         return TEXTURE_0;
     }
 
@@ -114,7 +114,7 @@ public class RenderVoidPortal extends EntityRenderer<EntityVoidPortal> {
                 .setLight(p_229039_12_).setNormal(normal.x, normal.y, normal.z);
     }
 
-    public ResourceLocation getIdleTexture(int age, boolean shattered) {
+    public Identifier getIdleTexture(int age, boolean shattered) {
         if (age < 3) {
             return shattered ? TEXTURE_SHATTERED_0 : TEXTURE_0;
         } else if (age < 6) {
@@ -126,7 +126,7 @@ public class RenderVoidPortal extends EntityRenderer<EntityVoidPortal> {
         }
     }
 
-    public ResourceLocation getGrowingTexture(int age, boolean shattered) {
+    public Identifier getGrowingTexture(int age, boolean shattered) {
         return shattered ? TEXTURE_SHATTERED_PROGRESS[Mth.clamp(age, 0, 9)] : TEXTURE_PROGRESS[Mth.clamp(age, 0, 9)];
     }
 }

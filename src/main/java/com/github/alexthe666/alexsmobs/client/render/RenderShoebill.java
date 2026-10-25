@@ -5,10 +5,10 @@ import com.github.alexthe666.alexsmobs.entity.EntityShoebill;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderShoebill extends MobRenderer<EntityShoebill, ModelShoebill> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/shoebill.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/shoebill.png");
 
     public RenderShoebill(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelShoebill(), 0.3F);
@@ -19,7 +19,7 @@ public class RenderShoebill extends MobRenderer<EntityShoebill, ModelShoebill> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityShoebill entity) {
+    public Identifier getTextureLocation(EntityShoebill entity) {
         return TEXTURE;
     }
 }

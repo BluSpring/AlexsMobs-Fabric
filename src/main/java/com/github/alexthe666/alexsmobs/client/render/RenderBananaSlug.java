@@ -13,20 +13,20 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Pose;
 
 public class RenderBananaSlug extends MobRenderer<EntityBananaSlug, ModelBananaSlug> {
-    private static final ResourceLocation TEXTURE_0 = ResourceLocation
+    private static final Identifier TEXTURE_0 = Identifier
             .parse("alexsmobs:textures/entity/banana_slug/banana_slug_0.png");
-    private static final ResourceLocation TEXTURE_1 = ResourceLocation
+    private static final Identifier TEXTURE_1 = Identifier
             .parse("alexsmobs:textures/entity/banana_slug/banana_slug_1.png");
-    private static final ResourceLocation TEXTURE_2 = ResourceLocation
+    private static final Identifier TEXTURE_2 = Identifier
             .parse("alexsmobs:textures/entity/banana_slug/banana_slug_2.png");
-    private static final ResourceLocation TEXTURE_3 = ResourceLocation
+    private static final Identifier TEXTURE_3 = Identifier
             .parse("alexsmobs:textures/entity/banana_slug/banana_slug_3.png");
-    private static final ResourceLocation TEXTURE_SLIME = ResourceLocation
+    private static final Identifier TEXTURE_SLIME = Identifier
             .parse("alexsmobs:textures/entity/banana_slug/banana_slug_slime.png");
 
     public RenderBananaSlug(EntityRendererProvider.Context renderManagerIn) {
@@ -126,7 +126,7 @@ public class RenderBananaSlug extends MobRenderer<EntityBananaSlug, ModelBananaS
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityBananaSlug entity) {
+    public Identifier getTextureLocation(EntityBananaSlug entity) {
         return switch (entity.getVariant()) {
             case 1 -> TEXTURE_1;
             case 2 -> TEXTURE_2;

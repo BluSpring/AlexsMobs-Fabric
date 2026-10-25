@@ -9,14 +9,14 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
 public class RenderAlligatorSnappingTurtle
         extends MobRenderer<EntityAlligatorSnappingTurtle, ModelAlligatorSnappingTurtle> {
-    private static final ResourceLocation TEXTURE_MOSS = ResourceLocation
+    private static final Identifier TEXTURE_MOSS = Identifier
             .parse("alexsmobs:textures/entity/alligator_snapping_turtle_moss.png");
-    private static final ResourceLocation TEXTURE = ResourceLocation
+    private static final Identifier TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/alligator_snapping_turtle.png");
 
     public RenderAlligatorSnappingTurtle(EntityRendererProvider.Context renderManagerIn) {
@@ -32,7 +32,7 @@ public class RenderAlligatorSnappingTurtle
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityAlligatorSnappingTurtle entity) {
+    public Identifier getTextureLocation(EntityAlligatorSnappingTurtle entity) {
         return TEXTURE;
     }
 

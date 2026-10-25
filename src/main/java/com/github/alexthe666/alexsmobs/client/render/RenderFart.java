@@ -10,11 +10,11 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
 public class RenderFart extends EntityRenderer<EntityFart> {
-    private static final ResourceLocation FART_TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/fart.png");
+    private static final Identifier FART_TEXTURE = Identifier.parse("alexsmobs:textures/entity/fart.png");
     private static final ModelFart MODEL = new ModelFart();
 
     public RenderFart(EntityRendererProvider.Context renderManagerIn) {
@@ -43,7 +43,7 @@ public class RenderFart extends EntityRenderer<EntityFart> {
      * Returns the location of an entity's texture.
      */
     @Override
-    public ResourceLocation getTextureLocation(EntityFart entity) {
+    public Identifier getTextureLocation(EntityFart entity) {
         return FART_TEXTURE;
     }
 }

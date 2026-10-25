@@ -5,11 +5,11 @@ import com.github.alexthe666.alexsmobs.entity.EntityFroststalker;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderFroststalker extends MobRenderer<EntityFroststalker, ModelFroststalker> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/froststalker.png");
-    private static final ResourceLocation TEXTURE_NOSPIKES = ResourceLocation.parse("alexsmobs:textures/entity/froststalker_nospikes.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/froststalker.png");
+    private static final Identifier TEXTURE_NOSPIKES = Identifier.parse("alexsmobs:textures/entity/froststalker_nospikes.png");
 
     public RenderFroststalker(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelFroststalker(), 0.4F);
@@ -20,7 +20,7 @@ public class RenderFroststalker extends MobRenderer<EntityFroststalker, ModelFro
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityFroststalker entity) {
+    public Identifier getTextureLocation(EntityFroststalker entity) {
         return entity.hasSpikes() ? TEXTURE : TEXTURE_NOSPIKES;
     }
 

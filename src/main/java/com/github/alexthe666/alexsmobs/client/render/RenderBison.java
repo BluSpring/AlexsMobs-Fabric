@@ -12,14 +12,14 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderBison extends MobRenderer<EntityBison, AdvancedEntityModel<EntityBison>> {
-    private static final ResourceLocation TEXTURE_BABY = ResourceLocation.parse("alexsmobs:textures/entity/bison_baby.png");
-    private static final ResourceLocation TEXTURE_BABY_SNOWY = ResourceLocation.parse("alexsmobs:textures/entity/bison_baby_snowy.png");
-    private static final ResourceLocation TEXTURE_SNOWY = ResourceLocation.parse("alexsmobs:textures/entity/bison_snowy.png");
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/bison.png");
-    private static final ResourceLocation TEXTURE_SHEARED = ResourceLocation.parse("alexsmobs:textures/entity/bison_sheared.png");
+    private static final Identifier TEXTURE_BABY = Identifier.parse("alexsmobs:textures/entity/bison_baby.png");
+    private static final Identifier TEXTURE_BABY_SNOWY = Identifier.parse("alexsmobs:textures/entity/bison_baby_snowy.png");
+    private static final Identifier TEXTURE_SNOWY = Identifier.parse("alexsmobs:textures/entity/bison_snowy.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/bison.png");
+    private static final Identifier TEXTURE_SHEARED = Identifier.parse("alexsmobs:textures/entity/bison_sheared.png");
     private final ModelBison modelBison = new ModelBison();
     private final ModelBisonBaby modelBaby = new ModelBisonBaby();
 
@@ -38,7 +38,7 @@ public class RenderBison extends MobRenderer<EntityBison, AdvancedEntityModel<En
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityBison entity) {
+    public Identifier getTextureLocation(EntityBison entity) {
         return entity.isBaby() ? TEXTURE_BABY : entity.isSheared() ? TEXTURE_SHEARED : TEXTURE;
     }
 

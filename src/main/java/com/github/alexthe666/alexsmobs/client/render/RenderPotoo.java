@@ -13,13 +13,13 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 
 public class RenderPotoo extends MobRenderer<EntityPotoo, ModelPotoo> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/potoo.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/potoo.png");
 
     public RenderPotoo(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelPotoo(), 0.35F);
@@ -67,7 +67,7 @@ public class RenderPotoo extends MobRenderer<EntityPotoo, ModelPotoo> {
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityPotoo entity) {
+    public Identifier getTextureLocation(EntityPotoo entity) {
         return TEXTURE;
     }
 }

@@ -7,16 +7,17 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexMultiConsumer;
+import org.joml.Matrix4f;
+
 import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.TheEndPortalRenderer;
-import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix4f;
+import net.minecraft.resources.Identifier;
 
 public class AMRenderTypes extends RenderType {
 
-    public static final ResourceLocation STATIC_TEXTURE = ResourceLocation.parse("alexsmobs:textures/static.png");
+    public static final Identifier STATIC_TEXTURE = Identifier.parse("alexsmobs:textures/static.png");
     // Use DefaultVertexFormat.NEW_ENTITY for entity rendering
     public static final VertexFormat AM_NEW_ENTITY = DefaultVertexFormat.NEW_ENTITY;
 
@@ -68,7 +69,7 @@ public class AMRenderTypes extends RenderType {
     public static final RenderType COMBJELLY_RAINBOW_GLINT = create("cj_rainbow_glint",
             DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS, 256, false, false,
             RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_GLINT_SHADER)
-                    .setTextureState(new RenderStateShard.TextureStateShard(ResourceLocation
+                    .setTextureState(new RenderStateShard.TextureStateShard(Identifier
                             .parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_rainbow.png"), true, false))
                     .setWriteMaskState(COLOR_DEPTH_WRITE).setCullState(NO_CULL).setDepthTestState(EQUAL_DEPTH_TEST)
                     .setTransparencyState(NO_TRANSPARENCY).setTexturingState(COMB_JELLY_TEXTURING)
@@ -76,7 +77,7 @@ public class AMRenderTypes extends RenderType {
     public static final RenderType RAINBOW_GLINT = create("rainbow_glint", DefaultVertexFormat.POSITION_TEX,
             VertexFormat.Mode.QUADS, 256, true, true,
             RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_GLINT_SHADER)
-                    .setTextureState(new RenderStateShard.TextureStateShard(ResourceLocation
+                    .setTextureState(new RenderStateShard.TextureStateShard(Identifier
                             .parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_rainbow.png"), true, false))
                     .setWriteMaskState(COLOR_DEPTH_WRITE).setCullState(NO_CULL).setDepthTestState(EQUAL_DEPTH_TEST)
                     .setTransparencyState(GLINT_TRANSPARENCY).setTexturingState(RAINBOW_TEXTURING)
@@ -85,7 +86,7 @@ public class AMRenderTypes extends RenderType {
             VertexFormat.Mode.QUADS, 256, false, false,
             RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_GLINT_SHADER)
                     .setTextureState(new RenderStateShard.TextureStateShard(
-                            ResourceLocation.parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_trans.png"),
+                            Identifier.parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_trans.png"),
                             true, false))
                     .setWriteMaskState(COLOR_DEPTH_WRITE).setCullState(NO_CULL).setDepthTestState(EQUAL_DEPTH_TEST)
                     .setTransparencyState(GLINT_TRANSPARENCY).setTexturingState(RAINBOW_TEXTURING)
@@ -94,7 +95,7 @@ public class AMRenderTypes extends RenderType {
             VertexFormat.Mode.QUADS, 256, false, false,
             RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_GLINT_SHADER)
                     .setTextureState(new RenderStateShard.TextureStateShard(
-                            ResourceLocation.parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_nonbi.png"),
+                            Identifier.parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_nonbi.png"),
                             true, false))
                     .setWriteMaskState(COLOR_DEPTH_WRITE).setCullState(NO_CULL).setDepthTestState(EQUAL_DEPTH_TEST)
                     .setTransparencyState(GLINT_TRANSPARENCY).setTexturingState(RAINBOW_TEXTURING)
@@ -103,7 +104,7 @@ public class AMRenderTypes extends RenderType {
             VertexFormat.Mode.QUADS, 256, false, false,
             RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_GLINT_SHADER)
                     .setTextureState(new RenderStateShard.TextureStateShard(
-                            ResourceLocation.parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_bi.png"),
+                            Identifier.parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_bi.png"),
                             true, false))
                     .setWriteMaskState(COLOR_DEPTH_WRITE).setCullState(NO_CULL).setDepthTestState(EQUAL_DEPTH_TEST)
                     .setTransparencyState(GLINT_TRANSPARENCY).setTexturingState(RAINBOW_TEXTURING)
@@ -112,7 +113,7 @@ public class AMRenderTypes extends RenderType {
             VertexFormat.Mode.QUADS, 256, false, false,
             RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_GLINT_SHADER)
                     .setTextureState(new RenderStateShard.TextureStateShard(
-                            ResourceLocation.parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_ace.png"),
+                            Identifier.parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_ace.png"),
                             true, false))
                     .setWriteMaskState(COLOR_DEPTH_WRITE).setCullState(NO_CULL).setDepthTestState(EQUAL_DEPTH_TEST)
                     .setTransparencyState(GLINT_TRANSPARENCY).setTexturingState(RAINBOW_TEXTURING)
@@ -121,7 +122,7 @@ public class AMRenderTypes extends RenderType {
             VertexFormat.Mode.QUADS, 256, false, false,
             RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_GLINT_SHADER)
                     .setTextureState(new RenderStateShard.TextureStateShard(
-                            ResourceLocation.parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_brazil.png"),
+                            Identifier.parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_brazil.png"),
                             true, false))
                     .setWriteMaskState(COLOR_DEPTH_WRITE).setCullState(NO_CULL).setDepthTestState(EQUAL_DEPTH_TEST)
                     .setTransparencyState(GLINT_TRANSPARENCY).setTexturingState(RAINBOW_TEXTURING_LARGE)
@@ -130,7 +131,7 @@ public class AMRenderTypes extends RenderType {
             VertexFormat.Mode.QUADS, 256, false, false,
             RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_GLINT_SHADER)
                     .setTextureState(new RenderStateShard.TextureStateShard(
-                            ResourceLocation.parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_weezer.png"),
+                            Identifier.parse("alexsmobs:textures/entity/rainbow_jelly_overlays/glint_weezer.png"),
                             false, false))
                     .setWriteMaskState(COLOR_DEPTH_WRITE).setCullState(NO_CULL).setDepthTestState(EQUAL_DEPTH_TEST)
                     .setTransparencyState(GLINT_TRANSPARENCY).setTexturingState(WEEZER_TEXTURING)
@@ -202,7 +203,7 @@ public class AMRenderTypes extends RenderType {
         super(p_173178_, p_173179_, p_173180_, p_173181_, p_173182_, p_173183_, p_173184_, p_173185_);
     }
 
-    public static RenderType getTransparentMimicube(ResourceLocation texture) {
+    public static RenderType getTransparentMimicube(Identifier texture) {
         RenderType.CompositeState lvt_1_1_ = RenderType.CompositeState.builder()
                 .setTextureState(new TextureStateShard(texture, false, false))
                 .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER)
@@ -214,7 +215,7 @@ public class AMRenderTypes extends RenderType {
                 256, true, true, lvt_1_1_);
     }
 
-    public static RenderType getEyesFlickering(ResourceLocation p_228652_0_, float lightLevel) {
+    public static RenderType getEyesFlickering(Identifier p_228652_0_, float lightLevel) {
         RenderStateShard.TextureStateShard lvt_1_1_ = new RenderStateShard.TextureStateShard(p_228652_0_, false, false);
         return create("eye_flickering", AM_NEW_ENTITY,
                 VertexFormat.Mode.QUADS, 256, false, true,
@@ -224,7 +225,7 @@ public class AMRenderTypes extends RenderType {
                         .setOverlayState(OVERLAY).createCompositeState(false));
     }
 
-    public static RenderType getFullBright(ResourceLocation p_228652_0_) {
+    public static RenderType getFullBright(Identifier p_228652_0_) {
         RenderStateShard.TextureStateShard lvt_1_1_ = new RenderStateShard.TextureStateShard(p_228652_0_, false, false);
         return create("full_bright", AM_NEW_ENTITY,
                 VertexFormat.Mode.QUADS, 256, false, true,
@@ -234,7 +235,7 @@ public class AMRenderTypes extends RenderType {
                         .setOverlayState(OVERLAY).createCompositeState(false));
     }
 
-    public static RenderType getFreddy(ResourceLocation p_228652_0_) {
+    public static RenderType getFreddy(Identifier p_228652_0_) {
         RenderStateShard.TextureStateShard lvt_1_1_ = new RenderStateShard.TextureStateShard(p_228652_0_, false, false);
         return create("freddy", AM_NEW_ENTITY, VertexFormat.Mode.QUADS,
                 256, false, true,
@@ -244,7 +245,7 @@ public class AMRenderTypes extends RenderType {
                         .setCullState(NO_CULL).setOverlayState(OVERLAY).createCompositeState(true));
     }
 
-    public static RenderType getFrilledSharkTeeth(ResourceLocation p_228652_0_) {
+    public static RenderType getFrilledSharkTeeth(Identifier p_228652_0_) {
         RenderStateShard.TextureStateShard lvt_1_1_ = new RenderStateShard.TextureStateShard(p_228652_0_, false, false);
         return create("sharkteeth", AM_NEW_ENTITY,
                 VertexFormat.Mode.QUADS, 256, false, true,
@@ -254,7 +255,7 @@ public class AMRenderTypes extends RenderType {
                         .createCompositeState(false));
     }
 
-    public static RenderType getEyesNoCull(ResourceLocation p_228652_0_) {
+    public static RenderType getEyesNoCull(Identifier p_228652_0_) {
         TextureStateShard lvt_1_1_ = new TextureStateShard(p_228652_0_, false, false);
         return create("eyes_no_cull", AM_NEW_ENTITY,
                 VertexFormat.Mode.QUADS, 256, false, true,
@@ -264,7 +265,7 @@ public class AMRenderTypes extends RenderType {
                         .setCullState(NO_CULL).createCompositeState(false));
     }
 
-    public static RenderType getSpectreBones(ResourceLocation p_228652_0_) {
+    public static RenderType getSpectreBones(Identifier p_228652_0_) {
         TextureStateShard lvt_1_1_ = new TextureStateShard(p_228652_0_, false, false);
         return create("spectre_bones", AM_NEW_ENTITY,
                 VertexFormat.Mode.QUADS, 256, false, true,
@@ -274,7 +275,7 @@ public class AMRenderTypes extends RenderType {
                         .setOverlayState(OVERLAY).createCompositeState(false));
     }
 
-    public static RenderType getGhost(ResourceLocation p_228652_0_) {
+    public static RenderType getGhost(Identifier p_228652_0_) {
         TextureStateShard lvt_1_1_ = new TextureStateShard(p_228652_0_, false, false);
         return create("ghost_am", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 262144, false, true,
                 RenderType.CompositeState.builder().setTextureState(lvt_1_1_).setShaderState(RENDERTYPE_EYES_SHADER)
@@ -283,7 +284,7 @@ public class AMRenderTypes extends RenderType {
                         .setCullState(RenderStateShard.NO_CULL).createCompositeState(true));
     }
 
-    public static RenderType getEyesAlphaEnabled(ResourceLocation locationIn) {
+    public static RenderType getEyesAlphaEnabled(Identifier locationIn) {
         RenderType.CompositeState rendertype$compositestate = RenderType.CompositeState.builder()
                 .setShaderState(RENDERTYPE_EYES_SHADER)
                 .setTextureState(new RenderStateShard.TextureStateShard(locationIn, false, false))
@@ -293,7 +294,7 @@ public class AMRenderTypes extends RenderType {
                 rendertype$compositestate);
     }
 
-    public static RenderType getEyesNoFog(ResourceLocation locationIn) {
+    public static RenderType getEyesNoFog(Identifier locationIn) {
         RenderStateShard.TextureStateShard renderstateshard$texturestateshard = new RenderStateShard.TextureStateShard(
                 locationIn, false, false);
         return create("eyes_nofog", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 256, true, false,
@@ -308,7 +309,7 @@ public class AMRenderTypes extends RenderType {
         return create("sunbird_shine", DefaultVertexFormat.POSITION_TEX, VertexFormat.Mode.QUADS, 256, true, true,
                 RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_GLINT_SHADER)
                         .setTextureState(new RenderStateShard.TextureStateShard(
-                                ResourceLocation.parse("alexsmobs:textures/entity/sunbird_shine.png"), true, true))
+                                Identifier.parse("alexsmobs:textures/entity/sunbird_shine.png"), true, true))
                         .setLightmapState(LIGHTMAP).setCullState(RenderStateShard.NO_CULL)
                         .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY).setOverlayState(OVERLAY)
                         .setDepthTestState(LEQUAL_DEPTH_TEST).createCompositeState(true));
@@ -319,7 +320,7 @@ public class AMRenderTypes extends RenderType {
                 .setShaderState(RENDERTYPE_ENERGY_SWIRL_SHADER)
                 .setCullState(NO_CULL)
                 .setTextureState(new TextureStateShard(
-                        ResourceLocation.parse("alexsmobs:textures/particle/skulk_boom.png"), true, true))
+                        Identifier.parse("alexsmobs:textures/particle/skulk_boom.png"), true, true))
                 .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                 .setLightmapState(LIGHTMAP)
                 .setOverlayState(OVERLAY)
@@ -331,7 +332,7 @@ public class AMRenderTypes extends RenderType {
                 renderState);
     }
 
-    public static RenderType getUnderminer(ResourceLocation texture) {
+    public static RenderType getUnderminer(Identifier texture) {
         CompositeState renderState = CompositeState.builder()
                 .setShaderState(RENDERTYPE_ENERGY_SWIRL_SHADER)
                 .setCullState(NO_CULL)
@@ -347,7 +348,7 @@ public class AMRenderTypes extends RenderType {
                 renderState);
     }
 
-    public static RenderType getGhostPickaxe(ResourceLocation texture) {
+    public static RenderType getGhostPickaxe(Identifier texture) {
         CompositeState renderState = CompositeState.builder()
                 .setShaderState(RENDERTYPE_ITEM_ENTITY_TRANSLUCENT_CULL_SHADER)
                 .setCullState(NO_CULL)
@@ -364,7 +365,7 @@ public class AMRenderTypes extends RenderType {
                 renderState);
     }
 
-    public static RenderType getGhostCrumbling(ResourceLocation texture) {
+    public static RenderType getGhostCrumbling(Identifier texture) {
         TextureStateShard lvt_1_1_ = new TextureStateShard(texture, false, false);
         return create("ghost_crumbling_am", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 262144, false,
                 true,

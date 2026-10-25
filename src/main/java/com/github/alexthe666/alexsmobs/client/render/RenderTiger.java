@@ -9,19 +9,19 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/tiger/tiger.png");
-    private static final ResourceLocation TEXTURE_ANGRY = ResourceLocation
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/tiger/tiger.png");
+    private static final Identifier TEXTURE_ANGRY = Identifier
             .parse("alexsmobs:textures/entity/tiger/tiger_angry.png");
-    private static final ResourceLocation TEXTURE_SLEEPING = ResourceLocation
+    private static final Identifier TEXTURE_SLEEPING = Identifier
             .parse("alexsmobs:textures/entity/tiger/tiger_sleeping.png");
-    private static final ResourceLocation TEXTURE_WHITE = ResourceLocation
+    private static final Identifier TEXTURE_WHITE = Identifier
             .parse("alexsmobs:textures/entity/tiger/tiger_white.png");
-    private static final ResourceLocation TEXTURE_ANGRY_WHITE = ResourceLocation
+    private static final Identifier TEXTURE_ANGRY_WHITE = Identifier
             .parse("alexsmobs:textures/entity/tiger/tiger_white_angry.png");
-    private static final ResourceLocation TEXTURE_SLEEPING_WHITE = ResourceLocation
+    private static final Identifier TEXTURE_SLEEPING_WHITE = Identifier
             .parse("alexsmobs:textures/entity/tiger/tiger_white_sleeping.png");
 
     public RenderTiger(EntityRendererProvider.Context renderManagerIn) {
@@ -37,7 +37,7 @@ public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
     @Override
     protected RenderType getRenderType(EntityTiger tiger, boolean b0, boolean b1, boolean b2) {
         if (tiger.isStealth()) {
-            ResourceLocation resourcelocation = this.getTextureLocation(tiger);
+            Identifier resourcelocation = this.getTextureLocation(tiger);
             return RenderType.itemEntityTranslucentCull(resourcelocation);
         } else {
             return super.getRenderType(tiger, b0, b1, b2);
@@ -45,7 +45,7 @@ public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityTiger entity) {
+    public Identifier getTextureLocation(EntityTiger entity) {
         if (entity.isSleeping()) {
             return entity.isWhite() ? TEXTURE_SLEEPING_WHITE : TEXTURE_SLEEPING;
         } else if (entity.getRemainingPersistentAngerTime() > 0) {

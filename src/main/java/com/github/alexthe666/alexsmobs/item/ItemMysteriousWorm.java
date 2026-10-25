@@ -30,7 +30,7 @@ public class ItemMysteriousWorm extends Item {
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         if(AMConfig.voidWormSummonable){
-            String dim = entity.level().dimension().location().toString();
+            String dim = entity.level().dimension().identifier().toString();
             if(AMConfig.voidWormSpawnDimensions.contains(dim) && entity.getY() < -60 && !entity.isRemoved()){
                 entity.kill();
                 EntityVoidWorm worm = AMEntityRegistry.VOID_WORM.get().create(entity.level());

@@ -1,23 +1,24 @@
 package com.github.alexthe666.alexsmobs.misc;
 
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Predicate;
 
 public class BlossomLootModifier implements IGlobalLootModifier {
 
@@ -50,11 +51,11 @@ public class BlossomLootModifier implements IGlobalLootModifier {
 
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         if (AMConfig.acaciaBlossomsDropFromLeaves) {
-            ItemStack ctxTool = context.getParamOrNull(LootContextParams.TOOL);
+            ItemInstance ctxTool = context.getOptionalParameter(LootContextParams.TOOL);
             RandomSource random = context.getRandom();
             if (ctxTool != null) {
                 int silkTouch = ctxTool.getEnchantmentLevel(context.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH));
-                if (silkTouch > 0 || ctxTool.getItem() instanceof ShearsItem) {
+                if (silkTouch > 0 || ctxTool.typeHolder().value() instanceof ShearsItem) {
                     return generatedLoot;
                 }
             }
@@ -71,5 +72,10 @@ public class BlossomLootModifier implements IGlobalLootModifier {
     @Override
     public MapCodec<? extends IGlobalLootModifier> codec() {
         return CODEC;
+    }
+
+    @Override
+    public int priority() {
+        return 0;
     }
 }

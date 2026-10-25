@@ -10,18 +10,18 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 
 public class RenderVoidWormBody extends LivingEntityRenderer<EntityVoidWormPart, EntityModel<EntityVoidWormPart>> {
-    private static final ResourceLocation TEXTURE_BODY = ResourceLocation.parse("alexsmobs:textures/entity/void_worm/void_worm_body.png");
-    private static final ResourceLocation TEXTURE_BODY_HURT = ResourceLocation.parse("alexsmobs:textures/entity/void_worm/void_worm_body_hurt.png");
-    private static final ResourceLocation TEXTURE_BODY_GLOW = ResourceLocation.parse("alexsmobs:textures/entity/void_worm/void_worm_body_glow.png");
-    private static final ResourceLocation TEXTURE_TAIL = ResourceLocation.parse("alexsmobs:textures/entity/void_worm/void_worm_tail.png");
-    private static final ResourceLocation TEXTURE_TAIL_HURT = ResourceLocation.parse("alexsmobs:textures/entity/void_worm/void_worm_tail_hurt.png");
-    private static final ResourceLocation TEXTURE_TAIL_GLOW = ResourceLocation.parse("alexsmobs:textures/entity/void_worm/void_worm_tail_glow.png");
+    private static final Identifier TEXTURE_BODY = Identifier.parse("alexsmobs:textures/entity/void_worm/void_worm_body.png");
+    private static final Identifier TEXTURE_BODY_HURT = Identifier.parse("alexsmobs:textures/entity/void_worm/void_worm_body_hurt.png");
+    private static final Identifier TEXTURE_BODY_GLOW = Identifier.parse("alexsmobs:textures/entity/void_worm/void_worm_body_glow.png");
+    private static final Identifier TEXTURE_TAIL = Identifier.parse("alexsmobs:textures/entity/void_worm/void_worm_tail.png");
+    private static final Identifier TEXTURE_TAIL_HURT = Identifier.parse("alexsmobs:textures/entity/void_worm/void_worm_tail_hurt.png");
+    private static final Identifier TEXTURE_TAIL_GLOW = Identifier.parse("alexsmobs:textures/entity/void_worm/void_worm_tail_glow.png");
     private final ModelVoidWormBody bodyModel = new ModelVoidWormBody(0.0F);
     private final ModelVoidWormTail tailModel = new ModelVoidWormTail(0.0F);
 
@@ -29,7 +29,7 @@ public class RenderVoidWormBody extends LivingEntityRenderer<EntityVoidWormPart,
         super(renderManagerIn, new ModelVoidWormBody(0.0F), 1F);
         this.addLayer(new LayerVoidWormGlow(this, renderManagerIn.getResourceManager(), new ModelVoidWormBody(0.0F)){
             @Override
-            public ResourceLocation getGlowTexture(LivingEntity worm){
+            public Identifier getGlowTexture(LivingEntity worm){
                 return ((EntityVoidWormPart)worm).isTail() ? TEXTURE_TAIL_GLOW : TEXTURE_BODY_GLOW;
             }
             @Override
@@ -50,7 +50,7 @@ public class RenderVoidWormBody extends LivingEntityRenderer<EntityVoidWormPart,
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityVoidWormPart entity) {
+    public Identifier getTextureLocation(EntityVoidWormPart entity) {
         if (entity.isHurt()) {
             return entity.isTail() ? TEXTURE_TAIL_HURT : TEXTURE_BODY_HURT;
         } else {

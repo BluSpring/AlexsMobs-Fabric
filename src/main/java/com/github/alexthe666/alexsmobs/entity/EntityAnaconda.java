@@ -271,7 +271,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
     public Entity getChild() {
         UUID id = getChildId();
         if (id != null && !level().isClientSide) {
-            return ((ServerLevel) level()).getEntity(id);
+            return level().getEntity(id);
         }
         return null;
     }
@@ -571,7 +571,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         if(entity instanceof LivingEntity living){
             final CompoundTag emptyNbt = new CompoundTag();
             living.addAdditionalSaveData(emptyNbt);
-            emptyNbt.putString("DeathLootTable", BuiltInLootTables.EMPTY.location().toString());
+            emptyNbt.putString("DeathLootTable", BuiltInLootTables.EMPTY.identifier().toString());
             living.readAdditionalSaveData(emptyNbt);
 
             if (this.getChild() instanceof EntityAnacondaPart)

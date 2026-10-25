@@ -9,12 +9,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderKomodoDragon extends MobRenderer<EntityKomodoDragon, ModelKomodoDragon> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/komodo_dragon.png");
-    private static final ResourceLocation TEXTURE_SADDLE = ResourceLocation.parse("alexsmobs:textures/entity/komodo_dragon_saddle.png");
-    private static final ResourceLocation TEXTURE_MAID = ResourceLocation.parse("alexsmobs:textures/entity/komodo_dragon_maid.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/komodo_dragon.png");
+    private static final Identifier TEXTURE_SADDLE = Identifier.parse("alexsmobs:textures/entity/komodo_dragon_saddle.png");
+    private static final Identifier TEXTURE_MAID = Identifier.parse("alexsmobs:textures/entity/komodo_dragon_maid.png");
 
     public RenderKomodoDragon(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelKomodoDragon(0.0F), 0.6F);
@@ -26,7 +26,7 @@ public class RenderKomodoDragon extends MobRenderer<EntityKomodoDragon, ModelKom
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityKomodoDragon entity) {
+    public Identifier getTextureLocation(EntityKomodoDragon entity) {
         return TEXTURE;
     }
 

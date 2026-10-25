@@ -67,7 +67,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -88,7 +88,7 @@ import net.minecraft.world.phys.EntityHitResult;
 @OnlyIn(Dist.CLIENT)
 public class ClientEvents {
 
-    private static final ResourceLocation ROCKY_CHESTPLATE_TEXTURE = ResourceLocation.fromNamespaceAndPath("alexsmobs",
+    private static final Identifier ROCKY_CHESTPLATE_TEXTURE = Identifier.fromNamespaceAndPath("alexsmobs",
             "textures/armor/rocky_chestplate.png");
     private static final ModelRockyChestplateRolling ROCKY_CHESTPLATE_MODEL = new ModelRockyChestplateRolling();
 
@@ -437,7 +437,7 @@ public class ClientEvents {
                             && Minecraft.getInstance().player
                                     .getEyeHeight() < Minecraft.getInstance().player.getBbHeight() * 0.45F) {
                         Minecraft.getInstance().gameRenderer
-                                .loadEffect(ResourceLocation.withDefaultNamespace("shaders/post/flip.json"));
+                                .loadEffect(Identifier.withDefaultNamespace("shaders/post/flip.json"));
                     } else if (Minecraft.getInstance().gameRenderer.currentEffect() != null
                             && Minecraft.getInstance().gameRenderer.currentEffect().getName()
                                     .equals("minecraft:shaders/post/flip.json")) {

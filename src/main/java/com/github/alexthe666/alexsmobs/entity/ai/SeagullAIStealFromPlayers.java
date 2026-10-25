@@ -10,7 +10,7 @@ import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySelector;
@@ -132,7 +132,7 @@ public class SeagullAIStealFromPlayers extends Goal {
     }
 
     private boolean isBlacklisted(ItemStack stack){
-        ResourceLocation loc = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        Identifier loc = BuiltInRegistries.ITEM.getKey(stack.getItem());
         if(loc != null){
             for(String str : AMConfig.seagullStealingBlacklist){
                 if(loc.toString().equals(str)){

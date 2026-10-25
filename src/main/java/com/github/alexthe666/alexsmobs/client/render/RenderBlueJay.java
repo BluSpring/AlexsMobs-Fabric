@@ -14,12 +14,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 
 public class RenderBlueJay extends MobRenderer<EntityBlueJay, ModelBlueJay> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/blue_jay.png");
-    private static final ResourceLocation TEXTURE_SHINY = ResourceLocation
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/blue_jay.png");
+    private static final Identifier TEXTURE_SHINY = Identifier
             .parse("alexsmobs:textures/entity/blue_jay_shiny.png");
 
     public RenderBlueJay(EntityRendererProvider.Context renderManagerIn) {
@@ -52,7 +52,7 @@ public class RenderBlueJay extends MobRenderer<EntityBlueJay, ModelBlueJay> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityBlueJay entity) {
+    public Identifier getTextureLocation(EntityBlueJay entity) {
         return TEXTURE;
     }
 

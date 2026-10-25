@@ -12,13 +12,13 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderGiantSquid extends MobRenderer<EntityGiantSquid, ModelGiantSquid> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/giant_squid.png");
-    private static final ResourceLocation TEXTURE_BLUE = ResourceLocation
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/giant_squid.png");
+    private static final Identifier TEXTURE_BLUE = Identifier
             .parse("alexsmobs:textures/entity/giant_squid_blue.png");
-    private static final ResourceLocation TEXTURE_DEPRESSURIZED = ResourceLocation
+    private static final Identifier TEXTURE_DEPRESSURIZED = Identifier
             .parse("alexsmobs:textures/entity/giant_squid_depressurized.png");
 
     public RenderGiantSquid(EntityRendererProvider.Context renderManagerIn) {
@@ -54,7 +54,7 @@ public class RenderGiantSquid extends MobRenderer<EntityGiantSquid, ModelGiantSq
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityGiantSquid entity) {
+    public Identifier getTextureLocation(EntityGiantSquid entity) {
         return entity.isBlue() ? TEXTURE_BLUE : TEXTURE;
     }
 

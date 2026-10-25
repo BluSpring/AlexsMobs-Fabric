@@ -5,10 +5,10 @@ import com.github.alexthe666.alexsmobs.entity.EntityStradpole;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderStradpole extends MobRenderer<EntityStradpole, ModelStradpole> {
-    public static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/stradpole.png");
+    public static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/stradpole.png");
 
     public RenderStradpole(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelStradpole(), 0.25F);
@@ -21,7 +21,7 @@ public class RenderStradpole extends MobRenderer<EntityStradpole, ModelStradpole
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityStradpole entity) {
+    public Identifier getTextureLocation(EntityStradpole entity) {
         return TEXTURE;
     }
 }

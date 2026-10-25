@@ -9,10 +9,10 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class LayerGrizzlyHoney extends RenderLayer<EntityGrizzlyBear, ModelGrizzlyBear> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/grizzly_bear_honey.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/grizzly_bear_honey.png");
 
     public LayerGrizzlyHoney(RenderGrizzlyBear renderGrizzlyBear) {
         super(renderGrizzlyBear);

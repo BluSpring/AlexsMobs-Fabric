@@ -14,12 +14,12 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 
 public class RenderTossedItem extends EntityRenderer<EntityTossedItem> {
-    public static final ResourceLocation DART_TEXTURE = ResourceLocation
+    public static final Identifier DART_TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/ancient_dart.png");
     public static final ModelAncientDart DART_MODEL = new ModelAncientDart();
 
@@ -28,7 +28,7 @@ public class RenderTossedItem extends EntityRenderer<EntityTossedItem> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityTossedItem entity) {
+    public Identifier getTextureLocation(EntityTossedItem entity) {
         return TextureAtlas.LOCATION_BLOCKS;
     }
 

@@ -9,11 +9,11 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class LayerCrimsonMosquitoBlood extends RenderLayer<EntityCrimsonMosquito, ModelCrimsonMosquito> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/crimson_mosquito_blood.png");
-    private static final ResourceLocation TEXTURE_SICK = ResourceLocation.parse("alexsmobs:textures/entity/crimson_mosquito_blood_blue.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/crimson_mosquito_blood.png");
+    private static final Identifier TEXTURE_SICK = Identifier.parse("alexsmobs:textures/entity/crimson_mosquito_blood_blue.png");
 
     public LayerCrimsonMosquitoBlood(RenderCrimsonMosquito renderCrimsonMosquito) {
         super(renderCrimsonMosquito);

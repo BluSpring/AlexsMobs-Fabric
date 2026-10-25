@@ -5,10 +5,10 @@ import com.github.alexthe666.alexsmobs.entity.EntityDevilsHolePupfish;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderDevilsHolePupfish extends MobRenderer<EntityDevilsHolePupfish, ModelDevilsHolePupfish> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/devils_hole_pupfish.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/devils_hole_pupfish.png");
 
     public RenderDevilsHolePupfish(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelDevilsHolePupfish(), 0.2F);
@@ -25,7 +25,7 @@ public class RenderDevilsHolePupfish extends MobRenderer<EntityDevilsHolePupfish
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityDevilsHolePupfish entity) {
+    public Identifier getTextureLocation(EntityDevilsHolePupfish entity) {
         return TEXTURE;
     }
 }

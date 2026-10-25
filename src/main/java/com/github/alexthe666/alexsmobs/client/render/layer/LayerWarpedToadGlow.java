@@ -10,13 +10,13 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
 public class LayerWarpedToadGlow extends RenderLayer<EntityWarpedToad, ModelWarpedToad> {
-    private static final ResourceLocation TEXTURE = ResourceLocation
+    private static final Identifier TEXTURE = Identifier
             .parse("alexsmobs:textures/entity/warped_toad_glow.png");
-    private static final ResourceLocation TEXTURE_BLINKING = ResourceLocation
+    private static final Identifier TEXTURE_BLINKING = Identifier
             .parse("alexsmobs:textures/entity/warped_toad_glow_blink.png");
 
     public LayerWarpedToadGlow(RenderWarpedToad renderWarpedToad) {

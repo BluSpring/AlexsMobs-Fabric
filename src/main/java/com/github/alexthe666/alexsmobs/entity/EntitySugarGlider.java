@@ -29,8 +29,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -88,7 +88,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntitySugarGlider extends TamableAnimal implements IFollower {
 
-    public static final ResourceKey<LootTable> SUGAR_GLIDER_REWARD = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("alexsmobs", "gameplay/sugar_glider_reward"));
+    public static final ResourceKey<LootTable> SUGAR_GLIDER_REWARD = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("alexsmobs", "gameplay/sugar_glider_reward"));
     public static final Map<Block, Item> LEAF_TO_SAPLING = Util.make(Maps.newHashMap(), (map) -> {
         map.put(Blocks.OAK_LEAVES, Items.OAK_SAPLING);
         map.put(Blocks.BIRCH_LEAVES, Items.BIRCH_SAPLING);

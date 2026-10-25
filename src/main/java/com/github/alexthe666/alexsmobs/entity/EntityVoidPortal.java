@@ -24,8 +24,8 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -322,7 +322,7 @@ public class EntityVoidPortal extends Entity {
             compound.putUUID("SisterUUID", this.getSisterId());
         }
         if(this.exitDimension != null){
-            ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, this.exitDimension.location()).resultOrPartial(AlexsMobs.LOGGER::error).ifPresent((p_241148_1_) -> {
+            Identifier.CODEC.encodeStart(NbtOps.INSTANCE, this.exitDimension.location()).resultOrPartial(AlexsMobs.LOGGER::error).ifPresent((p_241148_1_) -> {
                 compound.put("ExitDimension", p_241148_1_);
             });
         }
@@ -332,7 +332,7 @@ public class EntityVoidPortal extends Entity {
     public Entity getSister() {
         UUID id = getSisterId();
         if (id != null && !this.level().isClientSide) {
-            return ((ServerLevel) level()).getEntity(id);
+            return level().getEntity(id);
         }
         return null;
     }

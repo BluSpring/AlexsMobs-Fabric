@@ -5,11 +5,11 @@ import com.github.alexthe666.alexsmobs.entity.EntityMudskipper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderMudskipper extends MobRenderer<EntityMudskipper, ModelMudskipper> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/mudskipper.png");
-    private static final ResourceLocation TEXTURE_SPIT = ResourceLocation.parse("alexsmobs:textures/entity/mudskipper_spit.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/mudskipper.png");
+    private static final Identifier TEXTURE_SPIT = Identifier.parse("alexsmobs:textures/entity/mudskipper_spit.png");
 
     public RenderMudskipper(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelMudskipper(), 0.25F);
@@ -22,7 +22,7 @@ public class RenderMudskipper extends MobRenderer<EntityMudskipper, ModelMudskip
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityMudskipper entity) {
+    public Identifier getTextureLocation(EntityMudskipper entity) {
         return entity.isMouthOpen() ? TEXTURE_SPIT : TEXTURE;
     }
 }

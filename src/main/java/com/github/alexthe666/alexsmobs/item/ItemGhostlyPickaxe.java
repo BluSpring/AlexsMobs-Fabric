@@ -1,33 +1,39 @@
 package com.github.alexthe666.alexsmobs.item;
 
-import java.util.List;
 import java.util.function.Consumer;
+
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-public class ItemGhostlyPickaxe extends PickaxeItem {
+public class ItemGhostlyPickaxe extends Item {
 
     public ItemGhostlyPickaxe(Properties props) {
-        super(Tiers.IRON, props);
+        super(props
+            .pickaxe(ToolMaterial.IRON, 1f, -2.8f)
+            .repairable(Items.PHANTOM_MEMBRANE)
+        );
     }
 
     public static boolean shouldStoreInGhost(LivingEntity player, ItemStack stack){
@@ -54,15 +60,15 @@ public class ItemGhostlyPickaxe extends PickaxeItem {
 
             }
         }
-        if(!item.isEmpty()){
-            user.spawnAtLocation(item);
+        if(!item.isEmpty() && user.level() instanceof ServerLevel level){
+            user.spawnAtLocation(level, item);
         }
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int i, boolean offhand) {
-        super.inventoryTick(stack, level, entity, i, offhand);
-        if(entity instanceof Player player){
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity owner, @Nullable EquipmentSlot equipmentSlot) {
+        super.inventoryTick(stack, level, owner, equipmentSlot);
+        if(owner instanceof Player player){
             if(player.tickCount % 3 == 0){
                 ItemContainerContents contents = stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
 
@@ -88,13 +94,8 @@ public class ItemGhostlyPickaxe extends PickaxeItem {
     }
 
     @Override
-    public boolean isValidRepairItem(ItemStack pickaxe, ItemStack stack) {
-        return stack.is(Items.PHANTOM_MEMBRANE);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(stack, context, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, display, builder, tooltipFlag);
         if (stack.has(DataComponents.CONTAINER)) {
             ItemContainerContents contents = stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
             int i = 0;
@@ -108,13 +109,13 @@ public class ItemGhostlyPickaxe extends PickaxeItem {
                         ++i;
                         MutableComponent mutablecomponent = itemstack.getHoverName().copy();
                         mutablecomponent.append(" x").append(String.valueOf(itemstack.getCount()));
-                        tooltip.add(mutablecomponent.withStyle(ChatFormatting.DARK_AQUA));
+                        builder.accept(mutablecomponent.withStyle(ChatFormatting.DARK_AQUA));
                     }
                 }
             }
 
             if (j - i > 0) {
-                tooltip.add(Component.translatable("container.shulkerBox.more", j - i).withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.ITALIC));
+                builder.accept(Component.translatable("container.shulkerBox.more", j - i).withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.ITALIC));
             }
         }
     }

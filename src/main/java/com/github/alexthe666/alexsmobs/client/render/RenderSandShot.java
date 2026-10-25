@@ -11,12 +11,12 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.projectile.LlamaSpit;
 
 public class RenderSandShot extends EntityRenderer<EntitySandShot> {
-    private static final ResourceLocation SAND_SHOT = ResourceLocation.parse("alexsmobs:textures/entity/sand_shot.png");
+    private static final Identifier SAND_SHOT = Identifier.parse("alexsmobs:textures/entity/sand_shot.png");
     private final LlamaSpitModel<LlamaSpit> model;
 
     public RenderSandShot(EntityRendererProvider.Context renderManagerIn) {
@@ -45,7 +45,7 @@ public class RenderSandShot extends EntityRenderer<EntitySandShot> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntitySandShot entity) {
+    public Identifier getTextureLocation(EntitySandShot entity) {
         return SAND_SHOT;
     }
 }

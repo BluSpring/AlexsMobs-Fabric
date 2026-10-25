@@ -8,12 +8,12 @@ import com.mojang.math.Axis;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Pose;
 
 public class RenderCentipedeTail extends MobRenderer<EntityCentipedeTail, AdvancedEntityModel<EntityCentipedeTail>> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/cave_centipede.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/cave_centipede.png");
 
     public RenderCentipedeTail(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelCaveCentipede<>(2), 0.5F);
@@ -56,7 +56,7 @@ public class RenderCentipedeTail extends MobRenderer<EntityCentipedeTail, Advanc
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityCentipedeTail entity) {
+    public Identifier getTextureLocation(EntityCentipedeTail entity) {
         return TEXTURE;
     }
 }

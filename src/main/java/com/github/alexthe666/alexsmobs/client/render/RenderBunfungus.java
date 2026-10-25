@@ -10,14 +10,14 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class RenderBunfungus extends MobRenderer<EntityBunfungus, ModelBunfungus> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/bunfungus.png");
-    private static final ResourceLocation TEXTURE_SLEEPING = ResourceLocation.parse("alexsmobs:textures/entity/bunfungus_sleeping.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/bunfungus.png");
+    private static final Identifier TEXTURE_SLEEPING = Identifier.parse("alexsmobs:textures/entity/bunfungus_sleeping.png");
 
     public RenderBunfungus(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelBunfungus(), 0.6F);
@@ -34,7 +34,7 @@ public class RenderBunfungus extends MobRenderer<EntityBunfungus, ModelBunfungus
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityBunfungus entity) {
+    public Identifier getTextureLocation(EntityBunfungus entity) {
         return entity.isSleeping() ? TEXTURE_SLEEPING : TEXTURE;
     }
 

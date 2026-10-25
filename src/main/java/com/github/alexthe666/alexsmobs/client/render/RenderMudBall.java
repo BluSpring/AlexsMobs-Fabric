@@ -14,10 +14,10 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RenderMudBall extends EntityRenderer<EntityMudBall> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/mud_ball.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/mud_ball.png");
 
     public RenderMudBall(EntityRendererProvider.Context p_173962_) {
         super(p_173962_);
@@ -54,7 +54,7 @@ public class RenderMudBall extends EntityRenderer<EntityMudBall> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityMudBall mudball) {
+    public Identifier getTextureLocation(EntityMudBall mudball) {
         return TEXTURE;
     }
 }

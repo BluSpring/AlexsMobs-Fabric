@@ -10,18 +10,18 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 
 public class RenderVoidWormHead extends MobRenderer<EntityVoidWorm, ModelVoidWorm> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/void_worm/void_worm_head.png");
-    private static final ResourceLocation TEXTURE_GLOW = ResourceLocation.parse("alexsmobs:textures/entity/void_worm/void_worm_head_glow.png");
+    private static final Identifier TEXTURE = Identifier.parse("alexsmobs:textures/entity/void_worm/void_worm_head.png");
+    private static final Identifier TEXTURE_GLOW = Identifier.parse("alexsmobs:textures/entity/void_worm/void_worm_head_glow.png");
 
     public RenderVoidWormHead(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelVoidWorm(0.0f), 1F);
         this.addLayer(new LayerVoidWormGlow(this, renderManagerIn.getResourceManager(), new ModelVoidWorm(1.001F)){
             @Override
-            public ResourceLocation getGlowTexture(LivingEntity worm){
+            public Identifier getGlowTexture(LivingEntity worm){
                 return TEXTURE_GLOW;
             }
             @Override
@@ -38,7 +38,7 @@ public class RenderVoidWormHead extends MobRenderer<EntityVoidWorm, ModelVoidWor
     @Override
     @Nullable
     protected RenderType getRenderType(EntityVoidWorm jelly, boolean normal, boolean invis, boolean outline) {
-        ResourceLocation resourcelocation = this.getTextureLocation(jelly);
+        Identifier resourcelocation = this.getTextureLocation(jelly);
         if (invis) {
             return RenderType.itemEntityTranslucentCull(resourcelocation);
         } else if (normal) {
@@ -54,7 +54,7 @@ public class RenderVoidWormHead extends MobRenderer<EntityVoidWorm, ModelVoidWor
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityVoidWorm entity) {
+    public Identifier getTextureLocation(EntityVoidWorm entity) {
         return TEXTURE;
     }
 }

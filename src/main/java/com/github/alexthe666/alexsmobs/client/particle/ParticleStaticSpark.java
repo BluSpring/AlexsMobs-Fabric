@@ -20,20 +20,20 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 public class ParticleStaticSpark extends Particle {
-    private static final ResourceLocation[] TEXTURES = new ResourceLocation[] {
-            ResourceLocation.withDefaultNamespace("textures/particle/generic_0.png"),
-            ResourceLocation.withDefaultNamespace("textures/particle/generic_1.png"),
-            ResourceLocation.withDefaultNamespace("textures/particle/generic_2.png"),
-            ResourceLocation.withDefaultNamespace("textures/particle/generic_3.png"),
-            ResourceLocation.withDefaultNamespace("textures/particle/generic_4.png"),
-            ResourceLocation.withDefaultNamespace("textures/particle/generic_5.png"),
-            ResourceLocation.withDefaultNamespace("textures/particle/generic_6.png"),
-            ResourceLocation.withDefaultNamespace("textures/particle/generic_7.png")
+    private static final Identifier[] TEXTURES = new Identifier[] {
+            Identifier.withDefaultNamespace("textures/particle/generic_0.png"),
+            Identifier.withDefaultNamespace("textures/particle/generic_1.png"),
+            Identifier.withDefaultNamespace("textures/particle/generic_2.png"),
+            Identifier.withDefaultNamespace("textures/particle/generic_3.png"),
+            Identifier.withDefaultNamespace("textures/particle/generic_4.png"),
+            Identifier.withDefaultNamespace("textures/particle/generic_5.png"),
+            Identifier.withDefaultNamespace("textures/particle/generic_6.png"),
+            Identifier.withDefaultNamespace("textures/particle/generic_7.png")
     };
     private int decrement = 1;
     private int textureIndex = 0;

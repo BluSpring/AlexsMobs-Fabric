@@ -9,7 +9,7 @@ import com.mojang.math.Axis;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Pose;
 
@@ -76,7 +76,7 @@ public class RenderAnacondaPart extends LivingEntityRenderer<EntityAnacondaPart,
 
 
     @Override
-    public ResourceLocation getTextureLocation(EntityAnacondaPart entity) {
+    public Identifier getTextureLocation(EntityAnacondaPart entity) {
         return RenderAnaconda.getAnacondaTexture(entity.isYellow(), entity.isShedding());
     }
 }
