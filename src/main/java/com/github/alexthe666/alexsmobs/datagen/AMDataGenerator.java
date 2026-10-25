@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import com.github.alexthe666.alexsmobs.datagen.client.AMItemModelProvider;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -36,5 +37,7 @@ public class AMDataGenerator {
             new LootTableProvider.SubProviderEntry(AMGameplayLootTableProvider::new, LootContextParamSets.EMPTY)
         ), lookupProvider));
         generator.addProvider(event.includeServer(), new AMAdvancementProvider(output, lookupProvider, existingFileHelper));
+
+        generator.addProvider(event.includeClient(), new AMItemModelProvider(output, existingFileHelper));
     }
 }

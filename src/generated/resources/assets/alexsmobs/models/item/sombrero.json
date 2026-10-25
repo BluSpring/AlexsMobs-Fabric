@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "alexsmobs:item/end_pirate_door"
+    "layer0": "alexsmobs:item/sombrero"
   }
 }
