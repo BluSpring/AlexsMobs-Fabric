@@ -20,14 +20,9 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
-import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.StairBlock;
-import net.minecraft.world.level.block.TrapDoorBlock;
-import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.material.MapColor;
 
 public class AMBlockRegistry {
@@ -95,6 +90,7 @@ public class AMBlockRegistry {
         public static final DeferredBlock<Block> TRIOPS_EGGS = registerBlockAndItem("triops_eggs",
                         () -> new BlockTriopsEggs());
 
+        /*
         public static final DeferredBlock<Block> PURPUR_PLANKS = registerBlockAndItem("purpur_planks",
                         () -> new Block(PURPUR_PLANKS_PROPERTIES));
         public static final DeferredBlock<Block> PURPUR_PLANKS_STAIRS = registerBlockAndItem(
@@ -114,6 +110,7 @@ public class AMBlockRegistry {
         public static final DeferredBlock<Block> END_PIRATE_FLAG = registerBlockAndItem("end_pirate_flag", () -> new BlockEndPirateFlag());
         public static final DeferredBlock<Block> PHANTOM_SAIL = registerBlockAndItem("phantom_sail", () -> new BlockEndPirateSail(false));
         public static final DeferredBlock<Block> SPECTRE_SAIL = registerBlockAndItem("spectre_sail", () -> new BlockEndPirateSail(true));
+         */
 
         public static DeferredBlock<Block> registerBlockAndItem(String name, Supplier<Block> block) {
                 return registerBlockAndItem(name, block, new Item.Properties(), false);
