@@ -36,9 +36,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -94,11 +94,11 @@ public class EntityCosmaw extends TamableAnimal implements ITargetsDroppedItems,
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.cosmawSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static boolean canCosmawSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean canCosmawSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         return !worldIn.getBlockState(pos.below()).isAir();
     }
 
@@ -260,7 +260,7 @@ public class EntityCosmaw extends TamableAnimal implements ITargetsDroppedItems,
         prevClutchProgress = clutchProgress;
         prevBiteProgress = biteProgress;
         prevCosmawPitch = this.getCosmawPitch();
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             final float f2 = -((float) this.getDeltaMovement().y * Mth.RAD_TO_DEG);
             this.setCosmawPitch(this.getCosmawPitch() + 0.6F * (this.getCosmawPitch() + f2) - this.getCosmawPitch());
         }
@@ -330,7 +330,7 @@ public class EntityCosmaw extends TamableAnimal implements ITargetsDroppedItems,
         } else {
             heldItemTime = 0;
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (tickCount % 100 == 0 || lastSafeTpPosition == null) {
                 BlockPos pos = getCosmawGround(this.blockPosition());
                 if (pos.getY() > 1) {
@@ -470,7 +470,7 @@ public class EntityCosmaw extends TamableAnimal implements ITargetsDroppedItems,
     public void onGetItem(ItemEntity e) {
         ItemStack duplicate = e.getItem().copy();
         duplicate.setCount(1);
-        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide) {
+        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide()) {
             this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0.0F);
         }
         this.setItemInHand(InteractionHand.MAIN_HAND, duplicate);

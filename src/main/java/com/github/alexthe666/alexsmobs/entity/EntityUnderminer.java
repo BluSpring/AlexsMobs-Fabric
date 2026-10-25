@@ -39,7 +39,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.SpawnGroupData;
@@ -101,8 +101,8 @@ public class EntityUnderminer extends PathfinderMob {
         return new PathNavigator(this, level());
     }
 
-    public static <T extends Mob> boolean checkUnderminerSpawnRules(EntityType<EntityUnderminer> entityType, ServerLevelAccessor iServerWorld, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        if (reason == MobSpawnType.SPAWNER) {
+    public static <T extends Mob> boolean checkUnderminerSpawnRules(EntityType<EntityUnderminer> entityType, ServerLevelAccessor iServerWorld, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+        if (reason == EntitySpawnReason.SPAWNER) {
             return true;
         }else{
             int j = 3;
@@ -130,7 +130,7 @@ public class EntityUnderminer extends PathfinderMob {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.underminerSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -276,7 +276,7 @@ public class EntityUnderminer extends PathfinderMob {
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnData) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficultyInstance, EntitySpawnReason mobSpawnType, @Nullable SpawnGroupData spawnData) {
         spawnData = super.finalizeSpawn(level, difficultyInstance, mobSpawnType, spawnData);
         RandomSource randomsource = level.getRandom();
         this.populateDefaultEquipmentSlots(randomsource, difficultyInstance);
@@ -306,7 +306,7 @@ public class EntityUnderminer extends PathfinderMob {
         if(!this.isHiding() && hidingProgress > 0F){
             hidingProgress--;
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             final double xzSpeed = this.getDeltaMovement().horizontalDistance();
             final double distToFloor = Mth.clamp(calculateDistanceToFloor(), -1F, 1F);
             if (Math.abs(distToFloor) > 0.01 && xzSpeed < 0.05 && !this.isActuallyInAWall()) {

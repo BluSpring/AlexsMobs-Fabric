@@ -104,12 +104,12 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.FOLLOW_RANGE, 16.0D).add(Attributes.MOVEMENT_SPEED, 0.15F).add(Attributes.ATTACK_DAMAGE, 2F).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
-    public static boolean canEnderiophageSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean canEnderiophageSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         return true;
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.enderiophageSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -120,8 +120,8 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
-        if (reason == MobSpawnType.NATURAL) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
+        if (reason == EntitySpawnReason.NATURAL) {
             doInitialPosing(worldIn);
         }
         setSkinForDimension();
@@ -287,7 +287,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
                                         this.playSound(SoundEvents.ITEM_BREAK, this.getSoundVolume(), this.getVoicePitch());
                                         this.setMissingEye(true);
                                     }
-                                    if (!this.level().isClientSide) {
+                                    if (!this.level().isClientSide()) {
                                         this.setTarget(null);
                                         this.setLastHurtMob(null);
                                         this.setLastHurtByMob(null);
@@ -368,7 +368,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         if (squishCooldown > 0) {
             squishCooldown--;
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (!this.isPassenger() && attachTime != 0) {
                 attachTime = 0;
             }
@@ -399,7 +399,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         this.yHeadRot = this.getYRot();
         this.setPhagePitch(-90F);
         if (this.isAlive() && this.isFlying() && randomMotionSpeed > 0.75F && this.getDeltaMovement().lengthSqr() > 0.02D) {
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 float pitch = -this.getPhagePitch() / 90F;
                 float radius = this.getBbWidth() * 0.2F * -pitch;
                 float angle = (Maths.STARTING_ANGLE * this.getYRot());
@@ -428,7 +428,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
         this.lastTentacleAngle = this.tentacleAngle;
         this.phageRotation += this.rotationVelocity;
         if ((double) this.phageRotation > (Math.PI * 2D)) {
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 this.phageRotation = Mth.TWO_PI;
             } else {
                 this.phageRotation = (float) ((double) this.phageRotation - (Math.PI * 2D));
@@ -451,7 +451,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
                 randomMotionSpeed = 0.01F;
             }
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (isFlying() && this.isLandNavigator) {
                 switchNavigator(false);
             }
@@ -799,7 +799,7 @@ public class EntityEnderiophage extends Animal implements Enemy, FlyingAnimal {
                 }
                 if (parentEntity.dismountCooldown == 0 && parentEntity.getBoundingBox().inflate(0.3, 0.3, 0.3).intersects(parentEntity.getTarget().getBoundingBox()) && !isBittenByPhage(parentEntity.getTarget())) {
                     parentEntity.startRiding(parentEntity.getTarget(), true);
-                    if (!parentEntity.level().isClientSide) {
+                    if (!parentEntity.level().isClientSide()) {
                         AlexsMobs.sendMSGToAll(new MessageMosquitoMountPlayer(parentEntity.getId(), parentEntity.getTarget().getId()));
                     }
                 }

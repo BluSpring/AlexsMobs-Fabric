@@ -34,10 +34,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -145,7 +145,7 @@ public class EntityPotoo extends Animal implements IFalconry {
         this.entityData.set(SLEEPING, Boolean.valueOf(sleeping));
     }
 
-    public static boolean canPotooSpawn(EntityType type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean canPotooSpawn(EntityType type, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         return isBrightEnoughToSpawn(worldIn, pos);
     }
 
@@ -160,7 +160,7 @@ public class EntityPotoo extends Animal implements IFalconry {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.potooSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -200,7 +200,7 @@ public class EntityPotoo extends Animal implements IFalconry {
         if (perchCooldown > 0) {
             perchCooldown--;
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.entityData.set(TEMP_BRIGHTNESS, level().getMaxLocalRawBrightness(this.blockPosition()));
             if (isFlying()) {
                 if (this.isLandNavigator)
@@ -479,7 +479,7 @@ public class EntityPotoo extends Animal implements IFalconry {
             boardingCooldown = 30;
             this.ejectPassengers();
             this.startRiding(player, true);
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 AlexsMobs.sendMSGToAll(new MessageMosquitoMountPlayer(this.getId(), player.getId()));
             }
             return InteractionResult.SUCCESS;

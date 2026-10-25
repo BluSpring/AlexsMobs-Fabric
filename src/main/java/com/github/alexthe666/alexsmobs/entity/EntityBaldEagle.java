@@ -40,10 +40,10 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -125,7 +125,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 16.0D).add(Attributes.FOLLOW_RANGE, 32.0D).add(Attributes.ATTACK_DAMAGE, 5.0D).add(Attributes.MOVEMENT_SPEED, 0.3F);
     }
 
-    public static boolean canEagleSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean canEagleSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         return worldIn.getRawBrightness(pos, 0) > 8;
     }
 
@@ -185,7 +185,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
 
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.baldEagleSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -414,7 +414,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
             } else if (itemstack.is(Items.SHEARS) && this.hasCap()) {
                 this.gameEvent(GameEvent.ENTITY_INTERACT);
                 this.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-                if (!this.level().isClientSide) {
+                if (!this.level().isClientSide()) {
                     if (player instanceof ServerPlayer) {
                         itemstack.shrink(1);
                     }
@@ -427,7 +427,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
                 this.setLaunched(false);
                 this.ejectPassengers();
                 this.startRiding(player, true);
-                if (!this.level().isClientSide) {
+                if (!this.level().isClientSide()) {
                     AlexsMobs.sendMSGToAll(new MessageMosquitoMountPlayer(this.getId(), player.getId()));
                 }
                 return InteractionResult.SUCCESS;
@@ -574,7 +574,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
             flapAmount = Math.min(2, flapAmount + 0.2F);
         }
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (isFlying()) {
                 if (this.isLandNavigator)
                     switchNavigator(false);
@@ -813,7 +813,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
             stillTicksCounter = 0;
             launchTime = Math.max(launchTime, 12000);
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (returnControlTime > 0 && owner != null) {
                 this.getLookControl().setLookAt(owner, 30, 30);
             } else {
@@ -896,7 +896,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
     }
 
     public void loadChunkOnServer(BlockPos center) {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             ServerLevel serverWorld = (ServerLevel) level();
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
@@ -916,7 +916,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
         if (this.hasCap()) {
             this.setFlying(true);
             this.getMoveControl().setWantedPosition(this.getX(), this.getY(), this.getZ(), 0.1F);
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 AlexsMobs.sendMSGToServer(new MessageMosquitoDismount(this.getId(), player.getId()));
             }
             AlexsMobs.PROXY.setRenderViewEntity(this);
@@ -1264,7 +1264,7 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
                     this.eagle.setLaunched(false);
                     if (this.eagle.getRidingFalcons(owner) <= 0) {
                         this.eagle.startRiding(owner);
-                        if (!eagle.level().isClientSide) {
+                        if (!eagle.level().isClientSide()) {
                             AlexsMobs.sendMSGToAll(new MessageMosquitoMountPlayer(eagle.getId(), owner.getId()));
                         }
                     } else {

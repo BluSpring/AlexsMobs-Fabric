@@ -28,9 +28,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -82,7 +82,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.lobsterSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -285,7 +285,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         float variantChange = this.getRandom().nextFloat();
         if(variantChange <= 0.00001){
             this.setVariant(5);
@@ -334,7 +334,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         return 5;
     }
 
-    public static <T extends Mob> boolean canLobsterSpawn(EntityType type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static <T extends Mob> boolean canLobsterSpawn(EntityType type, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         boolean spawnBlock = worldIn.getBlockState(pos.below()).is(AMTagRegistry.LOBSTER_SPAWNS);
         return spawnBlock || worldIn.getFluidState(pos).is(FluidTags.WATER);
     }

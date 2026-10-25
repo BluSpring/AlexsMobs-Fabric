@@ -200,7 +200,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.elephantSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -340,7 +340,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         if (hasChestVarChanged && elephantInventory != null && !this.isChested()) {
             for (int i = 3; i < 18; i++) {
                 if (!elephantInventory.getItem(i).isEmpty()) {
-                    if (!this.level().isClientSide) {
+                    if (!this.level().isClientSide()) {
                         this.spawnAtLocation(elephantInventory.getItem(i), 1);
                     }
                     elephantInventory.removeItemNoUpdate(i);
@@ -475,7 +475,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
         }else{
         }
         if (!isTame() && isTrader()) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.tryDespawn();
             }
         }
@@ -607,7 +607,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide());
         } else if (owner && isChested() && stack.is(net.minecraft.world.item.Items.SHEARS)) {
             this.gameEvent(GameEvent.ENTITY_INTERACT);
             this.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
@@ -619,7 +619,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
             this.setChested(false);
             return InteractionResult.SUCCESS;
         } else if (owner && !this.isBaby() && type != InteractionResult.CONSUME) {
-            if(!this.level().isClientSide){
+            if(!this.level().isClientSide()){
                 player.startRiding(this);
             }
             return InteractionResult.SUCCESS;
@@ -669,7 +669,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.isChested()) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.spawnAtLocation(Blocks.CHEST);
             }
             for (int i = 0; i < elephantInventory.getContainerSize(); i++) {
@@ -679,7 +679,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
             this.setChested(false);
         }
         if (!this.isTrader() && this.getColor() != null) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.spawnAtLocation(this.getCarpetItemBeingWorn());
             }
             this.setColor(null);
@@ -789,7 +789,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
     @Override
     public void die(DamageSource cause) {
         super.die(cause);
-        if (elephantInventory != null && !this.level().isClientSide) {
+        if (elephantInventory != null && !this.level().isClientSide()) {
             for (int i = 0; i < elephantInventory.getContainerSize(); ++i) {
                 ItemStack itemstack = elephantInventory.getItem(i);
                 if (!itemstack.isEmpty()) {
@@ -829,7 +829,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         if (spawnDataIn instanceof AgeableMobGroupData lvt_6_1_) {
             if (lvt_6_1_.getGroupSize() == 0) {
                 this.setTusked(true);
@@ -887,7 +887,7 @@ public class EntityElephant extends TamableAnimal implements ITargetsDroppedItem
     public void onGetItem(ItemEntity e) {
         ItemStack duplicate = e.getItem().copy();
         duplicate.setCount(1);
-        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide) {
+        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide()) {
             this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0.0F);
         }
         Entity itemThrower = e.getOwner();

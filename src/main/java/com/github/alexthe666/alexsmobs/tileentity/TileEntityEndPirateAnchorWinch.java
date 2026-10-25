@@ -216,7 +216,7 @@ public class TileEntityEndPirateAnchorWinch extends BlockEntity {
     }
 
     private void syncToClient() {
-        if (level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide()) {
             setChanged();
             level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
         }

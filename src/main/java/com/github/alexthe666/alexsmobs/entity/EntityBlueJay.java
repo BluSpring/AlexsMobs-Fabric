@@ -42,9 +42,9 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -140,7 +140,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
     }
 
 
-    public static boolean checkBlueJaySpawnRules(EntityType type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean checkBlueJaySpawnRules(EntityType type, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         return isBrightEnoughToSpawn(worldIn, pos);
     }
 
@@ -155,7 +155,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.blueJaySpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -243,7 +243,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         }else{
             this.crestAmount = Mth.approach(this.crestAmount, this.getTargetCrest(), 0.3F);
         }
-        if(!this.level().isClientSide){
+        if(!this.level().isClientSide()){
             if (isFlying()) {
                 if (this.isLandNavigator)
                     switchNavigator(false);
@@ -298,15 +298,15 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             if(this.prevSingTime % 15 == 0){
                this.playSound(AMSoundRegistry.BLUE_JAY_SONG.get(), this.getSoundVolume(), this.getVoicePitch());
             }
-            if(this.level().isClientSide){
-                if(this.getSingTime() % 5 == 0 && this.level().isClientSide){
+            if(this.level().isClientSide()){
+                if(this.getSingTime() % 5 == 0 && this.level().isClientSide()){
                     Vec3 modelFront = new Vec3(0, 0.2F, 0.3F).scale(this.getScale()).xRot(-this.getXRot() * Mth.DEG_TO_RAD).yRot(-this.getYRot() * Mth.DEG_TO_RAD);
                     Vec3 particleFrom = this.position().add(modelFront);
                     this.level().addParticle(AMParticleRegistry.BIRD_SONG.get(), particleFrom.x, particleFrom.y, particleFrom.z, modelFront.x, modelFront.y, modelFront.z);
                 }
             }
         }
-        if(prevSingTime < getSingTime() && !this.level().isClientSide){
+        if(prevSingTime < getSingTime() && !this.level().isClientSide()){
             blueTime = 1200;
             this.entityData.set(BLUE_VISUAL_FLAG, true);
             highlightMonsters();
@@ -346,7 +346,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
 
     @Override
     public void remove(Entity.RemovalReason removalReason) {
-        if(this.getSingTime() > 0 && !this.level().isClientSide){
+        if(this.getSingTime() > 0 && !this.level().isClientSide()){
             this.entityData.set(BLUE_VISUAL_FLAG, false);
             this.level().broadcastEntityEvent(this, (byte) 68);
         }
@@ -539,8 +539,8 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
     @javax.annotation.Nullable
     public Entity getLastFeeder() {
         UUID id = getLastFeederUUID();
-        if (id != null && !this.level().isClientSide) {
-            return ((ServerLevel) level()).getEntity(id);
+        if (id != null && !this.level().isClientSide()) {
+            return level().getEntity(id);
         }
         return null;
     }
@@ -565,8 +565,8 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
     @javax.annotation.Nullable
     public Entity getRaccoon() {
         UUID id = getRaccoonUUID();
-        if (id != null && !this.level().isClientSide) {
-            return ((ServerLevel) level()).getEntity(id);
+        if (id != null && !this.level().isClientSide()) {
+            return level().getEntity(id);
         }
         return null;
     }
@@ -608,7 +608,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
 
     @Override
     public void onGetItem(ItemEntity e) {
-        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide) {
+        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide()) {
             this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0.0F);
         }
         this.heal(3);

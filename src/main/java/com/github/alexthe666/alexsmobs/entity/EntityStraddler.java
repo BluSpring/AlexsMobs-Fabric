@@ -26,7 +26,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -87,7 +87,7 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
         return AMSoundRegistry.STRADDLER_HURT.get();
     }
 
-    public static boolean canStraddlerSpawn(EntityType animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean canStraddlerSpawn(EntityType animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         boolean spawnBlock = worldIn.getBlockState(pos.below()).is(BlockTags.BASE_STONE_NETHER);
         return spawnBlock;
     }
@@ -111,7 +111,7 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.straddlerSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -272,7 +272,7 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
             pole.shoot(d1, d2 + (double)f3, d3, 2F, 0F);
             pole.setYRot(this.getYRot() % 360.0F);
             pole.setXRot(Mth.clamp(this.getYRot(), -90.0F, 90.0F) % 360.0F);
-            if(!this.level().isClientSide){
+            if(!this.level().isClientSide()){
                 this.level().addFreshEntity(pole);
             }
         }

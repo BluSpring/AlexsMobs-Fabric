@@ -75,7 +75,7 @@ public class ItemStinkRay extends Item {
                 entity.gameEvent(GameEvent.ITEM_INTERACT_START);
                 entity.playSound(AMSoundRegistry.STINK_RAY.get(), 1.0F, 0.9F + (rand.nextFloat() - rand.nextFloat()) * 0.2F);
                 blood.shoot(vector3d.x(), vector3d.y(), vector3d.z(), 0.2F + getPowerForTime(i) * 0.4F, 10);
-                if (!level.isClientSide) {
+                if (!level.isClientSide()) {
                     level.addFreshEntity(blood);
                 }
                 EquipmentSlot slot = entity.getUsedItemHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;

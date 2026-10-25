@@ -58,7 +58,7 @@ public class ItemSquidGrapple extends Item {
         }
         livingEntityIn.playSound(AMSoundRegistry.GIANT_SQUID_TENTACLE.get(),1.0F, 1.0F + (livingEntityIn.getRandom().nextFloat() - livingEntityIn.getRandom().nextFloat()) * 0.2F);
         livingEntityIn.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
-        if (!worldIn.isClientSide) {
+        if (!worldIn.isClientSide()) {
             boolean left = livingEntityIn.getUsedItemHand() == InteractionHand.OFF_HAND && livingEntityIn.getMainArm() == HumanoidArm.RIGHT || livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND && livingEntityIn.getMainArm() == HumanoidArm.LEFT;
             int power = this.getUseDuration(stack, livingEntityIn) - i;
             EntitySquidGrapple hook = new EntitySquidGrapple(worldIn, livingEntityIn, !left);
@@ -66,7 +66,7 @@ public class ItemSquidGrapple extends Item {
             hook.shoot(vector3d.x(), vector3d.y(), vector3d.z(), getPowerForTime(power) * 3, 1);
             hook.setXRot(livingEntityIn.getXRot());
             hook.setYRot(livingEntityIn.getYRot());
-            if (!worldIn.isClientSide) {
+            if (!worldIn.isClientSide()) {
                 worldIn.addFreshEntity(hook);
             }
             EquipmentSlot slot = livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;

@@ -57,7 +57,7 @@ public class ItemPocketSand extends Item {
             EntitySandShot blood = new EntitySandShot(worldIn, livingEntityIn, !left);
             Vec3 vector3d = livingEntityIn.getViewVector(1.0F);
             blood.shoot(vector3d.x(), vector3d.y(), vector3d.z(), 1.2F, 11);
-            if (!worldIn.isClientSide) {
+            if (!worldIn.isClientSide()) {
                 worldIn.addFreshEntity(blood);
             }
             livingEntityIn.getCooldowns().addCooldown(this, 2);

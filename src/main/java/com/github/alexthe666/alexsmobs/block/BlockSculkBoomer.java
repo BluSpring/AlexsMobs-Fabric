@@ -43,14 +43,14 @@ public class BlockSculkBoomer extends BaseEntityBlock {
 
     @Override
     public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        if(!worldIn.isClientSide){
+        if(!worldIn.isClientSide()){
             this.updateState(state, worldIn, pos, blockIn);
         }
     }
 
     @Override
     public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
-        if(!worldIn.isClientSide){
+        if(!worldIn.isClientSide()){
             this.updateState(state, worldIn, pos, state.getBlock());
         }
     }

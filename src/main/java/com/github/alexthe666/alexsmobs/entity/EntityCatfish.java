@@ -171,12 +171,12 @@ public class EntityCatfish extends WaterAnimal implements FlyingAnimal, Bucketab
         return super.requiresCustomPersistence() || this.hasCustomName() || this.fromBucket() || this.hasSwallowedEntity() || this.catfishInventory != null && !this.catfishInventory.isEmpty();
     }
 
-    public static boolean canCatfishSpawn(EntityType<EntityCatfish> entityType, ServerLevelAccessor iServerWorld, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return reason == MobSpawnType.SPAWNER || iServerWorld.getBlockState(pos).getFluidState().is(Fluids.WATER) && random.nextInt(1) == 0;
+    public static boolean canCatfishSpawn(EntityType<EntityCatfish> entityType, ServerLevelAccessor iServerWorld, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+        return reason == EntitySpawnReason.SPAWNER || iServerWorld.getBlockState(pos).getFluidState().is(Fluids.WATER) && random.nextInt(1) == 0;
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.catfishSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -199,7 +199,7 @@ public class EntityCatfish extends WaterAnimal implements FlyingAnimal, Bucketab
     @Override
     public void tick() {
         super.tick();
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if(this.getSpitTime() > 0){
                 this.setSpitTime(this.getSpitTime() - 1);
             }
@@ -393,7 +393,7 @@ public class EntityCatfish extends WaterAnimal implements FlyingAnimal, Bucketab
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() == Items.SEA_PICKLE) {
             this.spit();
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide());
         }
         return Bucketable.bucketMobPickup(player, hand, this).orElse(super.mobInteract(player, hand));
     }
@@ -452,11 +452,11 @@ public class EntityCatfish extends WaterAnimal implements FlyingAnimal, Bucketab
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setCatfishSize(random.nextFloat() < 0.35F ? 1 : 0);
         if (random.nextFloat() < 0.1F) {
             final Holder<Biome> holder = worldIn.getBiome(this.blockPosition());
-            if (holder.is(AMTagRegistry.SPAWNS_HUGE_CATFISH) || reason == MobSpawnType.SPAWN_EGG) {
+            if (holder.is(AMTagRegistry.SPAWNS_HUGE_CATFISH) || reason == EntitySpawnReason.SPAWN_EGG) {
                 this.setCatfishSize(2);
             }
         }

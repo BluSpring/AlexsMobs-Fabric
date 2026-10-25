@@ -38,7 +38,7 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -85,11 +85,11 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.tusklinSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static boolean canTusklinSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean canTusklinSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         return worldIn.getRawBrightness(pos, 0) > 8 && (worldIn.getBlockState(pos.below()).isSolid() || worldIn.getBlockState(pos.below()).is(AMTagRegistry.TUSKLIN_SPAWNS));
     }
 
@@ -353,12 +353,12 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.isSaddled()) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.spawnAtLocation(Items.SADDLE);
             }
         }
         if (!this.getShoeStack().isEmpty()) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.spawnAtLocation(this.getShoeStack().copy());
             }
         }
@@ -379,7 +379,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         super.tick();
         if(isInNether()) {
             conversionTime++;
-            if (conversionTime > 300 && !this.level().isClientSide) {
+            if (conversionTime > 300 && !this.level().isClientSide()) {
                 Hoglin hoglin = this.convertTo(EntityType.HOGLIN, false);
                 if(hoglin != null){
                     hoglin.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
@@ -415,7 +415,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
                 entityToLaunchId = passenger.getId();
             }
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.isVehicle()) {
                 ridingTime++;
                 if (ridingTime >= this.getMaxRidingTime() && this.getAnimation() != ANIMATION_BUCK) {
@@ -512,7 +512,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         if (spawnDataIn == null) {
             spawnDataIn = new AgeableMob.AgeableMobGroupData(0.34F);
         }

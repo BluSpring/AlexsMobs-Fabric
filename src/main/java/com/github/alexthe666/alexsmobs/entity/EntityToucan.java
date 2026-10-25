@@ -43,7 +43,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -111,7 +111,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         switchNavigator(true);
     }
 
-    public static boolean canToucanSpawn(EntityType type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean canToucanSpawn(EntityType type, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         return true;
     }
 
@@ -161,7 +161,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.toucanSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -249,7 +249,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         super.tick();
         prevFlyProgress = flyProgress;
         prevPeckProgress = peckProgress;
-        if (this.getGoldenTime() > 0 && !this.level().isClientSide) {
+        if (this.getGoldenTime() > 0 && !this.level().isClientSide()) {
             this.setGoldenTime(this.getGoldenTime() - 1);
         }
 
@@ -261,7 +261,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
             if (flyProgress > 0F)
                 flyProgress--;
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (flying) {
                 if (this.isLandNavigator)
                     switchNavigator(false);
@@ -513,7 +513,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setVariant(this.getRandom().nextInt(4));
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
@@ -591,7 +591,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
     public void onGetItem(ItemEntity e) {
         ItemStack duplicate = e.getItem().copy();
         duplicate.setCount(1);
-        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide) {
+        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide()) {
             this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0.0F);
         }
         peck();

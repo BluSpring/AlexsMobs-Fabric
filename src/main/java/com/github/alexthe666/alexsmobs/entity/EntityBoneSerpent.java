@@ -34,9 +34,9 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -78,7 +78,7 @@ public class EntityBoneSerpent extends Monster {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.boneSeprentSpawnRolls, this.getRandom(), spawnReasonIn) && super.checkSpawnRules(worldIn, spawnReasonIn);
     }
 
@@ -149,7 +149,7 @@ public class EntityBoneSerpent extends Monster {
         return worldIn.isUnobstructed(this);
     }
 
-    public static boolean canBoneSerpentSpawn(EntityType<EntityBoneSerpent> p_234314_0_, LevelAccessor p_234314_1_, MobSpawnType p_234314_2_, BlockPos p_234314_3_, RandomSource p_234314_4_) {
+    public static boolean canBoneSerpentSpawn(EntityType<EntityBoneSerpent> p_234314_0_, LevelAccessor p_234314_1_, EntitySpawnReason p_234314_2_, BlockPos p_234314_3_, RandomSource p_234314_4_) {
         BlockPos.MutableBlockPos blockpos$mutable = p_234314_3_.mutable();
 
         do {
@@ -250,8 +250,8 @@ public class EntityBoneSerpent extends Monster {
 
     public Entity getChild() {
         UUID id = getChildId();
-        if (id != null && !this.level().isClientSide) {
-            return ((ServerLevel) level()).getEntity(id);
+        if (id != null && !this.level().isClientSide()) {
+            return level().getEntity(id);
         }
         return null;
     }
@@ -279,7 +279,7 @@ public class EntityBoneSerpent extends Monster {
                 switchNavigator(false);
         }
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             final Entity child = getChild();
             if (child == null) {
                 LivingEntity partParent = this;

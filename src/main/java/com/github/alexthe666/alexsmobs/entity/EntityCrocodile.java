@@ -119,7 +119,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         this.baskingType = random.nextInt(1);
     }
 
-    public static boolean canCrocodileSpawn(EntityType type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean canCrocodileSpawn(EntityType type, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         boolean spawnBlock = worldIn.getBlockState(pos.below()).is(AMTagRegistry.CROCODILE_SPAWNS);
         return spawnBlock && pos.getY() < worldIn.getSeaLevel() + 4;
     }
@@ -129,7 +129,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.crocSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -153,7 +153,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setDesert(this.isBiomeDesert(worldIn, this.blockPosition()));
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
@@ -305,7 +305,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
             }
         }
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.setBesideClimbableBlock(this.horizontalCollision);
         }
         if (baskingTimer < 0) {
@@ -314,7 +314,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         if (passengerTimer > 0 && this.getPassengers().isEmpty()) {
             passengerTimer = 0;
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (isInWater()) {
                 swimTimer++;
                 ticksSinceInWater = 0;
@@ -381,7 +381,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
         }
         if (this.getStunTicks() > 0) {
             this.setStunTicks(this.getStunTicks() - 1);
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 final float angle = (Maths.STARTING_ANGLE * this.yBodyRot);
                 final double headX = 1.5F * getScale() * Mth.sin(Mth.PI + angle);
                 final double headZ = 1.5F * getScale() * Mth.cos(angle);
@@ -398,7 +398,7 @@ public class EntityCrocodile extends TamableAnimal implements IAnimatedEntity, I
 
     protected void damageShieldFor(Player holder, float damage) {
         if (holder.getUseItem().canPerformAction(ItemAbilities.SHIELD_BLOCK)) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 holder.awardStat(Stats.ITEM_USED.get(holder.getUseItem().getItem()));
             }
 

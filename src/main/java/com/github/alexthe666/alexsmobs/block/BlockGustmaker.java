@@ -59,7 +59,7 @@ public class BlockGustmaker extends Block {
                 if(state.getValue(FACING).getAxis() == Direction.Axis.Y){
                     gust.setVertical(true);
                 }
-                if (!worldIn.isClientSide) {
+                if (!worldIn.isClientSide()) {
                     worldIn.addFreshEntity(gust);
                 }
             }

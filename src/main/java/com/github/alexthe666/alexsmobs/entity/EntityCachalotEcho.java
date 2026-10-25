@@ -151,7 +151,7 @@ public class EntityCachalotEcho extends Entity {
                 this.remove(RemovalReason.DISCARDED);
                 echo.setReturning(true);
                 echo.shoot(d0, d1, d2, 1, 0);
-                if (!this.level().isClientSide) {
+                if (!this.level().isClientSide()) {
                     level().addFreshEntity(echo);
                 }
             }

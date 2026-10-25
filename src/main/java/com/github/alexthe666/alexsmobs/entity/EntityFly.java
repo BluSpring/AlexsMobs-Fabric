@@ -32,9 +32,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -112,8 +112,8 @@ public class EntityFly extends Animal implements FlyingAnimal {
     }
 
 
-    public static boolean canFlySpawn(EntityType<EntityFly> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return reason == MobSpawnType.SPAWNER || pos.getY() > 63 && random.nextInt(4) == 0 && worldIn.getRawBrightness(pos, 0) > 8 && worldIn.getBrightness(LightLayer.BLOCK, pos) == 0 && worldIn.getBlockState(pos.below()).is(AMTagRegistry.FLY_SPAWNS);
+    public static boolean canFlySpawn(EntityType<EntityFly> animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+        return reason == EntitySpawnReason.SPAWNER || pos.getY() > 63 && random.nextInt(4) == 0 && worldIn.getRawBrightness(pos, 0) > 8 && worldIn.getBrightness(LightLayer.BLOCK, pos) == 0 && worldIn.getBlockState(pos.below()).is(AMTagRegistry.FLY_SPAWNS);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class EntityFly extends Animal implements FlyingAnimal {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.flySpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -230,8 +230,8 @@ public class EntityFly extends Animal implements FlyingAnimal {
             if(conversionTime > 300){
                 EntityCrimsonMosquito mosquito = AMEntityRegistry.CRIMSON_MOSQUITO.get().create(level());
                 mosquito.copyPosition(this);
-                if(!this.level().isClientSide){
-                    mosquito.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.CONVERSION, null);
+                if(!this.level().isClientSide()){
+                    mosquito.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(this.blockPosition()), EntitySpawnReason.CONVERSION, null);
                 }
                 level().addFreshEntity(mosquito);
                 mosquito.onSpawnFromFly();

@@ -94,7 +94,7 @@ public class ShoebillAIFish extends Goal {
         List<ItemStack> result = loottable.getRandomItems(lootcontext$builder.create(lootparameterset$builder.build()));
         for (ItemStack itemstack : result) {
             ItemEntity item = new ItemEntity(this.bird.level(), this.bird.getX() + 0.5F, this.bird.getY(), this.bird.getZ(), itemstack);
-            if (!this.bird.level().isClientSide) {
+            if (!this.bird.level().isClientSide()) {
                 this.bird.level().addFreshEntity(item);
             }
         }

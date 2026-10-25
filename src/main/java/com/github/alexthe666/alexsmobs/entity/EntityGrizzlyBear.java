@@ -129,7 +129,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.grizzlyBearSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -314,7 +314,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
-        if(item == Items.SNOW && !this.isSnowy() && !this.level().isClientSide){
+        if(item == Items.SNOW && !this.isSnowy() && !this.level().isClientSide()){
             this.usePlayerItem(player, hand, itemstack);
             this.permSnow = true;
             this.setSnowy(true);
@@ -322,7 +322,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
             this.playSound(SoundEvents.SNOW_PLACE, this.getSoundVolume(), this.getVoicePitch());
             return InteractionResult.SUCCESS;
         }
-        if(item instanceof ShovelItem && this.isSnowy() && !this.level().isClientSide){
+        if(item instanceof ShovelItem && this.isSnowy() && !this.level().isClientSide()){
             this.permSnow = false;
             if(!player.isCreative()){
                 if (itemstack.isDamageableItem()) itemstack.setDamageValue(itemstack.getDamageValue() + 1);
@@ -528,7 +528,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
             }
         }
         if (attackTarget != null) {
-            if(!this.level().isClientSide){
+            if(!this.level().isClientSide()){
                 this.setSprinting(true);
             }
             if (distanceTo(attackTarget) < attackTarget.getBbWidth() + this.getBbWidth() + 2.5F) {
@@ -569,7 +569,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
         if(snowTimer > 0){
             snowTimer--;
         }
-        if (snowTimer == 0 && !this.level().isClientSide) {
+        if (snowTimer == 0 && !this.level().isClientSide()) {
             snowTimer = 200 + random.nextInt(400);
             if(this.isSnowy()){
                if(!permSnow){
@@ -743,7 +743,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         if (spawnDataIn == null) {
             spawnDataIn = new AgeableMob.AgeableMobGroupData(1.0F);
         }
@@ -762,7 +762,7 @@ public class EntityGrizzlyBear extends TamableAnimal implements NeutralMob, IAni
     public void onGetItem(ItemEntity targetEntity) {
         ItemStack duplicate = targetEntity.getItem().copy();
         duplicate.setCount(1);
-        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide) {
+        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide()) {
             this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0.0F);
         }
         this.setItemInHand(InteractionHand.MAIN_HAND, duplicate);

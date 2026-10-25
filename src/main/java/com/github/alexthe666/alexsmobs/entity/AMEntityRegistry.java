@@ -1,13 +1,28 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.google.common.base.Predicates;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacementType;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Monster;
@@ -17,14 +32,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
-import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
-
-import java.util.function.Predicate;
 
 @EventBusSubscriber(modid = AlexsMobs.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class AMEntityRegistry {
@@ -360,8 +367,8 @@ public class AMEntityRegistry {
         }
     }
 
-    public static boolean rollSpawn(int rolls, RandomSource random, MobSpawnType reason){
-        if(reason == MobSpawnType.SPAWNER){
+    public static boolean rollSpawn(int rolls, RandomSource random, EntitySpawnReason reason){
+        if(reason == EntitySpawnReason.SPAWNER){
             return true;
         }else{
             return rolls <= 0 || random.nextInt(rolls) == 0;

@@ -102,7 +102,7 @@ public class EntitySquidGrapple extends Entity {
 
     public Entity getOwner() {
         UUID id = getOwnerId();
-        if (id != null && !this.level().isClientSide) {
+        if (id != null && !this.level().isClientSide()) {
             return ((ServerLevel) level()).getEntity(id);
         }
         return getOwnerId() == null ? null : level().getPlayerByUUID(getOwnerId());
@@ -122,7 +122,7 @@ public class EntitySquidGrapple extends Entity {
         this.xRotO = this.getXRot();
         this.yRotO = this.getYRot();
         Entity entity = this.getOwner();
-        if(!this.level().isClientSide){
+        if(!this.level().isClientSide()){
             if(entity == null || !entity.isAlive()){
                 this.discard();
             }else if (entity.isShiftKeyDown()) {
@@ -142,7 +142,7 @@ public class EntitySquidGrapple extends Entity {
                 double d1 = this.getY() + vector3d.y;
                 double d2 = this.getZ() + vector3d.z;
                 float f = Mth.sqrt((float) (move.x * move.x + move.z * move.z));
-                if(!this.level().isClientSide){
+                if(!this.level().isClientSide()){
                     this.setYRot(Mth.wrapDegrees((float) (-Mth.atan2(move.x, move.z) * (double) Mth.RAD_TO_DEG)) - 180);
                     this.setXRot((float) (Mth.atan2(move.y, f) * (double) Mth.RAD_TO_DEG));
                     this.yRotO = this.getYRot();

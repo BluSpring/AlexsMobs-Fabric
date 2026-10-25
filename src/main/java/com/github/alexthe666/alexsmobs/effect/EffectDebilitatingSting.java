@@ -12,9 +12,9 @@ import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -66,8 +66,8 @@ public class EffectDebilitatingSting extends MobEffect {
                     EntityTarantulaHawk baby = AMEntityRegistry.TARANTULA_HAWK.get().create(entity.level());
                     baby.setBaby(true);
                     baby.setPos(entity.getX(), surface.getY() + 0.1F, entity.getZ());
-                    if (!entity.level().isClientSide) {
-                        baby.finalizeSpawn((ServerLevelAccessor) entity.level(), entity.level().getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.BREEDING, null);
+                    if (!entity.level().isClientSide()) {
+                        baby.finalizeSpawn((ServerLevelAccessor) entity.level(), entity.level().getCurrentDifficultyAt(entity.blockPosition()), EntitySpawnReason.BREEDING, null);
                         entity.level().addFreshEntity(baby);
                     }
                 }

@@ -132,7 +132,7 @@ public class EntityBoneSerpentPart extends LivingEntity implements IHurtableMult
         if (this.tickCount > 10) {
             Entity parent = getParent();
             refreshDimensions();
-            if (parent != null && !this.level().isClientSide) {
+            if (parent != null && !this.level().isClientSide()) {
                 this.setNoGravity(true);
                 this.setPos(parent.xo + this.radius * Math.cos(parent.yRotO * Mth.DEG_TO_RAD + this.angleYaw), parent.yo + this.offsetY, parent.zo + this.radius * Math.sin(parent.yRotO * Mth.DEG_TO_RAD + this.angleYaw));
                 final double d0 = parent.getX() - this.getX();
@@ -152,10 +152,10 @@ public class EntityBoneSerpentPart extends LivingEntity implements IHurtableMult
                     }
                 }
                 this.pushEntities();
-                if (parent.isRemoved() && !this.level().isClientSide) {
+                if (parent.isRemoved() && !this.level().isClientSide()) {
                     this.remove(RemovalReason.DISCARDED);
                 }
-            } else if (tickCount > 20 && !this.level().isClientSide) {
+            } else if (tickCount > 20 && !this.level().isClientSide()) {
                 remove(RemovalReason.DISCARDED);
             }
         }
@@ -164,7 +164,7 @@ public class EntityBoneSerpentPart extends LivingEntity implements IHurtableMult
 
     public Entity getParent() {
         UUID id = getParentId();
-        if (id != null && !this.level().isClientSide) {
+        if (id != null && !this.level().isClientSide()) {
             return ((ServerLevel) level()).getEntity(id);
         }
         return null;
@@ -209,7 +209,7 @@ public class EntityBoneSerpentPart extends LivingEntity implements IHurtableMult
     public boolean hurt(DamageSource source, float damage) {
         final Entity parent = getParent();
         final boolean prev = parent != null && parent.hurt(source, damage * this.damageMultiplier);
-        if (prev && !this.level().isClientSide) {
+        if (prev && !this.level().isClientSide()) {
             AlexsMobs.sendMSGToAll(new MessageHurtMultipart(this.getId(), parent.getId(), damage * this.damageMultiplier));
         }
         return prev;

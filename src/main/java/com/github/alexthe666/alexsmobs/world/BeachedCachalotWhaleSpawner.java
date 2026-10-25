@@ -1,23 +1,24 @@
 package com.github.alexthe666.alexsmobs.world;
 
+import java.util.Iterator;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.config.BiomeConfig;
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityCachalotWhale;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap.Types;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.Random;
 
 public class BeachedCachalotWhaleSpawner {
     private final Random random = new Random();
@@ -78,7 +79,7 @@ public class BeachedCachalotWhaleSpawner {
                 BlockPos upPos = new BlockPos(blockpos2.getX(), blockpos2.getY() + 2, blockpos2.getZ());
                 EntityCachalotWhale whale = AMEntityRegistry.CACHALOT_WHALE.get().create(world);
                 whale.moveTo(upPos.getX() + 0.5D, upPos.getY() + 0.5D, upPos.getZ() + 0.5D, random.nextFloat() * 360 - 180F, 0);
-                whale.finalizeSpawn(world, world.getCurrentDifficultyAt(upPos), MobSpawnType.SPAWNER, null);
+                whale.finalizeSpawn(world, world.getCurrentDifficultyAt(upPos), EntitySpawnReason.SPAWNER, null);
                 whale.setBeached(true);
                 AMWorldData worldinfo = AMWorldData.get(world);
                 worldinfo.setBeachedCachalotID(whale.getUUID());

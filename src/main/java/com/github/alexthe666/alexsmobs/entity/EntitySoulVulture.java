@@ -31,7 +31,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -82,14 +82,14 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.soulVultureSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static boolean canVultureSpawn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean canVultureSpawn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         BlockPos blockpos = pos.below();
         boolean spawnBlock = worldIn.getBlockState(blockpos).is(AMTagRegistry.SOUL_VULTURE_SPAWNS);
-        return reason == MobSpawnType.SPAWNER || spawnBlock && checkMobSpawnRules(AMEntityRegistry.SOUL_VULTURE.get(), worldIn, reason, pos, randomIn);
+        return reason == EntitySpawnReason.SPAWNER || spawnBlock && checkMobSpawnRules(AMEntityRegistry.SOUL_VULTURE.get(), worldIn, reason, pos, randomIn);
     }
 
     @Override
@@ -221,7 +221,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         super.tick();
         this.prevTackleProgress = tackleProgress;
         this.prevFlyProgress = flyProgress;
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if(perchSearchCooldown > 0){
                 perchSearchCooldown--;
             }

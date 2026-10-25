@@ -70,7 +70,7 @@ public class EntityHemolymph extends Entity {
         if (!this.leftOwner) {
             this.leftOwner = this.checkLeftOwner();
         }
-        if(this.level().isClientSide){
+        if(this.level().isClientSide()){
             float r1 = (random.nextFloat() - 0.5F) * 0.5F;
             float r2 = (random.nextFloat() - 0.5F) * 0.5F;
             float r3 = (random.nextFloat() - 0.5F) * 0.5F;
@@ -111,7 +111,7 @@ public class EntityHemolymph extends Entity {
 
     protected void onHitBlock(BlockHitResult p_230299_1_) {
         BlockState blockstate = this.level().getBlockState(p_230299_1_.getBlockPos());
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.remove(RemovalReason.DISCARDED);
         }
     }

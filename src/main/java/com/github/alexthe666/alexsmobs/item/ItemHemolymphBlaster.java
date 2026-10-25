@@ -97,7 +97,7 @@ public class ItemHemolymphBlaster extends Item {
                 livingEntityIn.gameEvent(GameEvent.ITEM_INTERACT_START);
                 livingEntityIn.playSound(SoundEvents.LAVA_POP,1.0F, 0.5F + (rand.nextFloat() - rand.nextFloat()) * 0.2F);
                 blood.shoot(vector3d.x(), vector3d.y(), vector3d.z(), 1F, 3);
-                if (!worldIn.isClientSide) {
+                if (!worldIn.isClientSide()) {
                     worldIn.addFreshEntity(blood);
                 }
                 EquipmentSlot slot = livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;

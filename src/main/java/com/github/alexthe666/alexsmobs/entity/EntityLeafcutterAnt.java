@@ -253,7 +253,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
                     EntityLeafcutterAnt leafcutterAnt = AMEntityRegistry.LEAFCUTTER_ANT.get().create(level());
                     leafcutterAnt.copyPosition(this);
                     leafcutterAnt.setAge(-24000);
-                    if(!this.level().isClientSide){
+                    if(!this.level().isClientSide()){
                         level().broadcastEntityEvent(this, (byte)18);
                         level().addFreshEntity(leafcutterAnt);
                     }
@@ -358,7 +358,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
             attachChangeProgress = 1F;
         }
         this.prevAttachDir = attachmentFacing;
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (attachmentFacing == Direction.UP && !this.isUpsideDownNavigator) {
                 switchNavigator(false);
             }
@@ -448,7 +448,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
 
     @Override
     protected void customServerAiStep() {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.updatePersistentAnger((ServerLevel)this.level(), false);
         }
     }
@@ -468,7 +468,7 @@ public class EntityLeafcutterAnt extends Animal implements NeutralMob, IAnimated
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setAntScale(0.75F + random.nextFloat() * 0.3F);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }

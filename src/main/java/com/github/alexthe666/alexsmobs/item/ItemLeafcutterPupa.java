@@ -35,7 +35,7 @@ public class ItemLeafcutterPupa extends Item {
                 playerentity.gameEvent(GameEvent.BLOCK_PLACE);
             }
             world.playSound(playerentity, blockpos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
-            if (!world.isClientSide) {
+            if (!world.isClientSide()) {
                 world.setBlock(blockpos, AMBlockRegistry.LEAFCUTTER_ANTHILL.get().defaultBlockState(), 11);
                 world.setBlock(blockpos.below(), AMBlockRegistry.LEAFCUTTER_ANT_CHAMBER.get().defaultBlockState(), 11);
                 BlockEntity tileentity = world.getBlockEntity(blockpos);
@@ -52,7 +52,7 @@ public class ItemLeafcutterPupa extends Item {
                 }
             }
 
-            return InteractionResult.sidedSuccess(world.isClientSide);
+            return InteractionResult.sidedSuccess(world.isClientSide());
         } else {
             return InteractionResult.PASS;
         }

@@ -220,7 +220,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         if (this.entityData.get(REMOVE_SOON)) {
             this.removeIn--;
             this.setBoardRot((float) Math.sin(this.removeIn * 0.3F * Math.PI) * 50F);
-            if (this.removeIn <= 0 && !this.level().isClientSide) {
+            if (this.removeIn <= 0 && !this.level().isClientSide()) {
                 this.removeIn = 0;
                 boolean drop;
                 if(this.getEnchantLevel(AMEnchantmentRegistry.STRADDLE_BOARDRETURN) > 0 && returnToPlayer != null){
@@ -235,7 +235,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
             }
         }
         Entity controller = getControllingPlayer();
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             if (this.lSteps > 0) {
                 double d5 = this.getX() + (this.lx - this.getX()) / (double) this.lSteps;
                 double d6 = this.getY() + (this.ly - this.getY())  / (double) this.lSteps;
@@ -408,7 +408,7 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
         if (player.isSecondaryUseActive()) {
             return InteractionResult.PASS;
         } else {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 return player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
             } else {
                 return InteractionResult.SUCCESS;

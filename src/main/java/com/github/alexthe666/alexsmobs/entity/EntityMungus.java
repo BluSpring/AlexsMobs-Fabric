@@ -47,9 +47,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Shearable;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -122,7 +122,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 15D).add(Attributes.MOVEMENT_SPEED, 0.25F);
     }
 
-    public static boolean canMungusSpawn(EntityType type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean canMungusSpawn(EntityType type, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         return worldIn.getBlockState(pos.below()).canOcclude();
     }
 
@@ -166,7 +166,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.mungusSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -248,7 +248,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
             float r3 = 6F * (random.nextFloat() - 0.5F);
             this.level().addParticle(ParticleTypes.EXPLOSION, this.getX() + r1, this.getY() + 0.5F + r2, this.getZ() + r3, r1 * 4, r2 * 4, r3 * 4);
         }
-        if(!this.level().isClientSide){
+        if(!this.level().isClientSide()){
             ServerLevel serverLevel = (ServerLevel) level();
             final int radius = 3;
             final int j = radius + level().random.nextInt(1);
@@ -284,7 +284,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
             BlockState finalTransformState = transformState;
             TagKey<Block> finalTransformReplace = transformMatches;
 
-            if (AMConfig.mungusBiomeTransformationType == 2 && !this.level().isClientSide) {
+            if (AMConfig.mungusBiomeTransformationType == 2 && !this.level().isClientSide()) {
                 transformBiome(center, biome);
             }
             this.gameEvent(GameEvent.EXPLODE);
@@ -362,14 +362,14 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
                 }
             }
             setChunkBiomes(chunk, container);
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 //AlexsMobs.sendMSGToAll(new MessageMungusBiomeChange(this.getId(), pos.getX(), pos.getZ(), biome.unwrapKey().map(k -> k.location()).orElse(null).toString()));
             }
         } else {
             if (biome == null) {
                 return;
             }
-            if (container != null && !this.level().isClientSide) {
+            if (container != null && !this.level().isClientSide()) {
                 for (int biomeX = 0; biomeX < 4; ++biomeX) {
                     for (int biomeY = 0; biomeY < 4; ++biomeY) {
                         for (int biomeZ = 0; biomeZ < 4; ++biomeZ) {
@@ -532,7 +532,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
                                 float r3 = 3F * (random.nextFloat() - 0.5F);
                                 this.level().addParticle(ParticleTypes.EXPLOSION, t.getX() + 0.5F + r1, t.getY() + 0.5F + r2, t.getZ() + 0.5F + r3, r1 * 4, r2 * 4, r3 * 4);
                             }
-                            if (!this.level().isClientSide) {
+                            if (!this.level().isClientSide()) {
                                 this.level().levelEvent(2005, t, 0);
                                 igrowable.performBonemeal((ServerLevel) this.level(), this.level().random, t, state);
                                 flag = level().getBlockState(t).getBlock() != state.getBlock();
@@ -578,7 +578,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.entityData.set(ALT_ORDER_MUSHROOMS, random.nextBoolean());
         this.setMushroomCount(random.nextInt(2));
         setMushroomState(random.nextBoolean() ? Blocks.BROWN_MUSHROOM.defaultBlockState() : Blocks.RED_MUSHROOM.defaultBlockState());

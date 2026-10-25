@@ -42,10 +42,10 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -118,13 +118,13 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         this.entityData.set(COMMAND, Integer.valueOf(command));
     }
 
-    public static <T extends Mob> boolean canKomodoDragonSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static <T extends Mob> boolean canKomodoDragonSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         boolean spawnBlock = worldIn.getBlockState(pos.below()).is(AMTagRegistry.KOMODO_DRAGON_SPAWNS);
         return spawnBlock && worldIn.getRawBrightness(pos, 0) > 8;
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.komodoDragonSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -291,7 +291,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
             jostleCooldown--;
         }
 
-        if(!this.level().isClientSide){
+        if(!this.level().isClientSide()){
             if(this.getJostleAngle() < nextJostleAngleFromServer){
                 this.setJostleAngle(this.getJostleAngle() + 1);
 
@@ -467,6 +467,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         return stack.is(AMTagRegistry.KOMODO_DRAGON_TAMEABLES) || stack.getFoodProperties(this) != null && stack.is(ItemTags.MEAT);
     }
 
+    @Override
     public boolean isSaddled() {
         return this.entityData.get(SADDLED);
     }
@@ -503,8 +504,8 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
     @Nullable
     public Entity getJostlingPartner() {
         UUID id = getJostlingPartnerUUID();
-        if (id != null && !this.level().isClientSide) {
-            return ((ServerLevel) level()).getEntity(id);
+        if (id != null && !this.level().isClientSide()) {
+            return level().getEntity(id);
         }
         return null;
     }
@@ -547,7 +548,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.isSaddled()) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.spawnAtLocation(Items.SADDLE);
             }
         }

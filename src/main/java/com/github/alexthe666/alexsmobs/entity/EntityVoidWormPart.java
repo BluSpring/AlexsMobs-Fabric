@@ -229,7 +229,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
         if (this.tickCount > 3) {
             Entity parent = getParent();
             refreshDimensions();
-            if (parent != null && !this.level().isClientSide) {
+            if (parent != null && !this.level().isClientSide()) {
                 this.setNoGravity(true);
                 Vec3 parentVec = parent.position().subtract(parent.xo, parent.yo, parent.zo);
                 double restrictRadius = Mth.clamp(radius - parentVec.lengthSqr() * 0.25F, radius * 0.5F, radius);
@@ -265,7 +265,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
                     }
                 }
                 this.pushEntities();
-                if (parent.isRemoved() && !this.level().isClientSide) {
+                if (parent.isRemoved() && !this.level().isClientSide()) {
                     this.remove(RemovalReason.DISCARDED);
                 }
                 if (parent instanceof EntityVoidWorm) {
@@ -273,7 +273,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
                 } else if (parent instanceof EntityVoidWormPart) {
                     this.setWormAngle(((EntityVoidWormPart) parent).prevWormAngle);
                 }
-            } else if (tickCount > 20 && !this.level().isClientSide) {
+            } else if (tickCount > 20 && !this.level().isClientSide()) {
                 remove(RemovalReason.DISCARDED);
             }
         }
@@ -335,7 +335,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
                 worm2.setChildId(segment.getUUID());
                 worm2.setSegmentCount(segments);
                 segment.setParent(worm2);
-                if (!this.level().isClientSide) {
+                if (!this.level().isClientSide()) {
                     level().addFreshEntity(worm2);
                 }
                 worm2.setSplitter(true);
@@ -343,7 +343,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
                 worm2.setSplitFromUuid(worm.getUUID());
                 worm2.setWormSpeed((float) Mth.clamp(worm.getWormSpeed() * 0.8, 0.4F, 1F));
                 worm2.resetWormScales();
-                if (!this.level().isClientSide) {
+                if (!this.level().isClientSide()) {
                     if (cause != null && cause.getEntity() instanceof ServerPlayer) {
                         AMAdvancementTriggerRegistry.VOID_WORM_SPLIT.get().trigger((ServerPlayer) cause.getEntity());
                     }
@@ -372,7 +372,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
 
     public Entity getChild() {
         UUID id = getChildId();
-        if (id != null && !this.level().isClientSide) {
+        if (id != null && !this.level().isClientSide()) {
             return ((ServerLevel) level()).getEntity(id);
         }
         return null;
@@ -380,7 +380,7 @@ public class EntityVoidWormPart extends LivingEntity implements IHurtableMultipa
 
     public Entity getParent() {
         UUID id = getParentId();
-        if (id != null && !this.level().isClientSide) {
+        if (id != null && !this.level().isClientSide()) {
             return ((ServerLevel) level()).getEntity(id);
         }
         return null;

@@ -39,10 +39,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -145,7 +145,7 @@ public class EntityCachalotWhale extends Animal {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 160.0D).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.FOLLOW_RANGE, 32.0D).add(Attributes.MOVEMENT_SPEED, 1.2F).add(Attributes.ATTACK_DAMAGE, 30F);
     }
 
-    public static <T extends Mob> boolean canCachalotWhaleSpawn(EntityType<T> entityType, ServerLevelAccessor iServerWorld, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static <T extends Mob> boolean canCachalotWhaleSpawn(EntityType<T> entityType, ServerLevelAccessor iServerWorld, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         BlockPos up = pos;
         while(up.getY() < iServerWorld.getMaxBuildHeight() && iServerWorld.getFluidState(up).is(FluidTags.WATER)){
             up = up.above();
@@ -497,7 +497,7 @@ public class EntityCachalotWhale extends Animal {
             this.whaleSpeedMod = 0.1F;
             this.getMoveControl().setWantedPosition(rewardPlayer.getX(), rewardPlayer.getY(), rewardPlayer.getZ(), 0.5D);
             if (this.distanceTo(rewardPlayer) < 10F) {
-                if (!this.level().isClientSide) {
+                if (!this.level().isClientSide()) {
                     final Vec3 vec = this.getMouthVec();
                     final ItemEntity itementity = new ItemEntity(this.level(), vec.x, vec.y, vec.z, new ItemStack(AMItemRegistry.AMBERGRIS.get(), 2 + random.nextInt(2)));
                     itementity.setDefaultPickUpDelay();
@@ -616,7 +616,7 @@ public class EntityCachalotWhale extends Animal {
                 this.whaleParts[l].zOld = avector3d[l].z;
             }
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             LivingEntity target = this.getTarget();
             if (target == null || !target.isAlive()) {
                 this.setGrabbing(false);
@@ -779,7 +779,7 @@ public class EntityCachalotWhale extends Animal {
         if (this.isInWater() && !this.isEyeInFluid(FluidTags.WATER) && this.getAirSupply() > 140) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, -0.06, 0));
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.tryDespawn();
         }
         prevEyesInWater = this.isEyeInFluid(FluidTags.WATER);
@@ -881,7 +881,7 @@ public class EntityCachalotWhale extends Animal {
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setAirSupply(this.getMaxAirSupply());
         this.setXRot(0.0F);
         if (spawnDataIn == null) {
@@ -951,7 +951,7 @@ public class EntityCachalotWhale extends Animal {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.cachalotWhaleSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 

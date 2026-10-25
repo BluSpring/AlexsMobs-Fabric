@@ -41,7 +41,7 @@ public class EntityEmuEgg extends ThrowableItemProjectile {
     @Override
     protected void onHit(HitResult result) {
         super.onHit(result);
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.random.nextInt(8) == 0) {
                 int lvt_2_1_ = 1;
                 if (this.random.nextInt(32) == 0) {

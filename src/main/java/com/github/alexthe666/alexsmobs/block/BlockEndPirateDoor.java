@@ -156,7 +156,7 @@ public class BlockEndPirateDoor extends BaseEntityBlock {
             openDoorAt(worldIn, relative, !open, powered);
         }
         openDoorAt(worldIn, pos, !open, powered);
-        return InteractionResult.sidedSuccess(worldIn.isClientSide);
+        return InteractionResult.sidedSuccess(worldIn.isClientSide());
     }
 
     public static void openDoorAt(Level worldIn, BlockPos pos, boolean open, boolean powered) {

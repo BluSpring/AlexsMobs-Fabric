@@ -39,9 +39,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Shearable;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -104,12 +104,12 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, I
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.bisonSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @javax.annotation.Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @javax.annotation.Nullable SpawnGroupData spawnDataIn) {
         if (spawnDataIn == null) {
             spawnDataIn = new AgeableMob.AgeableMobGroupData(0.25F);
         }
@@ -217,7 +217,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, I
         if (!this.isCharging() && chargeProgress > 0F) {
             chargeProgress--;
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (snowTimer == 0) {
                 snowTimer = 200 + random.nextInt(400);
                 if (this.isSnowy()) {
@@ -347,7 +347,7 @@ public class EntityBison extends Animal implements IAnimatedEntity, Shearable, I
         final ItemStack itemstack = player.getItemInHand(hand);
         final Item item = itemstack.getItem();
         final InteractionResult type = super.mobInteract(player, hand);
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (item == Items.SNOW && !this.isSnowy()) {
                 this.usePlayerItem(player, hand, itemstack);
                 this.permSnow = true;

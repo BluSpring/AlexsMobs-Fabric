@@ -45,7 +45,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -133,12 +133,12 @@ public class EntityTerrapin extends Animal implements ISemiAquatic, Bucketable {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.terrapinSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static boolean canTerrapinSpawn(EntityType<EntityTerrapin> entityType, ServerLevelAccessor iServerWorld, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return reason == MobSpawnType.SPAWNER || iServerWorld.getBlockState(pos).getFluidState().is(Fluids.WATER);
+    public static boolean canTerrapinSpawn(EntityType<EntityTerrapin> entityType, ServerLevelAccessor iServerWorld, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+        return reason == EntitySpawnReason.SPAWNER || iServerWorld.getBlockState(pos).getFluidState().is(Fluids.WATER);
     }
 
     @Override
@@ -219,7 +219,7 @@ public class EntityTerrapin extends Animal implements ISemiAquatic, Bucketable {
                 changeSpinAngleCooldown--;
             }
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.isInWaterOrBubble() && this.isLandNavigator) {
                 switchNavigator(false);
             }
@@ -484,7 +484,7 @@ public class EntityTerrapin extends Animal implements ISemiAquatic, Bucketable {
     private void handleSpin() {
         this.setRetreated(true);
         ++this.spinCounter;
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.spinCounter > maxRollTime) {
                 this.setSpinning(false);
                 this.hideInShellTimer = 10 + random.nextInt(30);
@@ -506,7 +506,7 @@ public class EntityTerrapin extends Animal implements ISemiAquatic, Bucketable {
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setAirSupply(this.getMaxAirSupply());
         this.setTurtleType(TerrapinTypes.getRandomType(random));
         this.setShellType(random.nextInt(7));

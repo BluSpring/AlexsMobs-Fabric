@@ -46,11 +46,11 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -131,7 +131,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
 
     }
 
-    public static <T extends Mob> boolean canKangarooSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static <T extends Mob> boolean canKangarooSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         boolean spawnBlock = worldIn.getBlockState(pos.below()).is(AMTagRegistry.KANGAROO_SPAWNS);
         return spawnBlock && worldIn.getRawBrightness(pos, 0) > 8;
     }
@@ -175,7 +175,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.kangarooSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -515,7 +515,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
         if (this.forcedSit() && !this.isVehicle() && this.isTame()) {
             this.setOrderedToSit(true);
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (tickCount == 1) {
                 updateClientInventory();
             }
@@ -839,7 +839,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
     }
 
     public void resetKangarooSlots() {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             int swordIndex = -1;
             double swordDamage = 0;
             int helmetIndex = -1;
@@ -883,7 +883,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
     }
 
     private void updateClientInventory() {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             for (int i = 0; i < 9; i++) {
                 AlexsMobs.sendMSGToAll(new MessageKangarooInventorySync(this.getId(), i, kangarooInventory.getItem(i)));
             }
@@ -951,7 +951,7 @@ public class EntityKangaroo extends TamableAnimal implements ContainerListener, 
             }
         }
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.level().broadcastEntityEvent(this, (byte) 1);
         }
 

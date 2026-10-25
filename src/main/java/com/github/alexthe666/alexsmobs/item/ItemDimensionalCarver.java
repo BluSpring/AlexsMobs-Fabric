@@ -122,7 +122,7 @@ public class ItemDimensionalCarver extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
         if (stack.has(AMDataComponentRegistry.POSITION)) {
             Vec3 position = stack.get(AMDataComponentRegistry.POSITION);
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 entityLiving.gameEvent(GameEvent.ITEM_INTERACT_START);
                 entityLiving.playSound(SoundEvents.GLASS_BREAK, 1, 0.5F);
                 EntityVoidPortal portal = new EntityVoidPortal(level, this);

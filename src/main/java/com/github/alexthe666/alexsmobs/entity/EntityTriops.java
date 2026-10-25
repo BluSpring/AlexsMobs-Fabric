@@ -36,7 +36,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -241,7 +241,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setTriopsScale(0.9F + random.nextFloat() * 0.2F);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
@@ -309,7 +309,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
             this.gameEvent(GameEvent.EAT);
             this.playSound(SoundEvents.CAT_EAT, this.getVoicePitch(), this.getSoundVolume());
             this.heal(5);
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 if (breedCooldown == 0 && !fedCarrot) {
                     this.fedCarrot = true;
                     this.level().broadcastEntityEvent(this, (byte) 67);
@@ -330,7 +330,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
             this.playSound(SoundEvents.CAT_EAT, this.getVoicePitch(), this.getSoundVolume());
             this.heal(5);
             if (itemstack.is(AMTagRegistry.TRIOPS_BREEDABLES)) {
-                if (!this.level().isClientSide) {
+                if (!this.level().isClientSide()) {
                     if (breedCooldown == 0) {
                         this.level().broadcastEntityEvent(this, (byte) 67);
                     }

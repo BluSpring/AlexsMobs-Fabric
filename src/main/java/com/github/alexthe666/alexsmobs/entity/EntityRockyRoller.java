@@ -28,7 +28,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -82,12 +82,12 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.rockyRollerSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
 
-    public static boolean checkRockyRollerSpawnRules(EntityType<? extends Monster> animal, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean checkRockyRollerSpawnRules(EntityType<? extends Monster> animal, ServerLevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         return worldIn.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(worldIn, pos, random) && (worldIn.getBlockState(pos.below()).is(AMTagRegistry.ROCKY_ROLLER_SPAWNS) || worldIn.getBlockState(pos.below()).isSolid());
     }
 
@@ -149,7 +149,7 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
                 rollProgress--;
         }
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.setAngry(this.getTarget() != null && this.getTarget().isAlive() && this.distanceToSqr(this.getTarget()) < 20 * 20);
         }
         if (this.isRolling() && rollCooldown <= 0) {
@@ -254,7 +254,7 @@ public class EntityRockyRoller extends Monster implements ICustomCollisions {
 
     private void handleRoll() {
         ++this.rollCounter;
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.horizontalCollision && earthquakeCooldown == 0 & this.isAngry()) {
                 earthquakeCooldown = maxRollTime;
                 this.earthquake();

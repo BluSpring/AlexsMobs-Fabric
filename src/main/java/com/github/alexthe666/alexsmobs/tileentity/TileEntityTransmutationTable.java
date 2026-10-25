@@ -56,7 +56,7 @@ public class TileEntityTransmutationTable  extends BlockEntity {
     }
 
     private static ItemStack createFromLootTable(Player player, Identifier loc) {
-        if(player.level().isClientSide){
+        if(player.level().isClientSide()){
             return ItemStack.EMPTY;
         }else{
             // In 1.21, use reloadableRegistries().getLootTable() with a ResourceKey

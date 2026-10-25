@@ -147,7 +147,7 @@ public class BlockTerrapinEgg extends BaseEntityBlock {
 
     @Override
     public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-        if (hasProperHabitat(worldIn, pos) && !worldIn.isClientSide) {
+        if (hasProperHabitat(worldIn, pos) && !worldIn.isClientSide()) {
             worldIn.levelEvent(2005, pos, 0);
         }
 

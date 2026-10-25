@@ -150,7 +150,7 @@ public class EntityVoidWormShot extends Entity {
 
     protected void onHitBlock(BlockHitResult p_230299_1_) {
         BlockState blockstate = this.level().getBlockState(p_230299_1_.getBlockPos());
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.remove(RemovalReason.DISCARDED);
         }
     }

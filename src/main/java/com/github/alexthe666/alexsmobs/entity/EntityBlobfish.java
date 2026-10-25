@@ -26,9 +26,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.SpawnGroupData;
@@ -74,7 +74,7 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
 
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.blobfishSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -240,7 +240,7 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
                 this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, lvt_3_1_), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth()) - (double) this.getBbWidth() * 0.5F, this.getY() + this.getBbHeight() * 0.5F + (double) (this.random.nextFloat() * this.getBbHeight() * 0.5F), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth()) - (double) this.getBbWidth() * 0.5F, d0, d1, d2);
             }
             lvt_3_1_.shrink(1);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide());
         }
         return Bucketable.bucketMobPickup(player, hand, this).orElse(super.mobInteract(player, hand));
     }
@@ -292,7 +292,7 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setBlobfishScale(0.75F + random.nextFloat() * 0.5F);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
@@ -303,7 +303,7 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
         this.prevSquishFactor = this.squishFactor;
         this.squishFactor += (this.squishAmount - this.squishFactor) * 0.5F;
 
-        final float f2 = -((float) this.getDeltaMovement().y * 2.2F * Mth.RAD_TO_DEG);
+        final float f2 = -(this.getDeltaMovement().y * 2.2F * Mth.RAD_TO_DEG);
         this.setXRot(f2);
         if (!isInWater()) {
             if (this.onGround()) {
@@ -341,8 +341,8 @@ public class EntityBlobfish extends WaterAnimal implements FlyingAnimal, Bucketa
         return SoundEvents.COD_HURT;
     }
 
-    public static boolean canBlobfishSpawn(EntityType<EntityBlobfish> entityType, ServerLevelAccessor iServerWorld, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return reason == MobSpawnType.SPAWNER || pos.getY() <= AMConfig.blobfishSpawnHeight && iServerWorld.getFluidState(pos).is(FluidTags.WATER) && iServerWorld.getFluidState(pos.above()).is(FluidTags.WATER);
+    public static boolean canBlobfishSpawn(EntityType<EntityBlobfish> entityType, ServerLevelAccessor iServerWorld, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+        return reason == EntitySpawnReason.SPAWNER || pos.getY() <= AMConfig.blobfishSpawnHeight && iServerWorld.getFluidState(pos).is(FluidTags.WATER) && iServerWorld.getFluidState(pos.above()).is(FluidTags.WATER);
     }
 
     @Override

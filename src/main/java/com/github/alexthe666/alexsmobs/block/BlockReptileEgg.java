@@ -137,7 +137,7 @@ public class BlockReptileEgg extends Block {
                     }
                     Holder<Biome> biome = worldIn.getBiome(pos);
                     fromType.moveTo((double) pos.getX() + 0.3D + (double) j * 0.2D, pos.getY(), (double) pos.getZ() + 0.3D, 0.0F, 0.0F);
-                    if (!worldIn.isClientSide) {
+                    if (!worldIn.isClientSide()) {
                         Player closest = worldIn.getNearestPlayer(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 20, EntitySelector.NO_SPECTATORS);
                         if (closest != null) {
                             if(fromType instanceof TamableAnimal tamableAnimal){
@@ -159,7 +159,7 @@ public class BlockReptileEgg extends Block {
 
     @Override
     public void onPlace(BlockState state, Level worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-        if (hasProperHabitat(worldIn, pos) && !worldIn.isClientSide) {
+        if (hasProperHabitat(worldIn, pos) && !worldIn.isClientSide()) {
             worldIn.levelEvent(2005, pos, 0);
         }
 

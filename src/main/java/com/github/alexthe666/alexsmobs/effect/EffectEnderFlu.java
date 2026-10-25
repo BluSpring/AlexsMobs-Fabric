@@ -24,7 +24,7 @@ public class EffectEnderFlu extends MobEffect {
                 phage.copyPosition(entity);
                 phage.onSpawnFromEffect();
                 phage.setSkinForDimension();
-                if (!entity.level().isClientSide) {
+                if (!entity.level().isClientSide()) {
                     phage.setStandardFleeTime();
                     entity.level().addFreshEntity(phage);
                 }

@@ -22,8 +22,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -76,12 +76,12 @@ public class EntityCombJelly extends WaterAnimal implements Bucketable {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.terrapinSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static boolean canCombJellySpawn(EntityType<EntityCombJelly> entityType, ServerLevelAccessor iServerWorld, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return reason == MobSpawnType.SPAWNER || iServerWorld.isWaterAt(pos) && iServerWorld.isWaterAt(pos.above()) && isLightLevelOk(pos, iServerWorld);
+    public static boolean canCombJellySpawn(EntityType<EntityCombJelly> entityType, ServerLevelAccessor iServerWorld, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+        return reason == EntitySpawnReason.SPAWNER || iServerWorld.isWaterAt(pos) && iServerWorld.isWaterAt(pos.above()) && isLightLevelOk(pos, iServerWorld);
     }
 
     private static boolean isLightLevelOk(BlockPos pos, ServerLevelAccessor iServerWorld) {
@@ -176,7 +176,7 @@ public class EntityCombJelly extends WaterAnimal implements Bucketable {
             onLandProgress--;
         }
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.isInWater()) {
                 this.setNoGravity(true);
                 if(moveTarget == null || this.random.nextInt(120) == 0 || this.distanceToSqr(moveTarget.getX() + 0.5F, moveTarget.getY() + 0.5F, moveTarget.getZ() + 0.5F) < 5 || tickCount % 10 == 0 && !canBlockPosBeSeen(moveTarget)){
@@ -291,7 +291,7 @@ public class EntityCombJelly extends WaterAnimal implements Bucketable {
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setVariant(random.nextInt(3));
         this.setJellyScale(0.8F + random.nextFloat() * 0.4F);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);

@@ -41,9 +41,9 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.SpawnGroupData;
@@ -123,13 +123,13 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 40.0D).add(Attributes.MOVEMENT_SPEED, 0.15F);
     }
 
-    public static boolean canAnacondaSpawn(EntityType type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean canAnacondaSpawn(EntityType type, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         final boolean spawnBlock = worldIn.getBlockState(pos.below()).is(AMTagRegistry.ANACONDA_SPAWNS);
         return spawnBlock && pos.getY() < worldIn.getSeaLevel() + 4;
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.anacondaSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -270,7 +270,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
 
     public Entity getChild() {
         UUID id = getChildId();
-        if (id != null && !level().isClientSide) {
+        if (id != null && !level().isClientSide()) {
             return level().getEntity(id);
         }
         return null;
@@ -359,7 +359,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         }
         this.ringBuffer[this.ringBufferIndex] = this.getYRot();
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             final int segments = 7;
             final Entity child = getChild();
             if (child == null) {
@@ -518,7 +518,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
     public ItemEntity spawnItemAtOffset(ItemStack stack, float f, float f1) {
         if (stack.isEmpty()) {
             return null;
-        } else if (this.level().isClientSide) {
+        } else if (this.level().isClientSide()) {
             return null;
         } else {
             final Vec3 vec = new Vec3(0, 0, f).yRot(-f * Mth.DEG_TO_RAD);
@@ -609,7 +609,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setYellow(random.nextBoolean());
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }

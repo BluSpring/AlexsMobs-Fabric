@@ -36,10 +36,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -121,17 +121,17 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.flutterSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static boolean canFlutterSpawnInLight(EntityType<? extends EntityFlutter> p_223325_0_, ServerLevelAccessor p_223325_1_, MobSpawnType p_223325_2_, BlockPos p_223325_3_, RandomSource p_223325_4_) {
+    public static boolean canFlutterSpawnInLight(EntityType<? extends EntityFlutter> p_223325_0_, ServerLevelAccessor p_223325_1_, EntitySpawnReason p_223325_2_, BlockPos p_223325_3_, RandomSource p_223325_4_) {
         return checkMobSpawnRules(p_223325_0_, p_223325_1_, p_223325_2_, p_223325_3_, p_223325_4_);
     }
 
-    public static <T extends Mob> boolean canFlutterSpawn(EntityType<EntityFlutter> entityType, ServerLevelAccessor iServerWorld, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static <T extends Mob> boolean canFlutterSpawn(EntityType<EntityFlutter> entityType, ServerLevelAccessor iServerWorld, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         BlockState blockstate = iServerWorld.getBlockState(pos.below());
-        return reason == MobSpawnType.SPAWNER || !iServerWorld.canSeeSky(pos) && blockstate.is(AMTagRegistry.FLUTTER_SPAWNS) && pos.getY() <= 64 && canFlutterSpawnInLight(entityType, iServerWorld, reason, pos, random);
+        return reason == EntitySpawnReason.SPAWNER || !iServerWorld.canSeeSky(pos) && blockstate.is(AMTagRegistry.FLUTTER_SPAWNS) && pos.getY() <= 64 && canFlutterSpawnInLight(entityType, iServerWorld, reason, pos, random);
     }
 
     @Override
@@ -298,7 +298,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
         }
         this.FlutterRotation += this.rotationVelocity;
         if ((double) this.FlutterRotation > (Mth.TWO_PI)) {
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 this.FlutterRotation = Mth.TWO_PI;
             } else {
                 this.FlutterRotation = (float) ((double) this.FlutterRotation - (Mth.TWO_PI));
@@ -323,7 +323,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
                 randomMotionSpeed = 0.01F;
             }
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (isFlying() && this.isLandNavigator) {
                 switchNavigator(false);
             }
@@ -460,7 +460,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
                     player.drop(fish, false);
                 }
                 this.remove(RemovalReason.DISCARDED);
-                return InteractionResult.sidedSuccess(this.level().isClientSide);
+                return InteractionResult.sidedSuccess(this.level().isClientSide());
             } else {
                 this.setCommand(this.getCommand() + 1);
                 if (this.getCommand() == 3) {
@@ -509,7 +509,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.isPotted()) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.spawnAtLocation(Items.FLOWER_POT);
             }
         }

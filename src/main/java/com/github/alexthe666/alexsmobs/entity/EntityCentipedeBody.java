@@ -82,7 +82,7 @@ public class EntityCentipedeBody extends Mob implements IHurtableMultipart {
         if (this.tickCount > 1) {
             final Entity parent = getParent();
             refreshDimensions();
-            if (parent != null && !this.level().isClientSide) {
+            if (parent != null && !this.level().isClientSide()) {
                 if (parent instanceof final LivingEntity parentEntity) {
                     if ((parentEntity.hurtTime > 0 || parentEntity.deathTime > 0)) {
                         AlexsMobs.sendMSGToAll(new MessageHurtMultipart(this.getId(), parent.getId(), 0));
@@ -142,7 +142,7 @@ public class EntityCentipedeBody extends Mob implements IHurtableMultipart {
 
     public Entity getParent() {
         final UUID id = getParentId();
-        if (id != null && !this.level().isClientSide) {
+        if (id != null && !this.level().isClientSide()) {
             return ((ServerLevel) level()).getEntity(id);
         }
         return null;
@@ -154,7 +154,7 @@ public class EntityCentipedeBody extends Mob implements IHurtableMultipart {
 
     public Entity getChild() {
         final UUID id = getChildId();
-        if (id != null && !this.level().isClientSide) {
+        if (id != null && !this.level().isClientSide()) {
             return ((ServerLevel) level()).getEntity(id);
         }
         return null;
@@ -178,7 +178,7 @@ public class EntityCentipedeBody extends Mob implements IHurtableMultipart {
     public boolean hurt(DamageSource source, float damage) {
         final Entity parent = getParent();
         final boolean prev = parent != null && parent.hurt(source, damage * this.damageMultiplier);
-        if (prev && !this.level().isClientSide) {
+        if (prev && !this.level().isClientSide()) {
             AlexsMobs.sendMSGToAll(new MessageHurtMultipart(this.getId(), parent.getId(), damage * this.damageMultiplier));
         }
         return prev;

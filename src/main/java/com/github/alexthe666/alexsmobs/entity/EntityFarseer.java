@@ -30,10 +30,10 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -96,7 +96,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.farseerSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -166,7 +166,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
         return AMSoundRegistry.FARSEER_HURT.get();
     }
 
-    public static boolean checkFarseerSpawnRules(EntityType<? extends Monster> animal, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean checkFarseerSpawnRules(EntityType<? extends Monster> animal, ServerLevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         boolean notPeaceful = worldIn.getDifficulty() != Difficulty.PEACEFUL;
         boolean darkEnough = isDarkEnoughToSpawn(worldIn, pos, random);
         boolean inFarseerArea = isFarseerArea(worldIn, pos);
@@ -221,7 +221,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
     public LivingEntity getLaserTarget() {
         if (!this.hasLaser()) {
             return null;
-        } else if (this.level().isClientSide) {
+        } else if (this.level().isClientSide()) {
             if (this.laserTargetEntity != null) {
                 return this.laserTargetEntity;
             } else {
@@ -312,7 +312,7 @@ public class EntityFarseer extends Monster implements IAnimatedEntity {
                 this.setInvisible(this.hasEffect(MobEffects.INVISIBILITY));
             }
             if (this.getAnimation() == ANIMATION_EMERGE) {
-                if(this.level().isClientSide){
+                if(this.level().isClientSide()){
                     this.level().addParticle(AMParticleRegistry.STATIC_SPARK.get(), this.getRandomX(0.75F), this.getRandomY(), this.getRandomZ(0.75F), (this.getRandom().nextFloat() - 0.5F) * 0.2F, this.getRandom().nextFloat() * 0.2F, (this.getRandom().nextFloat() - 0.5F) * 0.2F);
                 }
                 if(this.getAnimationTick() == 1){

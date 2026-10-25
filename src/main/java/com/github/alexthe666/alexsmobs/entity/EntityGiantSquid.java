@@ -35,9 +35,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -125,19 +125,19 @@ public class EntityGiantSquid extends WaterAnimal {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.giantSquidSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static boolean canGiantSquidSpawn(EntityType<EntityGiantSquid> entityType, ServerLevelAccessor iServerWorld, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return reason == MobSpawnType.SPAWNER || iServerWorld.isWaterAt(pos) && iServerWorld.isWaterAt(pos.above());
+    public static boolean canGiantSquidSpawn(EntityType<EntityGiantSquid> entityType, ServerLevelAccessor iServerWorld, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+        return reason == EntitySpawnReason.SPAWNER || iServerWorld.isWaterAt(pos) && iServerWorld.isWaterAt(pos.above());
     }
 
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
-        if (reason == MobSpawnType.NATURAL) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
+        if (reason == EntitySpawnReason.NATURAL) {
             doInitialPosing(worldIn);
         }
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
@@ -340,7 +340,7 @@ public class EntityGiantSquid extends WaterAnimal {
             }
             this.setNoGravity(this.isInWater());
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.getSquidPitch() > 0F) {
                 float decrease = Math.min(2F, this.getSquidPitch());
                 this.decrementSquidPitch(decrease);
@@ -381,7 +381,7 @@ public class EntityGiantSquid extends WaterAnimal {
             }
             humTick++;
         }
-        if(!this.level().isClientSide){
+        if(!this.level().isClientSide()){
             if(resetCapturedStateIn > 0){
                 resetCapturedStateIn--;
             }else{
@@ -684,7 +684,7 @@ public class EntityGiantSquid extends WaterAnimal {
     private void spawnInk() {
         this.gameEvent(GameEvent.ENTITY_INTERACT);
         this.playSound(SoundEvents.SQUID_SQUIRT, this.getSoundVolume(), 0.5F * this.getVoicePitch());
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             Vec3 inkDirection = new Vec3(0, 0, 1.2F).xRot(-this.getXRot() * Mth.DEG_TO_RAD).yRot(-this.yBodyRot * Mth.DEG_TO_RAD);
             Vec3 vec3 = this.position().add(inkDirection);
             for (int i = 0; i < 30; ++i) {

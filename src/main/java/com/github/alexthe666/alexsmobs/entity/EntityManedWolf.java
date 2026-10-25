@@ -36,8 +36,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -92,7 +92,7 @@ public class EntityManedWolf extends Animal implements ITargetsDroppedItems, IDa
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.manedWolfSpawnRolls, this.getRandom(), spawnReasonIn) && super.checkSpawnRules(worldIn, spawnReasonIn);
     }
 
@@ -257,7 +257,7 @@ public class EntityManedWolf extends Animal implements ITargetsDroppedItems, IDa
         prevEarYaw = this.getEarYaw();
         prevDanceProgress = danceProgress;
         prevShakeProgress = shakeProgress;
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             updateEars();
         }
         boolean dance = isDancing();
@@ -280,7 +280,7 @@ public class EntityManedWolf extends Animal implements ITargetsDroppedItems, IDa
         }
         if (this.isShaking()) {
             this.setShakingTime(this.getShakingTime() - 1);
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 double d0 = this.random.nextGaussian() * 0.02D;
                 double d1 = 0.05F + this.random.nextGaussian() * 0.02D;
                 double d2 = this.random.nextGaussian() * 0.02D;

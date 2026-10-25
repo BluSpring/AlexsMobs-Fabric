@@ -45,7 +45,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -122,7 +122,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         this.moveControl = new MovementControllerCustomCollisions(this);
     }
 
-    public static boolean canTigerSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean canTigerSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         return worldIn.getRawBrightness(pos, 0) > 8;
     }
 
@@ -131,7 +131,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.tigerSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -339,7 +339,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
 
     @Override
     protected void customServerAiStep() {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.updatePersistentAnger((ServerLevel) this.level(), false);
         }
     }
@@ -398,7 +398,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
                 stealthProgress--;
         }
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (isRunning() && !hasSpedUp) {
                 hasSpedUp = true;
                 this.setSprinting(true);
@@ -461,7 +461,7 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         } else {
             holdTime = 0;
         }
-        if (prevScaredMobId != this.entityData.get(LAST_SCARED_MOB_ID) && this.level().isClientSide) {
+        if (prevScaredMobId != this.entityData.get(LAST_SCARED_MOB_ID) && this.level().isClientSide()) {
             Entity e = level().getEntity(this.entityData.get(LAST_SCARED_MOB_ID));
             if (e != null) {
                 final double d2 = this.random.nextGaussian() * 0.1D;

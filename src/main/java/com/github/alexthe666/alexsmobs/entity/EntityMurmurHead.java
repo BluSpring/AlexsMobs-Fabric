@@ -179,7 +179,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
     }
 
     public Entity getBody() {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             final UUID id = getBodyId();
             return id == null ? null : ((ServerLevel) level()).getEntity(id);
         }else{
@@ -220,7 +220,7 @@ public class EntityMurmurHead extends Monster implements FlyingAnimal {
         }
         moveHair();
         Entity body = getBody();
-        if(!this.level().isClientSide) {
+        if(!this.level().isClientSide()) {
             if (body instanceof EntityMurmur murmur) {
                 this.entityData.set(BODY_ID, body.getId());
                 if(this.isPulledIn() && murmur.isAlive()){

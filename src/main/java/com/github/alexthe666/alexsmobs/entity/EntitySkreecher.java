@@ -32,7 +32,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -108,11 +108,11 @@ public class EntitySkreecher extends Monster {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.skreecherSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static boolean checkSkreecherSpawnRules(EntityType<? extends Monster> animal, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean checkSkreecherSpawnRules(EntityType<? extends Monster> animal, ServerLevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         boolean isOnSculk = worldIn.getBlockState(pos.below()).is(Blocks.SCULK);
         return worldIn.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(worldIn, pos, random) && isOnSculk;
     }
@@ -188,7 +188,7 @@ public class EntitySkreecher extends Monster {
                 clapProgress--;
         }
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             float technicalDistToCeiling = calculateDistanceToCeiling();
             float gap = Math.max(technicalDistToCeiling - this.getDistanceToCeiling(), 0F);
             if(this.isClinging()){
@@ -263,7 +263,7 @@ public class EntitySkreecher extends Monster {
                         Warden warden = EntityType.WARDEN.create(this.level());
 
                         warden.moveTo(this.getX(), spawnAt.getY() + 1, this.getZ(), this.getYRot(), 0.0F);
-                        warden.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.TRIGGERED, null);
+                        warden.finalizeSpawn((ServerLevelAccessor)level(), level().getCurrentDifficultyAt(this.blockPosition()), EntitySpawnReason.TRIGGERED, null);
                         warden.setAttackTarget(this);
                         warden.increaseAngerAt(this, 79, false);
                         this.level().addFreshEntity(warden);
@@ -272,7 +272,7 @@ public class EntitySkreecher extends Monster {
                 }
             }
             clapTick++;
-            if(!this.level().isClientSide){
+            if(!this.level().isClientSide()){
                 if(this.getTarget() != null && this.getTarget().isAlive() && this.hasLineOfSight(this.getTarget()) && !this.getTarget().hasEffect(MobEffects.INVISIBILITY) && !this.hasEffect(MobEffects.BLINDNESS)) {
                     double horizDist = this.getTarget().position().subtract(this.position()).horizontalDistance();
                     if (horizDist > 20) {

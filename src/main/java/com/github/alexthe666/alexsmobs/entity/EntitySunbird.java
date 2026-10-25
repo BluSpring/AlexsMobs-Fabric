@@ -35,7 +35,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -96,12 +96,12 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.FOLLOW_RANGE, 64.0D).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.MOVEMENT_SPEED, 1F);
     }
 
-    public static boolean canSunbirdSpawn(EntityType<? extends Mob> typeIn, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean canSunbirdSpawn(EntityType<? extends Mob> typeIn, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         return true;
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.sunbirdSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -207,7 +207,7 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
         prevScorchProgress = this.scorchProgress;
         float f2 = (float) -((float) this.getDeltaMovement().y * (double) Mth.RAD_TO_DEG);
         this.birdPitch = f2;
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             final float radius = 0.35F + random.nextFloat() * 3.5F;
             final float angle = (Maths.STARTING_ANGLE * ((random.nextBoolean() ? -85F : 85F) + this.yBodyRot));
             final float angleMotion = (Maths.STARTING_ANGLE * this.yBodyRot);
@@ -266,7 +266,7 @@ public class EntitySunbird extends Animal implements FlyingAnimal {
                 scorchProgress--;
         }
 
-        if (scorching && scorchProgress == 20F && !this.level().isClientSide) {
+        if (scorching && scorchProgress == 20F && !this.level().isClientSide()) {
             if(fullScorchTime > 30){
                 this.setScorching(false);
             }else if(fullScorchTime % 5 == 0){

@@ -1,11 +1,18 @@
 package com.github.alexthe666.alexsmobs.block;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.entity.EntityLeafcutterAnt;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMPointOfInterestRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityLeafcutterAnthill;
 import com.google.common.base.Predicates;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -27,11 +34,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class BlockLeafcutterAntChamber extends Block {
     public static final IntegerProperty FUNGUS = IntegerProperty.create("fungus", 0, 5);
@@ -55,7 +57,7 @@ public class BlockLeafcutterAntChamber extends Block {
                 this.angerNearbyAnts(worldIn, pos);
             }
             worldIn.setBlockAndUpdate(pos, state.setValue(FUNGUS, 0));
-            if(!worldIn.isClientSide){
+            if(!worldIn.isClientSide()){
                 if(worldIn.random.nextInt(2) == 0){
                     Direction dir = Direction.getRandom(worldIn.random);
                     if(worldIn.getBlockState(pos.above()).getBlock() == AMBlockRegistry.LEAFCUTTER_ANTHILL.get()){
@@ -102,7 +104,7 @@ public class BlockLeafcutterAntChamber extends Block {
                 }
             }
         }
-        if(!world.isClientSide){
+        if(!world.isClientSide()){
             PoiManager pointofinterestmanager = ((ServerLevel) world).getPoiManager();
             Stream<BlockPos> stream = pointofinterestmanager.findAll((poiTypeHolder -> poiTypeHolder.is(AMPointOfInterestRegistry.LEAFCUTTER_ANT_HILL.getKey())), Predicates.alwaysTrue(), pos, 50, PoiManager.Occupancy.ANY);
             List<BlockPos> listOfHives = stream.collect(Collectors.toList());

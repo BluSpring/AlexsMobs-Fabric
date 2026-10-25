@@ -68,7 +68,7 @@ public class EntityTendonSegment  extends Entity {
         if(tickCount < 1){
             onJoinWorld();
         }else if(tickCount == 1){
-            if(!this.level().isClientSide){
+            if(!this.level().isClientSide()){
                 this.playSound(AMSoundRegistry.TENDON_WHIP.get(),1.0F, 0.8F + this.random.nextFloat() * 0.4F);
             }
         }
@@ -97,7 +97,7 @@ public class EntityTendonSegment  extends Entity {
                 Vec3 target = new Vec3(current.getX(), current.getY(0.4F), current.getZ());
                 Vec3 lerp = target.subtract(this.position());
                 this.setDeltaMovement(lerp.scale(0.5F));
-                if(!this.level().isClientSide){
+                if(!this.level().isClientSide()){
                     if(!hasTouched && progress >= MAX_EXTEND_TIME){
                         hasTouched = true;
                         Entity entity = getCreatorEntity();
@@ -111,7 +111,7 @@ public class EntityTendonSegment  extends Entity {
             }
         }
         Vec3 vector3d = this.getDeltaMovement();
-        if(!this.level().isClientSide){
+        if(!this.level().isClientSide()){
             if(!hasChained){
                 if(this.getTargetsHit() > 3){
                     this.setRetracting(true);
@@ -244,7 +244,7 @@ public class EntityTendonSegment  extends Entity {
 
     public Entity getCreatorEntity() {
         UUID uuid = getCreatorEntityUUID();
-        if(uuid != null && !this.level().isClientSide){
+        if(uuid != null && !this.level().isClientSide()){
             return ((ServerLevel) level()).getEntity(uuid);
         }
         return null;

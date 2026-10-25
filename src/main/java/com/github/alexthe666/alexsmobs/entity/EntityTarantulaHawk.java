@@ -113,7 +113,7 @@ public class EntityTarantulaHawk extends TamableAnimal implements IFollower {
         switchNavigator(false);
     }
 
-    public static boolean canTarantulaHawkSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean canTarantulaHawkSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         return worldIn.getBlockState(pos.below()).is(AMTagRegistry.TARANTULA_HAWK_SPAWNS) && worldIn.getRawBrightness(pos, 0) > 8 || isBiomeNether(worldIn, pos) || AMConfig.fireproofTarantulaHawk;
     }
 
@@ -122,13 +122,13 @@ public class EntityTarantulaHawk extends TamableAnimal implements IFollower {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.tarantulaHawkSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         if(isBiomeNether(worldIn, this.blockPosition())){
             this.setNether(true);
         }
@@ -388,7 +388,7 @@ public class EntityTarantulaHawk extends TamableAnimal implements IFollower {
             this.setFlyAngle(Math.min(this.getFlyAngle() + 4, 0));
         }
         this.setFlyAngle(Mth.clamp(this.getFlyAngle(), -30, 30));
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (isFlying() && this.isLandNavigator) {
                 switchNavigator(false);
             }

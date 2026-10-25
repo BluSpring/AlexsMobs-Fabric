@@ -37,7 +37,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -139,7 +139,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
 
                 }
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide());
         }
         if (itemstack.getItem() == Items.LAVA_BUCKET && this.isAlive()) {
             this.gameEvent(GameEvent.ENTITY_INTERACT);
@@ -149,12 +149,12 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
             ItemStack itemstack2 = ItemUtils.createFilledResult(itemstack, player, itemstack1, false);
             player.setItemInHand(hand, itemstack2);
             Level level = this.level();
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer)player, itemstack1);
             }
 
             this.discard();
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.sidedSuccess(level.isClientSide());
         }
         return super.mobInteract(player, hand);
     }
@@ -219,11 +219,11 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.stradpoleSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static boolean canStradpoleSpawn(EntityType<EntityStradpole> p_234314_0_, LevelAccessor p_234314_1_, MobSpawnType p_234314_2_, BlockPos p_234314_3_, RandomSource p_234314_4_) {
+    public static boolean canStradpoleSpawn(EntityType<EntityStradpole> p_234314_0_, LevelAccessor p_234314_1_, EntitySpawnReason p_234314_2_, BlockPos p_234314_3_, RandomSource p_234314_4_) {
         if(p_234314_1_.getFluidState(p_234314_3_).is(FluidTags.LAVA)){
             if(!p_234314_1_.getFluidState(p_234314_3_.below()).is(FluidTags.LAVA)){
 
@@ -338,7 +338,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
 
     public Entity getParent() {
         UUID id = getParentId();
-        if (id != null && !this.level().isClientSide) {
+        if (id != null && !this.level().isClientSide()) {
             return ((ServerLevel) level()).getEntity(id);
         }
         return null;
@@ -361,7 +361,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
 
     protected void damageShieldFor(Player holder, float damage) {
         if (holder.getUseItem().canPerformAction(ItemAbilities.SHIELD_BLOCK)) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 holder.awardStat(Stats.ITEM_USED.get(holder.getUseItem().getItem()));
             }
 

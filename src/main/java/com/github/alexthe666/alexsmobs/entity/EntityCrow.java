@@ -50,10 +50,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -150,11 +150,11 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
 
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.crowSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static <T extends Mob> boolean canCrowSpawn(EntityType<EntityCrow> crow, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static <T extends Mob> boolean canCrowSpawn(EntityType<EntityCrow> crow, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         return isBrightEnoughToSpawn(worldIn, pos);
     }
 
@@ -248,7 +248,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
                 this.setPos(riding.getX() + extraX, riding.getY() + extraY, riding.getZ() + extraZ);
                 if (!riding.isAlive() || boardingCooldown == 0 && riding.isShiftKeyDown() || ((Player) riding).isFallFlying() || this.getTarget() != null && this.getTarget().isAlive()) {
                     this.removeVehicle();
-                    if (!this.level().isClientSide) {
+                    if (!this.level().isClientSide()) {
                         AlexsMobs.sendMSGToAll(new MessageCrowDismount(this.getId(), riding.getId()));
                     }
                 }
@@ -337,7 +337,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
             fleePumpkinFlag--;
         }
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             final boolean isFlying = isFlying();
             if (isFlying && this.isLandNavigator) {
                 switchNavigator(false);
@@ -656,7 +656,7 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
     public void onGetItem(ItemEntity e) {
         final ItemStack duplicate = e.getItem().copy();
         duplicate.setCount(1);
-        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide) {
+        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide()) {
             this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0.0F);
         }
         this.setItemInHand(InteractionHand.MAIN_HAND, duplicate);

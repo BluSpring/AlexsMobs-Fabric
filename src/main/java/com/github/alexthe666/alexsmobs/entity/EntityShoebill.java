@@ -38,7 +38,7 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -93,7 +93,7 @@ public class EntityShoebill extends Animal implements IAnimatedEntity, ITargetsD
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.shoebillSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -212,7 +212,7 @@ public class EntityShoebill extends Animal implements IAnimatedEntity, ITargetsD
         if (revengeCooldown == 0 && this.getLastHurtByMob() != null) {
             this.setLastHurtByMob(null);
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if(fishingCooldown > 0){
                 fishingCooldown--;
             }
@@ -332,7 +332,7 @@ public class EntityShoebill extends Animal implements IAnimatedEntity, ITargetsD
                  this.gameEvent(GameEvent.EAT);
                  this.playSound(SoundEvents.CAT_EAT, this.getSoundVolume(), this.getVoicePitch());
                  lvt_3_1_.shrink(1);
-                 return InteractionResult.sidedSuccess(this.level().isClientSide);
+                 return InteractionResult.sidedSuccess(this.level().isClientSide());
              }else{
                  if(this.getAnimation() == NO_ANIMATION){
                      this.setAnimation(ANIMATION_BEAKSHAKE);
@@ -352,7 +352,7 @@ public class EntityShoebill extends Animal implements IAnimatedEntity, ITargetsD
                  lvt_3_1_.shrink(1);
                  this.gameEvent(GameEvent.EAT);
                  this.playSound(SoundEvents.CAT_EAT, this.getSoundVolume(), this.getVoicePitch());
-                 return InteractionResult.sidedSuccess(this.level().isClientSide);
+                 return InteractionResult.sidedSuccess(this.level().isClientSide());
              }else{
                  if(this.getAnimation() == NO_ANIMATION){
                      this.setAnimation(ANIMATION_BEAKSHAKE);

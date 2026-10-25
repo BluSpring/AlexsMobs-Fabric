@@ -26,8 +26,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -124,7 +124,7 @@ public class EntityFlyingFish extends WaterAnimal implements FlyingAnimal, Bucke
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.flyingFishSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -170,7 +170,7 @@ public class EntityFlyingFish extends WaterAnimal implements FlyingAnimal, Bucke
             glideIn--;
         }
         this.yBodyRot = this.getYRot();
-        float f2 = (float) -((float) this.getDeltaMovement().y * 3F * (double) Mth.RAD_TO_DEG);
+        float f2 = (float) -(this.getDeltaMovement().y * 3F * (double) Mth.RAD_TO_DEG);
         if(this.isGliding()){
             f2 = -f2;
         }
@@ -327,7 +327,7 @@ public class EntityFlyingFish extends WaterAnimal implements FlyingAnimal, Bucke
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance diff, MobSpawnType spawnType, @Nullable SpawnGroupData data) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance diff, EntitySpawnReason spawnType, @Nullable SpawnGroupData data) {
         int i;
         if (data instanceof FlyingFishGroupData) {
             i = ((FlyingFishGroupData)data).variant;

@@ -34,9 +34,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -79,7 +79,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.cosmicCodSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -211,7 +211,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
     public void tick() {
         super.tick();
         this.prevFishPitch = this.getFishPitch();
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             final double ydist = (this.yo - this.getY());//down 0.4 up -0.38
             final float fishDist = (float) ((Math.abs(this.getDeltaMovement().x) + Math.abs(this.getDeltaMovement().z)) * 6F) / getPitchSensitivity();
             this.incrementFishPitch((float) (ydist) * 10 * getPitchSensitivity());
@@ -233,7 +233,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
         }
         if(teleportIn > 0){
             teleportIn--;
-            if(teleportIn == 0 && !this.level().isClientSide){
+            if(teleportIn == 0 && !this.level().isClientSide()){
                 final double range = 8;
                 final AABB bb = new AABB(this.getX() - range, this.getY() - range, this.getZ() - range, this.getX() + range, this.getY() + range, this.getZ() + range);
                 final List<EntityCosmicCod> list = this.level().getEntitiesOfClass(EntityCosmicCod.class, bb);
@@ -428,13 +428,13 @@ public class EntityCosmicCod extends Mob implements Bucketable {
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         if (spawnDataIn == null) {
             spawnDataIn = new EntityCosmicCod.GroupData(this);
         } else {
             this.createAndSetLeader(((EntityCosmicCod.GroupData) spawnDataIn).groupLeader);
         }
-        if (reason == MobSpawnType.NATURAL && spawnDataIn instanceof EntityCosmicCod.GroupData) {
+        if (reason == EntitySpawnReason.NATURAL && spawnDataIn instanceof EntityCosmicCod.GroupData) {
             doInitialPosing(worldIn, (GroupData) spawnDataIn);
         }
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
@@ -456,12 +456,12 @@ public class EntityCosmicCod extends Mob implements Bucketable {
             final ItemStack itemstack2 = ItemUtils.createFilledResult(itemstack, player, itemstack1, false);
             player.setItemInHand(hand, itemstack2);
             final Level level = this.level();
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer)player, itemstack1);
             }
 
             this.discard();
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide());
         }
         return super.mobInteract(player, hand);
     }

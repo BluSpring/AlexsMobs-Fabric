@@ -67,7 +67,7 @@ public class EntityMudBall extends EntityMobProjectile {
 
     @Override
     protected void onImpact(HitResult result) {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.level().broadcastEntityEvent(this, (byte)3);
         }
         super.onImpact(result);

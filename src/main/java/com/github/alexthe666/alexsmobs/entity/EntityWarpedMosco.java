@@ -34,7 +34,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -186,7 +186,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
         if ((!flying || dashRight) && flyLeftProgress > 0F) {
             flyLeftProgress--;
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (flying) {
                 if (this.isLandNavigator)
                     switchNavigator(false);
@@ -271,7 +271,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
                 BlockPos ground = getMoscoGround(new BlockPos(Mth.floor(this.getX() + extraX), Mth.floor(this.getY() + extraY) - 1, Mth.floor(this.getZ() + extraZ)));
                 BlockState state = this.level().getBlockState(ground);
                 if (state.isSolid()) {
-                    if (this.level().isClientSide) {
+                    if (this.level().isClientSide()) {
                         level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), true, this.getX() + extraX, ground.getY() + extraY, this.getZ() + extraZ, motionX, motionY, motionZ);
                     }
                 }
@@ -432,7 +432,7 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.warpedMoscoSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 

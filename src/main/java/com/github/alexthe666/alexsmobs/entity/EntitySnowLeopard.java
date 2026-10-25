@@ -28,7 +28,7 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
@@ -81,11 +81,11 @@ public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITarge
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.snowLeopardSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static <T extends Mob> boolean canSnowLeopardSpawn(EntityType<EntitySnowLeopard> snowleperd, LevelAccessor worldIn, MobSpawnType reason, BlockPos p_223317_3_, RandomSource random) {
+    public static <T extends Mob> boolean canSnowLeopardSpawn(EntityType<EntitySnowLeopard> snowleperd, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos p_223317_3_, RandomSource random) {
         return worldIn.getBlockState(p_223317_3_.below()).is(AMTagRegistry.SNOW_LEOPARD_SPAWNS) && worldIn.getRawBrightness(p_223317_3_, 0) > 8;
     }
 
@@ -240,7 +240,7 @@ public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITarge
         if(tackling){
             this.yBodyRot = this.getYRot();
         }
-        if(!this.level().isClientSide) {
+        if(!this.level().isClientSide()) {
             if (this.getTarget() != null && (this.isSitting() || this.isSleeping())) {
                 this.setSitting(false);
                 this.setSleeping(false);

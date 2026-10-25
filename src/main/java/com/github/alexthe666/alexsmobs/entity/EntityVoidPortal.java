@@ -116,7 +116,7 @@ public class EntityVoidPortal extends Entity {
         List<Entity> entities = new ArrayList<>();
         entities.addAll(this.level().getEntities(this, bb.deflate(0.2F)));
         entities.addAll(this.level().getEntitiesOfClass(EntityVoidWorm.class, bb.inflate(1.5F)));
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             MinecraftServer server = level().getServer();
             if (this.getDestination() != null && this.getLifespan() > 20 && tickCount > 20) {
                 BlockPos offsetPos = this.getDestination().relative(this.getAttachmentFacing().getOpposite(), 2);
@@ -331,7 +331,7 @@ public class EntityVoidPortal extends Entity {
 
     public Entity getSister() {
         UUID id = getSisterId();
-        if (id != null && !this.level().isClientSide) {
+        if (id != null && !this.level().isClientSide()) {
             return level().getEntity(id);
         }
         return null;

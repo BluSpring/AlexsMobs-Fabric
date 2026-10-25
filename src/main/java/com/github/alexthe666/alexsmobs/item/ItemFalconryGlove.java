@@ -82,7 +82,7 @@ public class ItemFalconryGlove extends Item implements ILeftClick {
                     if(entity instanceof IFalconry falcon && entity instanceof Animal animal){
                         animal.removeVehicle();
                         animal.moveTo(playerIn.getX(), playerIn.getEyeY(), playerIn.getZ(), animal.getYRot(), animal.getXRot());
-                        if(animal.level().isClientSide){
+                        if(animal.level().isClientSide()){
                             AlexsMobs.sendMSGToServer(new MessageSyncEntityPos(animal.getId(), playerIn.getX(), playerIn.getEyeY(), playerIn.getZ()));
                         }else{
                             AlexsMobs.sendMSGToAll(new MessageSyncEntityPos(animal.getId(), playerIn.getX(), playerIn.getEyeY(), playerIn.getZ()));

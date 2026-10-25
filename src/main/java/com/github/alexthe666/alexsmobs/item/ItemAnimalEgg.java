@@ -30,7 +30,7 @@ public class ItemAnimalEgg extends Item {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
         playerIn.gameEvent(GameEvent.ITEM_INTERACT_START);
         worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.EGG_THROW, SoundSource.PLAYERS, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
-        if (!worldIn.isClientSide) {
+        if (!worldIn.isClientSide()) {
             ThrowableItemProjectile eggentity;
             if(this == AMItemRegistry.EMU_EGG.get()){
                 eggentity = new EntityEmuEgg(worldIn, playerIn);

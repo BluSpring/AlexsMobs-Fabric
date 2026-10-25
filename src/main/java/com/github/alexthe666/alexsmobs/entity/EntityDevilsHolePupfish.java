@@ -41,8 +41,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.SpawnGroupData;
@@ -132,8 +132,8 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
         return super.requiresCustomPersistence() || this.hasCustomName() || this.fromBucket();
     }
 
-    public static boolean canPupfishSpawn(EntityType<EntityDevilsHolePupfish> entityType, ServerLevelAccessor iServerWorld, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return reason == MobSpawnType.SPAWNER || isPupfishChunk(iServerWorld, pos) && iServerWorld.getFluidState(pos).is(FluidTags.WATER) && isInCave(iServerWorld, pos);
+    public static boolean canPupfishSpawn(EntityType<EntityDevilsHolePupfish> entityType, ServerLevelAccessor iServerWorld, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+        return reason == EntitySpawnReason.SPAWNER || isPupfishChunk(iServerWorld, pos) && iServerWorld.getFluidState(pos).is(FluidTags.WATER) && isInCave(iServerWorld, pos);
     }
 
     private static boolean isPupfishChunk(ServerLevelAccessor iServerWorld, BlockPos pos) {
@@ -149,7 +149,7 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.devilsHolePupfishSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -339,7 +339,7 @@ public class EntityDevilsHolePupfish extends WaterAnimal implements FlyingAnimal
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setPupfishScale(0.65F + random.nextFloat() * 0.35F);
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }

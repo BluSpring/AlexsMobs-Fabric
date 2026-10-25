@@ -39,10 +39,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -128,11 +128,11 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.froststalkerSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static boolean canFroststalkerSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean canFroststalkerSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         return worldIn.getRawBrightness(pos, 0) > 8 && (worldIn.getBlockState(pos.below()).is(AMTagRegistry.FROSTSTALKER_SPAWNS) || worldIn.getBlockState(pos.below()).isSolid());
     }
 
@@ -323,7 +323,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
             }
         }
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.tickCount % 200 == 0) {
                 if (isInWaterRainOrBubble() && !this.hasSpikes()) {
                     this.setSpiked(true);
@@ -416,7 +416,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
         if (fleeFireFlag > 0) {
             fleeFireFlag--;
         }
-        if(!this.level().isClientSide){
+        if(!this.level().isClientSide()){
             if(resetLeaderCooldown > 0){
                 resetLeaderCooldown--;
             }else{
@@ -679,7 +679,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_27528_, DifficultyInstance p_27529_, MobSpawnType p_27530_, @Nullable SpawnGroupData p_27531_) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_27528_, DifficultyInstance p_27529_, EntitySpawnReason p_27530_, @Nullable SpawnGroupData p_27531_) {
         //do not call super here
         this.getAttribute(Attributes.FOLLOW_RANGE).addPermanentModifier(new AttributeModifier(Identifier.fromNamespaceAndPath("alexsmobs", "random_spawn_bonus"), this.random.nextGaussian() * 0.05D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         if (p_27531_ == null) {

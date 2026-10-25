@@ -52,7 +52,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -135,11 +135,11 @@ public class EntityVoidWorm extends Monster {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.voidWormSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static boolean canVoidWormSpawn(EntityType animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean canVoidWormSpawn(EntityType animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         return true;
     }
 
@@ -285,7 +285,7 @@ public class EntityVoidWorm extends Monster {
 
     public Entity getChild() {
         UUID id = getChildId();
-        if (id != null && !this.level().isClientSide) {
+        if (id != null && !this.level().isClientSide()) {
             return level().getEntity(id);
         }
         return null;
@@ -321,7 +321,7 @@ public class EntityVoidWorm extends Monster {
         } else if (this.getWormAngle() < 0) {
             this.setWormAngle(Math.min(this.getWormAngle() + 20, 0));
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (!fullyThrough) {
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.9F, 0.9F, 0.9F).add(0, -0.01, 0));
             } else {
@@ -367,7 +367,7 @@ public class EntityVoidWorm extends Monster {
         yBodyRot = getYRot();
         final float f2 = (float) -((float) this.getDeltaMovement().y * (double) Mth.RAD_TO_DEG);
         this.setXRot(f2);
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             Entity child = getChild();
             if (child == null) {
                 LivingEntity partParent = this;
@@ -415,7 +415,7 @@ public class EntityVoidWorm extends Monster {
         if (updatePostSummon) {
             updatePostSummon = false;
         }
-        if (!this.isSilent() && !this.level().isClientSide) {
+        if (!this.isSilent() && !this.level().isClientSide()) {
             this.level().broadcastEntityEvent(this, (byte) 67);
         }
     }
@@ -500,7 +500,7 @@ public class EntityVoidWorm extends Monster {
     }
 
     public void resetWormScales() {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             Entity child = getChild();
             if (child == null) {
                 LivingEntity nextPart = this;
@@ -524,7 +524,7 @@ public class EntityVoidWorm extends Monster {
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason
             reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setSegmentCount(25 + random.nextInt(15));
         this.setXRot(0.0F);
@@ -673,7 +673,7 @@ public class EntityVoidWorm extends Monster {
             Direction dir = Direction.getNearest(dirVec.x, dirVec.y, dirVec.z);
             portal.setAttachmentFacing(dir);
             portal.setLifespan(10000);
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 level().addFreshEntity(portal);
             }
             portalTarget = portal;

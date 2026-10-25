@@ -36,10 +36,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
@@ -93,7 +93,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
         super(type, worldIn);
     }
 
-    public static boolean canMooseSpawn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean canMooseSpawn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         BlockState blockstate = worldIn.getBlockState(pos.below());
         return (blockstate.is(Blocks.GRASS_BLOCK) || blockstate.is(Blocks.SNOW)) || blockstate.is(Blocks.SNOW_BLOCK) && worldIn.getRawBrightness(pos, 0) > 8;
     }
@@ -103,7 +103,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.mooseSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -258,7 +258,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
         if(snowTimer > 0){
             snowTimer--;
         }
-        if (snowTimer == 0 && !this.level().isClientSide) {
+        if (snowTimer == 0 && !this.level().isClientSide()) {
             snowTimer = 200 + random.nextInt(400);
             if(this.isSnowy()){
                 if(!permSnow){
@@ -350,7 +350,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
         InteractionResult type = super.mobInteract(player, hand);
-        if (item == Items.SNOW && !this.isSnowy() && !this.level().isClientSide) {
+        if (item == Items.SNOW && !this.isSnowy() && !this.level().isClientSide()) {
             this.usePlayerItem(player, hand, itemstack);
             this.permSnow = true;
             this.setSnowy(true);
@@ -358,7 +358,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
             this.playSound(SoundEvents.SNOW_PLACE, this.getSoundVolume(), this.getVoicePitch());
             return InteractionResult.SUCCESS;
         }
-        if (item instanceof ShovelItem && this.isSnowy() && !this.level().isClientSide) {
+        if (item instanceof ShovelItem && this.isSnowy() && !this.level().isClientSide()) {
             this.permSnow = false;
             if (!player.isCreative()) {
                 if (itemstack.isDamageableItem()) itemstack.setDamageValue(itemstack.getDamageValue() + 1);
@@ -374,8 +374,8 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
     @Nullable
     public Entity getJostlingPartner() {
         UUID id = getJostlingPartnerUUID();
-        if (id != null && !this.level().isClientSide) {
-            return ((ServerLevel) level()).getEntity(id);
+        if (id != null && !this.level().isClientSide()) {
+            return level().getEntity(id);
         }
         return null;
     }

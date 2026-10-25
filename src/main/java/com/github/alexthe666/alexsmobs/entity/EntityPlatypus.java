@@ -45,10 +45,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -103,12 +103,12 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
         switchNavigator(false);
     }
 
-    public static boolean canPlatypusSpawn(EntityType type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean canPlatypusSpawn(EntityType type, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         return worldIn.getBlockState(pos.below()).is(AMTagRegistry.PLATYPUS_SPAWNS) && pos.getY() < worldIn.getSeaLevel() + 4;
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.platypusSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -177,7 +177,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
                 itemstack.shrink(1);
             }
             this.setFedora(true);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide());
         }
         if (itemstack.is(AMTagRegistry.PLATYPUS_CHARGEABLES) && !this.isSensing()) {
             superCharged = itemstack.is(AMTagRegistry.PLATYPUS_SUPER_CHARGEABLES);
@@ -185,7 +185,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
                 itemstack.shrink(1);
             }
             this.setSensing(true);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.sidedSuccess(this.level().isClientSide());
         }
         return Bucketable.bucketMobPickup(player, hand, this).orElse(super.mobInteract(player, hand));
     }
@@ -279,7 +279,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
             BlockPos ground = this.getBlockPosBelowThatAffectsMyMovement();
             BlockState state = this.level().getBlockState(ground);
             if (state.isSolid()) {
-                if (this.level().isClientSide) {
+                if (this.level().isClientSide()) {
                     level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), true, this.getX() + extraX, ground.getY() + extraY, this.getZ() + extraZ, motionX, motionY, motionZ);
                 }
             }
@@ -288,7 +288,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason
             reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setAirSupply(this.getMaxAirSupply());
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
@@ -433,7 +433,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
         if (inWaterProgress > 0) {
         } else {
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (isInWater()) {
                 swimTimer++;
             } else {

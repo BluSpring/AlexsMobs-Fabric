@@ -114,7 +114,7 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
         if (this.tickCount > 1) {
             final Entity parent = getParent();
             refreshDimensions();
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 if (parent == null) {
                     this.remove(RemovalReason.DISCARDED);
                 }
@@ -316,7 +316,7 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
     }
 
     public Entity getParent() {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             final UUID id = getParentId();
             if (id != null) {
                 return ((ServerLevel) level()).getEntity(id);
@@ -340,7 +340,7 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
     }
 
     public Entity getChild() {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             final UUID id = getChildId();
             if (id != null) {
                 return ((ServerLevel) level()).getEntity(id);

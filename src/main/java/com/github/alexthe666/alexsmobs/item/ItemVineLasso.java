@@ -71,7 +71,7 @@ public class ItemVineLasso extends Item {
 
     @Override
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity livingEntityIn, int i) {
-        if (!worldIn.isClientSide) {
+        if (!worldIn.isClientSide()) {
             boolean left = livingEntityIn.getUsedItemHand() == InteractionHand.OFF_HAND
                 && livingEntityIn.getMainArm() == HumanoidArm.RIGHT
                 || livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND
@@ -80,7 +80,7 @@ public class ItemVineLasso extends Item {
             EntityVineLasso lasso = new EntityVineLasso(worldIn, livingEntityIn);
             Vec3 vector3d = livingEntityIn.getViewVector(1.0F);
             lasso.shoot(vector3d.x(), vector3d.y(), vector3d.z(), getPowerForTime(power), 1);
-            if (!worldIn.isClientSide) {
+            if (!worldIn.isClientSide()) {
                 worldIn.addFreshEntity(lasso);
             }
             stack.shrink(1);

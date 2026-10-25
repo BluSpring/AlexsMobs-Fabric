@@ -44,10 +44,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -134,7 +134,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.raccoonSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -197,7 +197,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.getColor() != null) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.spawnAtLocation(this.getCarpetItemBeingWorn());
             }
             this.setColor(null);
@@ -237,7 +237,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
             this.level().broadcastEntityEvent(this, (byte) 93);
             return InteractionResult.SUCCESS;
         } else if (this.isTame() && !this.getMainHandItem().isEmpty()) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.spawnAtLocation(this.getMainHandItem().copy());
             }
             this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
@@ -437,7 +437,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
             standingTime = 0;
             maxStandTime = 75 + random.nextInt(50);
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (lookForWaterBeforeEatingTimer > 0) {
                 lookForWaterBeforeEatingTimer--;
             } else if (!isWashing() && canTargetItem(this.getMainHandItem())) {
@@ -636,7 +636,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         lookForWaterBeforeEatingTimer = 100;
         ItemStack duplicate = e.getItem().copy();
         duplicate.setCount(1);
-        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide) {
+        if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !this.level().isClientSide()) {
             this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0.0F);
         }
         Entity thrower = e.getOwner();

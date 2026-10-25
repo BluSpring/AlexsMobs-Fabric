@@ -43,9 +43,9 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.TamableAnimal;
@@ -158,7 +158,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
         super.awardKillScore(entity, score, src);
     }
 
-    public static boolean canMantisShrimpSpawn(EntityType type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean canMantisShrimpSpawn(EntityType type, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         BlockPos downPos = pos;
         while (downPos.getY() > 1 && !worldIn.getFluidState(downPos).isEmpty()) {
             downPos = downPos.below();
@@ -181,7 +181,7 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.mantisShrimpSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -596,9 +596,9 @@ public class EntityMantisShrimp extends TamableAnimal implements ISemiAquatic, I
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         int i;
-        if(reason == MobSpawnType.SPAWN_EGG){
+        if(reason == EntitySpawnReason.SPAWN_EGG){
             i = this.getRandom().nextInt(4);
         }else if(worldIn.getBiome(this.blockPosition()).is(AMTagRegistry.SPAWNS_WHITE_MANTIS_SHRIMP)){
             i = 3;

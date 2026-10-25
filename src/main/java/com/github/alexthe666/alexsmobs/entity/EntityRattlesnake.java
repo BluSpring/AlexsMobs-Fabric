@@ -28,7 +28,7 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
@@ -100,7 +100,7 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.rattlesnakeSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -167,7 +167,7 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
         }
 
         LivingEntity target = this.getTarget();
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.isCurled() && (target != null && target.isAlive())) {
                 this.setCurled(false);
             }
@@ -257,7 +257,7 @@ public class EntityRattlesnake extends Animal implements IAnimatedEntity {
         return new Animation[]{ANIMATION_BITE};
     }
 
-    public static boolean canRattlesnakeSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean canRattlesnakeSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         boolean spawnBlock = worldIn.getBlockState(pos.below()).is(AMTagRegistry.RATTLESNAKE_SPAWNS);
         return spawnBlock && worldIn.getRawBrightness(pos, 0) > 8;
 }

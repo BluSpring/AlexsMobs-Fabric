@@ -43,10 +43,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -143,7 +143,7 @@ public class EntityCrimsonMosquito extends Monster {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.crimsonMosquitoSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -178,10 +178,10 @@ public class EntityCrimsonMosquito extends Monster {
         this.goalSelector.addGoal(3, new AvoidEntityGoal(this, EntityTriops.class, 16, 1.3D, 1.0D));
     }
 
-    public static boolean canMosquitoSpawn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean canMosquitoSpawn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         BlockPos blockpos = pos.below();
         boolean spawnBlock = worldIn.getBlockState(blockpos).canOcclude();
-        return reason == MobSpawnType.SPAWNER || spawnBlock && worldIn.getBlockState(blockpos).isValidSpawn(worldIn, blockpos, typeIn) && isDarkEnoughToSpawn(worldIn, pos, randomIn) && checkMobSpawnRules(AMEntityRegistry.CRIMSON_MOSQUITO.get(), worldIn, reason, pos, randomIn);
+        return reason == EntitySpawnReason.SPAWNER || spawnBlock && worldIn.getBlockState(blockpos).isValidSpawn(worldIn, blockpos, typeIn) && isDarkEnoughToSpawn(worldIn, pos, randomIn) && checkMobSpawnRules(AMEntityRegistry.CRIMSON_MOSQUITO.get(), worldIn, reason, pos, randomIn);
     }
 
 
@@ -268,7 +268,7 @@ public class EntityCrimsonMosquito extends Monster {
                     if (!mount.isAlive() || mount instanceof Player && ((Player) mount).isCreative()) {
                         this.removeVehicle();
                     }
-                    if (!this.level().isClientSide) {
+                    if (!this.level().isClientSide()) {
                         if (drinkTime % 20 == 0 && this.isAlive()) {
                             final boolean mungus = AMConfig.warpedMoscoTransformation && mount instanceof EntityMungus && ((EntityMungus) mount).isWarpedMoscoReady();
                             if (mount.hurt(this.damageSources().mobAttack(this), mungus ? 7F : 2.0F)) {
@@ -421,7 +421,7 @@ public class EntityCrimsonMosquito extends Monster {
                 flyProgress--;
         }
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.isPassenger())
                 this.setFlying(false);
 
@@ -558,11 +558,11 @@ public class EntityCrimsonMosquito extends Monster {
                 if (sickTicks > 160) {
                     EntityWarpedMosco mosco = AMEntityRegistry.WARPED_MOSCO.get().create(level());
                     mosco.copyPosition(this);
-                    if (!this.level().isClientSide) {
-                        mosco.finalizeSpawn((ServerLevelAccessor) level(), level().getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.CONVERSION, null);
+                    if (!this.level().isClientSide()) {
+                        mosco.finalizeSpawn((ServerLevelAccessor) level(), level().getCurrentDifficultyAt(this.blockPosition()), EntitySpawnReason.CONVERSION, null);
                     }
 
-                    if (!this.level().isClientSide) {
+                    if (!this.level().isClientSide()) {
                         this.level().broadcastEntityEvent(this, (byte) 79);
                         level().addFreshEntity(mosco);
                     }
@@ -821,7 +821,7 @@ public class EntityCrimsonMosquito extends Monster {
                 this.parentEntity.getMoveControl().setWantedPosition(parentEntity.getTarget().getX(), parentEntity.getTarget().getY(), parentEntity.getTarget().getZ(), 1.0D);
                 if (parentEntity.getBoundingBox().inflate(0.3F, 0.3F, 0.3F).intersects(parentEntity.getTarget().getBoundingBox()) && !isBittenByMosquito(parentEntity.getTarget()) && parentEntity.drinkTime == 0) {
                     parentEntity.startRiding(parentEntity.getTarget(), true);
-                    if (!parentEntity.level().isClientSide) {
+                    if (!parentEntity.level().isClientSide()) {
                         AlexsMobs.sendMSGToAll(new MessageMosquitoMountPlayer(parentEntity.getId(), parentEntity.getTarget().getId()));
                     }
                 }

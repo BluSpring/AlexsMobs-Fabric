@@ -110,7 +110,7 @@ public class MenuTransmutationTable extends AbstractContainerMenu {
 
     @Override
     public boolean clickMenuButton(Player player, int buttonId) {
-        if(player.level().isClientSide){
+        if(player.level().isClientSide()){
             AlexsMobs.sendMSGToServer(new MessageTransmuteFromMenu(player.getId(), buttonId));
         }
         return true;

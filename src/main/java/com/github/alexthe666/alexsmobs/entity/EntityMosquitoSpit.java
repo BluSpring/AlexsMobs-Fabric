@@ -89,14 +89,14 @@ public class EntityMosquitoSpit extends Entity {
         if (entity instanceof LivingEntity) {
             hitEntity.hurt(damageSources().mobProjectile(this, (LivingEntity)entity), 4.0F);
         }
-        if (hitEntity instanceof EntityCrimsonMosquito mosquito && !this.level().isClientSide) {
+        if (hitEntity instanceof EntityCrimsonMosquito mosquito && !this.level().isClientSide()) {
             mosquito.setBloodLevel(mosquito.getBloodLevel() + 1);
         }
     }
 
     protected void onHitBlock(BlockHitResult p_230299_1_) {
         BlockState blockstate = this.level().getBlockState(p_230299_1_.getBlockPos());
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.remove(RemovalReason.DISCARDED);
         }
     }

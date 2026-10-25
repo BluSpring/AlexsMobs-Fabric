@@ -25,7 +25,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -61,11 +61,11 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
 
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.spectreSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static boolean canSpectreSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean canSpectreSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         BlockState blockstate = worldIn.getBlockState(pos.below());
         return true;
     }
@@ -129,7 +129,7 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setXRot(0.0F);
         this.randomizeDirection();
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
@@ -182,7 +182,7 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
                 this.dropLeash(true, true);
             }
             // Custom leash handling for spectre (from tickLeash replacement)
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 if (f > 30) {
                     double dx = (this.getLeashHolder().getX() - this.getX()) / (double) f;
                     double dy = (this.getLeashHolder().getY() - this.getY()) / (double) f;

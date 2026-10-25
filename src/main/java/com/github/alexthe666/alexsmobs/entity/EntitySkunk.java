@@ -30,7 +30,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -115,7 +115,7 @@ public class EntitySkunk extends Animal {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.skunkSpawnRolls, this.getRandom(), spawnReasonIn) && super.checkSpawnRules(worldIn, spawnReasonIn);
     }
 
@@ -176,7 +176,7 @@ public class EntitySkunk extends Animal {
         if(this.getSprayTime() <= 0 && this.sprayProgress > 0F){
             this.sprayProgress--;
         }
-        if(!this.level().isClientSide){
+        if(!this.level().isClientSide()){
             if(harassedTime > 200 && sprayCooldown == 0 && !this.isBaby()){
                 harassedTime = 0;
                 sprayCooldown = 200 + random.nextInt(200);

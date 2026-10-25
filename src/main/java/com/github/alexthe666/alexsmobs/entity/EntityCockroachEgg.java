@@ -7,9 +7,9 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -43,14 +43,14 @@ public class EntityCockroachEgg extends ThrowableItemProjectile {
     @Override
     protected void onHit(HitResult result) {
         super.onHit(result);
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.level().broadcastEntityEvent(this, (byte)3);
             int i = random.nextInt(3);
             for (int j = 0; j < i; ++j) {
                 final EntityCockroach croc = AMEntityRegistry.COCKROACH.get().create(this.level());
                 croc.setAge(-24000);
                 croc.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-                croc.finalizeSpawn((ServerLevel)level(), level().getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.TRIGGERED, null);
+                croc.finalizeSpawn((ServerLevel)level(), level().getCurrentDifficultyAt(this.blockPosition()), EntitySpawnReason.TRIGGERED, null);
                 croc.restrictTo(this.blockPosition(), 20);
                 this.level().addFreshEntity(croc);
             }

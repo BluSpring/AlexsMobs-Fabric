@@ -102,7 +102,7 @@ public class EntityEnderiophageRocket extends FireworkRocketEntity {
     @Override
     public void tick() {
         // Don't call super.tick() - we implement our own logic
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.setSharedFlag(6, this.isCurrentlyGlowing());
         }
         this.baseTick();
@@ -129,7 +129,7 @@ public class EntityEnderiophageRocket extends FireworkRocketEntity {
                 this.setPos(this.attachedToEntity.getX(), this.attachedToEntity.getY(), this.attachedToEntity.getZ());
                 
                 // Particles when boosting
-                if (this.level().isClientSide) {
+                if (this.level().isClientSide()) {
                     this.level().addParticle(ParticleTypes.END_ROD, this.getX(), this.getY() - 0.3D, this.getZ(), 
                         this.random.nextGaussian() * 0.05D, -this.getDeltaMovement().y * 0.5D, this.random.nextGaussian() * 0.05D);
                 }
@@ -156,7 +156,7 @@ public class EntityEnderiophageRocket extends FireworkRocketEntity {
             this.move(MoverType.SELF, this.getDeltaMovement());
             
             // Particles
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 this.level().addParticle(ParticleTypes.END_ROD, this.getX(), this.getY() - 0.3D, this.getZ(), 
                     this.random.nextGaussian() * 0.05D, -this.getDeltaMovement().y * 0.5D, this.random.nextGaussian() * 0.05D);
             }
@@ -169,7 +169,7 @@ public class EntityEnderiophageRocket extends FireworkRocketEntity {
     }
     
     private void explode() {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.level().broadcastEntityEvent(this, (byte)17);
             this.discard();
         }

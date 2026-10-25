@@ -47,7 +47,7 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -206,7 +206,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
         return AMSoundRegistry.SUGAR_GLIDER_HURT.get();
     }
 
-    public static boolean canSugarGliderSpawn(EntityType type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean canSugarGliderSpawn(EntityType type, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         return isBrightEnoughToSpawn(worldIn, pos);
     }
 
@@ -221,7 +221,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.sugarGliderSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -263,7 +263,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
             }
         }
         Vec3 vector3d = this.getDeltaMovement();
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.setBesideClimbableBlock(this.horizontalCollision);
             if (this.onGround() || this.isOrderedToSit() || this.isInWaterOrBubble() || this.isInLava() || this.isGliding() || this.isPassenger()) {
                 this.entityData.set(ATTACHED_FACE, Direction.DOWN);
@@ -303,7 +303,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
             attachChangeProgress = 1F;
         }
         this.prevAttachDir = this.getAttachmentFacing();
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if ((this.getAttachmentFacing() == Direction.UP || this.isGliding()) && !this.isGlidingNavigator) {
                 switchNavigator(false);
             }
@@ -325,7 +325,7 @@ public class EntitySugarGlider extends TamableAnimal implements IFollower {
                 }
                 this.setForagingTime(this.getForagingTime() + 1);
             } else {
-                if (!this.level().isClientSide) {
+                if (!this.level().isClientSide()) {
                     List<ItemStack> lootList = getForageLoot(state);
                     if (lootList.size() > 0) {
                         for (ItemStack stack : lootList) {

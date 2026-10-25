@@ -27,9 +27,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -85,7 +85,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.geladaMonkeySpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -224,7 +224,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
                 sitProgress--;
         }
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (isSitting() && ++sittingTime > maxSitTime) {
                 this.setSitting(false);
                 sittingTime = 0;
@@ -415,7 +415,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
 
     @Override
     @javax.annotation.Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @javax.annotation.Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @javax.annotation.Nullable SpawnGroupData spawnDataIn) {
         if (spawnDataIn instanceof AgeableMobGroupData pack) {
             if (pack.getGroupSize() == 0 || pack.getGroupSize() > 4 && random.nextInt(2) == 0) {
                 this.setLeader(true);

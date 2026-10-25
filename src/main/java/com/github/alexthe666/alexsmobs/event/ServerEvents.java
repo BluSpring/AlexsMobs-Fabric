@@ -252,20 +252,20 @@ public class ServerEvents {
             iLeftClick.onLeftClick(rightItem, event.getEntity());
             flag = true;
         }
-        if (flag && event.getLevel().isClientSide) {
+        if (flag && event.getLevel().isClientSide()) {
             AlexsMobs.sendMSGToServer(MessageSwingArm.INSTANCE);
         }
     }
 
     @SubscribeEvent
     public static void onStruckByLightning(EntityStruckByLightningEvent event) {
-        if (event.getEntity().getType() == EntityType.SQUID && !event.getEntity().level().isClientSide) {
+        if (event.getEntity().getType() == EntityType.SQUID && !event.getEntity().level().isClientSide()) {
             ServerLevel level = (ServerLevel) event.getEntity().level();
             event.setCanceled(true);
             EntityGiantSquid squid = AMEntityRegistry.GIANT_SQUID.get().create(level);
             squid.moveTo(event.getEntity().getX(), event.getEntity().getY(), event.getEntity().getZ(),
                     event.getEntity().getYRot(), event.getEntity().getXRot());
-            squid.finalizeSpawn(level, level.getCurrentDifficultyAt(squid.blockPosition()), MobSpawnType.CONVERSION,
+            squid.finalizeSpawn(level, level.getCurrentDifficultyAt(squid.blockPosition()), EntitySpawnReason.CONVERSION,
                     null);
             if (event.getEntity().hasCustomName()) {
                 squid.setCustomName(event.getEntity().getCustomName());
@@ -281,7 +281,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onProjectileHit(ProjectileImpactEvent event) {
         if (event.getRayTraceResult() instanceof EntityHitResult hitResult
-                && hitResult.getEntity() instanceof EntityEmu emu && !event.getEntity().level().isClientSide) {
+                && hitResult.getEntity() instanceof EntityEmu emu && !event.getEntity().level().isClientSide()) {
             if (event.getEntity() instanceof AbstractArrow arrow) {
                 if(arrow instanceof AbstractArrowAccessor accessor){
                     accessor.invokeSetPierceLevel((byte) (arrow.getPierceLevel() + 1));
@@ -311,7 +311,7 @@ public class ServerEvents {
                 if (!emu.horizontalCollision) {
                     emu.move(MoverType.SELF, new Vec3(vector3d2.x() * 0.25F, 0.1F, vector3d2.z() * 0.25F));
                 }
-                if (!event.getEntity().level().isClientSide) {
+                if (!event.getEntity().level().isClientSide()) {
                     if (event.getEntity() instanceof Projectile projectile) {
                         if (projectile.getOwner() instanceof ServerPlayer serverPlayer) {
                             AMAdvancementTriggerRegistry.EMU_DODGE.get().trigger(serverPlayer);
@@ -409,7 +409,7 @@ public class ServerEvents {
     public static void onInteractWithEntity(PlayerInteractEvent.EntityInteract event) {
         if (event.getTarget() instanceof LivingEntity living) {
             if (!event.getEntity().isShiftKeyDown() && VineLassoUtil.hasLassoData(living)) {
-                if (!event.getEntity().level().isClientSide) {
+                if (!event.getEntity().level().isClientSide()) {
                     event.getTarget().spawnAtLocation(new ItemStack(AMItemRegistry.VINE_LASSO.get()));
                 }
                 VineLassoUtil.lassoTo(null, living);

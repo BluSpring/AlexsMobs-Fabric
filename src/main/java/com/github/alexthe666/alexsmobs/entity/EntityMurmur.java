@@ -22,10 +22,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -76,12 +76,12 @@ public class EntityMurmur extends Monster implements ISemiAquatic {
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
-    public static <T extends Mob> boolean checkMurmurSpawnRules(EntityType<EntityMurmur> entityType, ServerLevelAccessor iServerWorld, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        return reason == MobSpawnType.SPAWNER || !iServerWorld.canSeeSky(pos) && (pos.getY() <= AMConfig.murmurSpawnHeight || iServerWorld.getBiome(pos).is(AMTagRegistry.SPAWNS_MURMURS_IGNORE_HEIGHT)) && checkMonsterSpawnRules(entityType, iServerWorld, reason, pos, random);
+    public static <T extends Mob> boolean checkMurmurSpawnRules(EntityType<EntityMurmur> entityType, ServerLevelAccessor iServerWorld, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+        return reason == EntitySpawnReason.SPAWNER || !iServerWorld.canSeeSky(pos) && (pos.getY() <= AMConfig.murmurSpawnHeight || iServerWorld.getBiome(pos).is(AMTagRegistry.SPAWNS_MURMURS_IGNORE_HEIGHT)) && checkMonsterSpawnRules(entityType, iServerWorld, reason, pos, random);
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.murmurSpawnRolls, this.getRandom(), spawnReasonIn) && super.checkSpawnRules(worldIn, spawnReasonIn);
     }
 
@@ -114,9 +114,9 @@ public class EntityMurmur extends Monster implements ISemiAquatic {
     }
 
     public Entity getHead() {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             UUID id = getHeadUUID();
-            return id == null ? null : ((ServerLevel) level()).getEntity(id);
+            return id == null ? null : level().getEntity(id);
         }else{
             int id = this.entityData.get(HEAD_ID);
             return id == -1 ? null : level().getEntity(id);
@@ -133,7 +133,7 @@ public class EntityMurmur extends Monster implements ISemiAquatic {
         if (this.renderFakeHead) this.renderFakeHead = false;
         this.yBodyRot = this.getYRot();
         this.yHeadRot = Mth.clamp(this.yHeadRot, this.yBodyRot - 70, this.yBodyRot + 70);
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             Entity head = getHead();
             if(head == null){
                 LivingEntity created = createHead();

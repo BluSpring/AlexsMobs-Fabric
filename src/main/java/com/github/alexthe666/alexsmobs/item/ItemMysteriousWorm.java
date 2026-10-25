@@ -40,7 +40,7 @@ public class ItemMysteriousWorm extends Item {
                 worm.updatePostSummon = true;
                 worm.setBaseMaxHealth(AMConfig.voidWormMaxHealth, true);
 
-                if(!entity.level().isClientSide){
+                if(!entity.level().isClientSide()){
                     Entity thrower = entity.getOwner();
                     if(thrower != null){
                         UUID uuid = thrower.getUUID();

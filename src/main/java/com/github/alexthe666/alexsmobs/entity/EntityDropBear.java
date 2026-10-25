@@ -32,9 +32,9 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -92,7 +92,7 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.dropbearSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -183,7 +183,7 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
         if (!this.isUpsideDown() && upsideDownProgress > 0F) {
             upsideDownProgress--;
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             BlockPos abovePos = this.getPositionAbove();
             BlockState aboveState = level().getBlockState(abovePos);
             BlockState belowState = level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement());
@@ -324,15 +324,15 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
-        if (reason == MobSpawnType.NATURAL) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
+        if (reason == EntitySpawnReason.NATURAL) {
             doInitialPosing(worldIn);
         }
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
     private void onLand() {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             level().broadcastEntityEvent(this, (byte) 39);
             for (Entity entity : this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(2.5D))) {
                 if (!isAlliedTo(entity) && !(entity instanceof EntityDropBear) && entity != this) {
@@ -366,7 +366,7 @@ public class EntityDropBear extends Monster implements IAnimatedEntity {
 
     public void spawnGroundEffects() {
         float radius = 2.3F;
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             for (int i1 = 0; i1 < 20 + random.nextInt(12); i1++) {
                 double motionX = getRandom().nextGaussian() * 0.07D;
                 double motionY = getRandom().nextGaussian() * 0.07D;

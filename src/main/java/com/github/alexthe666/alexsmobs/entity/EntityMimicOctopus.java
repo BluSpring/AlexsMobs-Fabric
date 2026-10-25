@@ -139,7 +139,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 16D).add(Attributes.ARMOR, 0.0D).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
-    public static boolean canMimicOctopusSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean canMimicOctopusSpawn(EntityType<? extends Animal> animal, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         BlockPos downPos = pos;
         while (downPos.getY() > 1 && !worldIn.getFluidState(downPos).isEmpty()) {
             downPos = downPos.below();
@@ -182,13 +182,13 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.mimicOctopusSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.entityData.set(PREV_MIMIC_ORDINAL, 0);
         this.setMimickedBlock(null);
         this.setMimicState(MimicState.OVERLAY);
@@ -766,7 +766,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     public LivingEntity getGuardianLaser() {
         if (!this.hasGuardianLaser()) {
             return null;
-        } else if (this.level().isClientSide) {
+        } else if (this.level().isClientSide()) {
             if (this.laserTargetEntity != null) {
                 return this.laserTargetEntity;
             } else {

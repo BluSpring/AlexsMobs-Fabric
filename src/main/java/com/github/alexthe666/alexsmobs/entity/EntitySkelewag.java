@@ -28,7 +28,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -72,15 +72,15 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.skelewagSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static boolean canSkelewagSpawn(EntityType<EntitySkelewag> type, ServerLevelAccessor levelAccessor, MobSpawnType p_32352_, BlockPos below, RandomSource random) {
+    public static boolean canSkelewagSpawn(EntityType<EntitySkelewag> type, ServerLevelAccessor levelAccessor, EntitySpawnReason p_32352_, BlockPos below, RandomSource random) {
         if (!levelAccessor.getFluidState(below.below()).is(FluidTags.WATER)) {
             return false;
         } else {
-            return levelAccessor.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(levelAccessor, below, random) && (p_32352_ == MobSpawnType.SPAWNER || random.nextInt(40) == 0 && levelAccessor.getFluidState(below).is(FluidTags.WATER));
+            return levelAccessor.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(levelAccessor, below, random) && (p_32352_ == EntitySpawnReason.SPAWNER || random.nextInt(40) == 0 && levelAccessor.getFluidState(below).is(FluidTags.WATER));
         }
     }
 
@@ -242,7 +242,7 @@ public class EntitySkelewag extends Monster implements IAnimatedEntity {
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setVariant(this.getRandom().nextFloat() < 0.3F ? 1 : 0);
         if (this.random.nextFloat() < 0.2F) {
             Drowned drowned = EntityType.DROWNED.create(level());

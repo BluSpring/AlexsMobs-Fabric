@@ -31,11 +31,11 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -159,11 +159,11 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.caimanSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
-    public static <T extends Mob> boolean canCaimanSpawn(EntityType type, LevelAccessor worldIn, MobSpawnType reason, BlockPos p_223317_3_, RandomSource random) {
+    public static <T extends Mob> boolean canCaimanSpawn(EntityType type, LevelAccessor worldIn, EntitySpawnReason reason, BlockPos p_223317_3_, RandomSource random) {
         BlockState blockstate = worldIn.getBlockState(p_223317_3_.below());
         return blockstate.is(Blocks.MUD) || blockstate.is(Blocks.MUDDY_MANGROVE_ROOTS) || blockstate.is(AMTagRegistry.CAIMAN_SPAWNS);
     }
@@ -253,7 +253,7 @@ public class EntityCaiman extends TamableAnimal implements ISemiAquatic,IFollowe
         if (!grabbing && holdProgress > 0F) {
             holdProgress -= 2.5F;
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (isInWater()) {
                 swimTimer++;
             } else {

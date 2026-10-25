@@ -40,7 +40,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -109,10 +109,10 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
         return s != null && s.toLowerCase().contains("pepe");
     }
 
-    public static boolean canWarpedToadSpawn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
+    public static boolean canWarpedToadSpawn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, EntitySpawnReason reason, BlockPos pos, RandomSource randomIn) {
         BlockPos blockpos = pos.below();
         boolean spawnBlock = worldIn.getFluidState(blockpos).is(FluidTags.LAVA) || worldIn.getBlockState(blockpos).canOcclude();
-        return reason == MobSpawnType.SPAWNER || spawnBlock;
+        return reason == EntitySpawnReason.SPAWNER || spawnBlock;
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {
@@ -140,7 +140,7 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.warpedToadSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -339,7 +339,7 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
         if(this.isBaby() && this.getEyeHeight() > this.getBbHeight()){
             this.refreshDimensions();
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (isInWater() || isInLava()) {
                 if (swimTimer < 0) {
                     swimTimer = 0;
@@ -417,7 +417,7 @@ public class EntityWarpedToad extends TamableAnimal implements ITargetsDroppedIt
         if (isTongueOut && attackProgress < 5F) {
             attackProgress++;
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.entityData.set(JUMP_ACTIVE, !this.onGround());
         }
         if (this.entityData.get(JUMP_ACTIVE) && !isInWaterOrBubble()) {

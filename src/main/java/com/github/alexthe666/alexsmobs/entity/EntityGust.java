@@ -133,7 +133,7 @@ public class EntityGust extends Entity {
         if( p_230299_1_.getBlockPos() != null){
             BlockPos pos = p_230299_1_.getBlockPos();
             if(level().isWaterAt(pos)){
-                if (!this.level().isClientSide) {
+                if (!this.level().isClientSide()) {
                     this.remove(RemovalReason.DISCARDED);
 
                 }

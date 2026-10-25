@@ -46,7 +46,7 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -146,7 +146,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
     }
 
     @Override
-    public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
+    public boolean checkSpawnRules(LevelAccessor worldIn, EntitySpawnReason spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.rhinocerosSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
@@ -154,7 +154,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
     public void tick() {
         super.tick();
         AnimationHandler.INSTANCE.updateAnimations(this);
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.getAnimation() == NO_ANIMATION && (this.getTarget() == null || !this.getTarget().isAlive())) {
                 if (this.getDeltaMovement().lengthSqr() < 0.03D && (getRandom().nextInt(500) == 0 && level().getBlockState(this.blockPosition().below()).is(Blocks.GRASS_BLOCK))) {
                     this.setAnimation(ANIMATION_EAT_GRASS);

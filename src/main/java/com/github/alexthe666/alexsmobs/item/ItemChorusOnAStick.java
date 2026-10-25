@@ -21,7 +21,7 @@ public class ItemChorusOnAStick extends Item {
         if (player.getVehicle() instanceof EntityEndergrade endergrade) {
             if (endergrade.boost()) {
                 player.awardStat(Stats.ITEM_USED.get(this));
-                return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide);
+                return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
             }
         }
         return InteractionResultHolder.pass(itemstack);
