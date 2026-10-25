@@ -53,8 +53,8 @@ public class AMItemModelProvider extends ItemModelProvider {
         basicItem(AMItemRegistry.EMU_LEGGINGS.asItem());
         basicItem(AMItemRegistry.ENDERIOPHAGE_ROCKET.asItem());
         basicItem(AMItemRegistry.ENDOLOCATOR.asItem());
-//        basicItem(AMBlockRegistry.END_PIRATE_DOOR.asItem());
-//        basicItem(AMBlockRegistry.END_PIRATE_FLAG.asItem());
+        basicItem(AMBlockRegistry.END_PIRATE_DOOR.asItem());
+        basicItem(AMBlockRegistry.END_PIRATE_FLAG.asItem());
         basicItem(AMItemRegistry.FALCONRY_HOOD.asItem());
         basicItem(AMItemRegistry.FARSEER_ARM.asItem());
         basicItem(AMItemRegistry.FEDORA.asItem());
