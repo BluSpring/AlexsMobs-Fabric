@@ -1,4 +1,4 @@
-// 1.21.1	2026-10-25T20:56:31.6700417	Item Models: alexsmobs
+// 1.21.1	2026-10-25T20:58:38.1362345	Item Models: alexsmobs
 1f854dbd5d5a46041538e24511990a5156279463 assets/alexsmobs/models/item/acacia_blossom.json
 c4844c8d7805a9034434ccacb6079d53633486e0 assets/alexsmobs/models/item/ambergris.json
 7d26ed95b60cf08df28aeb78219ec55ff5fe357b assets/alexsmobs/models/item/ancient_dart.json
@@ -37,6 +37,8 @@ df8f87586cde0304d1e7ac97f061566d35048504 assets/alexsmobs/models/item/emu_feathe
 49473ed8c2206a9b36c6897c16cbd3d92e8404fd assets/alexsmobs/models/item/emu_leggings.json
 5e7ab48d446ffa69e9fb174c4c3996fa259eba93 assets/alexsmobs/models/item/enderiophage_rocket.json
 1de0f0ddb964db238e94144129da5c4b37e6f9c6 assets/alexsmobs/models/item/endolocator.json
+878fd091c6244fdecc55ec679156a4fcde16c607 assets/alexsmobs/models/item/end_pirate_door.json
+bc3b49d002c1f21c7c29597ab5cc200e1428a65e assets/alexsmobs/models/item/end_pirate_flag.json
 69ce0ee4b309ada40af4d512f88a8b2d80c0133f assets/alexsmobs/models/item/falconry_hood.json
 6a8219e40366713629a27d24bee584079a3ead2f assets/alexsmobs/models/item/farseer_arm.json
 1983b1a7859027adc65b80c535c5c121c9b4f6ec assets/alexsmobs/models/item/fedora.json
