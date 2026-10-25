@@ -17,7 +17,7 @@ public class AMDatamapProvider extends DataMapProvider {
     }
 
     @Override
-    protected void gather() {
+    protected void gather(HolderLookup.Provider provider) {
         builder(NeoForgeDataMaps.COMPOSTABLES)
             .add(AMItemRegistry.BANANA, new Compostable(0.65f), false)
             .add(AMBlockRegistry.BANANA_PEEL.value().asItem().builtInRegistryHolder(), new Compostable(1f), false)

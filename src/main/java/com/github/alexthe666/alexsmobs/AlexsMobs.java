@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.function.Supplier;
 
 import com.github.alexthe666.alexsmobs.attachment.AMAttachmentRegistry;
+
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.client.model.layered.AMModelLayers;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
@@ -18,7 +19,6 @@ import com.github.alexthe666.alexsmobs.item.AMArmorMaterial;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.message.*;
 import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
-import com.github.alexthe666.alexsmobs.misc.AMBannerRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMCreativeTabRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMLootRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMPointOfInterestRegistry;
@@ -86,11 +86,10 @@ public class AlexsMobs {
         AMMenuRegistry.DEF_REG.register(modEventBus);
         AMRecipeRegistry.DEF_REG.register(modEventBus);
         AMLootRegistry.DEF_REG.register(modEventBus);
-        AMBannerRegistry.DEF_REG.register(modEventBus);
         AMCreativeTabRegistry.DEF_REG.register(modEventBus);
         AMAdvancementTriggerRegistry.DEF_REG.register(modEventBus);
         AMAttachmentRegistry.DEF_REG.register(modEventBus);
-        
+
         // Biome modifiers
         AMMobSpawnBiomeModifier.BIOME_MODIFIER_SERIALIZERS.register(modEventBus);
         AMLeafcutterAntBiomeModifier.BIOME_MODIFIER_SERIALIZERS.register(modEventBus);
