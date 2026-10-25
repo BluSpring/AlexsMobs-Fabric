@@ -37,6 +37,7 @@ public class AMDataGenerator {
             new LootTableProvider.SubProviderEntry(AMGameplayLootTableProvider::new, LootContextParamSets.EMPTY)
         ), lookupProvider));
         generator.addProvider(event.includeServer(), new AMAdvancementProvider(output, lookupProvider, existingFileHelper));
+        generator.addProvider(event.includeServer(), new AMEntityTypeTagProvider(output, lookupProvider, existingFileHelper));
 
         generator.addProvider(event.includeClient(), new AMItemModelProvider(output, existingFileHelper));
     }
