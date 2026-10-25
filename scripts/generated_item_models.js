@@ -25,6 +25,12 @@ for (const file of itemModels) {
     if (data.parent == 'minecraft:item/generated' && data.textures.layer0 == 'alexsmobs:item/' + baseId && !data.display) {
         datagenLines.push(`basicItem(AMItemRegistry.${baseId.toUpperCase()}.asItem());`);
         fs.rmSync(path.resolve(filePath, file));
+    } else if (data.parent == 'minecraft:item/handheld' && data.textures.layer0 == 'alexsmobs:item/' + baseId && !data.display) {
+        datagenLines.push(`handheldItem(AMItemRegistry.${baseId.toUpperCase()}.asItem());`);
+        fs.rmSync(path.resolve(filePath, file));
+    } else if (!data.display && data.parent == 'alexsmobs:block/' + baseId) {
+        datagenLines.push(`simpleBlockItem(AMBlockRegistry.${baseId.toUpperCase()}.value());`);
+        fs.rmSync(path.resolve(filePath, file));
     }
 }
 
