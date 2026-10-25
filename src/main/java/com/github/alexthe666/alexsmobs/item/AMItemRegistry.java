@@ -10,6 +10,7 @@ import com.github.alexthe666.alexsmobs.entity.EntityEnderiophageRocket;
 import com.github.alexthe666.alexsmobs.entity.EntitySharkToothArrow;
 import com.github.alexthe666.alexsmobs.entity.EntityTossedItem;
 import com.github.alexthe666.alexsmobs.misc.AMProjectileDispenseBehavior;
+import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.server.block.LecternBooks;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
@@ -22,6 +23,8 @@ import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -220,12 +223,15 @@ public class AMItemRegistry {
     public static final DeferredItem<Item> MOSQUITO_REPELLENT_STEW = DEF_REG.register("mosquito_repellent_stew", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).alwaysEdible().saturationModifier(0.3F).effect(() -> new MobEffectInstance(AMEffectRegistry.MOSQUITO_REPELLENT, 24000), 1.0F).usingConvertsTo(Items.BOWL).build()).stacksTo(1)));
     public static final DeferredItem<Item> TRIOPS_BUCKET = DEF_REG.register("triops_bucket", () -> new ItemModFishBucket(AMEntityRegistry.TRIOPS, Fluids.WATER, new Item.Properties()));
 
-    // Music discs - in 1.21+, use jukeboxPlayable component in item properties
-    // The jukebox songs are data-driven and defined in data/alexsmobs/jukebox_song/
     public static final ResourceKey<JukeboxSong> JUKEBOX_SONG_THIME = ResourceKey.create(Registries.JUKEBOX_SONG, ResourceLocation.fromNamespaceAndPath("alexsmobs", "thime"));
     public static final ResourceKey<JukeboxSong> JUKEBOX_SONG_DAZE = ResourceKey.create(Registries.JUKEBOX_SONG, ResourceLocation.fromNamespaceAndPath("alexsmobs", "daze"));
     public static final DeferredItem<Item> MUSIC_DISC_THIME = DEF_REG.register("music_disc_thime", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(JUKEBOX_SONG_THIME)));
     public static final DeferredItem<Item> MUSIC_DISC_DAZE = DEF_REG.register("music_disc_daze", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(JUKEBOX_SONG_DAZE)));
+
+    public static void bootstrapJukebox(BootstrapContext<JukeboxSong> context) {
+        context.register(JUKEBOX_SONG_THIME, new JukeboxSong(AMSoundRegistry.MUSIC_DISC_THIME, Component.translatable(JUKEBOX_SONG_THIME.location().toLanguageKey("jukebox_song")), 204f, 14));
+        context.register(JUKEBOX_SONG_DAZE, new JukeboxSong(AMSoundRegistry.MUSIC_DISC_DAZE, Component.translatable(JUKEBOX_SONG_DAZE.location().toLanguageKey("jukebox_song")), 180f, 15));
+    }
 
     public static void initSpawnEggs() {
         DEF_REG.register("spawn_egg_grizzly_bear", () -> new DeferredSpawnEggItem(AMEntityRegistry.GRIZZLY_BEAR, 0X693A2C, 0X976144, new Item.Properties()));
