@@ -59,10 +59,10 @@ import org.antlr.v4.runtime.misc.Triple;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetExperiencePacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
@@ -71,6 +71,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -110,7 +111,6 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ClipContext;
@@ -118,6 +118,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ScaffoldingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -132,8 +133,8 @@ public class ServerEvents {
 
     public static final UUID ALEX_UUID = UUID.fromString("71363abe-fd03-49c9-940d-aae8b8209b7c");
     public static final UUID CARRO_UUID = UUID.fromString("98905d4a-1cbc-41a4-9ded-2300404e2290");
-    private static final net.minecraft.resources.ResourceLocation SAND_SPEED_MODIFIER = net.minecraft.resources.ResourceLocation.parse("alexsmobs:sand_speed_bonus");
-    private static final net.minecraft.resources.ResourceLocation SNEAK_SPEED_MODIFIER = net.minecraft.resources.ResourceLocation.parse("alexsmobs:sneak_speed_bonus");
+    private static final ResourceLocation SAND_SPEED_MODIFIER = ResourceLocation.parse("alexsmobs:sand_speed_bonus");
+    private static final ResourceLocation SNEAK_SPEED_MODIFIER = ResourceLocation.parse("alexsmobs:sneak_speed_bonus");
     private static final AttributeModifier SAND_SPEED_BONUS = new AttributeModifier(SAND_SPEED_MODIFIER,
             0.1F, AttributeModifier.Operation.ADD_VALUE);
     private static final AttributeModifier SNEAK_SPEED_BONUS = new AttributeModifier(SNEAK_SPEED_MODIFIER,
@@ -679,14 +680,14 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onLivingSetTargetEvent(LivingChangeTargetEvent event) {
         if (event.getNewAboutToBeSetTarget() != null && event.getEntity() instanceof Mob mob) {
-            if (mob.getType().is(net.minecraft.tags.EntityTypeTags.ARTHROPOD)) {
+            if (mob.getType().is(EntityTypeTags.ARTHROPOD)) {
                 if (event.getNewAboutToBeSetTarget().hasEffect(AMEffectRegistry.BUG_PHEROMONES)
                         && event.getEntity().getLastHurtByMob() != event.getNewAboutToBeSetTarget()) {
                     event.setCanceled(true);
                     return;
                 }
             }
-            if (mob.getType().is(net.minecraft.tags.EntityTypeTags.UNDEAD)
+            if (mob.getType().is(EntityTypeTags.UNDEAD)
                     && !mob.getType().is(AMTagRegistry.IGNORES_KIMONO)) {
                 if (event.getNewAboutToBeSetTarget().getItemBySlot(EquipmentSlot.CHEST).is(AMItemRegistry.UNSETTLING_KIMONO.get())
                         && event.getEntity().getLastHurtByMob() != event.getNewAboutToBeSetTarget()) {
@@ -743,9 +744,8 @@ public class ServerEvents {
             }
         }
         final ItemStack boots = entity.getItemBySlot(EquipmentSlot.FEET);
-        if (!boots.isEmpty() && boots.has(DataComponents.CUSTOM_DATA)
-                && boots.get(DataComponents.CUSTOM_DATA).contains("BisonFur")
-                && boots.get(DataComponents.CUSTOM_DATA).copyTag().getBoolean("BisonFur")) {
+        if (!boots.isEmpty()
+                && boots.has(AMDataComponentRegistry.BISON_FUR)) {
             BlockPos posBelow = new BlockPos((int) event.getEntity().getX(),
                     (int) (entity.getBoundingBox().minY - 0.1F), (int) entity.getZ());
             if (entity.level().getBlockState(posBelow).is(Blocks.POWDER_SNOW)) {
@@ -764,7 +764,7 @@ public class ServerEvents {
                 Vec3 motion = entity.getDeltaMovement();
                 double d2 = 0.1D;
                 BlockState feetBlockState = entity.level().getBlockState(entity.blockPosition());
-                if (entity.isShiftKeyDown() || !(feetBlockState.getBlock() instanceof net.minecraft.world.level.block.ScaffoldingBlock)
+                if (entity.isShiftKeyDown() || !(feetBlockState.getBlock() instanceof ScaffoldingBlock)
                         && entity.isSuppressingSlidingDownLadder()) {
                     d2 = 0.0D;
                 }
@@ -851,7 +851,7 @@ public class ServerEvents {
                         flag = true;
                     }
                     if (flag) {
-                        if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
                             EquipmentSlot slot = event.getEntity().getUsedItemHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
                             event.getEntity().getUseItem().hurtAndBreak(1, serverPlayer.serverLevel(), serverPlayer,
                                     item -> serverPlayer.onEquippedItemBroken(item, slot));
