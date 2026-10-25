@@ -1,17 +1,29 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.block.BlockReptileEgg;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeaveWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalSwimMoveControllerSink;
+import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
+import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
+import com.github.alexthe666.alexsmobs.entity.ai.PlatypusAIDigForItems;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticAIRandomSwimming;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticPathNavigator;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -32,11 +44,24 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreathAirGoal;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -44,16 +69,16 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDroppedItems, Bucketable {
 
@@ -82,6 +107,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
         return worldIn.getBlockState(pos.below()).is(AMTagRegistry.PLATYPUS_SPAWNS) && pos.getY() < worldIn.getSeaLevel() + 4;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.platypusSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -90,19 +116,23 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.FOLLOW_RANGE, 16.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.PLATYPUS_BREEDABLES);
     }
 
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.PLATYPUS_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.PLATYPUS_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.PLATYPUS_HURT.get();
     }
@@ -112,7 +142,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.PLATYPUS_BUCKET.get());
         if (this.hasCustomName()) {
-            stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
+            stack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
         return stack;
     }
@@ -121,7 +151,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
     public void saveToBucketTag(@Nonnull ItemStack bucket) {
         Bucketable.saveDefaultDataToBucketTag(this, bucket);
         if (this.hasCustomName()) {
-            bucket.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
+            bucket.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
         CompoundTag platTag = new CompoundTag();
         this.addAdditionalSaveData(platTag);
@@ -160,6 +190,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
         return Bucketable.bucketMobPickup(player, hand, this).orElse(super.mobInteract(player, hand));
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BreathAirGoal(this));
         this.goalSelector.addGoal(1, new AnimalAIFindWater(this));
@@ -169,21 +200,25 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
         this.goalSelector.addGoal(2, new BreedGoal(this, 0.8D));
         this.goalSelector.addGoal(3, new PanicGoal(this, 1.1D));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.of(AMTagRegistry.PLATYPUS_CHARGEABLES), false){
+            @Override
             public void start() {
                 super.start();
                 EntityPlatypus.this.setSensingVisual(true);
             }
 
+            @Override
             public boolean canUse(){
                 return super.canUse() && !EntityPlatypus.this.isSensing();
             }
 
+            @Override
             public void stop() {
                 super.stop();
                 EntityPlatypus.this.setSensingVisual(false);
             }
         });
         this.goalSelector.addGoal(5, new TemptGoal(this, 1.1D, Ingredient.of(AMTagRegistry.PLATYPUS_FOODSTUFFS), false){
+            @Override
             public boolean canUse(){
                 return super.canUse() && !EntityPlatypus.this.isSensing();
             }
@@ -194,20 +229,22 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.targetSelector.addGoal(1, new CreatureAITargetItems(this, false, false, 40, 15){
+            @Override
             public boolean canUse(){
                 return super.canUse() && !EntityPlatypus.this.isSensing();
             }
 
+            @Override
             public boolean canContinueToUse(){
                 return super.canContinueToUse() && !EntityPlatypus.this.isSensing();
             }
         });
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
-        if(prev && source.getDirectEntity() instanceof LivingEntity){
-            LivingEntity entity = (LivingEntity)source.getDirectEntity();
+        if(prev && source.getDirectEntity() instanceof LivingEntity entity){
             entity.addEffect(new MobEffectInstance(MobEffects.POISON, 100));
         }
         return prev;
@@ -219,10 +256,12 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
     }
 
 
+    @Override
     public int getMaxAirSupply() {
         return 4800;
     }
 
+    @Override
     protected int increaseAirSupply(int currentAir) {
         return this.getMaxAirSupply();
     }
@@ -247,6 +286,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
         }
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType
             reason, @Nullable SpawnGroupData spawnDataIn) {
@@ -254,10 +294,12 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -279,6 +321,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
         builder.define(HAS_EGG, false);
     }
 
+    @Override
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.hasFedora()) {
@@ -311,6 +354,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
         this.entityData.set(FEDORA, Boolean.valueOf(sensing));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Fedora", this.hasFedora());
@@ -320,6 +364,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
         compound.putBoolean("SuperCharged", this.superCharged);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFedora(compound.getBoolean("Fedora"));
@@ -355,6 +400,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
         return !this.fromBucket() && !this.requiresCustomPersistence();
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevInWaterProgress = inWaterProgress;
@@ -486,10 +532,12 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
             this.platypus = platypus;
         }
 
+        @Override
         public boolean canUse() {
             return super.canUse() && !this.platypus.hasEgg();
         }
 
+        @Override
         protected void breed() {
             ServerPlayer serverplayerentity = this.animal.getLoveCause();
             if (serverplayerentity == null && this.partner.getLoveCause() != null) {
@@ -524,22 +572,27 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
             this.turtle = turtle;
         }
 
+        @Override
         public void stop() {
             digTime = 0;
         }
 
+        @Override
         public boolean canUse() {
             return this.turtle.hasEgg() && super.canUse();
         }
 
+        @Override
         public boolean canContinueToUse() {
             return super.canContinueToUse() && this.turtle.hasEgg();
         }
 
+        @Override
         public double acceptedDistance() {
             return turtle.getBbWidth() + 0.5D;
         }
 
+        @Override
         public void tick() {
             super.tick();
             if (!this.turtle.isInWater() && this.isReachedTarget()) {
@@ -554,6 +607,7 @@ public class EntityPlatypus extends Animal implements ISemiAquatic, ITargetsDrop
             }
         }
 
+        @Override
         protected boolean isValidTarget(LevelReader worldIn, BlockPos pos) {
             return worldIn.isEmptyBlock(pos.above()) && BlockReptileEgg.isProperHabitat(worldIn, pos);
         }

@@ -1,13 +1,14 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityElephant;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
-import java.util.List;
 
 public class ElephantAIFollowCaravan extends Goal {
     public final EntityElephant elephant;
@@ -20,6 +21,7 @@ public class ElephantAIFollowCaravan extends Goal {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
+    @Override
     public boolean canUse() {
         if (elephant.aiItemFlag || elephant.getControllingPassenger() != null) {
             return false;
@@ -72,6 +74,7 @@ public class ElephantAIFollowCaravan extends Goal {
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
+    @Override
     public boolean canContinueToUse() {
         if (elephant.isSitting() || elephant.aiItemFlag) {
             return false;
@@ -100,11 +103,13 @@ public class ElephantAIFollowCaravan extends Goal {
         }
     }
 
+    @Override
     public void stop() {
         this.elephant.leaveCaravan();
         this.speedModifier = 1D;
     }
 
+    @Override
     public void tick() {
         if (this.elephant.inCaravan() && !this.elephant.isSitting()) {
             EntityElephant llamaentity = this.elephant.getCaravanHead();

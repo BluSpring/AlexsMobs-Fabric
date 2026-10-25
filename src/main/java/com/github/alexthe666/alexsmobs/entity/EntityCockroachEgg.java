@@ -1,20 +1,20 @@
 package com.github.alexthe666.alexsmobs.entity;
 
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+
 public class EntityCockroachEgg extends ThrowableItemProjectile {
 
     public EntityCockroachEgg(EntityType p_i50154_1_, Level p_i50154_2_) {
@@ -29,6 +29,7 @@ public class EntityCockroachEgg extends ThrowableItemProjectile {
         super(AMEntityRegistry.COCKROACH_EGG.get(), x, y, z, worldIn);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 3) {
@@ -39,6 +40,7 @@ public class EntityCockroachEgg extends ThrowableItemProjectile {
 
     }
 
+    @Override
     protected void onHit(HitResult result) {
         super.onHit(result);
         if (!this.level().isClientSide) {
@@ -48,7 +50,7 @@ public class EntityCockroachEgg extends ThrowableItemProjectile {
                 final EntityCockroach croc = AMEntityRegistry.COCKROACH.get().create(this.level());
                 croc.setAge(-24000);
                 croc.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-                croc.finalizeSpawn((ServerLevel)level(), level().getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.TRIGGERED, (SpawnGroupData)null);
+                croc.finalizeSpawn((ServerLevel)level(), level().getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.TRIGGERED, null);
                 croc.restrictTo(this.blockPosition(), 20);
                 this.level().addFreshEntity(croc);
             }
@@ -58,6 +60,7 @@ public class EntityCockroachEgg extends ThrowableItemProjectile {
 
     }
 
+    @Override
     protected Item getDefaultItem() {
         return AMItemRegistry.COCKROACH_OOTHECA.get();
     }

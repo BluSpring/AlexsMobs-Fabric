@@ -14,10 +14,12 @@ public class RenderHammerheadShark extends MobRenderer<EntityHammerheadShark, Mo
         super(renderManagerIn, new ModelHammerheadShark(), 0.8F);
     }
 
+    @Override
     protected void scale(EntityHammerheadShark entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityHammerheadShark entity) {
         return TEXTURE;
     }

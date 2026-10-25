@@ -28,6 +28,7 @@ public class RenderBison extends MobRenderer<EntityBison, AdvancedEntityModel<En
         this.addLayer(new LayerSnow());
     }
 
+    @Override
     protected void scale(EntityBison entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         if(entitylivingbaseIn.isBaby()){
             model = modelBaby;
@@ -36,6 +37,7 @@ public class RenderBison extends MobRenderer<EntityBison, AdvancedEntityModel<En
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityBison entity) {
         return entity.isBaby() ? TEXTURE_BABY : entity.isSheared() ? TEXTURE_SHEARED : TEXTURE;
     }
@@ -46,6 +48,7 @@ public class RenderBison extends MobRenderer<EntityBison, AdvancedEntityModel<En
             super(RenderBison.this);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityBison entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if (entitylivingbaseIn.isSnowy()) {
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(entitylivingbaseIn.isBaby() ? TEXTURE_BABY_SNOWY : TEXTURE_SNOWY));

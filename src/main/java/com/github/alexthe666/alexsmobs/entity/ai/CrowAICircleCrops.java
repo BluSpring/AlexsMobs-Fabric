@@ -33,6 +33,7 @@ public class CrowAICircleCrops extends MoveToBlockGoal {
         this.crow = bird;
     }
 
+    @Override
     public void start() {
         super.start();
         circlePhase = true;
@@ -41,14 +42,17 @@ public class CrowAICircleCrops extends MoveToBlockGoal {
         circleDistance = 1 + crow.getRandom().nextInt(3);
     }
 
+    @Override
     public boolean canUse() {
         return !crow.isBaby() && AMConfig.crowsStealCrops && (crow.getTarget() == null || !crow.getTarget().isAlive()) && !crow.isTame() && crow.fleePumpkinFlag == 0 && !crow.aiItemFlag && super.canUse();
     }
 
+    @Override
     public boolean canContinueToUse() {
         return blockPos != null && AMConfig.crowsStealCrops && (crow.getTarget() == null || !crow.getTarget().isAlive()) && !crow.isTame() && !crow.aiItemFlag && crow.fleePumpkinFlag == 0 && super.canContinueToUse();
     }
 
+    @Override
     public void stop() {
         idleAtFlowerTime = 0;
         circlingTime = 0;
@@ -56,10 +60,12 @@ public class CrowAICircleCrops extends MoveToBlockGoal {
         blockPos = BlockPos.ZERO;
     }
 
+    @Override
     public double acceptedDistance() {
         return 1D;
     }
 
+    @Override
     public void tick() {
         if(blockPos == null){
             return;
@@ -119,6 +125,7 @@ public class CrowAICircleCrops extends MoveToBlockGoal {
         return blockpos.distSqr(AMBlockPos.fromCoords(positionVec.x(), blockpos.getY(), positionVec.z())) < distance * distance;
     }
 
+    @Override
     protected boolean isReachedTarget() {
         return this.isAboveDestinationBear;
     }
@@ -129,9 +136,8 @@ public class CrowAICircleCrops extends MoveToBlockGoal {
             tryTicks = 1200;
             return;
         }
-        if(crow.level().getBlockState(blockPos).getBlock() instanceof CropBlock){
+        if(crow.level().getBlockState(blockPos).getBlock() instanceof CropBlock block){
             if(crow.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)){
-                CropBlock block = (CropBlock)crow.level().getBlockState(blockPos).getBlock();
                 int cropAge = block.getAge(crow.level().getBlockState(blockPos));
                 if(cropAge > 0){
                     crow.level().setBlockAndUpdate(blockPos, block.getStateForAge(Math.max(0, cropAge - 1)));
@@ -151,7 +157,7 @@ public class CrowAICircleCrops extends MoveToBlockGoal {
 
     private boolean canSeeBlock(BlockPos destinationBlock) {
         final Vec3 Vector3d = new Vec3(crow.getX(), crow.getEyeY(), crow.getZ());
-        final Vec3 blockVec = net.minecraft.world.phys.Vec3.atCenterOf(destinationBlock);
+        final Vec3 blockVec = Vec3.atCenterOf(destinationBlock);
         final BlockHitResult result = crow.level().clip(new ClipContext(Vector3d, blockVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, crow));
         return result.getBlockPos().equals(destinationBlock);
     }

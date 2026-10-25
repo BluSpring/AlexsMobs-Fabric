@@ -16,6 +16,7 @@ public class RenderTusklin extends MobRenderer<EntityTusklin, ModelTusklin> {
         this.addLayer(new LayerTusklinGear(this));
     }
 
+    @Override
     protected boolean isShaking(EntityTusklin entity) {
         return entity.isInNether();
     }

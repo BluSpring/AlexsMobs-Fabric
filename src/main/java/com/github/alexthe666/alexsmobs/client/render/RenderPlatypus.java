@@ -21,10 +21,12 @@ public class RenderPlatypus extends MobRenderer<EntityPlatypus, ModelPlatypus> {
         this.addLayer(new FedoraLayer(this));
     }
 
+    @Override
     protected void scale(EntityPlatypus entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
          matrixStackIn.scale(0.9F, 0.9F, 0.9F);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityPlatypus entity) {
         return entity.isPerry() ? TEXTURE_PERRY : TEXTURE;
     }
@@ -36,6 +38,7 @@ public class RenderPlatypus extends MobRenderer<EntityPlatypus, ModelPlatypus> {
             super(renderGrizzlyBear);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityPlatypus entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if(entitylivingbaseIn.hasFedora()){
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutout(TEXTURE));

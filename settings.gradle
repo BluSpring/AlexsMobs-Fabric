@@ -11,3 +11,4 @@ plugins {
 }
 
 rootProject.name = 'alexsmobs'
+include('Citadel')

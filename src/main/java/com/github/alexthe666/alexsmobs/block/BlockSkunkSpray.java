@@ -1,8 +1,11 @@
 package com.github.alexthe666.alexsmobs.block;
 
+import java.util.ArrayList;
+
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.mojang.serialization.MapCodec;
+
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,7 +21,12 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.MultifaceBlock;
+import net.minecraft.world.level.block.MultifaceSpreader;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -29,8 +37,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
-
-import java.util.ArrayList;
 
 public class BlockSkunkSpray extends MultifaceBlock implements SimpleWaterloggedBlock {
     public static final MapCodec<BlockSkunkSpray> CODEC = simpleCodec(p -> new BlockSkunkSpray());
@@ -48,6 +54,7 @@ public class BlockSkunkSpray extends MultifaceBlock implements SimpleWaterlogged
         this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, Boolean.valueOf(false)).setValue(AGE, 0));
     }
 
+    @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState state2, LevelAccessor levelAccessor, BlockPos pos, BlockPos pos2) {
         if (state.getValue(WATERLOGGED)) {
             levelAccessor.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
@@ -56,10 +63,12 @@ public class BlockSkunkSpray extends MultifaceBlock implements SimpleWaterlogged
         return super.updateShape(state, direction, state2, levelAccessor, pos, pos2);
     }
 
+    @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource randomSource) {
         this.tick(state, level, pos, randomSource);
     }
 
+    @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (random.nextInt(8) == 0) {
             BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
@@ -76,11 +85,13 @@ public class BlockSkunkSpray extends MultifaceBlock implements SimpleWaterlogged
         }
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> definition) {
         super.createBlockStateDefinition(definition);
         definition.add(WATERLOGGED, AGE);
     }
 
+    @Override
     public ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         int setContent = -1;
         if(itemStack.is(Items.GLASS_BOTTLE)) {
@@ -116,10 +127,12 @@ public class BlockSkunkSpray extends MultifaceBlock implements SimpleWaterlogged
     }
 
 
+    @Override
     public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
         return !context.getItemInHand().is(AMBlockRegistry.SKUNK_SPRAY.get().asItem()) || super.canBeReplaced(state, context);
     }
 
+    @Override
     public FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
@@ -129,10 +142,12 @@ public class BlockSkunkSpray extends MultifaceBlock implements SimpleWaterlogged
         return null;
     }
 
+    @Override
     public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
         return state.getFluidState().isEmpty();
     }
 
+    @Override
     public void animateTick(BlockState blockState, Level level, BlockPos pos, RandomSource randomSource) {
         if (randomSource.nextInt(2) == 0) {
             ArrayList<Direction> faces = new ArrayList<Direction>(availableFaces(blockState));

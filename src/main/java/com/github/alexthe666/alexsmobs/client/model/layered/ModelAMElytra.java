@@ -1,11 +1,16 @@
 package com.github.alexthe666.alexsmobs.client.model.layered;
 
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,6 +45,7 @@ public class ModelAMElytra extends HumanoidModel {
         return  this;
     }
 
+    @Override
     public void setupAnim(LivingEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         float f = 0.2617994F;
         float f1 = -0.2617994F;
@@ -64,8 +70,7 @@ public class ModelAMElytra extends HumanoidModel {
 
         this.leftWing.x = 5.0F;
         this.leftWing.y = f2;
-        if (entityIn instanceof AbstractClientPlayer) {
-            AbstractClientPlayer abstractclientplayerentity = (AbstractClientPlayer)entityIn;
+        if (entityIn instanceof AbstractClientPlayer abstractclientplayerentity) {
             abstractclientplayerentity.elytraRotX = (float)((double)abstractclientplayerentity.elytraRotX + (double)(f - abstractclientplayerentity.elytraRotX) * 0.1D);
             abstractclientplayerentity.elytraRotY = (float)((double)abstractclientplayerentity.elytraRotY + (double)(f3 - abstractclientplayerentity.elytraRotY) * 0.1D);
             abstractclientplayerentity.elytraRotZ = (float)((double)abstractclientplayerentity.elytraRotZ + (double)(f1 - abstractclientplayerentity.elytraRotZ) * 0.1D);

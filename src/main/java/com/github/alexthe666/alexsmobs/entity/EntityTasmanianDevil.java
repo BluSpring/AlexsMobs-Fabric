@@ -1,17 +1,24 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -22,7 +29,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
@@ -39,9 +52,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITargetsDroppedItems {
 
@@ -68,23 +78,28 @@ public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITa
     }
 
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.TASMANIAN_DEVIL_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.TASMANIAN_DEVIL_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.TASMANIAN_DEVIL_HURT.get();
     }
     
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5D, true));
         this.goalSelector.addGoal(2, new TemptGoal(this, 1.1D, Ingredient.of(AMTagRegistry.TASMANIAN_DEVIL_HOWLING_FOODS), false){
+            @Override
             public void tick(){
                 super.tick();
                 if(EntityTasmanianDevil.this.getAnimation() == NO_ANIMATION){
@@ -105,12 +120,13 @@ public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITa
     }
 
     public void killed(ServerLevel world, LivingEntity entity) {
-        if(this.getRandom().nextBoolean() && (entity instanceof Animal || entity.getType().is(net.minecraft.tags.EntityTypeTags.UNDEAD))){
+        if(this.getRandom().nextBoolean() && (entity instanceof Animal || entity.getType().is(EntityTypeTags.UNDEAD))){
             entity.spawnAtLocation(new ItemStack(Items.BONE));
         }
     }
 
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (!this.shouldMove()) {
             if (this.getNavigation().getPath() != null) {
@@ -151,10 +167,12 @@ public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITa
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 14.0D).add(Attributes.FOLLOW_RANGE, 32.0D).add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.ATTACK_DAMAGE, 2F);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) && stack.getFoodProperties(this) != null && !stack.is(AMTagRegistry.TASMANIAN_DEVIL_HOWLING_FOODS);
+        return stack.has(DataComponents.FOOD) && stack.getFoodProperties(this) != null && !stack.is(AMTagRegistry.TASMANIAN_DEVIL_HOWLING_FOODS);
     }
 
+    @Override
     public void tick(){
         super.tick();
         this.prevBaskProgress = this.baskProgress;
@@ -233,6 +251,7 @@ public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITa
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -250,6 +269,7 @@ public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITa
         return type;
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             this.setAnimation(ANIMATION_ATTACK);
@@ -296,7 +316,7 @@ public class EntityTasmanianDevil extends Animal implements IAnimatedEntity, ITa
 
     @Override
     public boolean canTargetItem(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) && stack.getFoodProperties(this) != null || stack.getItem() == Items.BONE;
+        return stack.has(DataComponents.FOOD) && stack.getFoodProperties(this) != null || stack.getItem() == Items.BONE;
     }
 
     @Override

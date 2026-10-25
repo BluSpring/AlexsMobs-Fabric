@@ -1,8 +1,22 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.BoneSerpentAIFindLava;
+import com.github.alexthe666.alexsmobs.entity.ai.BoneSerpentAIJump;
+import com.github.alexthe666.alexsmobs.entity.ai.BoneSerpentAIMeleeJump;
+import com.github.alexthe666.alexsmobs.entity.ai.BoneSerpentPathNavigator;
+import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
+import com.github.alexthe666.alexsmobs.entity.ai.LavaAndWaterAIRandomSwimming;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import net.neoforged.neoforge.fluids.FluidType;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,7 +33,11 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -36,23 +54,16 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.fluids.FluidType;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Predicate;
 
 public class EntityBoneSerpent extends Monster {
 
     private static final EntityDataAccessor<Optional<UUID>> CHILD_UUID = SynchedEntityData.defineId(EntityBoneSerpent.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final Predicate<LivingEntity> NOT_RIDING_STRADDLEBOARD_FRIENDLY = (entity) -> {
         return entity.isAlive() && (entity.getVehicle() == null || !(entity.getVehicle() instanceof EntityStraddleboard) || !((EntityStraddleboard)entity.getVehicle()).shouldSerpentFriend());
-    };;
+    };
     private static final Predicate<EntityStraddleboard> STRADDLEBOARD_FRIENDLY = (entity) -> {
         return entity.isVehicle() && entity.shouldSerpentFriend();
-    };;
+    };
 
     public int jumpCooldown = 0;
     private boolean isLandNavigator;
@@ -66,27 +77,33 @@ public class EntityBoneSerpent extends Monster {
         switchNavigator(false);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.boneSeprentSpawnRolls, this.getRandom(), spawnReasonIn) && super.checkSpawnRules(worldIn, spawnReasonIn);
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 1;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
 
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.BONE_SERPENT_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.BONE_SERPENT_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.BONE_SERPENT_HURT.get();
     }
@@ -95,10 +112,12 @@ public class EntityBoneSerpent extends Monster {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 25.0D).add(Attributes.FOLLOW_RANGE, 32.0D).add(Attributes.ATTACK_DAMAGE, 5.0D).add(Attributes.MOVEMENT_SPEED, 1.45F);
     }
 
+    @Override
     public int getMaxFallDistance() {
         return 256;
     }
 
+    @Override
     public boolean canBeAffected(MobEffectInstance potioneffectIn) {
         if (potioneffectIn.is(MobEffects.WITHER)) {
             return false;
@@ -106,6 +125,7 @@ public class EntityBoneSerpent extends Monster {
         return super.canBeAffected(potioneffectIn);
     }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         if (worldIn.getBlockState(pos).getFluidState().is(FluidTags.WATER) || worldIn.getBlockState(pos).getFluidState().is(FluidTags.LAVA)) {
             return 10.0F;
@@ -114,14 +134,17 @@ public class EntityBoneSerpent extends Monster {
         }
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
+    @Override
     public boolean canBeLeashed() {
         return true;
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
@@ -136,6 +159,7 @@ public class EntityBoneSerpent extends Monster {
         return p_234314_1_.getBlockState(blockpos$mutable).isAir();
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BreathAirGoal(this));
         this.goalSelector.addGoal(0, new BoneSerpentAIFindLava(this));
@@ -153,6 +177,7 @@ public class EntityBoneSerpent extends Monster {
         this.targetSelector.addGoal(5, new EntityAINearestTarget3D(this, EntitySoulVulture.class, 10, true, false, NOT_RIDING_STRADDLEBOARD_FRIENDLY));
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         boolean liquid = this.isInLava() || this.isInWater();
         if (this.isEffectiveAi() && liquid) {
@@ -180,6 +205,7 @@ public class EntityBoneSerpent extends Monster {
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.getChildId() != null) {
@@ -188,6 +214,7 @@ public class EntityBoneSerpent extends Monster {
     }
 
 
+    @Override
     public void pushEntities() {
         final List<Entity> entities = this.level().getEntities(this, this.getBoundingBox().expandTowards(0.2D, 0.0D, 0.2D));
         entities.stream().filter(entity -> !(entity instanceof EntityBoneSerpentPart) && entity.isPushable()).forEach(entity -> entity.push(this));
@@ -198,6 +225,7 @@ public class EntityBoneSerpent extends Monster {
         return source.is(DamageTypes.FALL) || source.is(DamageTypes.DROWN) || source.is(DamageTypes.IN_WALL)  || source.is(DamageTypes.LAVA) || source.is(DamageTypeTags.IS_FIRE) || super.isInvulnerableTo(source);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.hasUUID("ChildUUID")) {
@@ -233,12 +261,13 @@ public class EntityBoneSerpent extends Monster {
         return false;
     }
 
+    @Override
     public void tick() {
         super.tick();
         final boolean ground = !this.isInLava() && !this.isInWater() && this.onGround();
         if (jumpCooldown > 0) {
             jumpCooldown--;
-            final float f2 = (float) -((float) this.getDeltaMovement().y * Mth.RAD_TO_DEG);
+            final float f2 = -((float) this.getDeltaMovement().y * Mth.RAD_TO_DEG);
             this.setXRot(f2);
 
         }
@@ -319,6 +348,7 @@ public class EntityBoneSerpent extends Monster {
             this.dolphin = dolphinIn;
         }
 
+        @Override
         public void tick() {
             if (this.dolphin.isInWater() || this.dolphin.isInLava()) {
                 this.dolphin.setDeltaMovement(this.dolphin.getDeltaMovement().add(0.0D, 0.005D, 0.0D));

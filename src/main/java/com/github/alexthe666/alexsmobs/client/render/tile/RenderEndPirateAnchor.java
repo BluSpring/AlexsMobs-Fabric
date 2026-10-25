@@ -52,10 +52,12 @@ public class RenderEndPirateAnchor<T extends TileEntityEndPirateAnchor> implemen
         matrixStackIn.popPose();
     }
 
+    @Override
     public boolean shouldRenderOffScreen(T p_112306_) {
         return true;
     }
 
+    @Override
     public int getViewDistance() {
         return 256;
     }

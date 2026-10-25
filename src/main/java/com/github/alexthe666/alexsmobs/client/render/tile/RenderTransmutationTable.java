@@ -8,6 +8,11 @@ import com.github.alexthe666.alexsmobs.tileentity.TileEntityTransmutationTable;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -15,8 +20,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 public class RenderTransmutationTable<T extends TileEntityTransmutationTable> implements BlockEntityRenderer<T> {
 
@@ -68,9 +71,9 @@ public class RenderTransmutationTable<T extends TileEntityTransmutationTable> im
 
         private static void vertex(VertexConsumer p_114090_, Matrix4f p_114091_, Matrix3f p_114092_, int p_114093_,
                         float p_114094_, float p_114095_, int p_114096_, int p_114097_) {
-                org.joml.Vector3f normal = new org.joml.Vector3f(0.0F, 1.0F, 0.0F);
+                Vector3f normal = new Vector3f(0.0F, 1.0F, 0.0F);
                 normal.mul(p_114092_);
-                org.joml.Vector4f pos = new org.joml.Vector4f(p_114094_, p_114095_, 0.0F, 1.0F);
+                Vector4f pos = new Vector4f(p_114094_, p_114095_, 0.0F, 1.0F);
                 pos.mul(p_114091_);
                 p_114090_.addVertex(pos.x, pos.y, pos.z).setColor(255, 255, 255, 100)
                                 .setUv((float) p_114096_, (float) p_114097_).setOverlay(OverlayTexture.NO_OVERLAY)

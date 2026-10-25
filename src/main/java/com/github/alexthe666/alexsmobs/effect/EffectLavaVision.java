@@ -21,6 +21,7 @@ public class EffectLavaVision extends MobEffect {
         return duration > 0;
     }
 
+    @Override
     public String getDescriptionId() {
         return "alexsmobs.potion.lava_vision";
     }

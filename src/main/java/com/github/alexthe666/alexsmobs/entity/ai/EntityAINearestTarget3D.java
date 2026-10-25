@@ -1,12 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.phys.AABB;
-
-import javax.annotation.Nullable;
-import java.util.function.Predicate;
 
 public class EntityAINearestTarget3D<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
     public EntityAINearestTarget3D(Mob goalOwnerIn, Class<T> targetClassIn, boolean checkSight) {
@@ -21,6 +22,7 @@ public class EntityAINearestTarget3D<T extends LivingEntity> extends NearestAtta
         super(goalOwnerIn, targetClassIn, targetChanceIn, checkSight, nearbyOnlyIn, targetPredicate);
     }
 
+    @Override
     protected AABB getTargetSearchArea(double targetDistance) {
         return this.mob.getBoundingBox().inflate(targetDistance, targetDistance, targetDistance);
     }

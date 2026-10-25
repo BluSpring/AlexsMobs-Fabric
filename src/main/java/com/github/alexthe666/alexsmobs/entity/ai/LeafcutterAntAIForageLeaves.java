@@ -3,6 +3,8 @@ package com.github.alexthe666.alexsmobs.entity.ai;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.EntityLeafcutterAnt;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.neoforge.event.EventHooks;
+
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -31,32 +33,39 @@ public class LeafcutterAntAIForageLeaves extends MoveToBlockGoal {
         this.ant = LeafcutterAnt;
     }
 
+    @Override
     public boolean canUse() {
         return !ant.isBaby() && !ant.hasLeaf() && !ant.isBaby() && !ant.isQueen() && super.canUse();
     }
 
+    @Override
     public boolean canContinueToUse() {
         return super.canContinueToUse() && !ant.hasLeaf();
     }
 
+    @Override
     public void stop() {
         idleAtLeavesTime = 0;
         logStartPos = null;
         logTopPos = null;
     }
 
+    @Override
     public void start() {
         moveToCooldown = 10 + ant.getRandom().nextInt(10);
     }
 
+    @Override
     public double acceptedDistance() {
         return 2.0D;
     }
 
+    @Override
     public boolean shouldRecalculatePath() {
         return this.tryTicks % 40 == 0 && logStartPos == null;
     }
 
+    @Override
     public void tick() {
         if(moveToCooldown > 0){
             moveToCooldown--;
@@ -144,7 +153,7 @@ public class LeafcutterAntAIForageLeaves extends MoveToBlockGoal {
     private void breakLeaves() {
         BlockState blockstate = ant.level().getBlockState(this.blockPos);
         if (blockstate.is(AMTagRegistry.LEAFCUTTER_ANT_BREAKABLES)) {
-            if (net.neoforged.neoforge.event.EventHooks.canEntityGrief(ant.level(), ant)) {
+            if (EventHooks.canEntityGrief(ant.level(), ant)) {
                 ant.level().destroyBlock(blockPos, false);
                 if (ant.getRandom().nextFloat() > AMConfig.leafcutterAntBreakLeavesChance) {
                     ant.level().setBlockAndUpdate(blockPos, blockstate);

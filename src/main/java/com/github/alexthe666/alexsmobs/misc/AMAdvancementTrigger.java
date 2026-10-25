@@ -1,13 +1,14 @@
 package com.github.alexthe666.alexsmobs.misc;
 
+import java.util.Optional;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-
-import java.util.Optional;
 
 public class AMAdvancementTrigger extends SimpleCriterionTrigger<AMAdvancementTrigger.Instance> {
     
@@ -20,7 +21,7 @@ public class AMAdvancementTrigger extends SimpleCriterionTrigger<AMAdvancementTr
         this.trigger(player, (instance) -> true);
     }
 
-    public static record Instance(Optional<ContextAwarePredicate> player) implements SimpleInstance {
+    public record Instance(Optional<ContextAwarePredicate> player) implements SimpleInstance {
         public static final Codec<Instance> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                 EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player)

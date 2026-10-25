@@ -1,5 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
 import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
@@ -7,6 +13,9 @@ import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -44,13 +53,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.Optional;
-import java.util.Random;
 
 public class EntitySoulVulture extends Monster implements FlyingAnimal {
 
@@ -73,11 +75,13 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         switchNavigator(true);
     }
 
+    @Override
     @Nullable
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return hasSoulHeart() ? SOUL_LOOT : super.getDefaultLootTable();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.soulVultureSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -88,14 +92,17 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         return reason == MobSpawnType.SPAWNER || spawnBlock && checkMobSpawnRules(AMEntityRegistry.SOUL_VULTURE.get(), worldIn, reason, pos, randomIn);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.SOUL_VULTURE_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.SOUL_VULTURE_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.SOUL_VULTURE_HURT.get();
     }
@@ -108,6 +115,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         return level().isEmptyBlock(pos.above()) && level().isEmptyBlock(pos.above(2)) && state.is(AMTagRegistry.SOUL_VULTURE_PERCHES);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new AICirclePerch(this));
         this.goalSelector.addGoal(2, new AIFlyRandom(this));
@@ -120,10 +128,12 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         this.targetSelector.addGoal(3, new EntityAINearestTarget3D(this, AbstractVillager.class, true));
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 1;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return true;
     }
@@ -149,6 +159,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         builder.define(SOUL_LEVEL, 0);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Flying", this.isFlying());
@@ -161,6 +172,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         compound.putInt("LandingCooldown", landingCooldown);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFlying(compound.getBoolean("Flying"));
@@ -171,6 +183,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         }
     }
 
+    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
@@ -203,6 +216,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         this.entityData.set(SOUL_LEVEL, tackling);
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevTackleProgress = tackleProgress;
@@ -262,13 +276,9 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         if(tackleCooldown > 0){
             tackleCooldown--;
         }
-        if (isFlying()) {
-            this.setNoGravity(true);
-        } else {
-            this.setNoGravity(false);
-        }
+        this.setNoGravity(isFlying());
         if (this.level().isClientSide  && hasSoulHeart()) {
-            final float radius = 0.25F + random.nextFloat() * 1F;
+            final float radius = 0.25F + random.nextFloat();
             final float fly = this.flyProgress * 0.2F;
             final float wingSpread = 15F + 65 * fly + random.nextInt(5);
             final float angle = (Maths.STARTING_ANGLE * ((random.nextBoolean() ? -1 : 1) * (wingSpread + 180) + this.yBodyRot));
@@ -283,6 +293,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if(id == 68){
@@ -321,10 +332,12 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         return this.distanceToSqr(Vec3.atCenterOf(perchPos)) > 13 || landingCooldown == 0;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -351,10 +364,12 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
             this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         }
 
+        @Override
         public boolean canUse() {
             return  !vulture.shouldSwoop() && this.vulture.isFlying() && this.vulture.getPerchPos() != null;
         }
 
+        @Override
         public void start() {
             circlingTime = 0;
             speed = 0.8F + random.nextFloat() * 0.4F;
@@ -364,6 +379,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
             clockwise = this.vulture.random.nextBoolean();
         }
 
+        @Override
         public void stop() {
             circlingTime = 0;
             speed = 0.8F + random.nextFloat() * 0.4F;
@@ -374,6 +390,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
             this.vulture.tackleCooldown = 0;
         }
 
+        @Override
         public void tick() {
             BlockPos encircle = vulture.getPerchPos();
             double localSpeed = speed;
@@ -399,6 +416,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             return canUse();
         }
@@ -428,6 +446,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
             this.parentEntity = bird;
         }
 
+        @Override
         public void tick() {
             if (this.operation == MoveControl.Operation.MOVE_TO) {
                 Vec3 vector3d = new Vec3(this.wantedX - parentEntity.getX(), this.wantedY - parentEntity.getY(), this.wantedZ - parentEntity.getZ());
@@ -470,6 +489,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
 
+        @Override
         public boolean canUse() {
             if(vulture.getPerchPos() != null || vulture.shouldSwoop()){
                 return false;
@@ -485,6 +505,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
             return false;
         }
 
+        @Override
         public boolean canContinueToUse() {
             if(vulture.getPerchPos() != null || vulture.shouldSwoop()){
                 return false;
@@ -492,10 +513,12 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
             return target != null && vulture.distanceToSqr(Vec3.atCenterOf(target)) > 2.4D && vulture.getMoveControl().hasWanted() && !vulture.horizontalCollision;
         }
 
+        @Override
         public void stop(){
             target = null;
         }
 
+        @Override
         public void tick() {
             if (target == null) {
                 target = getBlockInViewVulture();
@@ -536,6 +559,7 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
 
+        @Override
         public boolean canUse() {
             if(vulture.getTarget() != null && vulture.shouldSwoop()) {
                 vulture.setFlying(true);
@@ -545,16 +569,14 @@ public class EntitySoulVulture extends Monster implements FlyingAnimal {
         }
 
 
+        @Override
         public void stop(){
             vulture.setTackling(false);
         }
 
+        @Override
         public void tick() {
-            if(vulture.isFlying()){
-                vulture.setTackling(true);
-            }else{
-                vulture.setTackling(false);
-            }
+            vulture.setTackling(vulture.isFlying());
             if (vulture.getTarget() != null) {
                 this.vulture.getMoveControl().setWantedPosition(vulture.getTarget().getX(), vulture.getTarget().getY() + vulture.getTarget().getEyeHeight(), vulture.getTarget().getZ(), 2.0D);
                 final double d0 = this.vulture.getX() - this.vulture.getTarget().getX();

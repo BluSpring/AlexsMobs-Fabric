@@ -188,12 +188,12 @@ public class ModelCaiman extends AdvancedEntityModel<EntityCaiman> {
         this.walk(leftHand, walkSpeed, walkDegree * 0.2F, true, -3F, 0.1F, limbSwing, walkAmount);
         leftArm.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -1.5F, 3, false)) - bodyBob;
         leftArm.rotationPointZ += walkValue(limbSwing, walkAmount, walkSpeed, -1.5F, walkDegree * 3, false);
-        leftHand.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -2.5F, walkDegree * 1F, true));
+        leftHand.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -2.5F, walkDegree, true));
         this.walk(rightArm, walkSpeed, walkDegree * 0.4F, false, 0F, 0F, limbSwing, walkAmount);
         this.walk(rightHand, walkSpeed, walkDegree * 0.2F, false, -3F, -0.1F, limbSwing, walkAmount);
         rightArm.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -1.5F, 3, true)) - bodyBob;
         rightArm.rotationPointZ += walkValue(limbSwing, walkAmount, walkSpeed, -1.5F, walkDegree * 3, true);
-        rightHand.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -2.5F, walkDegree * 1F, false));
+        rightHand.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -2.5F, walkDegree, false));
         this.walk(leftLeg, walkSpeed, walkDegree * 0.3F, false, 1F, 0F, limbSwing, walkAmount);
         this.walk(leftFoot, walkSpeed, walkDegree * 0.2F, false, -2F, -0.1F, limbSwing, walkAmount);
         leftLeg.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -0.5F, 3, true)) - bodyBob;
@@ -210,7 +210,7 @@ public class ModelCaiman extends AdvancedEntityModel<EntityCaiman> {
         this.walk(leftLeg, swimSpeed, swimDegree, true, 0F, 0.25F, limbSwing, swimAmount);
         this.swing(body, swimSpeed, swimDegree * 0.4F, false, 1.5F, 0F, limbSwing, swimAmount);
         this.swing(head, swimSpeed, swimDegree * 0.1F, true, 2F, 0F, limbSwing, swimAmount);
-        this.chainSwing(new AdvancedModelBox[]{tail1, tail2, tail3}, swimSpeed, swimDegree * 1F, -2.5F, limbSwing, swimAmount);
+        this.chainSwing(new AdvancedModelBox[]{tail1, tail2, tail3}, swimSpeed, swimDegree, -2.5F, limbSwing, swimAmount);
         this.faceTarget(netHeadYaw, headPitch, 1, head);
     }
 
@@ -220,6 +220,7 @@ public class ModelCaiman extends AdvancedEntityModel<EntityCaiman> {
         AdvancedModelBox.rotateAngleZ = z;
     }
 
+    @Override
     public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.young) {
             float f = 1.25F;

@@ -1,14 +1,23 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AquaticMoveController;
 import com.github.alexthe666.alexsmobs.entity.ai.BoneSerpentPathNavigator;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.neoforge.common.ItemAbilities;
+
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -24,7 +33,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -52,12 +67,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.ItemAbilities;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.UUID;
 
 public class EntityStradpole extends WaterAnimal implements Bucketable {
 
@@ -76,14 +85,17 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
         this.moveControl = new AquaticMoveController(this, 1.4F);
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.COD_DEATH;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return SoundEvents.COD_HURT;
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 2;
     }
@@ -93,7 +105,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.STRADPOLE_BUCKET.get());
         if (this.hasCustomName()) {
-            stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
+            stack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
         return stack;
     }
@@ -101,7 +113,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
     @Override
     public void saveToBucketTag(@Nonnull ItemStack bucket) {
         if (this.hasCustomName()) {
-            bucket.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
+            bucket.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
         Bucketable.saveDefaultDataToBucketTag(this, bucket);
     }
@@ -186,6 +198,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
         this.entityData.set(PARENT_UUID, Optional.ofNullable(uniqueId));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.getParentId() != null) {
@@ -195,14 +208,17 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
         compound.putBoolean("DespawnSoon", this.isDespawnSoon());
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.fromBucket();
     }
 
+    @Override
     public boolean removeWhenFarAway(double p_27492_) {
         return !this.fromBucket() && !this.hasCustomName();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.stradpoleSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -217,6 +233,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
         return false;
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.hasUUID("ParentUUID")) {
@@ -226,12 +243,14 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
         this.setDespawnSoon(compound.getBoolean("DespawnSoon"));
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new StradpoleAISwim(this, 1.0D, 10));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
     }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         if (!worldIn.getBlockState(pos).getFluidState().isEmpty()) {
             return 15.0F;
@@ -248,10 +267,12 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
         this.entityData.set(DESPAWN_SOON, despawnSoon);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new BoneSerpentPathNavigator(this, worldIn);
     }
 
+    @Override
     public void tick() {
         float f = 1.0F;
         if (entityData.get(LAUNCHED)) {
@@ -367,14 +388,17 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
         return !p_230298_1_.isSpectator() && !(p_230298_1_ instanceof EntityStraddler)&& !(p_230298_1_ instanceof EntityStradpole);
     }
 
+    @Override
     public boolean isOnFire() {
         return false;
     }
 
+    @Override
     public boolean canStandOnFluid(FluidState p_230285_1_) {
         return p_230285_1_.is(FluidTags.LAVA);
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && (this.isInWater() || this.isInLava())) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -389,6 +413,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
 
     }
 
+    @Override
     protected void handleAirSupply(int p_209207_1_) {
 
     }
@@ -413,6 +438,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
             super(creature, speed, chance, false);
         }
 
+        @Override
         public boolean canUse() {
             if (!this.mob.isInLava() && !this.mob.isInWater() || this.mob.isPassenger() || mob.getTarget() != null || !this.mob.isInWater() && !this.mob.isInLava() && this.mob instanceof ISemiAquatic && !((ISemiAquatic) this.mob).shouldEnterWater()) {
                 return false;
@@ -435,6 +461,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
             }
         }
 
+        @Override
         @Nullable
         protected Vec3 getPosition() {
             if (this.mob.getRandom().nextFloat() < 0.3F) {

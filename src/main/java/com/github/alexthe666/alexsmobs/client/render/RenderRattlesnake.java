@@ -14,10 +14,12 @@ public class RenderRattlesnake extends MobRenderer<EntityRattlesnake, ModelRattl
         super(renderManagerIn, new ModelRattlesnake(), 0.2F);
     }
 
+    @Override
     protected void scale(EntityRattlesnake entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityRattlesnake entity) {
         return TEXTURE;
     }

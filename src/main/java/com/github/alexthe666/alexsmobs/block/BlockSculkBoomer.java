@@ -3,6 +3,8 @@ package com.github.alexthe666.alexsmobs.block;
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntitySculkBoomer;
 import com.mojang.serialization.MapCodec;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -22,7 +24,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.level.material.MapColor;
-import org.jetbrains.annotations.Nullable;
 
 public class BlockSculkBoomer extends BaseEntityBlock {
     public static final MapCodec<BlockSculkBoomer> CODEC = simpleCodec(p -> new BlockSculkBoomer());
@@ -40,12 +41,14 @@ public class BlockSculkBoomer extends BaseEntityBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(OPEN, false).setValue(POWERED, false));
     }
 
+    @Override
     public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         if(!worldIn.isClientSide){
             this.updateState(state, worldIn, pos, blockIn);
         }
     }
 
+    @Override
     public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
         if(!worldIn.isClientSide){
             this.updateState(state, worldIn, pos, state.getBlock());
@@ -63,10 +66,12 @@ public class BlockSculkBoomer extends BaseEntityBlock {
     }
 
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(OPEN, false).setValue(POWERED, Boolean.valueOf(context.getLevel().hasNeighborSignal(context.getClickedPos())));
     }
 
+    @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
@@ -77,17 +82,20 @@ public class BlockSculkBoomer extends BaseEntityBlock {
         return new TileEntitySculkBoomer(pos, state);
     }
 
+    @Override
     @javax.annotation.Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_222100_, BlockState p_222101_, BlockEntityType<T> p_222102_) {
         return createTickerHelper(p_222102_, AMTileEntityRegistry.SCULK_BOOMER.get(), TileEntitySculkBoomer::commonTick);
     }
 
 
+    @Override
     @javax.annotation.Nullable
     public <T extends BlockEntity> GameEventListener getListener(ServerLevel p_222092_, T p_222093_) {
         return p_222093_ instanceof TileEntitySculkBoomer ? (TileEntitySculkBoomer)p_222093_ : null;
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(POWERED, OPEN);
     }

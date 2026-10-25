@@ -24,6 +24,7 @@ public class LayerAnteaterBaby extends RenderLayer<EntityAnteater, ModelAnteater
         super(render);
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityAnteater roo, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if(roo.isVehicle() && !roo.isBaby()){
             for(Entity passenger : roo.getPassengers()){

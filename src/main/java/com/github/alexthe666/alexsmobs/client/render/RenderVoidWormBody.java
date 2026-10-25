@@ -28,12 +28,15 @@ public class RenderVoidWormBody extends LivingEntityRenderer<EntityVoidWormPart,
     public RenderVoidWormBody(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn, new ModelVoidWormBody(0.0F), 1F);
         this.addLayer(new LayerVoidWormGlow(this, renderManagerIn.getResourceManager(), new ModelVoidWormBody(0.0F)){
+            @Override
             public ResourceLocation getGlowTexture(LivingEntity worm){
                 return ((EntityVoidWormPart)worm).isTail() ? TEXTURE_TAIL_GLOW : TEXTURE_BODY_GLOW;
             }
+            @Override
             public boolean isGlowing(LivingEntity worm){
                 return !((EntityVoidWormPart)worm).isHurt();
             }
+            @Override
             public float getAlpha(LivingEntity livingEntity){
                 EntityVoidWormPart worm = (EntityVoidWormPart) livingEntity;
                 return (float) Mth.clamp((worm.getHealth() - worm.getHealthThreshold()) / (worm.getMaxHealth() - worm.getHealthThreshold()), 0, 1F);
@@ -41,10 +44,12 @@ public class RenderVoidWormBody extends LivingEntityRenderer<EntityVoidWormPart,
         });
     }
 
+    @Override
     public boolean shouldRender(EntityVoidWormPart worm, Frustum camera, double camX, double camY, double camZ) {
         return worm.getPortalTicks() <= 0 && super.shouldRender(worm, camera, camX, camY, camZ);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityVoidWormPart entity) {
         if (entity.isHurt()) {
             return entity.isTail() ? TEXTURE_TAIL_HURT : TEXTURE_BODY_HURT;
@@ -53,6 +58,7 @@ public class RenderVoidWormBody extends LivingEntityRenderer<EntityVoidWormPart,
         }
     }
 
+    @Override
     protected void setupRotations(EntityVoidWormPart entityLiving, PoseStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks, float tickDelta) {
         Pose pose = entityLiving.getPose();
         if (pose != Pose.SLEEPING) {
@@ -69,11 +75,13 @@ public class RenderVoidWormBody extends LivingEntityRenderer<EntityVoidWormPart,
 
     }
 
+    @Override
     protected void scale(EntityVoidWormPart entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         this.model = entitylivingbaseIn.isTail() ? tailModel : bodyModel;
         matrixStackIn.scale(entitylivingbaseIn.getWormScale(), entitylivingbaseIn.getWormScale(), entitylivingbaseIn.getWormScale());
     }
 
+    @Override
     protected boolean shouldShowName(EntityVoidWormPart entity) {
         return super.shouldShowName(entity) && (entity.shouldShowName() || entity.hasCustomName() && entity == this.entityRenderDispatcher.crosshairPickEntity);
     }

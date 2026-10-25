@@ -1,12 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityBunfungus;
+
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
 
 public class BunfungusAIMelee extends Goal {
 
@@ -30,6 +31,7 @@ public class BunfungusAIMelee extends Goal {
         return false;
     }
 
+    @Override
     public void tick(){
         if(jumpCooldown > 0){
             jumpCooldown--;

@@ -1,10 +1,19 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.util.AnacondaPartIndex;
 import com.github.alexthe666.alexsmobs.message.MessageHurtMultipart;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.google.common.collect.ImmutableList;
+import net.neoforged.neoforge.fluids.FluidType;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -16,7 +25,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
@@ -28,13 +42,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.neoforged.neoforge.fluids.FluidType;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Predicate;
 
 public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipart {
     private static final EntityDataAccessor<Integer> BODYINDEX = SynchedEntityData.defineId(EntityAnacondaPart.class, EntityDataSerializers.INT);
@@ -91,6 +98,7 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
         return false;
     }
 
+    @Override
     public boolean isNoGravity() {
         return false;
     }
@@ -226,6 +234,7 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
         return false; // Anaconda part can breathe underwater
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
@@ -268,6 +277,7 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
     }
 
 
+    @Override
     public void pushEntities() {
         final List<Entity> entities = this.level().getEntities(this, this.getBoundingBox().expandTowards(0.2D, 0.0D, 0.2D));
         final Entity parent = this.getParent();
@@ -349,6 +359,7 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
         this.entityData.set(CHILD_UUID, Optional.ofNullable(uniqueId));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.getParentId() != null) {
@@ -361,6 +372,7 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
         compound.putInt("BodyIndex", getBodyIndex());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.hasUUID("ParentUUID")) {
@@ -374,7 +386,7 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
     }
 
     @Override
-    public boolean is(net.minecraft.world.entity.Entity entity) {
+    public boolean is(Entity entity) {
         return this == entity || this.getParent() == entity;
     }
 
@@ -383,6 +395,7 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
         return true;
     }
 
+    @Override
     @Nullable
     public ItemStack getPickResult() {
         Entity parent = this.getParent();

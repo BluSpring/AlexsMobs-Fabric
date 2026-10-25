@@ -39,6 +39,7 @@ public class EffectFleetFooted extends MobEffect {
         return true;
     }
 
+    @Override
     public void removeAttributeModifiers(AttributeMap attributeMap) {
         AttributeInstance modifiableattributeinstance = attributeMap.getInstance(Attributes.MOVEMENT_SPEED);
         if(modifiableattributeinstance != null && modifiableattributeinstance.hasModifier(SPRINT_JUMP_SPEED_MODIFIER)){
@@ -52,6 +53,7 @@ public class EffectFleetFooted extends MobEffect {
         return duration > 0;
     }
 
+    @Override
     public String getDescriptionId() {
         return "alexsmobs.potion.fleet_footed";
     }

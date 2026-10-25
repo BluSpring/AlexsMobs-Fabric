@@ -1,12 +1,15 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.function.Consumer;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.EntityVoidPortal;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 public class ItemShatteredDimensionalCarver extends ItemDimensionalCarver {
 
@@ -15,7 +18,7 @@ public class ItemShatteredDimensionalCarver extends ItemDimensionalCarver {
     }
 
     @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getISTERProperties());
     }
 

@@ -1,14 +1,16 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
-import com.github.alexthe666.alexsmobs.entity.EntityKomodoDragon;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.level.Level;
-
-import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.annotation.Nullable;
+
+import com.github.alexthe666.alexsmobs.entity.EntityKomodoDragon;
+
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.level.Level;
 
 public class KomodoDragonAIJostle  extends Goal {
 
@@ -48,6 +50,7 @@ public class KomodoDragonAIJostle  extends Goal {
         return false;
     }
 
+    @Override
     public void start(){
         this.komodo.jostleTimer = 0;
         this.angle = 0;
@@ -59,6 +62,7 @@ public class KomodoDragonAIJostle  extends Goal {
         this.targetKomodoDragon.jostleDirection = dir;
     }
 
+    @Override
     public void stop() {
         this.komodo.setJostling(false);
         this.komodo.setJostlingPartner(null);
@@ -74,6 +78,7 @@ public class KomodoDragonAIJostle  extends Goal {
 
     }
 
+    @Override
     public void tick() {
         if(targetKomodoDragon != null){
             this.komodo.lookAt(targetKomodoDragon, 360, 180);

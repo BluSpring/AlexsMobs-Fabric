@@ -21,6 +21,7 @@ public class MovementControllerCustomCollisions extends MoveControl {
     }
 
 
+    @Override
     public void tick() {
         if (this.operation == MoveControl.Operation.STRAFE) {
             float f = (float)this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
@@ -86,9 +87,7 @@ public class MovementControllerCustomCollisions extends MoveControl {
         PathNavigation pathnavigator = this.mob.getNavigation();
         if (pathnavigator != null) {
             NodeEvaluator nodeprocessor = pathnavigator.getNodeEvaluator();
-            if (nodeprocessor != null && nodeprocessor.getPathType(this.mob, new BlockPos(Mth.floor(this.mob.getX() + (double)p_234024_1_), Mth.floor(this.mob.getY()), Mth.floor(this.mob.getZ() + (double)p_234024_2_))) != PathType.WALKABLE) {
-                return false;
-            }
+            return nodeprocessor == null || nodeprocessor.getPathType(this.mob, new BlockPos(Mth.floor(this.mob.getX() + (double) p_234024_1_), Mth.floor(this.mob.getY()), Mth.floor(this.mob.getZ() + (double) p_234024_2_))) == PathType.WALKABLE;
         }
 
         return true;

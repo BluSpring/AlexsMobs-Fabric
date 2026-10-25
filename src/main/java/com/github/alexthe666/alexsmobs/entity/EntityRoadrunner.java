@@ -1,11 +1,14 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -26,7 +29,14 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
@@ -38,8 +48,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
 
 public class EntityRoadrunner extends Animal {
 
@@ -58,6 +66,7 @@ public class EntityRoadrunner extends Animal {
         super(type, worldIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.1D));
@@ -71,6 +80,7 @@ public class EntityRoadrunner extends Animal {
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, EntityRattlesnake.class, 55, true, true, null));
         this.targetSelector.addGoal(2, (new HurtByTargetGoal(this, EntityRattlesnake.class, Player.class)).setAlertOthers());
     }
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("FeatherTime")) {
@@ -79,23 +89,28 @@ public class EntityRoadrunner extends Animal {
 
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.roadrunnerSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("FeatherTime", this.timeUntilNextFeather);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return isMeep() || random.nextInt(2000) == 0 ? AMSoundRegistry.ROADRUNNER_MEEP.get() : AMSoundRegistry.ROADRUNNER_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.ROADRUNNER_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.ROADRUNNER_HURT.get();
     }
@@ -108,6 +123,7 @@ public class EntityRoadrunner extends Animal {
 
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         this.entityData.set(ATTACK_TICK, 5);
         return true;
@@ -122,6 +138,7 @@ public class EntityRoadrunner extends Animal {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.ATTACK_DAMAGE, 1.0D).add(Attributes.MOVEMENT_SPEED, 0.45F).add(Attributes.FOLLOW_RANGE, 10D);
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         this.oFlap = this.wingRotation;
@@ -158,6 +175,7 @@ public class EntityRoadrunner extends Animal {
         }
     }
 
+    @Override
     public void tick(){
         super.tick();
 
@@ -186,19 +204,23 @@ public class EntityRoadrunner extends Animal {
         }
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
         if(!this.isMeep()){
             this.playSound(SoundEvents.CHICKEN_STEP, 0.15F, 1.0F);
         }
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.ROADRUNNER_BREEDABLES);
     }

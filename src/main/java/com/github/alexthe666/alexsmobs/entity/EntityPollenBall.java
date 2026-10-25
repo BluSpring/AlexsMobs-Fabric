@@ -20,10 +20,12 @@ public class EntityPollenBall extends EntityMobProjectile {
         this.setPos(vec3.x, vec3.y, vec3.z);
     }
 
+    @Override
     public boolean isNoGravity() {
         return true;
     }
 
+    @Override
     public void doBehavior() {
 
         Entity entity = this.getShooter();

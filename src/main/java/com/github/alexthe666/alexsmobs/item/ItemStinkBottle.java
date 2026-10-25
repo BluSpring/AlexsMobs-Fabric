@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import net.neoforged.neoforge.registries.DeferredHolder;
+
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
@@ -7,7 +9,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class ItemStinkBottle extends AMBlockItem {
 
@@ -15,6 +16,7 @@ public class ItemStinkBottle extends AMBlockItem {
         super(blockSupplier, props);
     }
 
+    @Override
     public InteractionResult place(BlockPlaceContext context) {
         InteractionResult result = super.place(context);
         if(result.consumesAction()){
@@ -27,6 +29,7 @@ public class ItemStinkBottle extends AMBlockItem {
         }
         return result;
     }
+    @Override
     public String getDescriptionId() {
         return this.getOrCreateDescriptionId();
     }

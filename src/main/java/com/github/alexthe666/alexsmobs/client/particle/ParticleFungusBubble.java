@@ -19,6 +19,7 @@ public class ParticleFungusBubble extends SimpleAnimatedParticle {
         this.setSprite(this.sprites.get(0, this.lifetime));
     }
 
+    @Override
     public void tick() {
         super.tick();
         int halflife = this.lifetime / 2;
@@ -58,6 +59,7 @@ public class ParticleFungusBubble extends SimpleAnimatedParticle {
             this.spriteSet = spriteSet;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             ParticleFungusBubble p = new ParticleFungusBubble(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet);
             return p;

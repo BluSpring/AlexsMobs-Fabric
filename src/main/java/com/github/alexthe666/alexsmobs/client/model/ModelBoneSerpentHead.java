@@ -64,7 +64,7 @@ public class ModelBoneSerpentHead extends AdvancedEntityModel<EntityBoneSerpent>
         double walkOffset = 0;
         this.walk(jaw, idleSpeed * 0.5F, idleDegree * 0.3F, false, -1.2F, 0F, ageInTicks, 1);
         this.head.rotationPointY += (float)(Math.sin( (double)(limbSwing * walkSpeed) + walkOffset) * (double)limbSwingAmount * (double)walkDegree - (double)(limbSwingAmount * walkDegree) );
-        this.walk(jaw, walkSpeed * 1F, walkDegree * 0.03F, false, -1.2F, 0F, limbSwing, limbSwingAmount);
+        this.walk(jaw, walkSpeed, walkDegree * 0.03F, false, -1.2F, 0F, limbSwing, limbSwingAmount);
         this.head.rotationPointY += (float)(Math.sin( (double)(ageInTicks * idleSpeed) + walkOffset) * (double)1 * (double)idleDegree - (double)(1 * idleDegree) );
 
     }

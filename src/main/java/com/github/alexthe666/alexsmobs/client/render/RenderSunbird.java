@@ -5,6 +5,11 @@ import com.github.alexthe666.alexsmobs.entity.EntitySunbird;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -13,8 +18,6 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 public class RenderSunbird extends MobRenderer<EntitySunbird, ModelSunbird> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/sunbird.png");
@@ -28,9 +31,9 @@ public class RenderSunbird extends MobRenderer<EntitySunbird, ModelSunbird> {
 
     private static void vertex(VertexConsumer p_114090_, Matrix4f p_114091_, Matrix3f p_114092_, int p_114093_,
             float p_114094_, float p_114095_, int p_114096_, int p_114097_) {
-        org.joml.Vector3f normal = new org.joml.Vector3f(0.0F, 1.0F, 0.0F);
+        Vector3f normal = new Vector3f(0.0F, 1.0F, 0.0F);
         normal.mul(p_114092_);
-        org.joml.Vector4f pos = new org.joml.Vector4f(p_114094_, p_114095_, 0.0F, 1.0F);
+        Vector4f pos = new Vector4f(p_114094_, p_114095_, 0.0F, 1.0F);
         pos.mul(p_114091_);
         p_114090_.addVertex(pos.x, pos.y, pos.z).setColor(255, 255, 255, 100)
                 .setUv((float) p_114096_, (float) p_114097_).setOverlay(OverlayTexture.NO_OVERLAY).setLight(p_114093_)
@@ -64,13 +67,16 @@ public class RenderSunbird extends MobRenderer<EntitySunbird, ModelSunbird> {
         }
     }
 
+    @Override
     protected void scale(EntitySunbird entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     protected int getBlockLightLevel(EntitySunbird entityIn, BlockPos partialTicks) {
         return 15;
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntitySunbird entity) {
         return TEXTURE;
     }
@@ -81,9 +87,10 @@ public class RenderSunbird extends MobRenderer<EntitySunbird, ModelSunbird> {
             super(p_i50928_1_);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntitySunbird entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntitySunbird entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             VertexConsumer scorch = bufferIn.getBuffer(AMRenderTypes.getEyesAlphaEnabled(TEXTURE_GLOW));
             float alpha = entitylivingbaseIn.getScorchProgress(partialTicks);
             this.getParentModel().renderToBuffer(matrixStackIn, scorch, 240,

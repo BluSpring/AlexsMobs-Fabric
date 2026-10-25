@@ -1,6 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityBunfungus;
+
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -8,8 +11,6 @@ import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
 
 public class AnimalAILeapRandomly extends Goal {
 
@@ -54,6 +55,7 @@ public class AnimalAILeapRandomly extends Goal {
         leapToPos = null;
     }
 
+    @Override
     public void start(){
         if(leapToPos != null){
             Vec3 vector3d = this.mob.getDeltaMovement();

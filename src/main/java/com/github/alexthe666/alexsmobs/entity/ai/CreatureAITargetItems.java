@@ -1,7 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.entity.ITargetsDroppedItems;
 import com.google.common.base.Predicate;
+
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -11,12 +19,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
 
 public class CreatureAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected final CreatureAITargetItems.Sorter theNearestAttackableTargetSorter;
@@ -95,6 +97,7 @@ public class CreatureAITargetItems<T extends ItemEntity> extends TargetGoal {
         }
     }
 
+    @Override
     protected double getFollowDistance() {
         return 16D;
     }
@@ -121,6 +124,7 @@ public class CreatureAITargetItems<T extends ItemEntity> extends TargetGoal {
         }
     }
 
+    @Override
     public void stop() {
         super.stop();
         this.mob.getNavigation().stop();
@@ -157,6 +161,7 @@ public class CreatureAITargetItems<T extends ItemEntity> extends TargetGoal {
     }
 
     public record Sorter(Entity theEntity) implements Comparator<Entity> {
+        @Override
         public int compare(Entity p_compare_1_, Entity p_compare_2_) {
             final double d0 = this.theEntity.distanceToSqr(p_compare_1_);
             final double d1 = this.theEntity.distanceToSqr(p_compare_2_);

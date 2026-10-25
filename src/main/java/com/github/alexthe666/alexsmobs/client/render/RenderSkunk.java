@@ -13,6 +13,7 @@ public class RenderSkunk extends MobRenderer<EntitySkunk, ModelSkunk> {
         super(renderManagerIn, new ModelSkunk(), 0.45F);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntitySkunk entity) {
         return TEXTURE;
     }

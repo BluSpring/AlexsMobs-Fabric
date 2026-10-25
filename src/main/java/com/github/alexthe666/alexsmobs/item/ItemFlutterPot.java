@@ -1,7 +1,10 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityFlutter;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -20,8 +23,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.BlockHitResult;
-
-import javax.annotation.Nullable;
 
 public class ItemFlutterPot extends Item implements DispensibleContainerItem {
 
@@ -49,7 +50,7 @@ public class ItemFlutterPot extends Item implements DispensibleContainerItem {
     }
 
     private boolean placeFish(ServerLevel worldIn, ItemStack stack, BlockPos pos) {
-        Entity entity = AMEntityRegistry.FLUTTER.get().spawn(worldIn, stack, (Player)null, pos, MobSpawnType.BUCKET, true, false);
+        Entity entity = AMEntityRegistry.FLUTTER.get().spawn(worldIn, stack, null, pos, MobSpawnType.BUCKET, true, false);
         if (entity != null && entity instanceof EntityFlutter) {
             CustomData customData = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
             CompoundTag compoundnbt = customData.copyTag();

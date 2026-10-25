@@ -2,6 +2,10 @@ package com.github.alexthe666.alexsmobs.effect;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -14,8 +18,6 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class AMEffectRegistry {
     public static final DeferredRegister<MobEffect> EFFECT_DEF_REG = DeferredRegister.create(Registries.MOB_EFFECT, AlexsMobs.MODID);
@@ -63,7 +65,7 @@ public class AMEffectRegistry {
         return stack;
     }
 
-    public static void registerBrewingRecipes(net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent event){
+    public static void registerBrewingRecipes(RegisterBrewingRecipesEvent event){
         var builder = event.getBuilder();
         builder.addMix(Potions.STRENGTH, AMItemRegistry.BEAR_FUR.get(), KNOCKBACK_RESISTANCE_POTION);
         builder.addMix(KNOCKBACK_RESISTANCE_POTION, Items.REDSTONE, LONG_KNOCKBACK_RESISTANCE_POTION);

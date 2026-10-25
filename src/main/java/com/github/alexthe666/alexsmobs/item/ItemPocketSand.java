@@ -1,6 +1,9 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.function.Predicate;
+
 import com.github.alexthe666.alexsmobs.entity.EntitySandShot;
+
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -16,8 +19,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.function.Predicate;
 
 public class ItemPocketSand extends Item {
 
@@ -42,6 +43,7 @@ public class ItemPocketSand extends Item {
         return ItemStack.EMPTY;
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player livingEntityIn, InteractionHand handIn) {
         ItemStack itemstack = livingEntityIn.getItemInHand(handIn);
         ItemStack ammo = findAmmo(livingEntityIn);
@@ -50,14 +52,11 @@ public class ItemPocketSand extends Item {
         }
         if (!worldIn.isClientSide && !ammo.isEmpty()) {
             livingEntityIn.gameEvent(GameEvent.ITEM_INTERACT_START);
-            worldIn.playSound((Player)null, livingEntityIn.getX(), livingEntityIn.getY(), livingEntityIn.getZ(), SoundEvents.SAND_BREAK, SoundSource.PLAYERS, 0.5F, 0.4F + (livingEntityIn.getRandom().nextFloat() * 0.4F + 0.8F));
-            boolean left = false;
-            if (livingEntityIn.getUsedItemHand() == InteractionHand.OFF_HAND && livingEntityIn.getMainArm() == HumanoidArm.RIGHT || livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND && livingEntityIn.getMainArm() == HumanoidArm.LEFT) {
-                left = true;
-            }
+            worldIn.playSound(null, livingEntityIn.getX(), livingEntityIn.getY(), livingEntityIn.getZ(), SoundEvents.SAND_BREAK, SoundSource.PLAYERS, 0.5F, 0.4F + (livingEntityIn.getRandom().nextFloat() * 0.4F + 0.8F));
+            boolean left = livingEntityIn.getUsedItemHand() == InteractionHand.OFF_HAND && livingEntityIn.getMainArm() == HumanoidArm.RIGHT || livingEntityIn.getUsedItemHand() == InteractionHand.MAIN_HAND && livingEntityIn.getMainArm() == HumanoidArm.LEFT;
             EntitySandShot blood = new EntitySandShot(worldIn, livingEntityIn, !left);
             Vec3 vector3d = livingEntityIn.getViewVector(1.0F);
-            blood.shoot((double) vector3d.x(), (double) vector3d.y(), (double) vector3d.z(), 1.2F, 11);
+            blood.shoot(vector3d.x(), vector3d.y(), vector3d.z(), 1.2F, 11);
             if (!worldIn.isClientSide) {
                 worldIn.addFreshEntity(blood);
             }

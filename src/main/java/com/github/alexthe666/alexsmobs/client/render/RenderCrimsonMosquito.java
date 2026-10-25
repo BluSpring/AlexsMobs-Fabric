@@ -19,15 +19,18 @@ public class RenderCrimsonMosquito extends MobRenderer<EntityCrimsonMosquito, Mo
         this.addLayer(new LayerCrimsonMosquitoBlood(this));
     }
 
+    @Override
     protected void scale(EntityCrimsonMosquito entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         float mosScale = entitylivingbaseIn.prevMosquitoScale + (entitylivingbaseIn.getMosquitoScale() - entitylivingbaseIn.prevMosquitoScale) * partialTickTime;
         matrixStackIn.scale(mosScale * 1.2F, mosScale * 1.2F, mosScale * 1.2F);
     }
 
+    @Override
     protected boolean isShaking(EntityCrimsonMosquito fly) {
         return fly.isSick() || fly.getFleeingEntityId() != -1;
     }
 
+    @Override
     protected void setupRotations(EntityCrimsonMosquito entityLiving, PoseStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks, float tickDelta) {
         if (this.isShaking(entityLiving)) {
             rotationYaw += (float) (Math.cos((double) entityLiving.tickCount * 7F) * Math.PI * (double) 0.9F);
@@ -37,6 +40,7 @@ public class RenderCrimsonMosquito extends MobRenderer<EntityCrimsonMosquito, Mo
         super.setupRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks, tickDelta);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityCrimsonMosquito entity) {
         if (entity.isSick()) {
             return entity.isFromFly() ? TEXTURE_SICK_FLY : TEXTURE_SICK;

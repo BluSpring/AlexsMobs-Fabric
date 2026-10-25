@@ -16,11 +16,13 @@ public class RenderSoulVulture extends MobRenderer<EntitySoulVulture, ModelSoulV
         this.addLayer(new LayerSoulVultureGlow(this));
     }
 
+    @Override
     protected void scale(EntitySoulVulture entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
       //  matrixStackIn.scale(1.2F, 1.2F, 1.2F);
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntitySoulVulture entity) {
         return TEXTURE;
     }

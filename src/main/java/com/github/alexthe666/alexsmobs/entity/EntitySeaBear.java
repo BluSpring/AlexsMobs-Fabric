@@ -1,5 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAISwimBottom;
 import com.github.alexthe666.alexsmobs.entity.ai.AquaticMoveController;
@@ -10,11 +15,16 @@ import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -28,10 +38,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.function.Predicate;
 
 public class EntitySeaBear extends WaterAnimal implements IAnimatedEntity {
 
@@ -52,10 +58,12 @@ public class EntitySeaBear extends WaterAnimal implements IAnimatedEntity {
         this.moveControl = new AquaticMoveController(this, 1F, 10);
     }
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !requiresCustomPersistence();
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.hasCustomName();
     }
@@ -72,18 +80,22 @@ public class EntitySeaBear extends WaterAnimal implements IAnimatedEntity {
         return state.is(AMBlockRegistry.SAND_CIRCLE.get()) || state.is(AMBlockRegistry.RED_SAND_CIRCLE.get());
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.GRIZZLY_BEAR_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.GRIZZLY_BEAR_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.GRIZZLY_BEAR_DIE.get();
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new TryFindWaterGoal(this));
@@ -91,10 +103,12 @@ public class EntitySeaBear extends WaterAnimal implements IAnimatedEntity {
         this.goalSelector.addGoal(3, new AvoidCircleAI());
         this.goalSelector.addGoal(4, new AnimalAISwimBottom(this, 1F, 7){
 
+            @Override
             public boolean canUse() {
                 return super.canUse() && EntitySeaBear.this.getAnimation() == NO_ANIMATION;
             }
 
+            @Override
             public boolean canContinueToUse() {
                 return super.canContinueToUse() && EntitySeaBear.this.getAnimation() == NO_ANIMATION;
             }
@@ -102,6 +116,7 @@ public class EntitySeaBear extends WaterAnimal implements IAnimatedEntity {
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal(this, LivingEntity.class, false, SOMBRERO));
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevOnLandProgress = onLandProgress;
@@ -132,22 +147,27 @@ public class EntitySeaBear extends WaterAnimal implements IAnimatedEntity {
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new SemiAquaticPathNavigator(this, worldIn);
     }
 
+    @Override
     public boolean isPushable() {
         return false;
     }
 
+    @Override
     public boolean canBeCollidedWith() {
         return false;
     }
 
+    @Override
     public boolean canCollideWith(Entity e) {
         return !isMobSafe(e);
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if(this.getAnimation() == ANIMATION_POINT){
             super.travel(Vec3.ZERO);
@@ -190,12 +210,14 @@ public class EntitySeaBear extends WaterAnimal implements IAnimatedEntity {
         animationTick = tick;
     }
 
+    @Override
     public void setTarget(@Nullable LivingEntity entity) {
         if (entity == null || !isMobSafe(entity)) {
             super.setTarget(entity);
         }
     }
 
+    @Override
     public void push(Entity entity) {
         if (!isMobSafe(entity)) {
             super.push(entity);
@@ -214,6 +236,7 @@ public class EntitySeaBear extends WaterAnimal implements IAnimatedEntity {
             return EntitySeaBear.this.getTarget() != null && EntitySeaBear.this.getTarget().isInWaterOrBubble() && EntitySeaBear.this.getTarget().isAlive() && (EntitySeaBear.this.circleCooldown == 0 || EntitySeaBear.this.getAnimation() == ANIMATION_POINT);
         }
 
+        @Override
         public void tick() {
             LivingEntity enemy = EntitySeaBear.this.getTarget();
             if(EntitySeaBear.this.getAnimation() == ANIMATION_POINT){
@@ -249,6 +272,7 @@ public class EntitySeaBear extends WaterAnimal implements IAnimatedEntity {
             return EntitySeaBear.this.circleCooldown > 0 && EntitySeaBear.this.lastCircle != null && EntitySeaBear.this.getAnimation() != ANIMATION_POINT;
         }
 
+        @Override
         public void tick() {
             BlockPos pos = EntitySeaBear.this.lastCircle;
             if (target == null || EntitySeaBear.this.distanceToSqr(target) < 2 || !EntitySeaBear.this.level().getFluidState(AMBlockPos.fromVec3(target).above()).is(FluidTags.WATER)) {

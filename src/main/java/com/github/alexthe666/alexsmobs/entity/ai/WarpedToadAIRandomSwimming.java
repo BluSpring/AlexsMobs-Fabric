@@ -1,8 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.entity.EntityWarpedToad;
 import com.github.alexthe666.alexsmobs.entity.ISemiAquatic;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.PathfinderMob;
@@ -11,13 +14,12 @@ import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
-
 public class WarpedToadAIRandomSwimming extends RandomStrollGoal {
     public WarpedToadAIRandomSwimming(EntityWarpedToad creature, double speed, int chance) {
         super(creature, speed, chance, false);
     }
 
+    @Override
     public boolean canUse() {
         if (this.mob.isVehicle() || ((EntityWarpedToad)mob).isOrderedToSit() || mob.getTarget() != null || !this.mob.isInWater() && !this.mob.isInLava() && this.mob instanceof ISemiAquatic && !((ISemiAquatic) this.mob).shouldEnterWater()) {
             return false;
@@ -40,6 +42,7 @@ public class WarpedToadAIRandomSwimming extends RandomStrollGoal {
         }
     }
 
+    @Override
     @Nullable
     protected Vec3 getPosition() {
         if(this.mob.hasRestriction() && this.mob.distanceToSqr(Vec3.atCenterOf(this.mob.getRestrictCenter())) > this.mob.getRestrictRadius() * this.mob.getRestrictRadius()){

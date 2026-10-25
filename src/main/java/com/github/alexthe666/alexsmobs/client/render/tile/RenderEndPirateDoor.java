@@ -52,6 +52,7 @@ public class RenderEndPirateDoor<T extends TileEntityEndPirateDoor> implements B
         matrixStackIn.popPose();
     }
 
+    @Override
     public int getViewDistance() {
         return 128;
     }

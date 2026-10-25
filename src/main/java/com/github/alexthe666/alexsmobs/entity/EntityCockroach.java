@@ -1,5 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFleeLight;
@@ -7,7 +15,12 @@ import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.IShearable;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -26,31 +39,43 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.Shearable;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-public class EntityCockroach extends Animal implements Shearable, net.neoforged.neoforge.common.IShearable, ITargetsDroppedItems {
+public class EntityCockroach extends Animal implements Shearable, IShearable, ITargetsDroppedItems {
 
     public static final ResourceKey<LootTable> MARACA_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("alexsmobs", "entities/cockroach_maracas"));
     public static final ResourceKey<LootTable> MARACA_HEADLESS_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("alexsmobs", "entities/cockroach_maracas_headless"));
@@ -86,6 +111,7 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         }
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.cockroachSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -98,22 +124,27 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         return reason == MobSpawnType.SPAWNER || !iServerWorld.canSeeSky(pos) && pos.getY() <= 64 && canMonsterSpawnInLight(entityType, iServerWorld, reason, pos, random);
     }
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !requiresCustomPersistence();
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.hasCustomName() || this.isBreaded() || this.isDancing() || this.hasMaracas() || this.isHeadless();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.COCKROACH_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.COCKROACH_HURT.get();
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.1D));
@@ -121,11 +152,13 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.of(AMTagRegistry.COCKROACH_FOODSTUFFS), false));
         this.goalSelector.addGoal(4, new AvoidEntityGoal(this, EntityCentipedeHead.class, 16, 1.3D, 1.0D));
         this.goalSelector.addGoal(4, new AvoidEntityGoal(this, Player.class, 8, 1.3D, 1.0D) {
+            @Override
             public boolean canUse() {
                 return !EntityCockroach.this.isBreaded() && super.canUse();
             }
         });
         this.goalSelector.addGoal(5, new AnimalAIFleeLight(this, 1.0D) {
+            @Override
             public boolean canUse() {
                 return !EntityCockroach.this.isBreaded() && super.canUse();
             }
@@ -136,6 +169,7 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         this.targetSelector.addGoal(1, new CreatureAITargetItems(this, false));
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if(prev){
@@ -153,10 +187,12 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         return prev;
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.COCKROACH_BREEDABLES);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Maracas", this.hasMaracas());
@@ -165,6 +201,7 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         compound.putInt("EggTime", this.timeUntilNextEgg);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setMaracas(compound.getBoolean("Maracas"));
@@ -175,15 +212,18 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         }
     }
 
+    @Override
     @Nullable
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return this.hasMaracas() ? this.isHeadless() ? MARACA_HEADLESS_LOOT : MARACA_LOOT : super.getDefaultLootTable();
     }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         return 0.5F - Math.max(worldIn.getBrightness(LightLayer.BLOCK, pos), worldIn.getBrightness(LightLayer.SKY, pos));
     }
 
+    @Override
     public EntityDimensions getDefaultDimensions(Pose poseIn) {
         return isDancing() ? STAND_SIZE.scale(this.getScale()) : super.getDefaultDimensions(poseIn);
     }
@@ -193,6 +233,7 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         return source.is(DamageTypes.FALL) || source.is(DamageTypes.DROWN) || source.is(DamageTypes.IN_WALL)  || source.is(DamageTypeTags.IS_EXPLOSION) || source.getMsgId().equals("anvil") || super.isInvulnerableTo(source);
     }
 
+    @Override
     public InteractionResult mobInteract(Player p_230254_1_, InteractionHand p_230254_2_) {
         ItemStack lvt_3_1_ = p_230254_1_.getItemInHand(p_230254_2_);
        if (lvt_3_1_.getItem() == AMItemRegistry.MARACA.get() && this.isAlive() && !this.hasMaracas()) {
@@ -256,6 +297,7 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         return this.entityData.get(NEAREST_MUSICIAN).orElse(null);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevDanceProgress = danceProgress;
@@ -335,6 +377,7 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         return this.getBoundingBox().inflate(10, 10, 10);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 67) {
@@ -356,6 +399,7 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         this.entityData.set(NEAREST_MUSICIAN, Optional.ofNullable(uniqueId));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void setRecordPlayingNearby(BlockPos pos, boolean isPartying) {
         this.jukeboxPosition = pos;
@@ -370,12 +414,13 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         return roach;
     }
 
+    @Override
     public boolean readyForShearing() {
         return this.isAlive() && !this.isBaby() && !isHeadless();
     }
 
     @Override
-    public boolean isShearable(@javax.annotation.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
+    public boolean isShearable(@Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         return readyForShearing();
     }
 
@@ -387,9 +432,9 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
         this.setHeadless(true);
     }
 
-    @javax.annotation.Nonnull
+    @Nonnull
     @Override
-    public java.util.List<ItemStack> onSheared(@javax.annotation.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
+    public List<ItemStack> onSheared(@Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         if (player != null) {
             level().playSound(null, this, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
@@ -401,14 +446,15 @@ public class EntityCockroach extends Animal implements Shearable, net.neoforged.
             }
         }
         this.setHeadless(true);
-        return java.util.Collections.emptyList();
+        return Collections.emptyList();
     }
 
     @Override
     public boolean canTargetItem(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) || stack.is(AMTagRegistry.COCKROACH_BREEDABLES);
+        return stack.has(DataComponents.FOOD) || stack.is(AMTagRegistry.COCKROACH_BREEDABLES);
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isDancing() || danceProgress > 0) {
             if (this.getNavigation().getPath() != null) {

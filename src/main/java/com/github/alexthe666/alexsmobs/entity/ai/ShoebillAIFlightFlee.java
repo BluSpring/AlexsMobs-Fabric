@@ -1,15 +1,16 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityShoebill;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
 
 public class ShoebillAIFlightFlee extends Goal {
 
@@ -22,12 +23,14 @@ public class ShoebillAIFlightFlee extends Goal {
         this.bird = bird;
     }
 
+    @Override
     public void stop(){
         currentTarget = null;
         executionTime = 0;
         bird.setFlying(false);
     }
 
+    @Override
     public boolean canContinueToUse(){
         return bird.isFlying() && (executionTime < 15 || !bird.onGround());
     }
@@ -37,12 +40,14 @@ public class ShoebillAIFlightFlee extends Goal {
         return bird.revengeCooldown > 0 && bird.onGround();
     }
 
+    @Override
     public void start(){
         if(bird.onGround()){
             bird.setFlying(true);
         }
     }
 
+    @Override
     public void tick() {
         executionTime++;
         if (currentTarget == null) {

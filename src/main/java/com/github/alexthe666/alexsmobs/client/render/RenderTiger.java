@@ -4,13 +4,12 @@ import com.github.alexthe666.alexsmobs.client.model.ModelTiger;
 import com.github.alexthe666.alexsmobs.client.render.layer.LayerTigerEyes;
 import com.github.alexthe666.alexsmobs.entity.EntityTiger;
 import com.mojang.blaze3d.vertex.PoseStack;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
-
-import org.jetbrains.annotations.Nullable;
 
 public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/tiger/tiger.png");
@@ -45,6 +44,7 @@ public class RenderTiger extends MobRenderer<EntityTiger, ModelTiger> {
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityTiger entity) {
         if (entity.isSleeping()) {
             return entity.isWhite() ? TEXTURE_SLEEPING_WHITE : TEXTURE_SLEEPING;

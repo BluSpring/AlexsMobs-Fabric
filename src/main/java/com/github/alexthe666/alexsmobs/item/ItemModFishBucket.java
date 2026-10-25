@@ -1,9 +1,17 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.List;
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityCatfish;
 import com.github.alexthe666.alexsmobs.entity.EntityLobster;
 import com.github.alexthe666.alexsmobs.entity.util.TerrapinTypes;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -25,12 +33,6 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.function.Supplier;
 
 public class ItemModFishBucket extends MobBucketItem {
 
@@ -45,6 +47,7 @@ public class ItemModFishBucket extends MobBucketItem {
         return this.fishTypeSupplier.get();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip,
             TooltipFlag flagIn) {
@@ -86,9 +89,8 @@ public class ItemModFishBucket extends MobBucketItem {
     }
 
     private void spawnFish(ServerLevel serverLevel, ItemStack stack, BlockPos pos) {
-        Entity entity = getFishType().spawn(serverLevel, stack, (Player) null, pos, MobSpawnType.BUCKET, true, false);
-        if (entity instanceof Bucketable) {
-            Bucketable bucketable = (Bucketable) entity;
+        Entity entity = getFishType().spawn(serverLevel, stack, null, pos, MobSpawnType.BUCKET, true, false);
+        if (entity instanceof Bucketable bucketable) {
             bucketable.loadFromBucketTag(stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag());
             bucketable.setFromBucket(true);
         }

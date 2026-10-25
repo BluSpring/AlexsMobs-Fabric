@@ -1,10 +1,10 @@
 package com.github.alexthe666.alexsmobs.config;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.google.common.collect.Lists;
 import net.neoforged.fml.config.ModConfig;
-
-import java.util.List;
 
 public class AMConfig {
     public static int grizzlyBearSpawnWeight = 8;
@@ -465,7 +465,7 @@ public class AMConfig {
             giveBookOnStartup = ConfigHolder.COMMON.giveBookOnStartup.get();
             mimicubeSpawnInEndCity = ConfigHolder.COMMON.mimicubeSpawnInEndCity.get();
             mimicreamRepair = ConfigHolder.COMMON.mimicreamRepair.get();
-            mimicreamBlacklist = (List<? extends String>) ConfigHolder.COMMON.mimicreamBlacklist.get();
+            mimicreamBlacklist = ConfigHolder.COMMON.mimicreamBlacklist.get();
             fishOilMeme = ConfigHolder.COMMON.fishOilMeme.get();
             raccoonsStealFromChests = ConfigHolder.COMMON.raccoonStealFromChests.get();
             crowsStealCrops = ConfigHolder.COMMON.crowsStealCrops.get();
@@ -474,10 +474,10 @@ public class AMConfig {
             soulVultureSpawnOnFossil = ConfigHolder.COMMON.soulVultureSpawnOnFossil.get();
             wanderingTraderOffers = ConfigHolder.COMMON.wanderingTraderOffers.get();
             mungusBiomeTransformationType = ConfigHolder.COMMON.mungusBiomeTransformationType.get();
-            mungusBiomeMatches = (List<? extends String>) ConfigHolder.COMMON.mungusBiomeMatches.get();
+            mungusBiomeMatches = ConfigHolder.COMMON.mungusBiomeMatches.get();
             limitGusterSpawnsToWeather = ConfigHolder.COMMON.limitGusterSpawnsToWeather.get();
             warpedMoscoTransformation = ConfigHolder.COMMON.warpedMoscoTransformation.get();
-            warpedMoscoMobTriggers = (List<? extends String>) ConfigHolder.COMMON.warpedMoscoMobTriggers.get();
+            warpedMoscoMobTriggers = ConfigHolder.COMMON.warpedMoscoMobTriggers.get();
             straddleboardEnchants = ConfigHolder.COMMON.straddleboardEnchants.get();
             emuTargetSkeletons = ConfigHolder.COMMON.emuTargetSkeletons.get();
             emuPantsDodgeChance = ConfigHolder.COMMON.emuPantsDodgeChance.get();
@@ -495,11 +495,11 @@ public class AMConfig {
             falconryTeleportsBack = ConfigHolder.COMMON.falconryTeleportsBack.get();
             fireproofTarantulaHawk = ConfigHolder.COMMON.fireproofTarantulaHawk.get();
             voidWormSummonable = ConfigHolder.COMMON.voidWormSummonable.get();
-            voidWormSpawnDimensions = (List<? extends String>) ConfigHolder.COMMON.voidWormSpawnDimensions.get();
+            voidWormSpawnDimensions = ConfigHolder.COMMON.voidWormSpawnDimensions.get();
             voidWormDamageModifier = ConfigHolder.COMMON.voidWormDamageModifier.get();
             voidWormMaxHealth = ConfigHolder.COMMON.voidWormMaxHealth.get();
             seagullStealing = ConfigHolder.COMMON.seagullStealing.get();
-            seagullStealingBlacklist = (List<? extends String>) ConfigHolder.COMMON.seagullStealingBlacklist.get();
+            seagullStealingBlacklist = ConfigHolder.COMMON.seagullStealingBlacklist.get();
             clingingFlipEffect = ConfigHolder.COMMON.clingingFlipEffect.get();
             tusklinShoesBarteringChance = ConfigHolder.COMMON.tusklinShoesBarteringChance.get();
             rainbowGlassFidelity = ConfigHolder.COMMON.rainbowGlassFidelity.get();
@@ -512,7 +512,7 @@ public class AMConfig {
             restrictUnderminerSpawns = ConfigHolder.COMMON.restrictUnderminerSpawns.get();
             superSecretSettings = ConfigHolder.COMMON.superSecretSettings.get();
             addLootToChests = ConfigHolder.COMMON.addLootToChests.get();
-            transmutationBlacklist = (List<? extends String>) ConfigHolder.COMMON.transmutationBlacklist.get();
+            transmutationBlacklist = ConfigHolder.COMMON.transmutationBlacklist.get();
             limitTransmutingToLootTables = ConfigHolder.COMMON.limitTransmutingToLootTables.get();
             transmutingTableExplodes = ConfigHolder.COMMON.transmutingTableExplodes.get();
             transmutingExperienceCost = ConfigHolder.COMMON.transmutingExperienceCost.get();

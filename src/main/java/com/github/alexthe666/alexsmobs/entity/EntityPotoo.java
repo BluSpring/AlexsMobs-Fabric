@@ -1,5 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.Optional;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AdvancedPathNavigateNoTeleport;
@@ -11,6 +15,8 @@ import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.server.entity.pathfinding.raycoms.AdvancedPathNavigate;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -26,11 +32,20 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
@@ -47,11 +62,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.Optional;
 
 public class EntityPotoo extends Animal implements IFalconry {
 
@@ -84,6 +94,7 @@ public class EntityPotoo extends Animal implements IFalconry {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.ATTACK_DAMAGE, 1.0D).add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new TemptGoal(this, 1.0D, Ingredient.of(AMTagRegistry.POTOO_BREEDABLES), false));
@@ -103,6 +114,7 @@ public class EntityPotoo extends Animal implements IFalconry {
         } else {
             this.moveControl = new FlightMoveController(this, 0.6F, false, true);
             this.navigation = new AdvancedPathNavigateNoTeleport(this, level(), AdvancedPathNavigate.MovementType.FLYING, false, false) {
+                @Override
                 public boolean isStableDestination(BlockPos pos) {
                     return !this.level.getBlockState(pos.below(2)).isAir();
                 }
@@ -124,6 +136,7 @@ public class EntityPotoo extends Animal implements IFalconry {
         builder.define(TEMP_BRIGHTNESS, 0);
     }
 
+    @Override
     public boolean isSleeping() {
         return this.entityData.get(SLEEPING);
     }
@@ -136,6 +149,7 @@ public class EntityPotoo extends Animal implements IFalconry {
         return isBrightEnoughToSpawn(worldIn, pos);
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader reader) {
         if (reader.isUnobstructed(this) && !reader.containsAnyLiquid(this.getBoundingBox())) {
             BlockPos blockpos = this.blockPosition();
@@ -145,11 +159,13 @@ public class EntityPotoo extends Animal implements IFalconry {
         return false;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.potooSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
 
+    @Override
     public void tick() {
         super.tick();
         this.prevPerchProgress = perchProgress;
@@ -247,18 +263,23 @@ public class EntityPotoo extends Animal implements IFalconry {
         }
     }
 
+    @Override
+    @Override
     public float getHandOffset(){
         return 1.0F;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.POTOO_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.POTOO_HURT.get();
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if (prev && source.getDirectEntity() instanceof LivingEntity) {
@@ -272,6 +293,7 @@ public class EntityPotoo extends Animal implements IFalconry {
         return source.is(DamageTypes.IN_WALL)  || super.isInvulnerableTo(source);
     }
 
+    @Override
     public void rideTick() {
         Entity entity = this.getVehicle();
         if (this.isPassenger() && (!entity.isAlive() || !this.isAlive())) {
@@ -353,6 +375,7 @@ public class EntityPotoo extends Animal implements IFalconry {
         this.entityData.set(PERCHING, perching);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Flying", this.isFlying());
@@ -365,6 +388,7 @@ public class EntityPotoo extends Animal implements IFalconry {
         }
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFlying(compound.getBoolean("Flying"));
@@ -446,6 +470,7 @@ public class EntityPotoo extends Animal implements IFalconry {
         return null;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -492,10 +517,12 @@ public class EntityPotoo extends Animal implements IFalconry {
         return null;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -507,6 +534,7 @@ public class EntityPotoo extends Animal implements IFalconry {
         return !level().getFluidState(position).isEmpty() || level().getBlockState(position).is(Blocks.VINE) || position.getY() <= -65;
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.POTOO_BREEDABLES);
     }
@@ -547,6 +575,7 @@ public class EntityPotoo extends Animal implements IFalconry {
             }
         }
 
+        @Override
         public void tick() {
             EntityPotoo.this.getMoveControl().setWantedPosition(this.x, this.y, this.z, 1F);
             if (isFlying() && EntityPotoo.this.onGround() && EntityPotoo.this.timeFlying > 10) {
@@ -564,15 +593,18 @@ public class EntityPotoo extends Animal implements IFalconry {
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             return EntityPotoo.this.isFlying() && EntityPotoo.this.distanceToSqr(x, y, z) > 5F;
         }
 
+        @Override
         public void start() {
             EntityPotoo.this.setFlying(true);
             EntityPotoo.this.getMoveControl().setWantedPosition(this.x, this.y, this.z, 1F);
         }
 
+        @Override
         public void stop() {
             EntityPotoo.this.getNavigation().stop();
             x = 0;
@@ -649,6 +681,7 @@ public class EntityPotoo extends Animal implements IFalconry {
             }
         }
 
+        @Override
         public void start(){
             pathRecalcTime = 0;
         }
@@ -658,6 +691,7 @@ public class EntityPotoo extends Animal implements IFalconry {
             return (perchingTime < 300 || EntityPotoo.this.level().isDay()) && (EntityPotoo.this.getTarget() == null || !EntityPotoo.this.getTarget().isAlive()) && !EntityPotoo.this.isPassenger();
         }
 
+        @Override
         public void tick() {
             if (EntityPotoo.this.isPerching()) {
                 perchingTime++;
@@ -715,6 +749,7 @@ public class EntityPotoo extends Animal implements IFalconry {
             }
         }
 
+        @Override
         public void stop() {
             EntityPotoo.this.setPerching(false);
             EntityPotoo.this.perchCooldown = 120 + random.nextInt(1200);
@@ -736,6 +771,7 @@ public class EntityPotoo extends Animal implements IFalconry {
             return !EntityPotoo.this.isSleeping() && !EntityPotoo.this.isPassenger() && EntityPotoo.this.getTarget() != null && EntityPotoo.this.getTarget().isAlive();
         }
 
+        @Override
         public void tick() {
             if (biteCooldown > 0) {
                 biteCooldown--;

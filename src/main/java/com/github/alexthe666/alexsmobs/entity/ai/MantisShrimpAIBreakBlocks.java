@@ -1,7 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.github.alexthe666.alexsmobs.entity.EntityMantisShrimp;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+import net.neoforged.neoforge.common.CommonHooks;
+
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,12 +22,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MantisShrimpAIBreakBlocks extends Goal {
 
@@ -39,10 +41,12 @@ public class MantisShrimpAIBreakBlocks extends Goal {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Flag.LOOK));
     }
 
+    @Override
     public void start() {
         super.start();
     }
 
+    @Override
     public boolean canUse() {
 
         if (!mantisShrimp.isBaby() && (mantisShrimp.getTarget() == null || !mantisShrimp.getTarget().isAlive()) && mantisShrimp.getCommand() == 3 && !mantisShrimp.getMainHandItem().isEmpty()) {
@@ -57,10 +61,12 @@ public class MantisShrimpAIBreakBlocks extends Goal {
         return false;
     }
 
+    @Override
     public boolean canContinueToUse() {
         return destinationBlock != null && timeoutCounter < 1200 && (mantisShrimp.getTarget() == null || !mantisShrimp.getTarget().isAlive()) && mantisShrimp.getCommand() == 3 && !mantisShrimp.getMainHandItem().isEmpty();
     }
 
+    @Override
     public void stop() {
         searchCooldown = 50;
         timeoutCounter = 0;
@@ -71,6 +77,7 @@ public class MantisShrimpAIBreakBlocks extends Goal {
         return 2.3D;
     }
 
+    @Override
     public void tick() {
         BlockPos blockpos = destinationBlock;
         float yDist = (float) Math.abs(blockpos.getY() - mantisShrimp.getY() - mantisShrimp.getBbHeight()/2);
@@ -140,7 +147,7 @@ public class MantisShrimpAIBreakBlocks extends Goal {
     private void breakBlock() {
         if (shouldMoveTo(mantisShrimp.level(), destinationBlock)) {
             BlockState state = mantisShrimp.level().getBlockState(destinationBlock);
-            if(!mantisShrimp.level().isEmptyBlock(destinationBlock) && net.neoforged.neoforge.common.CommonHooks.canEntityDestroy(mantisShrimp.level(), destinationBlock, mantisShrimp) && state.getDestroySpeed(mantisShrimp.level(), destinationBlock) >= 0){
+            if(!mantisShrimp.level().isEmptyBlock(destinationBlock) && CommonHooks.canEntityDestroy(mantisShrimp.level(), destinationBlock, mantisShrimp) && state.getDestroySpeed(mantisShrimp.level(), destinationBlock) >= 0){
                 mantisShrimp.level().destroyBlock(destinationBlock, true);
             }
         }
@@ -148,7 +155,7 @@ public class MantisShrimpAIBreakBlocks extends Goal {
 
     private boolean hasLineOfSightBlock(BlockPos destinationBlock) {
         Vec3 Vector3d = new Vec3(mantisShrimp.getX(), mantisShrimp.getEyeY(), mantisShrimp.getZ());
-        Vec3 blockVec = net.minecraft.world.phys.Vec3.atCenterOf(destinationBlock);
+        Vec3 blockVec = Vec3.atCenterOf(destinationBlock);
         BlockHitResult result = mantisShrimp.level().clip(new ClipContext(Vector3d, blockVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mantisShrimp));
         return result.getBlockPos().equals(destinationBlock);
     }

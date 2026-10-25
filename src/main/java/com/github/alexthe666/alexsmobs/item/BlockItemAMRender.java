@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.function.Consumer;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
@@ -12,7 +14,7 @@ public class BlockItemAMRender extends AMBlockItem {
     }
 
     @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getISTERProperties());
     }
 }

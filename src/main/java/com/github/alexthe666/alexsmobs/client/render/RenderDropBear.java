@@ -21,10 +21,12 @@ public class RenderDropBear extends MobRenderer<EntityDropBear, ModelDropBear> {
         this.addLayer(new EyeLayer(this));
     }
 
+    @Override
     protected void scale(EntityDropBear entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityDropBear entity) {
         return TEXTURE;
     }
@@ -35,6 +37,7 @@ public class RenderDropBear extends MobRenderer<EntityDropBear, ModelDropBear> {
             super(render);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityDropBear entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.eyes(TEXTURE_EYES));
             this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), -1);

@@ -1,12 +1,28 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeaveWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIPanicBaby;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalSwimMoveControllerSink;
+import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
+import com.github.alexthe666.alexsmobs.entity.ai.GroundPathNavigatorWide;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticAIRandomSwimming;
+import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticPathNavigator;
 import com.github.alexthe666.alexsmobs.entity.util.AnacondaPartIndex;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.neoforge.fluids.FluidType;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -22,11 +38,24 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
@@ -43,12 +72,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.fluids.FluidType;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 public class EntityAnaconda extends Animal implements ISemiAquatic {
 
@@ -76,14 +99,17 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         switchNavigator(true);
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.ANACONDA_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.ANACONDA_HURT.get();
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
         if (!isBaby()) {
             this.playSound(AMSoundRegistry.ANACONDA_SLITHER.get(), 1.0F, 1.0F);
@@ -102,6 +128,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         return spawnBlock && pos.getY() < worldIn.getSeaLevel() + 4;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.anacondaSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -118,6 +145,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         }
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new AnimalAIPanicBaby(this, 1.25D));
         this.goalSelector.addGoal(2, new AIMelee());
@@ -132,6 +160,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal(this, LivingEntity.class, 200, false, false, AMEntityRegistry.buildPredicateFromTag(AMTagRegistry.ANACONDA_TARGETS)));
         this.targetSelector.addGoal(2, new EntityAINearestTarget3D(this, Player.class, 110, false, true, null) {
+            @Override
             public boolean canUse() {
                 return !isBaby() && passiveFor == 0 && level().getDifficulty() != Difficulty.PEACEFUL && !EntityAnaconda.this.isInLove() && super.canUse();
             }
@@ -143,6 +172,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         return this.isBaby() ? 0.15F : 0.3F;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         final ItemStack itemstack = player.getItemInHand(hand);
         if (isFood(itemstack)) {
@@ -152,6 +182,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         return super.mobInteract(player, hand);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.hasUUID("ChildUUID")) {
@@ -164,6 +195,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         passiveFor = compound.getInt("PassiveFor");
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.getChildId() != null) {
@@ -177,6 +209,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
     }
 
 
+    @Override
     public void pushEntities() {
         final List<Entity> entities = this.level().getEntities(this, this.getBoundingBox().expandTowards(0.2D, 0.0D, 0.2D));
         entities.stream().filter(entity -> !(entity instanceof EntityAnacondaPart) && entity.isPushable()).forEach(entity -> entity.push(this));
@@ -225,10 +258,12 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         this.entityData.set(YELLOW, yellow);
     }
 
+    @Override
     public int getMaxHeadXRot() {
         return 1;
     }
 
+    @Override
     public int getMaxHeadYRot() {
         return 3;
     }
@@ -246,14 +281,17 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         return false; // Anaconda can breathe underwater
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
 
+    @Override
     public void tick() {
         super.tick();
         if(this.passiveFor > 0){
@@ -424,10 +462,12 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         return Mth.wrapDegrees(d0 + d1 * partialTicks);
     }
 
+    @Override
     public float getScale() {
         return this.isBaby() ? 0.75F : 1.0F;
     }
 
+    @Override
     public boolean isPushable() {
         return !this.isStrangling();
     }
@@ -436,10 +476,12 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         return !this.isStrangling();
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.ANACONDA_FOODSTUFFS);
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (!this.shouldMove()) {
             if (this.getNavigation().getPath() != null) {
@@ -494,6 +536,8 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         return this.getTarget() == null && !shouldLeaveWater() && swimTimer <= -1000;
     }
 
+    @Override
+    @Override
     public boolean shouldLeaveWater() {
         if (!this.getPassengers().isEmpty())
             return false;
@@ -563,6 +607,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
         return this.getSheddingTime() > 0;
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setYellow(random.nextBoolean());
@@ -582,6 +627,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
             return snake.getTarget() != null && snake.getTarget().isAlive();
         }
 
+        @Override
         public void tick() {
             if (jumpAttemptCooldown > 0)
                 jumpAttemptCooldown--;
@@ -606,6 +652,7 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
             }
         }
 
+        @Override
         public void stop() {
             snake.setStrangling(false);
         }

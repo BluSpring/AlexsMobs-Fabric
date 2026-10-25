@@ -115,6 +115,7 @@ public class ModelManedWolf extends AdvancedEntityModel<EntityManedWolf> {
         return ImmutableList.of(root, body, head_pivot, head, neck, tail, left_ear, right_ear, left_arm, right_arm, left_leg, right_leg, right_ear_pivot, left_ear_pivot);
     }
 
+    @Override
     public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.young) {
             float f = 1.35F;
@@ -195,7 +196,7 @@ public class ModelManedWolf extends AdvancedEntityModel<EntityManedWolf> {
         this.flap(neck, 0.25F, 0.9F, false, 0F, 0, ageInTicks, danceProgress * 0.2F);
         this.swing(head, 0.25F, 0.9F, true, 0F, 0, ageInTicks, danceProgress * 0.2F);
         this.flap(tail, 0.25F, 0.9F, true, 1, 0, ageInTicks, danceProgress * 0.2F);
-        float f1 = 0.2F * danceProgress * (float)(-Math.abs(Math.sin((double)(ageInTicks * 0.5F * 0.5F)) * (double)8F));
+        float f1 = 0.2F * danceProgress * (float)(-Math.abs(Math.sin(ageInTicks * 0.5F * 0.5F) * (double)8F));
         float f2 = 0.2F * danceProgress * 6F * Mth.cos(ageInTicks * 0.5F + 0) * 0.3F * (danceProgress * 0.2F) + 0 * (danceProgress * 0.2F);
         this.body.rotationPointY += f1;
         this.body.rotationPointZ -= f2;

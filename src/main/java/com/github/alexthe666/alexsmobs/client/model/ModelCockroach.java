@@ -189,6 +189,7 @@ public class ModelCockroach extends AdvancedEntityModel<EntityCockroach> {
         }
     }
 
+    @Override
     public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.young) {
             this.head.setScale(1.5F, 1.5F, 1.5F);

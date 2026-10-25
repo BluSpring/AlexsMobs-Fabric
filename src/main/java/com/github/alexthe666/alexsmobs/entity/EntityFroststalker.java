@@ -1,13 +1,24 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeaveWater;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
+import com.github.alexthe666.alexsmobs.entity.ai.FroststalkerAIFollowLeader;
+import com.github.alexthe666.alexsmobs.entity.ai.FroststalkerAIMelee;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -26,11 +37,22 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
@@ -48,11 +70,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemiAquatic {
 
@@ -95,18 +112,22 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
         this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0F);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.FROSTSTALKER_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.FROSTSTALKER_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.FROSTSTALKER_HURT.get();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.froststalkerSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -115,6 +136,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
         return worldIn.getRawBrightness(pos, 0) > 8 && (worldIn.getBlockState(pos.below()).is(AMTagRegistry.FROSTSTALKER_SPAWNS) || worldIn.getBlockState(pos.below()).isSolid());
     }
 
+    @Override
     @Nullable
     protected ResourceKey<LootTable> getDefaultLootTable() {
         return this.hasSpikes() ? SPIKED_LOOT : super.getDefaultLootTable();
@@ -124,13 +146,16 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 24D).add(Attributes.ARMOR, 2.0D).add(Attributes.ATTACK_DAMAGE, 4.5D).add(Attributes.MOVEMENT_SPEED, 0.3F);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if(source.is(DamageTypeTags.IS_FIRE)){
             amount *= 2F;
@@ -144,6 +169,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
         return prev;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this) {
             @Override
@@ -203,6 +229,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
         builder.define(TACKLING, false);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Spiked", this.hasSpikes());
@@ -211,6 +238,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
         compound.putInt("StandingTime", standingTime);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setSpiked(compound.getBoolean("Spiked"));
@@ -219,18 +247,22 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
         this.standingTime = compound.getInt("StandingTime");
     }
 
+    @Override
     public BlockPos getRestrictCenter() {
         return this.leader == null ? super.getRestrictCenter() : this.leader.getOnPos();
     }
 
+    @Override
     public boolean hasRestriction() {
         return this.isFollower();
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.FROSTSTALKER_BREEDABLES);
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevBipedProgress = bipedProgress;
@@ -532,6 +564,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
         }
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             final int anim = this.random.nextInt(4);
@@ -577,6 +610,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
         return this.packSize > 1;
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 6;
     }
@@ -614,7 +648,8 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
     }
 
     // onChangedBlock renamed or has different signature in 1.21
-    protected void onChangedBlock(net.minecraft.server.level.ServerLevel serverLevel, BlockPos pos) {
+    @Override
+    protected void onChangedBlock(ServerLevel serverLevel, BlockPos pos) {
         super.onChangedBlock(serverLevel, pos);
         int i = EnchantmentHelper.getEnchantmentLevel(this.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FROST_WALKER), this);
         if (i > 0 || this.hasSpikes()) {
@@ -634,7 +669,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
                         BlockState belowState = level.getBlockState(nearbyPos);
                         if (belowState == Blocks.WATER.defaultBlockState() && frostedIce.canSurvive(level, nearbyPos)) {
                             level.setBlockAndUpdate(nearbyPos, frostedIce);
-                            level.scheduleTick(nearbyPos, Blocks.FROSTED_ICE, net.minecraft.util.Mth.nextInt(entity.getRandom(), 60, 120));
+                            level.scheduleTick(nearbyPos, Blocks.FROSTED_ICE, Mth.nextInt(entity.getRandom(), 60, 120));
                         }
                     }
                 }
@@ -642,10 +677,11 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
         }
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_27528_, DifficultyInstance p_27529_, MobSpawnType p_27530_, @Nullable SpawnGroupData p_27531_) {
         //do not call super here
-        this.getAttribute(Attributes.FOLLOW_RANGE).addPermanentModifier(new AttributeModifier(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("alexsmobs", "random_spawn_bonus"), this.random.nextGaussian() * 0.05D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        this.getAttribute(Attributes.FOLLOW_RANGE).addPermanentModifier(new AttributeModifier(ResourceLocation.fromNamespaceAndPath("alexsmobs", "random_spawn_bonus"), this.random.nextGaussian() * 0.05D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         if (p_27531_ == null) {
             p_27531_ = new SchoolSpawnGroupData(this);
         } else {
@@ -702,6 +738,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
             verticalSearchRange = 1;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return destinationBlock != null && isFire(EntityFroststalker.this.level(), destinationBlock.mutable()) && isCloseToFire(16);
         }
@@ -721,6 +758,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
             }
         }
 
+        @Override
         public void start() {
             EntityFroststalker.this.fleeFireFlag = 200;
             Vec3 vec = LandRandomPos.getPosAway(EntityFroststalker.this, 15, 5, Vec3.atCenterOf(destinationBlock));
@@ -731,6 +769,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
             }
         }
 
+        @Override
         public void tick() {
             if (this.isCloseToFire(16)) {
                 EntityFroststalker.this.fleeFireFlag = 200;
@@ -746,6 +785,7 @@ public class EntityFroststalker extends Animal implements IAnimatedEntity, ISemi
             }
         }
 
+        @Override
         public void stop() {
             fleeTarget = null;
         }

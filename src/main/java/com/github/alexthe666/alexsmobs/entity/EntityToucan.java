@@ -1,5 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
 import com.github.alexthe666.alexsmobs.entity.ai.FlightMoveController;
@@ -8,6 +16,7 @@ import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -32,11 +41,21 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.animal.Animal;
@@ -47,7 +66,11 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -56,9 +79,6 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 public class EntityToucan extends Animal implements ITargetsDroppedItems {
 
@@ -112,18 +132,22 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.TOUCAN_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.TOUCAN_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.TOUCAN_HURT.get();
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader p_29005_) {
         if (p_29005_.isUnobstructed(this) && !p_29005_.containsAnyLiquid(this.getBoundingBox())) {
             BlockPos blockpos = this.blockPosition();
@@ -136,6 +160,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         return false;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.toucanSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -153,6 +178,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         return null;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -168,6 +194,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         initFeedingData();
@@ -176,6 +203,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         this.goalSelector.addGoal(2, new AIPlantTrees());
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.0D, Ingredient.of(FEEDING_STACKS.stream()), false) {
+            @Override
             public boolean canUse() {
                 return !EntityToucan.this.aiItemFlag && super.canUse();
             }
@@ -193,6 +221,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
     }
 
 
+    @Override
     public boolean isFood(ItemStack stack) {
         Item item = stack.getItem();
         return stack.is(AMTagRegistry.TOUCAN_BREEDABLES);
@@ -215,6 +244,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         return false;
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevFlyProgress = flyProgress;
@@ -296,17 +326,23 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
+    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
 
+    @Override
+    @Override
     public void setFlying(boolean flying) {
         if (flying && isBaby()) {
             return;
@@ -314,6 +350,8 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         this.entityData.set(FLYING, flying);
     }
 
+    @Override
+    @Override
     public void peck() {
         if (this.peckProgress == 0) {
             this.entityData.set(PECK_TICK, 7);
@@ -395,6 +433,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         BlockState blockstate = this.getSaplingState();
@@ -406,6 +445,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         compound.putBoolean("Enchanted", this.isEnchanted());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         BlockState blockstate = null;
@@ -471,6 +511,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         this.entityData.set(SAPLING_STATE, Optional.ofNullable(state));
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setVariant(this.getRandom().nextInt(4));
@@ -560,7 +601,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
 
     private boolean hasLineOfSightSapling(BlockPos destinationBlock) {
         Vec3 Vector3d = new Vec3(this.getX(), this.getEyeY(), this.getZ());
-        Vec3 blockVec = net.minecraft.world.phys.Vec3.atCenterOf(destinationBlock);
+        Vec3 blockVec = Vec3.atCenterOf(destinationBlock);
         BlockHitResult result = this.level().clip(new ClipContext(Vector3d, blockVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         return result.getBlockPos().equals(destinationBlock);
     }
@@ -604,6 +645,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void tick() {
             if (flightTarget) {
                 toucan.getMoveControl().setWantedPosition(x, y, z, 1F);
@@ -647,6 +689,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             if (toucan.aiItemFlag) {
                 return false;
@@ -658,6 +701,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void start() {
             if (flightTarget) {
                 toucan.setFlying(true);
@@ -667,6 +711,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void stop() {
             this.toucan.getNavigation().stop();
             super.stop();
@@ -709,6 +754,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
             return toucan.isGolden() && !toucan.isEnchanted() ? 50 + random.nextInt(40) : 200 + random.nextInt(200);
         }
 
+        @Override
         public void tick() {
             toucan.aiItemFlag = true;
             double up = 3.0;
@@ -764,6 +810,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
             return null;
         }
 
+        @Override
         public void stop() {
             toucan.aiItemFlag = false;
             pos = null;
@@ -771,6 +818,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
             encircleTime = 0;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return pos != null && toucan.getSaplingState() != null;
         }

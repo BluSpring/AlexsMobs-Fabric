@@ -1,8 +1,11 @@
 package com.github.alexthe666.alexsmobs.block;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityEndPirateAnchorWinch;
 import com.mojang.serialization.MapCodec;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,8 +28,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import javax.annotation.Nullable;
-
 public class BlockEndPirateAnchorWinch extends BaseEntityBlock implements AMSpecialRenderBlock{
     public static final MapCodec<BlockEndPirateAnchorWinch> CODEC = simpleCodec(p -> new BlockEndPirateAnchorWinch());
 
@@ -45,18 +46,22 @@ public class BlockEndPirateAnchorWinch extends BaseEntityBlock implements AMSpec
         return CODEC;
     }
 
+    @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(EASTORWEST, POWERED);
     }
 
+    @Override
     public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
         return state.getValue(EASTORWEST) ? FULL_AABB_EW : FULL_AABB_NS;
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
 //        LevelReader levelreader = context.getLevel();
 //        BlockPos blockpos = context.getClickedPos();
@@ -70,12 +75,14 @@ public class BlockEndPirateAnchorWinch extends BaseEntityBlock implements AMSpec
         return defaultBlockState().setValue(EASTORWEST, axis);
     }
 
+    @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity player, ItemStack stack) {
         if(level.getBlockEntity(pos) instanceof TileEntityEndPirateAnchorWinch winch){
             winch.recalculateChains();
         }
     }
 
+    @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos p_52780_, boolean p_52781_) {
         boolean flag = level.hasNeighborSignal(pos);
         if(level.getBlockEntity(pos) instanceof TileEntityEndPirateAnchorWinch winch){
@@ -91,6 +98,7 @@ public class BlockEndPirateAnchorWinch extends BaseEntityBlock implements AMSpec
         return new TileEntityEndPirateAnchorWinch(pos, state);
     }
 
+    @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_152180_, BlockState state, BlockEntityType<T> p_152182_) {
         return createTickerHelper(p_152182_, AMTileEntityRegistry.END_PIRATE_ANCHOR_WINCH.get(), TileEntityEndPirateAnchorWinch::commonTick);

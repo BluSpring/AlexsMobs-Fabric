@@ -1,8 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+import java.util.function.Predicate;
+import java.util.function.ToDoubleFunction;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.entity.EntitySnowLeopard;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -16,11 +23,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.function.Predicate;
-import java.util.function.ToDoubleFunction;
 
 public class SnowLeopardAIMelee extends Goal {
     private final EntitySnowLeopard leopard;
@@ -85,6 +87,7 @@ public class SnowLeopardAIMelee extends Goal {
         return leopard.getTarget() != null && !leopard.isSleeping() && !leopard.isSitting() && (leopard.getTarget().isAlive() || leopard.getTarget() instanceof Player)&& !leopard.isBaby();
     }
 
+    @Override
     public void start() {
         target = leopard.getTarget();
         if(target instanceof Player && leopard.getLastHurtByMob() != null && leopard.getLastHurtByMob() == target){
@@ -95,6 +98,7 @@ public class SnowLeopardAIMelee extends Goal {
         secondPartOfLeap = false;
     }
 
+    @Override
     public void stop() {
         secondPartOfLeap = false;
         stalk = false;
@@ -104,6 +108,7 @@ public class SnowLeopardAIMelee extends Goal {
         this.leopard.setSlSneaking(false);
     }
 
+    @Override
     public void tick() {
         if(jumpCooldown > 0){
             jumpCooldown--;

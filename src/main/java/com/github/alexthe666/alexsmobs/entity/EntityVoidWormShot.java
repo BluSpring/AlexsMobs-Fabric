@@ -1,6 +1,14 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.ItemAbilities;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -23,12 +31,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.ItemAbilities;
-
-import javax.annotation.Nullable;
-import java.util.UUID;
 
 public class EntityVoidWormShot extends Entity {
     private UUID ownerUUID;
@@ -74,6 +76,7 @@ public class EntityVoidWormShot extends Entity {
         return Mth.lerp(0.2F, p_234614_0_, p_234614_1_);
     }
 
+    @Override
     public void tick() {
         this.prevStopHomingProgress = this.getStopHomingProgress();
         if (!this.leftOwner) {
@@ -129,8 +132,7 @@ public class EntityVoidWormShot extends Entity {
         Entity entity = this.getShooter();
         if (entity instanceof LivingEntity && !(p_213868_1_.getEntity() instanceof EntityVoidWorm || p_213868_1_.getEntity() instanceof EntityVoidWormPart)) {
             final boolean b = wormAttack(p_213868_1_.getEntity(), damageSources().mobProjectile(this, (LivingEntity) entity), (float) (AMConfig.voidWormDamageModifier * 4F));
-            if(b && p_213868_1_.getEntity() instanceof Player){
-                Player player = ((Player)p_213868_1_.getEntity());
+            if(b && p_213868_1_.getEntity() instanceof Player player){
                 if(player.getUseItem().canPerformAction(ItemAbilities.SHIELD_BLOCK)){
                     // disableShield() takes no parameters in 1.21
                     player.disableShield();
@@ -183,6 +185,7 @@ public class EntityVoidWormShot extends Entity {
         }
     }
 
+    @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         if (this.ownerUUID != null) {
             compound.putUUID("Owner", this.ownerUUID);
@@ -197,6 +200,7 @@ public class EntityVoidWormShot extends Entity {
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
+    @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         if (compound.hasUUID("Owner")) {
             this.ownerUUID = compound.getUUID("Owner");
@@ -246,6 +250,7 @@ public class EntityVoidWormShot extends Entity {
         Entity entity = this.getShooter();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void lerpMotion(double x, double y, double z) {
         this.setDeltaMovement(x, y, z);

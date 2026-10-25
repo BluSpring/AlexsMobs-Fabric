@@ -1,7 +1,11 @@
 package com.github.alexthe666.alexsmobs.block;
 
+import java.util.Queue;
+
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.google.common.collect.Lists;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
@@ -9,7 +13,12 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.world.level.block.HalfTransparentBlock;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -18,9 +27,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Queue;
 
 public class BlockBananaSlugSlime extends HalfTransparentBlock {
 
@@ -32,15 +38,18 @@ public class BlockBananaSlugSlime extends HalfTransparentBlock {
         super(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).speedFactor(0.4F).jumpFactor(0.5F).friction(0.8F).sound(SoundType.SLIME_BLOCK).noOcclusion());
     }
 
+    @Override
     public VoxelShape getVisualShape(BlockState p_48735_, BlockGetter p_48736_, BlockPos p_48737_, CollisionContext p_48738_) {
         return Shapes.empty();
     }
 
 
+    @Override
     public VoxelShape getCollisionShape(BlockState p_54015_, BlockGetter p_54016_, BlockPos p_54017_, CollisionContext p_54018_) {
         return SHAPE;
     }
 
+    @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         entity.setDeltaMovement(entity.getDeltaMovement().scale(0.8));
         super.entityInside(state, level, pos, entity);
@@ -56,6 +65,7 @@ public class BlockBananaSlugSlime extends HalfTransparentBlock {
         return true;
     }
 
+    @Override
     public boolean propagatesSkylightDown(BlockState p_48740_, BlockGetter p_48741_, BlockPos p_48742_) {
         return true;
     }
@@ -65,12 +75,14 @@ public class BlockBananaSlugSlime extends HalfTransparentBlock {
         return !other.isStickyBlock() || other.getBlock() == this;
     }
 
+    @Override
     public void onPlace(BlockState p_56811_, Level p_56812_, BlockPos p_56813_, BlockState p_56814_, boolean p_56815_) {
         if (!p_56814_.is(p_56811_.getBlock())) {
             this.tryAbsorbWater(p_56812_, p_56813_);
         }
     }
 
+    @Override
     public void neighborChanged(BlockState p_56801_, Level p_56802_, BlockPos p_56803_, Block p_56804_, BlockPos p_56805_, boolean p_56806_) {
         this.tryAbsorbWater(p_56802_, p_56803_);
         super.neighborChanged(p_56801_, p_56802_, p_56803_, p_56804_, p_56805_, p_56806_);

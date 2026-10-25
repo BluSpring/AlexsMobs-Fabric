@@ -48,11 +48,13 @@ public class BlockHummingbirdFeeder extends Block {
         this.registerDefaultState(this.stateDefinition.any().setValue(CONTENTS, 0).setValue(HANGING, false));
     }
 
+    @Override
     @Deprecated
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return state.getValue(HANGING) ? AABB_HANGING : AABB;
     }
 
+    @Override
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
@@ -113,15 +115,18 @@ public class BlockHummingbirdFeeder extends Block {
         }
     }
 
+    @Override
     public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
         Direction direction = getBlockConnected(state).getOpposite();
         return Block.canSupportCenter(worldIn, pos.relative(direction), direction.getOpposite());
     }
 
+    @Override
     public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.DESTROY;
     }
 
+    @Override
     public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
             worldIn.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
@@ -130,14 +135,17 @@ public class BlockHummingbirdFeeder extends Block {
         return getBlockConnected(stateIn).getOpposite() == facing && !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
+    @Override
     public FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
+    @Override
     public boolean isPathfindable(BlockState state, PathComputationType type) {
         return false;
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(CONTENTS, HANGING, WATERLOGGED);
     }

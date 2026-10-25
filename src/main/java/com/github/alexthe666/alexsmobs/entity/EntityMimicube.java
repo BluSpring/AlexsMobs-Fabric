@@ -6,6 +6,11 @@ import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
 import com.github.alexthe666.alexsmobs.entity.ai.MimiCubeAIRangedAttack;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.ItemAbilities;
+
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -17,7 +22,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -33,6 +42,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
@@ -41,9 +51,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.ItemAbilities;
 
 public class EntityMimicube extends Monster implements RangedAttackMob {
 
@@ -76,6 +83,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
     }
 
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.mimicubeSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -87,11 +95,13 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
 
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         this.entityData.set(ATTACK_TICK, 5);
         return true;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new AnimalAIWanderRanged(this, 60, 1.0D, 10, 7));
         this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -133,6 +143,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         this.level().addFreshEntity(tridententity);
     }
 
+    @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
         if (this.getMainHandItem().getItem() instanceof TridentItem) {
             attackEntityWithRangedAttackTrident(target, distanceFactor);
@@ -140,7 +151,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         }
         ItemStack itemstack = this.getProjectile(this.getMainHandItem());
         AbstractArrow abstractarrowentity = this.fireArrow(itemstack, distanceFactor);
-        if (this.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem)
+        if (this.getMainHandItem().getItem() instanceof BowItem)
             abstractarrowentity = abstractarrowentity /* customArrow signature changed in 1.21 */;
         double d0 = target.getX() - this.getX();
         double d1 = target.getY(0.3333333333333333D) - abstractarrowentity.getY();
@@ -156,10 +167,12 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         return ProjectileUtil.getMobArrow(this, arrowStack, distanceFactor, null);
     }
 
+    @Override
     public boolean canFireProjectileWeapon(ProjectileWeaponItem p_230280_1_) {
         return p_230280_1_ == Items.BOW;
     }
 
+    @Override
     public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
         switch (slotIn) {
             case HEAD -> {
@@ -187,6 +200,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         super.handleEntityEvent(id);
@@ -198,10 +212,12 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         }
     }
 
+    @Override
     public boolean isBlocking() {
         return this.getMainHandItem().canPerformAction(ItemAbilities.SHIELD_BLOCK) || this.getOffhandItem().canPerformAction(ItemAbilities.SHIELD_BLOCK);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         Entity trueSource = source.getEntity();
         if (trueSource != null && trueSource instanceof LivingEntity attacker) {
@@ -226,6 +242,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         return copy;
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.squishFactor += (this.squishAmount - this.squishFactor) * 0.5F;
@@ -261,7 +278,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         if(this.isInWater()){
             this.setDeltaMovement(this.getDeltaMovement().add(0, 0.05D, 0));
         }
-        if (this.getOffhandItem().has(net.minecraft.core.component.DataComponents.FOOD) && this.getHealth() < this.getMaxHealth()) {
+        if (this.getOffhandItem().has(DataComponents.FOOD) && this.getHealth() < this.getMaxHealth()) {
             if (eatingTicks < 100) {
                 for (int i = 0; i < 3; i++) {
                     double d2 = this.random.nextGaussian() * 0.02D;
@@ -282,7 +299,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
                 this.heal(5);
                 eatingTicks = 0;
             }
-        } else if (this.getMainHandItem().has(net.minecraft.core.component.DataComponents.FOOD) && this.getHealth() < this.getMaxHealth()) {
+        } else if (this.getMainHandItem().has(DataComponents.FOOD) && this.getHealth() < this.getMaxHealth()) {
             if (eatingTicks < 100) {
                 for (int i = 0; i < 3; i++) {
                     double d2 = this.random.nextGaussian() * 0.02D;
@@ -330,6 +347,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
 
     }
 
+    @Override
     protected float getEquipmentDropChance(EquipmentSlot slotIn) {
         return 0;
     }
@@ -342,6 +360,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         return AMSoundRegistry.MIMICUBE_JUMP.get();
     }
 
+    @Override
     public void jumpFromGround() {
         Vec3 vector3d = this.getDeltaMovement();
         this.setDeltaMovement(vector3d.x, this.getJumpPower(), vector3d.z);
@@ -382,6 +401,7 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
             this.operation = MoveControl.Operation.MOVE_TO;
         }
 
+        @Override
         public void tick() {
             if (this.mob.onGround()) {
                 this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
@@ -403,10 +423,12 @@ public class EntityMimicube extends Monster implements RangedAttackMob {
         }
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.MIMICUBE_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.MIMICUBE_HURT.get();
     }

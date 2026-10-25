@@ -3,6 +3,7 @@ package com.github.alexthe666.alexsmobs.tileentity;
 import com.github.alexthe666.alexsmobs.block.BlockSculkBoomer;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -15,7 +16,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipBlockStateContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -68,7 +68,7 @@ public class TileEntitySculkBoomer extends BlockEntity implements GameEventListe
                 if(level.getRandom().nextInt(100) == 0){
                     sound = AMSoundRegistry.SCULK_BOOMER_FART.get();
                 }
-                level.playSound((Player)null, pos, sound, SoundSource.BLOCKS, 4F, level.random.nextFloat() * 0.2F + 0.9F);
+                level.playSound(null, pos, sound, SoundSource.BLOCKS, 4F, level.random.nextFloat() * 0.2F + 0.9F);
                 level.addParticle(AMParticleRegistry.SKULK_BOOM.get(), pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0, 0, 0);
             }
             tileEntity.prevOpen = openNow;
@@ -121,7 +121,7 @@ public class TileEntitySculkBoomer extends BlockEntity implements GameEventListe
         Vec3 vec31 = new Vec3((double)Mth.floor(vec2.x) + 0.5D, (double)Mth.floor(vec2.y) + 0.5D, (double)Mth.floor(vec2.z) + 0.5D);
 
         for(Direction direction : Direction.values()) {
-            Vec3 vec32 = vec3.relative(direction, (double)Mth.EPSILON);
+            Vec3 vec32 = vec3.relative(direction, Mth.EPSILON);
             if (level.isBlockInLine(new ClipBlockStateContext(vec32, vec31, (p_223780_) -> {
                 return p_223780_.is(BlockTags.OCCLUDES_VIBRATION_SIGNALS);
             })).getType() != HitResult.Type.BLOCK) {

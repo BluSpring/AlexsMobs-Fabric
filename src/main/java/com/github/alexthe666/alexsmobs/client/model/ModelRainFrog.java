@@ -82,6 +82,7 @@ public class ModelRainFrog extends AdvancedEntityModel<EntityRainFrog> {
     public Iterable<AdvancedModelBox> getAllParts() {
         return ImmutableList.of(root, body, right_eye, left_eye, right_arm, left_arm, right_leg, left_leg, tongue);
     }
+    @Override
     public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.young) {
             float f = 1.25F;
@@ -167,8 +168,8 @@ public class ModelRainFrog extends AdvancedEntityModel<EntityRainFrog> {
         this.right_leg.rotationPointZ -= 2F * rightLegS;
         this.right_arm.rotationPointY += 1.5F * leftLegS;
         this.left_arm.rotationPointY += 1.5F * rightLegS;
-        this.right_arm.rotationPointZ += 1F * leftLegS;
-        this.left_arm.rotationPointZ += 1F * rightLegS;
+        this.right_arm.rotationPointZ += leftLegS;
+        this.left_arm.rotationPointZ += rightLegS;
         this.swing(body, danceSpeed, danceDegree * 0.5F, false, 1F, 0F, ageInTicks, danceProgress * 0.2F);
         this.walk(body, danceSpeed, danceDegree * 0.5F, false, 3F, -0.4F, ageInTicks, danceProgress * 0.2F);
         this.flap(right_arm, danceSpeed, danceDegree, false, 0F, 0.3F, ageInTicks, danceProgress * 0.2F);

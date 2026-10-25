@@ -1,6 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.entity.ISemiAquatic;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
@@ -8,8 +11,6 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
 
 public class BottomFeederAIWander extends RandomStrollGoal {
     private int waterChance = 0;
@@ -29,6 +30,7 @@ public class BottomFeederAIWander extends RandomStrollGoal {
         this.range = range;
     }
 
+    @Override
     public boolean canUse(){
         if (mob instanceof ISemiAquatic && ((ISemiAquatic) mob).shouldStopMoving()) {
             return false;
@@ -37,6 +39,7 @@ public class BottomFeederAIWander extends RandomStrollGoal {
         return super.canUse();
     }
 
+    @Override
     public boolean canContinueToUse() {
         if (mob instanceof ISemiAquatic && ((ISemiAquatic) mob).shouldStopMoving())
             return false;
@@ -44,6 +47,7 @@ public class BottomFeederAIWander extends RandomStrollGoal {
         return super.canContinueToUse();
     }
 
+    @Override
     @Nullable
     protected Vec3 getPosition() {
         if(this.mob.isInWater()) {

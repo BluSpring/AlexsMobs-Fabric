@@ -1,10 +1,19 @@
 package com.github.alexthe666.alexsmobs.client.render;
 
+import static net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;
+
 import com.github.alexthe666.alexsmobs.client.model.ModelFarseer;
 import com.github.alexthe666.alexsmobs.entity.EntityFarseer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,20 +23,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-
-import org.jetbrains.annotations.Nullable;
-
-import static net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;
 
 public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
     private static final ResourceLocation TEXTURE = ResourceLocation
@@ -55,6 +56,7 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
         this.addLayer(new LayerOverlay());
     }
 
+    @Override
     public boolean shouldRender(EntityFarseer livingEntityIn, Frustum camera, double camX, double camY, double camZ) {
         if (super.shouldRender(livingEntityIn, camera, camX, camY, camZ)) {
             return true;
@@ -217,9 +219,9 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
 
     private static void laserOriginVertex(VertexConsumer p_114220_, Matrix4f p_114221_, Matrix3f p_114092_,
             int p_114222_, float xOffset, float yOffset) {
-        org.joml.Vector3f normal = new org.joml.Vector3f(0.0F, 1.0F, 0.0F);
+        Vector3f normal = new Vector3f(0.0F, 1.0F, 0.0F);
         normal.mul(p_114092_);
-        org.joml.Vector4f pos = new org.joml.Vector4f(0.0F, 0.0F, 0.0F, 1.0F);
+        Vector4f pos = new Vector4f(0.0F, 0.0F, 0.0F, 1.0F);
         pos.mul(p_114221_);
         p_114220_.addVertex(pos.x, pos.y, pos.z).setColor(255, 255, 255, 255).setUv(xOffset + 0.5F, yOffset)
                 .setOverlay(NO_OVERLAY).setLight(240).setNormal(normal.x, normal.y, normal.z);
@@ -227,9 +229,9 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
 
     private static void laserLeftCornerVertex(VertexConsumer p_114215_, Matrix4f p_114216_, Matrix3f p_114092_,
             float p_114217_, float p_114218_, float xOffset, float yOffset) {
-        org.joml.Vector3f normal = new org.joml.Vector3f(0.0F, -1.0F, 0.0F);
+        Vector3f normal = new Vector3f(0.0F, -1.0F, 0.0F);
         normal.mul(p_114092_);
-        org.joml.Vector4f pos = new org.joml.Vector4f(-HALF_SQRT_3 * p_114218_, p_114217_, 0.0F, 1.0F);
+        Vector4f pos = new Vector4f(-HALF_SQRT_3 * p_114218_, p_114217_, 0.0F, 1.0F);
         pos.mul(p_114216_);
         p_114215_.addVertex(pos.x, pos.y, pos.z).setColor(255, 255, 255, 0).setUv(xOffset, yOffset + 1)
                 .setOverlay(NO_OVERLAY)
@@ -238,9 +240,9 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
 
     private static void laserRightCornerVertex(VertexConsumer p_114224_, Matrix4f p_114225_, Matrix3f p_114092_,
             float p_114226_, float p_114227_, float xOffset, float yOffset) {
-        org.joml.Vector3f normal = new org.joml.Vector3f(0.0F, -1.0F, 0.0F);
+        Vector3f normal = new Vector3f(0.0F, -1.0F, 0.0F);
         normal.mul(p_114092_);
-        org.joml.Vector4f pos = new org.joml.Vector4f(HALF_SQRT_3 * p_114227_, p_114226_, 0.0F, 1.0F);
+        Vector4f pos = new Vector4f(HALF_SQRT_3 * p_114227_, p_114226_, 0.0F, 1.0F);
         pos.mul(p_114225_);
         p_114224_.addVertex(pos.x, pos.y, pos.z).setColor(255, 255, 255, 0).setUv(xOffset + 1, yOffset + 1)
                 .setOverlay(NO_OVERLAY).setLight(240).setNormal(normal.x, normal.y, normal.z);
@@ -248,9 +250,9 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
 
     private static void portalVertex(VertexConsumer p_114090_, Matrix4f p_114091_, Matrix3f p_114092_, int p_114093_,
             float p_114094_, int p_114095_, int p_114096_, int p_114097_, float alpha) {
-        org.joml.Vector3f normal = new org.joml.Vector3f(0.0F, -1.0F, 0.0F);
+        Vector3f normal = new Vector3f(0.0F, -1.0F, 0.0F);
         normal.mul(p_114092_);
-        org.joml.Vector4f pos = new org.joml.Vector4f(p_114094_ - 0.5F, (float) p_114095_ - 0.25F, 0.0F, 1.0F);
+        Vector4f pos = new Vector4f(p_114094_ - 0.5F, (float) p_114095_ - 0.25F, 0.0F, 1.0F);
         pos.mul(p_114091_);
         p_114090_.addVertex(pos.x, pos.y, pos.z).setColor(1F, 1F, 1F, alpha)
                 .setUv((float) p_114096_, (float) p_114097_).setOverlay(NO_OVERLAY).setLight(240)
@@ -279,12 +281,13 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
 
             matrixStackIn.mulPose(Axis.YP.rotationDegrees(f * this.getFlipDegrees(farseer) * invCameraAmount));
         } else if (isEntityUpsideDown(farseer)) {
-            matrixStackIn.translate(0.0D, (double) (farseer.getBbHeight() + 0.1F), 0.0D);
+            matrixStackIn.translate(0.0D, farseer.getBbHeight() + 0.1F, 0.0D);
             matrixStackIn.mulPose(Axis.ZP.rotationDegrees(180.0F));
         }
 
     }
 
+    @Override
     @Nullable
     protected RenderType getRenderType(EntityFarseer farseer, boolean normal, boolean invis, boolean outline) {
         ResourceLocation resourcelocation = this.getTextureLocation(farseer);
@@ -297,6 +300,7 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityFarseer entity) {
         return entity.isAngry() ? TEXTURE_ANGRY : TEXTURE;
     }
@@ -307,9 +311,10 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
             super(RenderFarseer.this);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntityFarseer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntityFarseer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             if (entitylivingbaseIn.getAnimation() == EntityFarseer.ANIMATION_EMERGE) {
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(TEXTURE_CLAWS));
                 this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn,

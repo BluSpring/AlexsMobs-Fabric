@@ -1,5 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.Random;
+import java.util.stream.Stream;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHerdPanic;
 import com.github.alexthe666.alexsmobs.entity.ai.GeladaAIGroom;
@@ -8,6 +12,8 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -19,10 +25,23 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
@@ -35,11 +54,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.EnumSet;
-import java.util.Random;
-import java.util.stream.Stream;
 
 public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerdPanic {
 
@@ -70,6 +84,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         this.setPathfindingMalus(PathType.WATER, -1.0F);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.geladaMonkeySpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -78,27 +93,32 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 18.0D).add(Attributes.ATTACK_DAMAGE, 4.0D).add(Attributes.MOVEMENT_SPEED, 0.25F);
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 10;
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.GELADA_MONKEY_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.GELADA_MONKEY_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.GELADA_MONKEY_HURT.get();
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5D, true) {
-            protected double getAttackReachSqr(LivingEntity attackTarget) {
+            private double getAttackReachSqr(LivingEntity attackTarget) {
                 return EntityGeladaMonkey.this.getBbWidth() * 2.0F * EntityGeladaMonkey.this.getBbWidth() * 2.0F + attackTarget.getBbWidth() + 1.5;
             }
 
@@ -127,6 +147,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         }));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Leader", this.isLeader());
@@ -135,6 +156,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         compound.putBoolean("MonkeySitting", this.isSitting());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setLeader(compound.getBoolean("Leader"));
@@ -143,6 +165,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         this.leaderFightTime = compound.getInt("FightTime");
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.GELADA_MONKEY_BREEDABLES);
     }
@@ -188,6 +211,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         this.entityData.set(GRASS_TIME, i);
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevSitProgress = this.sitProgress;
@@ -284,6 +308,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         }
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             attackAnimation();
@@ -320,6 +345,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         return new Animation[]{ANIMATION_SWIPE_R, ANIMATION_SWIPE_L, ANIMATION_GROOM, ANIMATION_CHEST};
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if (prev) {
@@ -333,6 +359,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         return prev;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -375,6 +402,7 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         return this.getLastHurtByMob() instanceof EntityGeladaMonkey && this.random.nextInt(3) == 0;
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isSitting() || this.getAnimation() == ANIMATION_CHEST) {
             if (this.getNavigation().getPath() != null) {
@@ -385,10 +413,10 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
         super.travel(vec3d);
     }
 
+    @Override
     @javax.annotation.Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @javax.annotation.Nullable SpawnGroupData spawnDataIn) {
-        if (spawnDataIn instanceof AgeableMob.AgeableMobGroupData) {
-            AgeableMob.AgeableMobGroupData pack = (AgeableMob.AgeableMobGroupData) spawnDataIn;
+        if (spawnDataIn instanceof AgeableMobGroupData pack) {
             if (pack.getGroupSize() == 0 || pack.getGroupSize() > 4 && random.nextInt(2) == 0) {
                 this.setLeader(true);
             }
@@ -424,10 +452,12 @@ public class EntityGeladaMonkey extends Animal implements IAnimatedEntity, IHerd
             return false;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return target != null && EntityGeladaMonkey.this.level().getBlockState(target).is(AMTagRegistry.GELADA_MONKEY_GRASS);
         }
 
+        @Override
         public void tick() {
             EntityGeladaMonkey.this.setSitting(false);
             EntityGeladaMonkey.this.getNavigation().moveTo(target.getX() + 0.5F, target.getY() + 0.5F, target.getZ() + 0.5F, 1.4F);

@@ -1,5 +1,9 @@
 package com.github.alexthe666.alexsmobs;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.client.ClientLayerRegistry;
 import com.github.alexthe666.alexsmobs.client.event.ClientEvents;
@@ -21,20 +25,44 @@ import com.github.alexthe666.alexsmobs.client.render.tile.RenderVoidWormBeak;
 import com.github.alexthe666.alexsmobs.client.sound.SoundBearMusicBox;
 import com.github.alexthe666.alexsmobs.client.sound.SoundLaCucaracha;
 import com.github.alexthe666.alexsmobs.client.sound.SoundWormBoss;
-import com.github.alexthe666.alexsmobs.entity.*;
+import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
+import com.github.alexthe666.alexsmobs.entity.EntityBlueJay;
+import com.github.alexthe666.alexsmobs.entity.EntityCockroach;
+import com.github.alexthe666.alexsmobs.entity.EntityGrizzlyBear;
+import com.github.alexthe666.alexsmobs.entity.EntityVoidWorm;
 import com.github.alexthe666.alexsmobs.entity.util.RainbowUtil;
 import com.github.alexthe666.alexsmobs.inventory.AMMenuRegistry;
-import com.github.alexthe666.alexsmobs.item.*;
+import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import com.github.alexthe666.alexsmobs.item.ItemBloodSprayer;
+import com.github.alexthe666.alexsmobs.item.ItemHemolymphBlaster;
+import com.github.alexthe666.alexsmobs.item.ItemStraddleboard;
+import com.github.alexthe666.alexsmobs.item.ItemTarantulaHawkElytra;
+import com.github.alexthe666.alexsmobs.item.ItemTendonWhip;
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.event.RegisterRenderBuffersEvent;
+import net.neoforged.neoforge.common.NeoForge;
+
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -42,24 +70,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
-import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
-import net.neoforged.neoforge.client.event.RegisterRenderBuffersEvent;
-import net.neoforged.neoforge.common.NeoForge;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.material.Fluids;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientProxy extends CommonProxy {
@@ -97,12 +108,13 @@ public class ClientProxy extends CommonProxy {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void onRegisterMenuScreens(net.neoforged.neoforge.client.event.RegisterMenuScreensEvent event) {
+    public static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
         event.register(AMMenuRegistry.TRANSMUTATION_TABLE.get(), GUITransmutationTable::new);
     }
 
+    @Override
     public void init() {
-        IEventBus bus = net.neoforged.fml.ModLoadingContext.get().getActiveContainer().getEventBus();
+        IEventBus bus = ModLoadingContext.get().getActiveContainer().getEventBus();
         bus.addListener(ClientProxy::onBakingCompleted);
         bus.addListener(ClientProxy::onItemColors);
         bus.addListener(ClientProxy::onBlockColors);
@@ -112,6 +124,7 @@ public class ClientProxy extends CommonProxy {
         bus.addListener(ClientProxy::onRegisterRenderBuffers);
     }
 
+    @Override
     public void clientInit() {
         NeoForge.EVENT_BUS.register(new ClientEvents());
         // Set lava to translucent render layer for lava vision effect
@@ -314,29 +327,33 @@ public class ClientProxy extends CommonProxy {
 
     private static void onBakingCompleted(final ModelEvent.ModifyBakingResult e) {
         String ghostlyPickaxe = "alexsmobs:ghostly_pickaxe";
-        List<net.minecraft.client.resources.model.ModelResourceLocation> toProcess = new java.util.ArrayList<>();
-        for (net.minecraft.client.resources.model.ModelResourceLocation id : e.getModels().keySet()) {
+        List<ModelResourceLocation> toProcess = new ArrayList<>();
+        for (ModelResourceLocation id : e.getModels().keySet()) {
             if (id.id().toString().contains(ghostlyPickaxe)) {
                 toProcess.add(id);
             }
         }
-        for (net.minecraft.client.resources.model.ModelResourceLocation id : toProcess) {
+        for (ModelResourceLocation id : toProcess) {
             e.getModels().put(id, new GhostlyPickaxeBakedModel(e.getModels().get(id)));
         }
     }
 
+    @Override
     public void openBookGUI(ItemStack itemStackIn) {
         Minecraft.getInstance().setScreen(new GUIAnimalDictionary(itemStackIn));
     }
 
+    @Override
     public void openBookGUI(ItemStack itemStackIn, String page) {
         Minecraft.getInstance().setScreen(new GUIAnimalDictionary(itemStackIn, page));
     }
 
+    @Override
     public Player getClientSidePlayer() {
         return Minecraft.getInstance().player;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public Object getArmorModel(int armorId, LivingEntity entity) {
         switch (armorId) {
@@ -362,6 +379,7 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void onEntityStatus(Entity entity, byte updateKind) {
         if (updateKind == 67) {
@@ -414,6 +432,7 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+    @Override
     public void updateBiomeVisuals(int x, int z) {
         Minecraft.getInstance().levelRenderer.setBlocksDirty(x - 32, 0, z - 32, x + 32, 255, z + 32);
     }
@@ -449,25 +468,30 @@ public class ClientProxy extends CommonProxy {
         registry.registerSpriteSet(AMParticleRegistry.BIRD_SONG.get(), ParticleBirdSong.Factory::new);
     }
 
+    @Override
     public void setRenderViewEntity(Entity entity) {
         prevPOV = Minecraft.getInstance().options.getCameraType();
         Minecraft.getInstance().setCameraEntity(entity);
         Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK);
     }
 
+    @Override
     public void resetRenderViewEntity() {
         Minecraft.getInstance().setCameraEntity(Minecraft.getInstance().player);
     }
 
+    @Override
     public int getPreviousPOV() {
         return prevPOV.ordinal();
     }
 
+    @Override
     public boolean isFarFromCamera(double x, double y, double z) {
         Minecraft lvt_1_1_ = Minecraft.getInstance();
         return lvt_1_1_.gameRenderer.getMainCamera().getPosition().distanceToSqr(x, y, z) >= 256.0D;
     }
 
+    @Override
     public void resetVoidPortalCreation(Player player) {
 
     }
@@ -487,6 +511,7 @@ public class ClientProxy extends CommonProxy {
         return new CustomArmorRenderProperties();
     }
 
+    @Override
     public void spawnSpecialParticle(int type) {
         if (type == 0) {
             Minecraft.getInstance().level.addParticle(AMParticleRegistry.BEAR_FREDDY.get(),
@@ -495,26 +520,31 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+    @Override
     public void processVisualFlag(Entity entity, int flag) {
         if (entity == Minecraft.getInstance().player && flag == 87) {
             ClientEvents.renderStaticScreenFor = 60;
         }
     }
 
+    @Override
     public void setPupfishChunkForItem(int chunkX, int chunkZ) {
         this.pupfishChunkX = chunkX;
         this.pupfishChunkZ = chunkZ;
     }
 
+    @Override
     public void setDisplayTransmuteResult(int slot, ItemStack stack) {
         transmuteStacks[Mth.clamp(slot, 0, 2)] = stack;
     }
 
+    @Override
     public ItemStack getDisplayTransmuteResult(int slot) {
         ItemStack stack = transmuteStacks[Mth.clamp(slot, 0, 2)];
         return stack == null ? ItemStack.EMPTY : stack;
     }
 
+    @Override
     public int getSingingBlueJayId() {
         return singingBlueJayId;
     }

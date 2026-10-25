@@ -33,10 +33,12 @@ public class RenderToucan extends MobRenderer<EntityToucan, ModelToucan> {
         this.addLayer(new LayerHeldItem(this));
     }
 
+    @Override
     protected void scale(EntityToucan entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.9F, 0.9F, 0.9F);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityToucan entity) {
         if(entity.isSam()){
             return TEXTURE_SAM;
@@ -62,6 +64,7 @@ public class RenderToucan extends MobRenderer<EntityToucan, ModelToucan> {
             super(render);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityToucan entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if(entitylivingbaseIn.isEnchanted()){
                 VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(bufferIn, RenderType.armorCutoutNoCull(TEXTURE_GOLDEN), true);
@@ -76,6 +79,7 @@ public class RenderToucan extends MobRenderer<EntityToucan, ModelToucan> {
             super(render);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityToucan entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             ItemStack itemstack = entitylivingbaseIn.getItemBySlot(EquipmentSlot.MAINHAND);
             matrixStackIn.pushPose();

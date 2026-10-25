@@ -22,6 +22,7 @@ public class RenderAnacondaPart extends LivingEntityRenderer<EntityAnacondaPart,
         super(renderManagerIn, new ModelAnaconda<>(AnacondaPartIndex.NECK), 0.3F);
     }
 
+    @Override
     protected void setupRotations(EntityAnacondaPart entity, PoseStack stack, float pitchIn, float yawIn, float partialTickTime, float tickDelta) {
         float newYaw = entity.yHeadRot;
         if (this.isShaking(entity)) {
@@ -46,17 +47,19 @@ public class RenderAnacondaPart extends LivingEntityRenderer<EntityAnacondaPart,
          } else if (entity.hasCustomName()) {
             String s = ChatFormatting.stripFormatting(entity.getName().getString());
             if (("Dinnerbone".equals(s) || "Grumm".equals(s))) {
-                stack.translate(0.0D, (double)(entity.getBbHeight() + 0.1F), 0.0D);
+                stack.translate(0.0D, entity.getBbHeight() + 0.1F, 0.0D);
                 stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
             }
         }
 
     }
 
+    @Override
     protected boolean shouldShowName(EntityAnacondaPart entity) {
         return super.shouldShowName(entity) && (entity.shouldShowName() || entity.hasCustomName() && entity == this.entityRenderDispatcher.crosshairPickEntity);
     }
 
+    @Override
     protected void scale(EntityAnacondaPart entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         this.model = getModelForType(entitylivingbaseIn.getPartType());
         matrixStackIn.scale(entitylivingbaseIn.getScale(), entitylivingbaseIn.getScale(), entitylivingbaseIn.getScale());
@@ -72,6 +75,7 @@ public class RenderAnacondaPart extends LivingEntityRenderer<EntityAnacondaPart,
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityAnacondaPart entity) {
         return RenderAnaconda.getAnacondaTexture(entity.isYellow(), entity.isShedding());
     }

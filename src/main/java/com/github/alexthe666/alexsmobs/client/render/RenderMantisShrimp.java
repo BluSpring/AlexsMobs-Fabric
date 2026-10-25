@@ -19,11 +19,13 @@ public class RenderMantisShrimp extends MobRenderer<EntityMantisShrimp, ModelMan
         this.addLayer(new LayerMantisShrimpItem(this));
     }
 
+    @Override
     protected void scale(EntityMantisShrimp entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.8F, 0.8F, 0.8F);
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityMantisShrimp entity) {
         return entity.getVariant() == 3 ? TEXTURE_3 : entity.getVariant() == 2 ? TEXTURE_2 : entity.getVariant() == 1 ? TEXTURE_1 : TEXTURE_0;
     }

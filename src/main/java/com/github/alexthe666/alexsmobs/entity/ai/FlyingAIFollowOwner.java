@@ -1,6 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.IFollower;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,8 +15,6 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
-
-import java.util.EnumSet;
 
 public class FlyingAIFollowOwner extends Goal {
     private final TamableAnimal tameable;
@@ -44,6 +45,7 @@ public class FlyingAIFollowOwner extends Goal {
      * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
      * method as well.
      */
+    @Override
     public boolean canUse() {
         LivingEntity livingentity = this.tameable.getOwner();
         if (livingentity == null) {
@@ -63,6 +65,7 @@ public class FlyingAIFollowOwner extends Goal {
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
+    @Override
     public boolean canContinueToUse() {
         if (this.tameable.isOrderedToSit() || isInCombat()) {
             return false;
@@ -82,6 +85,7 @@ public class FlyingAIFollowOwner extends Goal {
     /**
      * Execute a one shot task or start executing a continuous task
      */
+    @Override
     public void start() {
         this.timeToRecalcPath = 0;
         this.oldWaterCost = this.tameable.getPathfindingMalus(PathType.WATER);
@@ -91,6 +95,7 @@ public class FlyingAIFollowOwner extends Goal {
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
+    @Override
     public void stop() {
         this.owner = null;
         this.navigator.stop();
@@ -100,6 +105,7 @@ public class FlyingAIFollowOwner extends Goal {
     /**
      * Keep ticking a continuous task that has already been started
      */
+    @Override
     public void tick() {
         this.tameable.getLookControl().setLookAt(this.owner, 10.0F, (float)this.tameable.getMaxHeadXRot());
         if (--this.timeToRecalcPath <= 0) {
@@ -134,7 +140,7 @@ public class FlyingAIFollowOwner extends Goal {
         } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
             return false;
         } else {
-            this.tameable.moveTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.tameable.getYRot(), this.tameable.getXRot());
+            this.tameable.moveTo((double)x + 0.5D, y, (double)z + 0.5D, this.tameable.getYRot(), this.tameable.getXRot());
             this.navigator.stop();
             return true;
         }

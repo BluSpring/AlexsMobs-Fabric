@@ -21,6 +21,7 @@ public class BoneSerpentAIJump extends JumpGoal {
         this.interval = p_i50329_2_;
     }
 
+    @Override
     public boolean canUse() {
         if (this.dolphin.getRandom().nextInt(this.interval) != 0 || dolphin.getTarget() != null) {
             return false;
@@ -50,11 +51,13 @@ public class BoneSerpentAIJump extends JumpGoal {
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
+    @Override
     public boolean canContinueToUse() {
         double d0 = this.dolphin.getDeltaMovement().y;
         return dolphin.jumpCooldown > 0 && (!(d0 * d0 < (double) 0.03F) || this.dolphin.getXRot() == 0.0F || !(Math.abs(this.dolphin.getXRot()) < 10.0F) || !this.dolphin.isInWater()) && !this.dolphin.onGround();
     }
 
+    @Override
     public boolean isInterruptable() {
         return false;
     }
@@ -62,6 +65,7 @@ public class BoneSerpentAIJump extends JumpGoal {
     /**
      * Execute a one shot task or start executing a continuous task
      */
+    @Override
     public void start() {
         Direction direction = this.dolphin.getMotionDirection();
         float up = 0.7F + dolphin.getRandom().nextFloat() * 0.8F;
@@ -73,6 +77,7 @@ public class BoneSerpentAIJump extends JumpGoal {
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
+    @Override
     public void stop() {
         this.dolphin.setXRot(0.0F);
     }
@@ -80,6 +85,7 @@ public class BoneSerpentAIJump extends JumpGoal {
     /**
      * Keep ticking a continuous task that has already been started
      */
+    @Override
     public void tick() {
         boolean flag = this.inWater;
         if (!flag) {

@@ -26,6 +26,7 @@ public class AquaticMoveController extends MoveControl {
         this.speedMulti = speedMulti;
     }
 
+    @Override
     public void tick() {
         if (this.entity.isInWater() || entity instanceof EntityWarpedToad && entity.isInLava()) {
             this.entity.setDeltaMovement(this.entity.getDeltaMovement().add(0.0D, 0.005D, 0.0D));

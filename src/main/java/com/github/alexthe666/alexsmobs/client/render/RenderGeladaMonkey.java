@@ -17,11 +17,13 @@ public class RenderGeladaMonkey extends MobRenderer<EntityGeladaMonkey, ModelGel
         super(renderManagerIn, new ModelGeladaMonkey(), 0.45F);
     }
 
+    @Override
     protected void scale(EntityGeladaMonkey entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(entitylivingbaseIn.getGeladaScale(), entitylivingbaseIn.getGeladaScale(), entitylivingbaseIn.getGeladaScale());
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityGeladaMonkey entity) {
         return entity.isLeader() ? entity.isAggro() ? TEXTURE_LEADER_ANGRY : TEXTURE_LEADER : entity.isAggro() ? TEXTURE_ANGRY : TEXTURE;
     }

@@ -23,10 +23,12 @@ public class RenderMurmurBody extends MobRenderer<EntityMurmur, ModelMurmurBody>
         super(renderManagerIn, new ModelMurmurBody(), 0.5F);
     }
 
+    @Override
     protected void scale(EntityMurmur entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.85F, 0.85F, 0.85F);
     }
 
+    @Override
     public void render(EntityMurmur body, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         super.render(body, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         if (renderWithHead || body.shouldRenderFakeHead()) {
@@ -52,6 +54,7 @@ public class RenderMurmurBody extends MobRenderer<EntityMurmur, ModelMurmurBody>
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityMurmur entity) {
         return entity.isAngry() ? TEXTURE_ANGRY : TEXTURE;
     }

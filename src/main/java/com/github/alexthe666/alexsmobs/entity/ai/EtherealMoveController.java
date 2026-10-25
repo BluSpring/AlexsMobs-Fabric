@@ -16,6 +16,7 @@ public class EtherealMoveController extends MoveControl {
         this.speedGeneral = speedGeneral;
     }
 
+    @Override
     public void tick() {
         if (this.operation == MoveControl.Operation.MOVE_TO) {
             Vec3 vector3d = new Vec3(this.wantedX - parentEntity.getX(), this.wantedY - parentEntity.getY(), this.wantedZ - parentEntity.getZ());

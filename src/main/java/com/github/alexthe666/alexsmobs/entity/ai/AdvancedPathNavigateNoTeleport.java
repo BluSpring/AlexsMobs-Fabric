@@ -19,6 +19,7 @@ public class AdvancedPathNavigateNoTeleport extends AdvancedPathNavigate {
         this(entity, world, MovementType.WALKING, false, wide);
     }
 
+    @Override
     protected boolean canUpdatePath() {
         // ignore dismounting logic
         return true;

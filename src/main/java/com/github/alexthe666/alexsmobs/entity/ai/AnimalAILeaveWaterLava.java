@@ -1,7 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.ISemiAquatic;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -9,8 +12,6 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.EnumSet;
 
 public class AnimalAILeaveWaterLava extends Goal {
     private final PathfinderMob creature;
@@ -22,6 +23,7 @@ public class AnimalAILeaveWaterLava extends Goal {
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
+    @Override
     public boolean canUse() {
         if (this.creature.level().getFluidState(this.creature.blockPosition()).is(FluidTags.WATER) || this.creature.level().getFluidState(this.creature.blockPosition()).is(FluidTags.LAVA)){
             if(this.creature instanceof ISemiAquatic && ((ISemiAquatic) this.creature).shouldLeaveWater() && (this.creature.getTarget() != null || this.creature.getRandom().nextInt(executionChance) == 0)){
@@ -32,23 +34,26 @@ public class AnimalAILeaveWaterLava extends Goal {
         return false;
     }
 
+    @Override
     public void start() {
         if(targetPos != null){
             this.creature.getNavigation().moveTo(targetPos.getX(), targetPos.getY(), targetPos.getZ(), 1D);
         }
     }
 
+    @Override
     public void tick() {
         if(targetPos != null){
             this.creature.getNavigation().moveTo(targetPos.getX(), targetPos.getY(), targetPos.getZ(), 1D);
         }
         if(this.creature.horizontalCollision && (this.creature.isInWater() || this.creature.isInLava())){
             float f1 = creature.getYRot() * Mth.DEG_TO_RAD;
-            creature.setDeltaMovement(creature.getDeltaMovement().add((double)(-Mth.sin(f1) * 0.2F), 0.1D, (double)(Mth.cos(f1) * 0.2F)));
+            creature.setDeltaMovement(creature.getDeltaMovement().add(-Mth.sin(f1) * 0.2F, 0.1D, Mth.cos(f1) * 0.2F));
 
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         if(this.creature instanceof ISemiAquatic && !((ISemiAquatic) this.creature).shouldLeaveWater()){
             this.creature.getNavigation().stop();

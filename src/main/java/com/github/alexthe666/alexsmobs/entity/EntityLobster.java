@@ -1,5 +1,8 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeaveWater;
@@ -8,7 +11,10 @@ import com.github.alexthe666.alexsmobs.entity.ai.SemiAquaticPathNavigator;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.neoforge.fluids.FluidType;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -21,7 +27,12 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -34,17 +45,12 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.fluids.FluidType;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketable {
 
@@ -61,10 +67,12 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         this.setPathfindingMalus(PathType.WATER_BORDER, 0.0F);
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 7;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
@@ -73,18 +81,22 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 5D).add(Attributes.ARMOR, 2.0D).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.MOVEMENT_SPEED, 0.15F);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.lobsterSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.LOBSTER_HURT.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.LOBSTER_HURT.get();
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
@@ -100,6 +112,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         };
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new AnimalAIFindWater(this));
         this.goalSelector.addGoal(1, new AnimalAILeaveWater(this));
@@ -109,6 +122,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -140,7 +154,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.LOBSTER_BUCKET.get());
         if (this.hasCustomName()) {
-            stack.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
+            stack.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
         return stack;
     }
@@ -148,7 +162,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
     @Override
     public void saveToBucketTag(@Nonnull ItemStack bucket) {
         if (this.hasCustomName()) {
-            bucket.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, this.getCustomName());
+            bucket.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
         Bucketable.saveDefaultDataToBucketTag(this, bucket);
         bucket.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> data.update(tag -> {
@@ -164,10 +178,12 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         }
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.fromBucket();
     }
 
+    @Override
     public boolean removeWhenFarAway(double p_27492_) {
         return !this.fromBucket() && !this.hasCustomName();
     }
@@ -178,15 +194,18 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         return Bucketable.bucketMobPickup(player, hand, this).orElse(super.mobInteract(player, hand));
     }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         return worldIn.getFluidState(pos.below()).isEmpty() && worldIn.getFluidState(pos).is(FluidTags.WATER) ? 10.0F : super.getWalkTargetValue(pos, worldIn);
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         this.entityData.set(ATTACK_TICK, 5);
         return super.doHurtTarget(entityIn);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevAttackProgress = attackProgress;
@@ -216,6 +235,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         }
     }
 
+    @Override
     protected void handleAirSupply(int air) {
 
     }
@@ -233,12 +253,14 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         this.entityData.set(VARIANT, Integer.valueOf(variant));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.getVariant());
         compound.putBoolean("FromBucket", this.fromBucket());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setVariant(compound.getInt("Variant"));
@@ -261,6 +283,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         return SoundEvents.BUCKET_FILL_FISH;
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         float variantChange = this.getRandom().nextFloat();
@@ -280,8 +303,10 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         SemiAquaticPathNavigator flyingpathnavigator = new SemiAquaticPathNavigator(this, worldIn) {
+            @Override
             public boolean isStableDestination(BlockPos pos) {
                 return this.level.getBlockState(pos).getFluidState().isEmpty();
             }

@@ -1,14 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityMimicube;
+
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Items;
-
-import java.util.EnumSet;
 
 public class MimiCubeAIRangedAttack extends Goal {
     private final EntityMimicube entity;
@@ -38,8 +39,9 @@ public class MimiCubeAIRangedAttack extends Goal {
      * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
      * method as well.
      */
+    @Override
     public boolean canUse() {
-        return this.entity.getTarget() == null ? false : this.isBowInMainhand();
+        return this.entity.getTarget() != null && this.isBowInMainhand();
     }
 
     protected boolean isBowInMainhand() {
@@ -49,6 +51,7 @@ public class MimiCubeAIRangedAttack extends Goal {
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
+    @Override
     public boolean canContinueToUse() {
         return (this.canUse() || !this.entity.getNavigation().isDone()) && this.isBowInMainhand();
     }
@@ -56,6 +59,7 @@ public class MimiCubeAIRangedAttack extends Goal {
     /**
      * Execute a one shot task or start executing a continuous task
      */
+    @Override
     public void start() {
         super.start();
         this.entity.setAggressive(true);
@@ -64,6 +68,7 @@ public class MimiCubeAIRangedAttack extends Goal {
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
+    @Override
     public void stop() {
         super.stop();
         this.entity.setAggressive(false);
@@ -75,6 +80,7 @@ public class MimiCubeAIRangedAttack extends Goal {
     /**
      * Keep ticking a continuous task that has already been started
      */
+    @Override
     public void tick() {
         LivingEntity livingentity = this.entity.getTarget();
         if(crossbowCooldown > 0){

@@ -1,6 +1,9 @@
 package com.github.alexthe666.alexsmobs.block;
 
+import java.util.Locale;
+
 import com.mojang.serialization.MapCodec;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -17,8 +20,6 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.Locale;
 
 public class BlockEndPirateSail extends Block {
     public static final MapCodec<BlockEndPirateSail> CODEC = simpleCodec(p -> new BlockEndPirateSail(false));
@@ -38,14 +39,17 @@ public class BlockEndPirateSail extends Block {
         return CODEC;
     }
 
+    @Override
     public VoxelShape getShape(BlockState p_52807_, BlockGetter p_52808_, BlockPos p_52809_, CollisionContext p_52810_) {
         return p_52807_.getValue(EASTORWEST) ? EW_AABB : NS_AABB;
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_58032_) {
         p_58032_.add(EASTORWEST, SAIL);
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         LevelReader levelreader = context.getLevel();
         BlockPos blockpos = context.getClickedPos();
@@ -63,6 +67,7 @@ public class BlockEndPirateSail extends Block {
         return axisState.setValue(SAIL, getSailTypeFor(axisState, downState, upState));
     }
 
+    @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState state2, LevelAccessor levelreader, BlockPos blockpos, BlockPos pos2) {
         BlockPos u = blockpos.above();
         BlockPos d = blockpos.below();
@@ -91,6 +96,7 @@ public class BlockEndPirateSail extends Block {
             return this.getSerializedName();
         }
 
+        @Override
         public String getSerializedName() {
             return this.name().toLowerCase(Locale.ROOT);
         }

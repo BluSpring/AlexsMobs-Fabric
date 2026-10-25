@@ -1,8 +1,12 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.message.MessageHurtMultipart;
 import com.github.alexthe666.alexsmobs.message.MessageInteractMultipart;
+import net.neoforged.neoforge.entity.PartEntity;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -18,9 +22,6 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.entity.PartEntity;
-
-import javax.annotation.Nullable;
 
 public class EntityGiantSquidPart extends PartEntity<EntityGiantSquid> implements IHurtableMultipart {
 
@@ -39,6 +40,7 @@ public class EntityGiantSquidPart extends PartEntity<EntityGiantSquid> implement
         this.collisionOnly = collisionOnly;
     }
 
+    @Override
     public boolean fireImmune() {
         return true;
     }
@@ -50,13 +52,14 @@ public class EntityGiantSquidPart extends PartEntity<EntityGiantSquid> implement
 
     @Override
     public Vec3 getLeashOffset() {
-        return new Vec3(0.0D, (double)this.getEyeHeight() * 0.15F, (double)(this.getBbWidth() * 0.1F));
+        return new Vec3(0.0D, (double)this.getEyeHeight() * 0.15F, this.getBbWidth() * 0.1F);
     }
 
     protected void collideWithNearbyEntities() {
 
     }
 
+    @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         if(this.level().isClientSide && this.getParent() != null){
             AlexsMobs.sendMSGToServer(new MessageInteractMultipart(this.getParent().getId(), hand == InteractionHand.OFF_HAND));
@@ -64,6 +67,7 @@ public class EntityGiantSquidPart extends PartEntity<EntityGiantSquid> implement
         return this.getParent() == null ? InteractionResult.PASS : this.getParent().mobInteract(player, hand);
     }
 
+    @Override
     public boolean canBeCollidedWith() {
         return !collisionOnly;
     }
@@ -74,16 +78,19 @@ public class EntityGiantSquidPart extends PartEntity<EntityGiantSquid> implement
         }
     }
 
+    @Override
     public boolean isPickable() {
         return !collisionOnly;
     }
 
+    @Override
     @Nullable
     public ItemStack getPickResult() {
         Entity parent = this.getParent();
         return parent != null ? parent.getPickResult() : ItemStack.EMPTY;
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if(this.level().isClientSide && this.getParent() != null && !this.getParent().isInvulnerableTo(source) && !collisionOnly){
             AlexsMobs.sendMSGToServer(new MessageHurtMultipart(this.getId(), this.getParent().getId(), amount, source.getMsgId()));
@@ -91,10 +98,12 @@ public class EntityGiantSquidPart extends PartEntity<EntityGiantSquid> implement
         return !collisionOnly && !this.isInvulnerableTo(source) && this.getParent().attackEntityPartFrom(this, source, amount);
     }
 
+    @Override
     public boolean is(Entity entityIn) {
         return this == entityIn || this.getParent() == entityIn;
     }
 
+    @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity) {
         throw new UnsupportedOperationException();
     }
@@ -108,6 +117,7 @@ public class EntityGiantSquidPart extends PartEntity<EntityGiantSquid> implement
 
     }
 
+    @Override
     public void tick(){
         super.tick();
     }

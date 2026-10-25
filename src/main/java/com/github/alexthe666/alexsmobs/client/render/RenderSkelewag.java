@@ -16,14 +16,17 @@ public class RenderSkelewag extends MobRenderer<EntitySkelewag, ModelSkelewag> {
         super(renderManagerIn, new ModelSkelewag(), 0.5F);
     }
 
+    @Override
     protected void scale(EntitySkelewag entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     protected int getBlockLightLevel(EntitySkelewag entityIn, BlockPos partialTicks) {
         return Math.max(2, super.getBlockLightLevel(entityIn, partialTicks));
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntitySkelewag entity) {
         return entity.getVariant() == 1 ? TEXTURE_1 : TEXTURE_0;
     }

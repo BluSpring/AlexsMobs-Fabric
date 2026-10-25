@@ -1,5 +1,9 @@
 package com.github.alexthe666.alexsmobs.client.render.layer;
 
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.client.model.ModelKangaroo;
 import com.github.alexthe666.alexsmobs.client.render.AMColorUtil;
 import com.github.alexthe666.alexsmobs.client.render.RenderKangaroo;
@@ -9,6 +13,8 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.joml.Quaternionf;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -22,15 +28,13 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
-import org.joml.Quaternionf;
-
-import java.util.Map;
 
 public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaroo> {
 
@@ -44,8 +48,8 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
         this.renderer = render;
     }
 
-    public static ResourceLocation getArmorResource(net.minecraft.world.entity.Entity entity, ItemStack stack,
-            EquipmentSlot slot, @javax.annotation.Nullable String type) {
+    public static ResourceLocation getArmorResource(Entity entity, ItemStack stack,
+                                                    EquipmentSlot slot, @Nullable String type) {
         ArmorItem item = (ArmorItem) stack.getItem();
         ResourceLocation materialName = item.getMaterial().unwrapKey().get().location();
         String domain = materialName.getNamespace();
@@ -63,9 +67,10 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
         return resourcelocation;
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityKangaroo roo,
-            float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
-            float headPitch) {
+                       float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
+                       float headPitch) {
         matrixStackIn.pushPose();
         if (roo.isRoger()) {
             ItemStack haloStack = new ItemStack(AMItemRegistry.HALO.get());
@@ -84,8 +89,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
             {
                 matrixStackIn.pushPose();
                 ItemStack itemstack = roo.getItemBySlot(EquipmentSlot.HEAD);
-                if (itemstack.getItem() instanceof ArmorItem) {
-                    ArmorItem armoritem = (ArmorItem) itemstack.getItem();
+                if (itemstack.getItem() instanceof ArmorItem armoritem) {
                     if (itemstack.canEquip(EquipmentSlot.HEAD, roo)) {
                         HumanoidModel a = defaultBipedModel;
                         a = getArmorModelHook(roo, itemstack, EquipmentSlot.HEAD, a);
@@ -129,8 +133,7 @@ public class LayerKangarooArmor extends RenderLayer<EntityKangaroo, ModelKangaro
             {
                 matrixStackIn.pushPose();
                 ItemStack itemstack = roo.getItemBySlot(EquipmentSlot.CHEST);
-                if (itemstack.getItem() instanceof ArmorItem) {
-                    ArmorItem armoritem = (ArmorItem) itemstack.getItem();
+                if (itemstack.getItem() instanceof ArmorItem armoritem) {
                     if (armoritem.getEquipmentSlot() == EquipmentSlot.CHEST) {
                         HumanoidModel a = defaultBipedModel;
                         a = getArmorModelHook(roo, itemstack, EquipmentSlot.CHEST, a);

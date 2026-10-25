@@ -125,7 +125,7 @@ public class ModelBlueJay extends AdvancedEntityModel<EntityBlueJay> {
         this.bob(body, flapSpeed, flapDegree * 10, false, ageInTicks, flapAmount);
         this.bob(head, flapSpeed, flapDegree * -6, false, ageInTicks, flapAmount);
         if(flyProgress <= 0.0F){
-            this.bob(body, walkSpeed * 1F, walkDegree * 1.3F, true, limbSwing, limbSwingAmount);
+            this.bob(body, walkSpeed, walkDegree * 1.3F, true, limbSwing, limbSwingAmount);
             this.walk(rightLeg, walkSpeed, walkDegree * 1.85F, false, 0F, 0.2F, limbSwing, limbSwingAmount);
             this.walk(leftLeg, walkSpeed, walkDegree * 1.85F, true, 0F, 0.2F, limbSwing, limbSwingAmount);
             this.walk(head, walkSpeed, walkDegree * 0.2F, false, 2F, -0.01F, limbSwing, limbSwingAmount);

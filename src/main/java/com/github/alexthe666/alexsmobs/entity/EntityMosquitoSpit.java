@@ -1,5 +1,12 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
@@ -15,11 +22,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.UUID;
 
 public class EntityMosquitoSpit extends Entity {
     private UUID ownerUUID;
@@ -50,6 +52,7 @@ public class EntityMosquitoSpit extends Entity {
         this.setDeltaMovement(p_i47274_8_, p_i47274_10_, p_i47274_12_);
     }
 
+    @Override
     public void tick() {
         if (!this.leftOwner) {
             this.leftOwner = this.checkLeftOwner();
@@ -71,9 +74,9 @@ public class EntityMosquitoSpit extends Entity {
         } else if (this.isInWaterOrBubble()) {
             this.remove(RemovalReason.DISCARDED);
         } else {
-            this.setDeltaMovement(vector3d.scale((double)0.99F));
+            this.setDeltaMovement(vector3d.scale(0.99F));
             if (!this.isNoGravity()) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0.0D, (double)-0.06F, 0.0D));
+                this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.06F, 0.0D));
             }
 
             this.setPos(d0, d1, d2);
@@ -86,8 +89,7 @@ public class EntityMosquitoSpit extends Entity {
         if (entity instanceof LivingEntity) {
             hitEntity.hurt(damageSources().mobProjectile(this, (LivingEntity)entity), 4.0F);
         }
-        if (hitEntity instanceof EntityCrimsonMosquito && !this.level().isClientSide) {
-            EntityCrimsonMosquito mosquito = ((EntityCrimsonMosquito)hitEntity);
+        if (hitEntity instanceof EntityCrimsonMosquito mosquito && !this.level().isClientSide) {
             mosquito.setBloodLevel(mosquito.getBloodLevel() + 1);
         }
     }
@@ -120,6 +122,7 @@ public class EntityMosquitoSpit extends Entity {
         }
     }
 
+    @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         if (this.ownerUUID != null) {
             compound.putUUID("Owner", this.ownerUUID);
@@ -134,6 +137,7 @@ public class EntityMosquitoSpit extends Entity {
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
+    @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         if (compound.hasUUID("Owner")) {
             this.ownerUUID = compound.getUUID("Owner");
@@ -158,11 +162,11 @@ public class EntityMosquitoSpit extends Entity {
     }
 
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
-        Vec3 vector3d = (new Vec3(x, y, z)).normalize().add(this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy).scale((double)velocity);
+        Vec3 vector3d = (new Vec3(x, y, z)).normalize().add(this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy).scale(velocity);
         this.setDeltaMovement(vector3d);
         float f = Mth.sqrt((float) vector3d.horizontalDistanceSqr());
         this.setYRot( (float)(Mth.atan2(vector3d.x, vector3d.z) * (double)Mth.RAD_TO_DEG));
-        this.setXRot((float)(Mth.atan2(vector3d.y, (double)f) * (double)Mth.RAD_TO_DEG));
+        this.setXRot((float)(Mth.atan2(vector3d.y, f) * (double)Mth.RAD_TO_DEG));
         this.yRotO = this.getYRot();
         this.xRotO = this.getXRot();
     }
@@ -171,7 +175,7 @@ public class EntityMosquitoSpit extends Entity {
         float f = -Mth.sin(p_234612_3_ * Mth.DEG_TO_RAD) * Mth.cos(p_234612_2_ * Mth.DEG_TO_RAD);
         float f1 = -Mth.sin((p_234612_2_ + p_234612_4_) * Mth.DEG_TO_RAD);
         float f2 = Mth.cos(p_234612_3_ * Mth.DEG_TO_RAD) * Mth.cos(p_234612_2_ * Mth.DEG_TO_RAD);
-        this.shoot((double)f, (double)f1, (double)f2, p_234612_5_, p_234612_6_);
+        this.shoot(f, f1, f2, p_234612_5_, p_234612_6_);
         Vec3 vector3d = p_234612_1_.getDeltaMovement();
         this.setDeltaMovement(this.getDeltaMovement().add(vector3d.x, p_234612_1_.onGround() ? 0.0D : vector3d.y, vector3d.z));
     }
@@ -189,12 +193,13 @@ public class EntityMosquitoSpit extends Entity {
 
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void lerpMotion(double x, double y, double z) {
         this.setDeltaMovement(x, y, z);
         if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
             float f = Mth.sqrt((float) (x * x + z * z));
-            this.setXRot((float)(Mth.atan2(y, (double)f) * (double)Mth.RAD_TO_DEG));
+            this.setXRot((float)(Mth.atan2(y, f) * (double)Mth.RAD_TO_DEG));
             this.setYRot( (float)(Mth.atan2(x, z) * (double)Mth.RAD_TO_DEG));
             this.xRotO = this.getXRot();
             this.yRotO = this.getYRot();
@@ -215,7 +220,7 @@ public class EntityMosquitoSpit extends Entity {
     protected void updateRotation() {
         Vec3 vector3d = this.getDeltaMovement();
         float f = Mth.sqrt((float) vector3d.horizontalDistanceSqr());
-        this.setXRot(lerpRotation(this.xRotO, (float)(Mth.atan2(vector3d.y, (double)f) * (double)Mth.RAD_TO_DEG)));
+        this.setXRot(lerpRotation(this.xRotO, (float)(Mth.atan2(vector3d.y, f) * (double)Mth.RAD_TO_DEG)));
         this.setYRot( lerpRotation(this.yRotO, (float)(Mth.atan2(vector3d.x, vector3d.z) * (double)Mth.RAD_TO_DEG)));
     }
 

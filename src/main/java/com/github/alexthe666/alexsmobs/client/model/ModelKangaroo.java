@@ -292,7 +292,7 @@ public class ModelKangaroo extends AdvancedEntityModel<EntityKangaroo> {
 		this.leg_left.rotationPointY -= (jumpRotation * 2F);
 		this.leg_right.rotationPointZ += (jumpRotation * 2F);
 		this.leg_left.rotationPointZ += (jumpRotation * 2F);
-		this.head.rotationPointY += (jumpRotation * 1F);
+		this.head.rotationPointY += (jumpRotation);
 		this.leg_left.rotateAngleX += (jumpRotation * 50.0F) * 0.017453292F;
 		this.leg_right.rotateAngleX += (jumpRotation * 50.0F) * 0.017453292F;
 		this.foot_left.rotateAngleX += (jumpRotation * 25.0F) * 0.017453292F;

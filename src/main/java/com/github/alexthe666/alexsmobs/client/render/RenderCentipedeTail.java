@@ -19,6 +19,7 @@ public class RenderCentipedeTail extends MobRenderer<EntityCentipedeTail, Advanc
         super(renderManagerIn, new ModelCaveCentipede<>(2), 0.5F);
     }
 
+    @Override
     protected float getFlipDegrees(EntityCentipedeTail centipede) {
         return 180.0F;
     }
@@ -48,12 +49,13 @@ public class RenderCentipedeTail extends MobRenderer<EntityCentipedeTail, Advanc
         } else if (entity.hasCustomName()) {
             String s = ChatFormatting.stripFormatting(entity.getName().getString());
             if (("Dinnerbone".equals(s) || "Grumm".equals(s))) {
-                stack.translate(0.0D, (double) (entity.getBbHeight() + 0.1F), 0.0D);
+                stack.translate(0.0D, entity.getBbHeight() + 0.1F, 0.0D);
                 stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
             }
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityCentipedeTail entity) {
         return TEXTURE;
     }

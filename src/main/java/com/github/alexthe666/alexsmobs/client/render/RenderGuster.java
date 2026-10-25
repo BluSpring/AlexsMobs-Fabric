@@ -1,9 +1,12 @@
 package com.github.alexthe666.alexsmobs.client.render;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.client.model.ModelGuster;
 import com.github.alexthe666.alexsmobs.entity.EntityGuster;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -11,8 +14,6 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-
-import javax.annotation.Nullable;
 
 public class RenderGuster extends MobRenderer<EntityGuster, ModelGuster> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/guster.png");
@@ -27,6 +28,7 @@ public class RenderGuster extends MobRenderer<EntityGuster, ModelGuster> {
         this.addLayer(new GusterEyesLayer(this));
     }
 
+    @Override
     @Nullable
     protected RenderType getRenderType(EntityGuster p_230496_1_, boolean p_230496_2_, boolean p_230496_3_, boolean p_230496_4_) {
         ResourceLocation resourcelocation = this.getTextureLocation(p_230496_1_);
@@ -40,6 +42,7 @@ public class RenderGuster extends MobRenderer<EntityGuster, ModelGuster> {
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityGuster entity) {
         return entity.isGooglyEyes() ? TEXTURE_GOOGLY : entity.getVariant() == 2 ? TEXTURE_SOUL : entity.getVariant() == 1 ? TEXTURE_RED : TEXTURE;
     }
@@ -50,6 +53,7 @@ public class RenderGuster extends MobRenderer<EntityGuster, ModelGuster> {
             super(p_i50928_1_);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityGuster entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             if(!entitylivingbaseIn.isGooglyEyes()){
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(entitylivingbaseIn.getVariant() == 2 ? AMRenderTypes.getEyesNoCull(TEXTURE_SOUL_EYES) : AMRenderTypes.getEyesNoCull(TEXTURE_EYES));
@@ -57,6 +61,7 @@ public class RenderGuster extends MobRenderer<EntityGuster, ModelGuster> {
             }
         }
 
+        @Override
         public RenderType renderType() {
             return AMRenderTypes.getEyesNoCull(TEXTURE_EYES);
         }

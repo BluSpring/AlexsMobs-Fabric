@@ -4,6 +4,7 @@ import com.github.alexthe666.alexsmobs.entity.util.RainbowUtil;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -49,19 +50,22 @@ public class ItemRainbowJelly extends Item {
         return InteractionResult.PASS;
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack st, Level level, LivingEntity e) {
         RainbowUtil.setRainbowType(e, RainbowUtil.getRainbowTypeFromStack(st));
-        return st.has(net.minecraft.core.component.DataComponents.FOOD) ? e.eat(level, st) : st;
+        return st.has(DataComponents.FOOD) ? e.eat(level, st) : st;
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        if (stack.has(net.minecraft.core.component.DataComponents.FOOD)) {
+        if (stack.has(DataComponents.FOOD)) {
             return 64;
         } else {
             return 0;
         }
     }
 
+    @Override
     public boolean isFoil(ItemStack stack) {
         return super.isFoil(stack) || RainbowUtil.getRainbowTypeFromStack(stack) != null;
     }

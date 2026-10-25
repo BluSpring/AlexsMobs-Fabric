@@ -30,10 +30,12 @@ public class BlockCrystalizedMucus extends TransparentBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, Integer.valueOf(7)).setValue(PERSISTENT, Boolean.valueOf(false)));
     }
 
+    @Override
     public boolean isRandomlyTicking(BlockState p_54449_) {
         return p_54449_.getValue(DISTANCE) == 7 && !p_54449_.getValue(PERSISTENT);
     }
 
+    @Override
     public void randomTick(BlockState p_221379_, ServerLevel p_221380_, BlockPos p_221381_, RandomSource p_221382_) {
         if (this.decaying(p_221379_)) {
             dropResources(p_221379_, p_221380_, p_221381_);
@@ -45,14 +47,17 @@ public class BlockCrystalizedMucus extends TransparentBlock {
         return !p_221386_.getValue(PERSISTENT) && p_221386_.getValue(DISTANCE) == 7;
     }
 
+    @Override
     public void tick(BlockState p_221369_, ServerLevel p_221370_, BlockPos p_221371_, RandomSource p_221372_) {
         p_221370_.setBlock(p_221371_, updateDistance(p_221369_, p_221370_, p_221371_), 3);
     }
 
+    @Override
     public int getLightBlock(BlockState p_54460_, BlockGetter p_54461_, BlockPos p_54462_) {
         return 1;
     }
 
+    @Override
     public BlockState updateShape(BlockState p_54440_, Direction p_54441_, BlockState p_54442_, LevelAccessor p_54443_, BlockPos p_54444_, BlockPos p_54445_) {
         int i = getDistanceAt(p_54442_) + 1;
         if (i != 1 || p_54440_.getValue(DISTANCE) != i) {
@@ -85,10 +90,12 @@ public class BlockCrystalizedMucus extends TransparentBlock {
         }
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_54447_) {
         p_54447_.add(DISTANCE, PERSISTENT);
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext p_54424_) {
         FluidState fluidstate = p_54424_.getLevel().getFluidState(p_54424_.getClickedPos());
         BlockState blockstate = this.defaultBlockState().setValue(PERSISTENT, Boolean.valueOf(true));

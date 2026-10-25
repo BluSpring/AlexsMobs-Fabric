@@ -1,5 +1,14 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.*;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
@@ -8,9 +17,14 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.fluids.FluidType;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -28,7 +42,13 @@ import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -55,12 +75,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.fluids.FluidType;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFollower, ITargetsDroppedItems, ILootsChests {
 
@@ -98,27 +112,33 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         this.setPathfindingMalus(PathType.WATER_BORDER, 0.0F);
     }
 
+    @Override
     protected float getWaterSlowDown() {
         return 0.98F;
     }
 
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.RACCOON_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.RACCOON_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.RACCOON_HURT.get();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.raccoonSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(1, new BreedGoal(this, 1.0D));
@@ -143,6 +163,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         this.targetSelector.addGoal(4, new OwnerHurtTargetGoal(this));
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (entityIn instanceof EntityBlueJay jay) {
             return jay.getRaccoonUUID() != null && jay.getRaccoonUUID().equals(this.getUUID());
@@ -164,6 +185,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
     }
 
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             this.setAnimation(ANIMATION_ATTACK);
@@ -171,6 +193,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         return true;
     }
 
+    @Override
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.getColor() != null) {
@@ -199,10 +222,12 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         return Items.AIR;
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.RACCOON_BREEDABLES);
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -231,7 +256,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
                 return InteractionResult.SUCCESS;
             }
             return InteractionResult.PASS;
-        } else if (owner && this.getColor() != null && itemstack.is(net.minecraft.world.item.Items.SHEARS)) {
+        } else if (owner && this.getColor() != null && itemstack.is(Items.SHEARS)) {
             this.gameEvent(GameEvent.ENTITY_INTERACT);
             this.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             if (this.getColor() != null) {
@@ -284,6 +309,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
     }
 
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("RacSitting", this.isSitting());
@@ -293,6 +319,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         compound.putInt("StealCooldown", stealCooldown);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setOrderedToSit(compound.getBoolean("RacSitting"));
@@ -311,6 +338,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         return this.entityData.get(COMMAND);
     }
 
+    @Override
     public void setOrderedToSit(boolean sit) {
         this.entityData.set(SITTING, Boolean.valueOf(sit));
     }
@@ -320,13 +348,14 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
     }
 
     public static boolean isRaccoonFood(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) || stack.is(AMTagRegistry.RACCOON_FOODSTUFFS);
+        return stack.has(DataComponents.FOOD) || stack.is(AMTagRegistry.RACCOON_FOODSTUFFS);
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 9D).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.MOVEMENT_SPEED, 0.25F);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -350,6 +379,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         this.goalSelector.setControlFlag(Goal.Flag.LOOK, flag || flag2);
     }
 
+    @Override
     public void tick() {
         super.tick();
         // Debug: force standing state for testing if name contains "Standy"
@@ -427,7 +457,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
                         double d3 = (this.random.nextDouble());
                         Vec3 vector3d = this.getDeltaMovement();
 
-                        this.level().addParticle(ParticleTypes.SPLASH, washingPos.getX() + d2, (double) (washingPos.getY() + 0.8F), washingPos.getZ() + d3, vector3d.x, vector3d.y, vector3d.z);
+                        this.level().addParticle(ParticleTypes.SPLASH, washingPos.getX() + d2, washingPos.getY() + 0.8F, washingPos.getZ() + d3, vector3d.x, vector3d.y, vector3d.z);
                     }
                 } else {
                     setWashing(false);
@@ -436,7 +466,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         }
         if (!this.level().isClientSide && this.getTarget() != null && this.hasLineOfSight(this.getTarget()) && this.distanceTo(this.getTarget()) < 4 && this.getAnimation() == ANIMATION_ATTACK && this.getAnimationTick() == 5) {
             float f1 = this.getYRot() * Mth.DEG_TO_RAD;
-            this.setDeltaMovement(this.getDeltaMovement().add((double) (-Mth.sin(f1) * -0.06F), 0.0D, (double) (Mth.cos(f1) * -0.06F)));
+            this.setDeltaMovement(this.getDeltaMovement().add(-Mth.sin(f1) * -0.06F, 0.0D, Mth.cos(f1) * -0.06F));
             this.getTarget().knockback(0.35F, getTarget().getX() - this.getX(), getTarget().getZ() - this.getZ());
             this.getTarget().hurt(this.damageSources().mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue());
         }
@@ -472,6 +502,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 92) {
@@ -493,6 +524,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         }
     }
 
+    @Override
     public boolean canBeRiddenUnderFluidType(FluidType type, Entity rider) {
         return true;
     }
@@ -578,6 +610,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
         return AMEntityRegistry.RACCOON.get().create(serverWorld);
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isSitting() || this.isWashing()) {
             if (this.getNavigation().getPath() != null) {
@@ -630,7 +663,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
     public double getPassengersRidingOffset() {
         double baseHeight = this.getBbHeight();
         // Height when standing or begging (highest)
-        double standingOffset = baseHeight * 1.0D;
+        double standingOffset = baseHeight;
         // Height when on all fours (medium)
         double quadrupedOffset = baseHeight * 0.6D;
         // Height when sitting (lowest)
@@ -686,14 +719,17 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
             super(EntityRaccoon.this, 1.0D, true, p_i50726_3_, () -> false);
         }
 
+        @Override
         public void start() {
             super.start();
         }
 
+        @Override
         public boolean canUse() {
             return super.canUse() && this.canFoxMove();
         }
 
+        @Override
         public boolean canContinueToUse() {
             return super.canContinueToUse() && this.canFoxMove();
         }
@@ -754,6 +790,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
             return target != null && raccoon != null;
         }
 
+        @Override
         public void stop() {
             target = null;
             cooldown = 200 + random.nextInt(200);
@@ -761,6 +798,7 @@ public class EntityRaccoon extends TamableAnimal implements IAnimatedEntity, IFo
             fleeTime = 0;
         }
 
+        @Override
         public void tick() {
             if (target != null) {
                 golemCheckTime++;

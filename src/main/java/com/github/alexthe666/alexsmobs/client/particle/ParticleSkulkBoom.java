@@ -4,6 +4,13 @@ import com.github.alexthe666.alexsmobs.client.render.AMRenderTypes;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -16,12 +23,6 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 public class ParticleSkulkBoom extends Particle {
     private static final ResourceLocation TEXTURE = ResourceLocation
@@ -41,10 +42,11 @@ public class ParticleSkulkBoom extends Particle {
         this.yd = motionY;
         this.zd = motionZ;
         this.lifetime = 20 + this.random.nextInt(20);
-        this.alphaDecrease = 1F / (float) Math.max(this.lifetime, 1F);
+        this.alphaDecrease = 1F / Math.max(this.lifetime, 1F);
         this.size = 0.3F;
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevSize = size;
@@ -59,11 +61,12 @@ public class ParticleSkulkBoom extends Particle {
         this.setSize(1 + size, 0.1F);
     }
 
+    @Override
     public void render(VertexConsumer vertexConsumer, Camera camera, float partialTick) {
         Vec3 vec3 = camera.getPosition();
-        float f = (float) (Mth.lerp((double) partialTick, this.xo, this.x) - vec3.x());
-        float f1 = (float) (Mth.lerp((double) partialTick, this.yo, this.y) - vec3.y());
-        float f2 = (float) (Mth.lerp((double) partialTick, this.zo, this.z) - vec3.z());
+        float f = (float) (Mth.lerp(partialTick, this.xo, this.x) - vec3.x());
+        float f1 = (float) (Mth.lerp(partialTick, this.yo, this.y) - vec3.y());
+        float f2 = (float) (Mth.lerp(partialTick, this.zo, this.z) - vec3.z());
         Quaternionf quaternion = Axis.XP.rotationDegrees(90F);
         MultiBufferSource.BufferSource multibuffersource$buffersource = Minecraft.getInstance().renderBuffers()
                 .bufferSource();
@@ -119,8 +122,9 @@ public class ParticleSkulkBoom extends Particle {
 
     @OnlyIn(Dist.CLIENT)
     public static class Factory implements ParticleProvider<SimpleParticleType> {
+        @Override
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z,
-                double xSpeed, double ySpeed, double zSpeed) {
+                                       double xSpeed, double ySpeed, double zSpeed) {
             return new ParticleSkulkBoom(worldIn, x, y, z, xSpeed, ySpeed, zSpeed);
         }
     }

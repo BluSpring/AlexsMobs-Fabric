@@ -25,10 +25,12 @@ public class RenderCosmaw extends MobRenderer<EntityCosmaw, ModelCosmaw> {
         this.addLayer(new LayerBasicGlow(this, TEXTURE_GLOW));
     }
 
+    @Override
     protected void scale(EntityCosmaw entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.translate(0, -0.5F, 0);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityCosmaw entity) {
         return TEXTURE;
     }
@@ -39,6 +41,7 @@ public class RenderCosmaw extends MobRenderer<EntityCosmaw, ModelCosmaw> {
             super(RenderCosmaw.this);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityCosmaw entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
             ItemStack itemstack = entitylivingbaseIn.getMainHandItem();
             matrixStackIn.pushPose();

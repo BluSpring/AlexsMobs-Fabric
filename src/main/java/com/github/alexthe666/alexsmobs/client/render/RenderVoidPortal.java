@@ -3,6 +3,11 @@ package com.github.alexthe666.alexsmobs.client.render;
 import com.github.alexthe666.alexsmobs.entity.EntityVoidPortal;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -10,8 +15,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 public class RenderVoidPortal extends EntityRenderer<EntityVoidPortal> {
     private static final ResourceLocation TEXTURE_0 = ResourceLocation
@@ -39,8 +42,9 @@ public class RenderVoidPortal extends EntityRenderer<EntityVoidPortal> {
         }
     }
 
+    @Override
     public void render(EntityVoidPortal entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
-            MultiBufferSource bufferIn, int packedLightIn) {
+                       MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(entityIn.getAttachmentFacing().getOpposite().getRotation());
         matrixStackIn.translate(0.5D, 0, 0.5D);
@@ -99,10 +103,10 @@ public class RenderVoidPortal extends EntityRenderer<EntityVoidPortal> {
     public void drawVertex(Matrix4f p_229039_1_, Matrix3f p_229039_2_, VertexConsumer p_229039_3_, int p_229039_4_,
             int p_229039_5_, int p_229039_6_, float p_229039_7_, float p_229039_8_, int p_229039_9_, int p_229039_10_,
             int p_229039_11_, int p_229039_12_) {
-        org.joml.Vector3f normal = new org.joml.Vector3f((float) p_229039_9_, (float) p_229039_11_,
+        Vector3f normal = new Vector3f((float) p_229039_9_, (float) p_229039_11_,
                 (float) p_229039_10_);
         normal.mul(p_229039_2_);
-        org.joml.Vector4f pos = new org.joml.Vector4f((float) p_229039_4_, (float) p_229039_5_, (float) p_229039_6_,
+        Vector4f pos = new Vector4f((float) p_229039_4_, (float) p_229039_5_, (float) p_229039_6_,
                 1.0F);
         pos.mul(p_229039_1_);
         p_229039_3_.addVertex(pos.x, pos.y, pos.z).setColor(255, 255, 255, 255).setUv(p_229039_7_, p_229039_8_)

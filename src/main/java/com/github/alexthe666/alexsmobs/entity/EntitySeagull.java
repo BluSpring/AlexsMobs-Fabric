@@ -1,5 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
 import com.github.alexthe666.alexsmobs.entity.ai.DirectPathNavigator;
@@ -10,8 +20,10 @@ import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.base.Predicate;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -28,11 +40,20 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.animal.Animal;
@@ -43,9 +64,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.component.MapDecorations;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -56,10 +75,6 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.stream.Stream;
 
 public class EntitySeagull extends Animal implements ITargetsDroppedItems {
 
@@ -100,18 +115,22 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         switchNavigator(false);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.SEAGULL_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.SEAGULL_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.SEAGULL_HURT.get();
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Flying", this.isFlying());
@@ -128,6 +147,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFlying(compound.getBoolean("Flying"));
@@ -146,6 +166,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.ATTACK_DAMAGE, 1.0D).add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -153,6 +174,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         this.targetSelector.addGoal(2, new SeagullAIStealFromPlayers(this));
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.0D, Ingredient.fromValues(Stream.of(new Ingredient.TagValue(AMTagRegistry.SEAGULL_BREEDABLES), new Ingredient.TagValue(AMTagRegistry.SEAGULL_OFFERINGS))), false){
+            @Override
             public boolean canUse(){
                 return !EntitySeagull.this.aiItemFlag && super.canUse();
             }
@@ -165,6 +187,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         this.targetSelector.addGoal(1, new AITargetItems(this, false, false, 15, 16));
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.SEAGULL_BREEDABLES);
     }
@@ -173,14 +196,17 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         return worldIn.getRawBrightness(pos, 0) > 8 && worldIn.getFluidState(pos.below()).isEmpty();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.seagullSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -206,10 +232,14 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         builder.define(FLIGHT_LOOK_YAW, 0F);
     }
 
+    @Override
+    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
 
+    @Override
+    @Override
     public void setFlying(boolean flying) {
         if (flying && this.isBaby()) {
             flying = false;
@@ -241,6 +271,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         this.entityData.set(TREASURE_POS, Optional.ofNullable(pos));
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -260,6 +291,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.prevFlyProgress = flyProgress;
@@ -377,7 +409,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
     }
     @Override
     public boolean canTargetItem(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) && !this.isSitting();
+        return stack.has(DataComponents.FOOD) && !this.isSitting();
     }
 
     private void eatItemEffect(ItemStack heldItemMainhand) {
@@ -415,6 +447,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         }
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isSitting()) {
             if (this.getNavigation().getPath() != null) {
@@ -529,6 +562,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         return !level().getFluidState(position).isEmpty() || position.getY() <= -64;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -550,6 +584,8 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         return AMEntityRegistry.SEAGULL.get().create(serverWorld);
     }
 
+    @Override
+    @Override
     public void peck() {
         this.entityData.set(ATTACK_TICK, 7);
     }
@@ -604,6 +640,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             return targetEntity != null;
         }
 
+        @Override
         public void stop() {
             flightTarget = null;
             this.targetEntity = null;
@@ -648,6 +685,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
 
 
         public record Sorter(Entity theEntity) implements Comparator<Entity> {
+            @Override
             public int compare(Entity p_compare_1_, Entity p_compare_2_) {
                 final double d0 = this.theEntity.distanceToSqr(p_compare_1_);
                 final double d1 = this.theEntity.distanceToSqr(p_compare_2_);
@@ -712,6 +750,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void tick() {
             if (orbitResetCooldown > 0) {
                 orbitResetCooldown--;
@@ -775,6 +814,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             if (flightTarget) {
                 return eagle.isFlying() && eagle.distanceToSqr(x, y, z) > 5F;
@@ -783,6 +823,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void start() {
             if (flightTarget) {
                 eagle.setFlying(true);
@@ -792,6 +833,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             }
         }
 
+        @Override
         public void stop() {
             this.eagle.getNavigation().stop();
             super.stop();
@@ -806,6 +848,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             this.parentEntity = bird;
         }
 
+        @Override
         public void tick() {
             if (this.operation == MoveControl.Operation.MOVE_TO) {
                 Vec3 vector3d = new Vec3(this.wantedX - parentEntity.getX(), this.wantedY - parentEntity.getY(), this.wantedZ - parentEntity.getZ());
@@ -832,15 +875,18 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
             this.executionChance = 1;
         }
 
+        @Override
         public void stop() {
             super.stop();
             ((EntitySeagull) mob).aiItemFlag = false;
         }
 
+        @Override
         public boolean canUse() {
             return super.canUse() && !((EntitySeagull) mob).isSitting() && (mob.getTarget() == null || !mob.getTarget().isAlive());
         }
 
+        @Override
         public boolean canContinueToUse() {
             return super.canContinueToUse() && !((EntitySeagull) mob).isSitting() && (mob.getTarget() == null || !mob.getTarget().isAlive());
         }

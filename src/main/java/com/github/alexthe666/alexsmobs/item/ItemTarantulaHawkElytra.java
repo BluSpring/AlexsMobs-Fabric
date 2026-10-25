@@ -1,12 +1,19 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.function.Consumer;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
@@ -14,9 +21,6 @@ import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-
-import javax.annotation.Nullable;
 
 public class ItemTarantulaHawkElytra extends ArmorItem {
 
@@ -25,7 +29,7 @@ public class ItemTarantulaHawkElytra extends ArmorItem {
     }
 
     @Override
-    public void initializeClient(java.util.function.Consumer<IClientItemExtensions> consumer) {
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept((IClientItemExtensions) AlexsMobs.PROXY.getArmorRenderProperties());
     }
 
@@ -33,27 +37,30 @@ public class ItemTarantulaHawkElytra extends ArmorItem {
         return stack.getDamageValue() < stack.getMaxDamage() - 1;
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         return super.use(worldIn, playerIn, handIn);
     }
 
     @Override
-    public boolean canElytraFly(ItemStack stack, net.minecraft.world.entity.LivingEntity entity) {
+    public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
         return ElytraItem.isFlyEnabled(stack);
     }
 
     @Override
-    public boolean elytraFlightTick(ItemStack stack, net.minecraft.world.entity.LivingEntity entity, int flightTicks) {
+    public boolean elytraFlightTick(ItemStack stack, LivingEntity entity, int flightTicks) {
         if (!entity.level().isClientSide && (flightTicks + 1) % 20 == 0) {
-            stack.hurtAndBreak(1, entity, net.minecraft.world.entity.EquipmentSlot.CHEST);
+            stack.hurtAndBreak(1, entity, EquipmentSlot.CHEST);
         }
         return true;
     }
 
+    @Override
     public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return repair.getItem() == AMItemRegistry.TARANTULA_HAWK_WING_FRAGMENT.get();
     }
 
+    @Override
     public EquipmentSlot getEquipmentSlot(ItemStack stack) {
         return EquipmentSlot.CHEST;
     }

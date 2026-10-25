@@ -1,7 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
 import com.github.alexthe666.alexsmobs.entity.EntityMimicOctopus;
 import com.github.alexthe666.alexsmobs.entity.IFollower;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
@@ -13,8 +16,6 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
-
-import java.util.EnumSet;
 
 public class TameableAIFollowOwnerWater extends Goal {
     private final TamableAnimal tameable;
@@ -37,6 +38,7 @@ public class TameableAIFollowOwnerWater extends Goal {
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
+    @Override
     public boolean canUse() {
         LivingEntity lvt_1_1_ = this.tameable.getOwner();
         if (lvt_1_1_ == null) {
@@ -55,6 +57,7 @@ public class TameableAIFollowOwnerWater extends Goal {
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         if (this.tameable.getNavigation().isDone() || isInCombat()) {
             return false;
@@ -75,18 +78,21 @@ public class TameableAIFollowOwnerWater extends Goal {
         return false;
     }
 
+    @Override
     public void start() {
         this.timeToRecalcPath = 0;
         this.oldWaterCost = this.tameable.getPathfindingMalus(PathType.WATER);
         this.tameable.setPathfindingMalus(PathType.WATER, 0.0F);
     }
 
+    @Override
     public void stop() {
         this.owner = null;
         this.tameable.getNavigation().stop();
         this.tameable.setPathfindingMalus(PathType.WATER, this.oldWaterCost);
     }
 
+    @Override
     public void tick() {
 
         this.tameable.getLookControl().setLookAt(this.owner, 10.0F, (float) this.tameable.getMaxHeadXRot());

@@ -15,11 +15,13 @@ public class RenderJerboa extends MobRenderer<EntityJerboa, ModelJerboa> {
         super(renderManagerIn, new ModelJerboa(), 0.1F);
     }
 
+    @Override
     protected void scale(EntityJerboa entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.8F, 0.8F, 0.8F);
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityJerboa entity) {
         return entity.isSleeping() ? TEXTURE_SLEEPING : TEXTURE;
     }

@@ -4,6 +4,8 @@ import com.github.alexthe666.alexsmobs.entity.EntityGrizzlyBear;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import net.neoforged.neoforge.event.EventHooks;
+
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -30,18 +32,22 @@ public class GrizzlyBearAIBeehive extends MoveToBlockGoal {
         this.bear = bear;
     }
 
+    @Override
     public boolean canUse() {
         return !bear.isBaby() && super.canUse();
     }
 
+    @Override
     public void stop() {
         idleAtHiveTime = 0;
     }
 
+    @Override
     public double acceptedDistance() {
         return 2D;
     }
 
+    @Override
     public void tick() {
         super.tick();
         BlockPos blockpos = this.getMoveToTarget();
@@ -81,17 +87,17 @@ public class GrizzlyBearAIBeehive extends MoveToBlockGoal {
         return blockpos.distSqr(AMBlockPos.fromCoords(positionVec.x(), blockpos.getY(), positionVec.z())) < distance * distance;
     }
 
+    @Override
     protected boolean isReachedTarget() {
         return this.isAboveDestinationBear;
     }
 
     private void eatHive() {
-        if (net.neoforged.neoforge.event.EventHooks.canEntityGrief(bear.level(), bear)) {
+        if (EventHooks.canEntityGrief(bear.level(), bear)) {
             BlockState blockstate = bear.level().getBlockState(this.blockPos);
             if (blockstate.is(AMTagRegistry.GRIZZLY_BEEHIVE)) {
-                if (bear.level().getBlockEntity(this.blockPos) instanceof BeehiveBlockEntity) {
+                if (bear.level().getBlockEntity(this.blockPos) instanceof BeehiveBlockEntity beehivetileentity) {
                     final RandomSource rand = this.bear.getRandom();
-                    BeehiveBlockEntity beehivetileentity = (BeehiveBlockEntity) bear.level().getBlockEntity(this.blockPos);
                     beehivetileentity.emptyAllLivingFromHive(null, blockstate, BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
                     bear.level().updateNeighbourForOutputSignal(this.blockPos, blockstate.getBlock());
                     ItemStack stack = new ItemStack(Items.HONEYCOMB);

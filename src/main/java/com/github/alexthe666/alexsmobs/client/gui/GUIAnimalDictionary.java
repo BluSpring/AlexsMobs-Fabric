@@ -5,12 +5,13 @@ import com.github.alexthe666.alexsmobs.client.render.RenderLaviathan;
 import com.github.alexthe666.alexsmobs.client.render.RenderMurmurBody;
 import com.github.alexthe666.alexsmobs.client.render.RenderUnderminer;
 import com.github.alexthe666.citadel.client.gui.GuiBasicBook;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 
 @OnlyIn(Dist.CLIENT)
@@ -27,6 +28,7 @@ public class GUIAnimalDictionary extends GuiBasicBook {
         this.currentPageJSON = this.getTextFileDirectory().withSuffix(page + ".json");
     }
 
+    @Override
     public void render(GuiGraphics guiGraphics, int x, int y, float partialTicks) {
         RenderLaviathan.renderWithoutShaking = true;
         ModelLaviathan.renderStaticInBook = true;
@@ -39,14 +41,17 @@ public class GUIAnimalDictionary extends GuiBasicBook {
         RenderUnderminer.renderWithPickaxe = false;
     }
 
+    @Override
     protected int getBindingColor() {
         return 0X606B26;
     }
 
+    @Override
     public ResourceLocation getRootPage() {
         return ROOT;
     }
 
+    @Override
     public ResourceLocation getTextFileDirectory() {
         return ResourceLocation.parse("alexsmobs:book/animal_dictionary/");
     }

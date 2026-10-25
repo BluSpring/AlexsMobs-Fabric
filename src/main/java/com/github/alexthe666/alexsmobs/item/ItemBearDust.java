@@ -1,6 +1,9 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.Random;
+
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -12,8 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 
-import java.util.Random;
-
 public class ItemBearDust extends Item  implements CustomTabBehavior{
 
     private final Random random = new Random();
@@ -22,6 +23,7 @@ public class ItemBearDust extends Item  implements CustomTabBehavior{
         super(props);
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
         playerIn.gameEvent(GameEvent.ITEM_INTERACT_START);

@@ -1,14 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
+import java.util.EnumSet;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
 
 public class AnimalAIFleeLight extends Goal {
     protected final PathfinderMob creature;
@@ -36,6 +37,7 @@ public class AnimalAIFleeLight extends Goal {
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
+    @Override
     public boolean canUse() {
         if (this.creature.getTarget() != null || this.creature.getRandom().nextInt(executeChance) != 0) {
             return false;
@@ -58,10 +60,12 @@ public class AnimalAIFleeLight extends Goal {
         }
     }
 
+    @Override
     public boolean canContinueToUse() {
         return !this.creature.getNavigation().isDone();
     }
 
+    @Override
     public void start() {
         this.creature.getNavigation().moveTo(this.shelterX, this.shelterY, this.shelterZ, this.movementSpeed);
     }

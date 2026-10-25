@@ -19,16 +19,19 @@ public class RenderBoneSerpentPart extends LivingEntityRenderer<EntityBoneSerpen
         super(renderManagerIn, new ModelBoneSerpentBody(), 0.3F);
     }
 
+    @Override
     protected boolean shouldShowName(EntityBoneSerpentPart entity) {
         return super.shouldShowName(entity) && (entity.shouldShowName() || entity.hasCustomName() && entity == this.entityRenderDispatcher.crosshairPickEntity);
     }
 
+    @Override
     protected void scale(EntityBoneSerpentPart entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         this.model = entitylivingbaseIn.isTail() ? tailModel : bodyModel;
       //  matrixStackIn.scale(1.2F, 1.2F, 1.2F);
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityBoneSerpentPart entity) {
         return entity.isTail() ? TEXTURE_TAIL : TEXTURE_BODY;
     }

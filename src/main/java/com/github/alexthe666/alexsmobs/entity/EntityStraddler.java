@@ -1,5 +1,7 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Set;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.StraddlerAIShoot;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
@@ -7,6 +9,8 @@ import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.google.common.collect.Sets;
+import net.neoforged.neoforge.common.NeoForgeMod;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -20,7 +24,11 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -49,9 +57,6 @@ import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.neoforged.neoforge.common.NeoForgeMod;
-
-import java.util.Set;
 
 public class EntityStraddler extends Monster implements IAnimatedEntity {
 
@@ -67,14 +72,17 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
         this.setPathfindingMalus(PathType.DAMAGE_FIRE, 0.0F);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.STRADDLER_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.STRADDLER_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.STRADDLER_HURT.get();
     }
@@ -102,10 +110,12 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
         this.entityData.set(STRADPOLE_COUNT, index);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.straddlerSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new StraddlerAIShoot(this, 0.5F, 30, 16));
         this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1.0D, 60));
@@ -117,6 +127,7 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, true));
     }
 
+    @Override
     protected void checkFallDamage(double p_184231_1_, boolean p_184231_3_, BlockState p_184231_4_, BlockPos p_184231_5_) {
         this.checkInsideBlocks();
         if (this.isInLava()) {
@@ -126,6 +137,7 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
         }
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         this.setSpeed((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED) * (this.getAnimation() == ANIMATION_LAUNCH ? 0.5F : 1F) * (isInLava() ? 0.2F : 1F));
         if (this.isEffectiveAi() && (this.isInWater() || this.isInLava())) {
@@ -158,14 +170,17 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
 
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
 
+    @Override
     protected float nextStep() {
         return this.moveDist + 0.6F;
     }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         if (worldIn.getBlockState(pos).getFluidState().is(FluidTags.LAVA)) {
             return 10.0F;
@@ -174,6 +189,7 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
         }
     }
 
+    @Override
     public Vec3 getDismountLocationForPassenger(LivingEntity livingEntity) {
         Vec3[] avector3d = new Vec3[]{getCollisionHorizontalEscapeVector(this.getBbWidth(), livingEntity.getBbWidth(), livingEntity.getYRot()), getCollisionHorizontalEscapeVector(this.getBbWidth(), livingEntity.getBbWidth(), livingEntity.getYRot() - 22.5F), getCollisionHorizontalEscapeVector(this.getBbWidth(), livingEntity.getBbWidth(), livingEntity.getYRot() + 22.5F), getCollisionHorizontalEscapeVector(this.getBbWidth(), livingEntity.getBbWidth(), livingEntity.getYRot() - 45.0F), getCollisionHorizontalEscapeVector(this.getBbWidth(), livingEntity.getBbWidth(), livingEntity.getYRot() + 45.0F)};
         Set<BlockPos> set = Sets.newLinkedHashSet();
@@ -210,24 +226,29 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
         return new Vec3(this.getX(), this.getBoundingBox().maxY, this.getZ());
     }
 
+    @Override
     public boolean isOnFire() {
         return false;
     }
 
+    @Override
     public boolean canStandOnFluid(FluidState p_230285_1_) {
         return p_230285_1_.is(FluidTags.LAVA);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("StradpoleCount", getStradpoleCount());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setStradpoleCount(compound.getInt("StradpoleCount"));
     }
 
+    @Override
     public void tick() {
         super.tick();
         this.floatStrider();
@@ -283,6 +304,7 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
         return new Animation[]{ANIMATION_LAUNCH};
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new LavaPathNavigator(this, worldIn);
     }
@@ -296,15 +318,18 @@ public class EntityStraddler extends Monster implements IAnimatedEntity {
             super(p_i231565_1_, p_i231565_2_);
         }
 
+        @Override
         protected PathFinder createPathFinder(int p_179679_1_) {
             this.nodeEvaluator = new WalkNodeEvaluator();
             return new PathFinder(this.nodeEvaluator, p_179679_1_);
         }
 
+        @Override
         protected boolean hasValidPathType(PathType p_230287_1_) {
             return p_230287_1_ == PathType.LAVA || p_230287_1_ == PathType.DAMAGE_FIRE || p_230287_1_ == PathType.DANGER_FIRE || super.hasValidPathType(p_230287_1_);
         }
 
+        @Override
         public boolean isStableDestination(BlockPos pos) {
             return this.level.getBlockState(pos).is(Blocks.LAVA) || super.isStableDestination(pos);
         }

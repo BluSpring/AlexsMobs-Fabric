@@ -1,9 +1,14 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.EnumSet;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -17,7 +22,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -38,9 +47,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-
 public class EntitySpectre extends Animal implements FlyingAnimal {
 
     private static final EntityDataAccessor<Integer> CARDINAL_ORDINAL = SynchedEntityData.defineId(EntitySpectre.class, EntityDataSerializers.INT);
@@ -54,6 +60,7 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
     }
 
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.spectreSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -63,14 +70,17 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
         return true;
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.SPECTRE_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.SPECTRE_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.SPECTRE_HURT.get();
     }
@@ -106,6 +116,7 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
         return false;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new TemptHeartGoal(this, 1.0D, Ingredient.of(AMItemRegistry.SOUL_HEART.get()), false));
         this.goalSelector.addGoal(2, new FlyGoal(this));
@@ -116,6 +127,7 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
         return !source.is(DamageTypes.MAGIC) && !source.is(DamageTypes.FELL_OUT_OF_WORLD) && !source.isCreativePlayer() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) || super.isInvulnerableTo(source);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.setXRot(0.0F);
@@ -124,21 +136,26 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
 
     }
 
+    @Override
     public float getLightLevelDependentMagicValue() {
         return 1.0F;
     }
 
+    @Override
     public boolean isNoGravity() {
         return true;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     public void tick() {
         super.tick();
         Vec3 vector3d1 = this.getDeltaMovement();
@@ -202,6 +219,7 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
             this.parentEntity = sunbird;
         }
 
+        @Override
         public void tick() {
             if (this.operation == MoveControl.Operation.MOVE_TO) {
                 Vec3 vector3d = new Vec3(this.wantedX - parentEntity.getX(), this.wantedY - parentEntity.getY(), this.wantedZ - parentEntity.getZ());
@@ -252,6 +270,7 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
+        @Override
         public boolean canUse() {
             if (parentEntity.lurePos != null) {
                 return false;
@@ -269,10 +288,12 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
             return false;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return parentEntity.lurePos == null;
         }
 
+        @Override
         public void stop() {
             island = false;
             islandCheckTime = 0;
@@ -282,6 +303,7 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
             target = null;
         }
 
+        @Override
         public void tick() {
             if (islandCheckTime-- <= 0) {
                 islandCheckTime = 20;
@@ -359,6 +381,7 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
             this.temptItem = p_i47823_5_;
         }
 
+        @Override
         public boolean canUse() {
             if (this.delayTemptCounter > 0) {
                 --this.delayTemptCounter;
@@ -377,20 +400,24 @@ public class EntitySpectre extends Animal implements FlyingAnimal {
             return this.temptItem.test(p_188508_1_);
         }
 
+        @Override
         public boolean canContinueToUse() {
             return this.canUse();
         }
 
+        @Override
         public void start() {
             creature.lurePos = this.closestPlayer.position();
         }
 
+        @Override
         public void stop() {
             this.closestPlayer = null;
             this.delayTemptCounter = 100;
             creature.lurePos = null;
         }
 
+        @Override
         public void tick() {
             this.creature.getLookControl().setLookAt(this.closestPlayer, (float) (this.creature.getMaxHeadYRot() + 20), (float) this.creature.getMaxHeadXRot());
             if (this.creature.distanceToSqr(this.closestPlayer) < 6.25D) {

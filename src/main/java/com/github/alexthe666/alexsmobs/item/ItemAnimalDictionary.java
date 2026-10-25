@@ -1,7 +1,10 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.List;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.*;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.chat.Component;
@@ -17,8 +20,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import java.util.List;
-
 public class ItemAnimalDictionary extends Item {
     public ItemAnimalDictionary(Properties properties) {
         super(properties);
@@ -29,8 +30,7 @@ public class ItemAnimalDictionary extends Item {
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity target, InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
-        if (playerIn instanceof ServerPlayer) {
-            ServerPlayer serverplayerentity = (ServerPlayer)playerIn;
+        if (playerIn instanceof ServerPlayer serverplayerentity) {
             CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, itemStackIn);
             serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
         }
@@ -57,11 +57,11 @@ public class ItemAnimalDictionary extends Item {
         return InteractionResult.CONSUME;
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack itemStackIn = playerIn.getItemInHand(handIn);
         if (!usedOnEntity) {
-            if (playerIn instanceof ServerPlayer) {
-                ServerPlayer serverplayerentity = (ServerPlayer) playerIn;
+            if (playerIn instanceof ServerPlayer serverplayerentity) {
                 CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, itemStackIn);
                 serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
             }

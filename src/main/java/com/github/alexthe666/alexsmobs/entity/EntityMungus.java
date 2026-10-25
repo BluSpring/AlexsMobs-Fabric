@@ -1,5 +1,13 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
@@ -11,6 +19,8 @@ import com.github.alexthe666.alexsmobs.message.MessageMungusBiomeChange;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.alexsmobs.mixin.LevelChunkSectionAccessor;
+import net.neoforged.neoforge.common.IShearable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
@@ -36,10 +46,21 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Shearable;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
@@ -58,17 +79,17 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.*;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.LevelChunkSection;
+import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.level.chunk.PalettedContainerRO;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Optional;
-
-public class EntityMungus extends Animal implements ITargetsDroppedItems, Shearable, net.neoforged.neoforge.common.IShearable {
+public class EntityMungus extends Animal implements ITargetsDroppedItems, Shearable, IShearable {
 
     protected static final EntityDataAccessor<Optional<BlockPos>> TARGETED_BLOCK_POS = SynchedEntityData.defineId(EntityMungus.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
     private static final EntityDataAccessor<Boolean> ALT_ORDER_MUSHROOMS = SynchedEntityData.defineId(EntityMungus.class, EntityDataSerializers.BOOLEAN);
@@ -129,22 +150,27 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
 
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.MUNGUS_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.MUNGUS_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.MUNGUS_HURT.get();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.mungusSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(1, new FloatGoal(this));
@@ -159,6 +185,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         this.targetSelector.addGoal(2, new MungusAIAlertBunfungus(this, EntityBunfungus.class));
     }
 
+    @Override
     public void tick(){
         super.tick();
         if (!this.level().isClientSide && this.isAlive() && !this.isBaby() && --this.timeUntilNextEgg <= 0) {
@@ -169,6 +196,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         }
     }
 
+    @Override
     public void baseTick() {
         super.baseTick();
         this.prevSwellProgress = swellProgress;
@@ -197,6 +225,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         }
     }
 
+    @Override
     protected void tickDeath() {
         super.tickDeath();
         if (this.getMushroomCount() >= 5 && AMConfig.mungusBiomeTransformationType > 0 && !this.isBaby() && !this.entityData.get(EXPLOSION_DISABLED)) {
@@ -328,7 +357,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
             for(int k = 0; k < 4; ++k) {
                 for(int l = 0; l < 4; ++l) {
                     for(int i1 = 0; i1 < 4; ++i1) {
-                        container.getAndSetUnchecked(k, l, i1, ((ServerLevel) level()).getUncachedNoiseBiome(lvt_4_1_ + k, yChunk + l, lvt_5_1_ + i1));
+                        container.getAndSetUnchecked(k, l, i1, level().getUncachedNoiseBiome(lvt_4_1_ + k, yChunk + l, lvt_5_1_ + i1));
                     }
                 }
             }
@@ -370,6 +399,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         return false;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -395,6 +425,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         }
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if (prev) {
@@ -417,6 +448,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         builder.define(SACK_SWELL, 0);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         BlockState blockstate = this.getMushroomState();
@@ -433,6 +465,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         compound.putInt("EggTime", this.timeUntilNextEgg);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         BlockState blockstate = null;
@@ -455,6 +488,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         }
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         if (this.getBeamTarget() != null) {
@@ -489,8 +523,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
                 }
                 if (beamCounter > 200) {
                     BlockState state = level().getBlockState(t);
-                    if (state.getBlock() instanceof BonemealableBlock) {
-                        BonemealableBlock igrowable = (BonemealableBlock) state.getBlock();
+                    if (state.getBlock() instanceof BonemealableBlock igrowable) {
                         boolean flag = false;
                         if (igrowable.isValidBonemealTarget(this.level(), t, state)) {
                             for (int i = 0; i < 5; i++) {
@@ -538,10 +571,12 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         }
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.MUNGUS_BREEDABLES);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         this.entityData.set(ALT_ORDER_MUSHROOMS, random.nextBoolean());
@@ -622,18 +657,19 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
 
     private boolean hasLineOfSightMushroom(BlockPos destinationBlock) {
         Vec3 Vector3d = new Vec3(this.getX(), this.getEyeY(), this.getZ());
-        Vec3 blockVec = net.minecraft.world.phys.Vec3.atCenterOf(destinationBlock);
+        Vec3 blockVec = Vec3.atCenterOf(destinationBlock);
         BlockHitResult result = this.level().clip(new ClipContext(Vector3d, blockVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         return result.getBlockPos().equals(destinationBlock);
     }
 
 
+    @Override
     public boolean readyForShearing() {
         return this.isAlive() && this.getMushroomState() != null && this.getMushroomCount() > 0;
     }
 
     @Override
-    public boolean isShearable(@javax.annotation.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
+    public boolean isShearable(@Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         return readyForShearing();
     }
 
@@ -652,9 +688,9 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
         }
     }
 
-    @javax.annotation.Nonnull
+    @Nonnull
     @Override
-    public java.util.List<ItemStack> onSheared(@javax.annotation.Nullable Player player, ItemStack item, Level level, BlockPos pos) {
+    public List<ItemStack> onSheared(@Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         if (player != null) {
             level().playSound(null, this, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
@@ -667,7 +703,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
             }
 
         }
-        return java.util.Collections.emptyList();
+        return Collections.emptyList();
     }
 
     public boolean isReverting() {
@@ -688,6 +724,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
             searchLength = 20;
         }
 
+        @Override
         public boolean canContinueToUse() {
             return destinationBlock != null && EntityMungus.this.isMushroomTarget(destinationBlock.mutable()) && isCloseToShroom(32);
         }
@@ -710,9 +747,11 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
             }
         }
 
+        @Override
         public void start() {
         }
 
+        @Override
         public void tick() {
             if (this.destinationBlock == null || !EntityMungus.this.isMushroomTarget(this.destinationBlock) || EntityMungus.this.beamCounter < 0) {
                 stop();
@@ -728,6 +767,7 @@ public class EntityMungus extends Animal implements ITargetsDroppedItems, Sheara
             }
         }
 
+        @Override
         public void stop() {
             EntityMungus.this.setBeamTarget(null);
         }

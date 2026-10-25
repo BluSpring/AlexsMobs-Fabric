@@ -1,5 +1,10 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHurtByTargetNotBaby;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIPanicBaby;
@@ -11,6 +16,11 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -24,10 +34,21 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.monster.Monster;
@@ -44,12 +65,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.UUID;
 
 public class EntityMoose extends Animal implements IAnimatedEntity {
 
@@ -87,14 +102,17 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 55D).add(Attributes.ATTACK_DAMAGE, 7.5D).add(Attributes.MOVEMENT_SPEED, 0.25F).add(Attributes.KNOCKBACK_RESISTANCE, 0.5F).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.mooseSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected float getWaterSlowDown() {
         return 0.98F;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new MooseAIJostle(this));
@@ -109,6 +127,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
         this.targetSelector.addGoal(1, (new AnimalAIHurtByTargetNotBaby(this)));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 6) {
@@ -124,6 +143,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
 
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         if (stack.is(AMTagRegistry.MOOSE_BREEDABLES) && !this.isInLove() && this.getAge() == 0) {
             if (this.getRandom().nextInt(5) == 0) {
@@ -136,12 +156,14 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
         return false;
     }
 
+    @Override
     public void setTarget(@Nullable LivingEntity entitylivingbaseIn) {
         if (!this.isBaby()) {
             super.setTarget(entitylivingbaseIn);
         }
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             this.setAnimation(ANIMATION_ATTACK);
@@ -159,6 +181,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
         builder.define(JOSTLER_UUID, Optional.empty());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setSnowy(compound.getBoolean("Snowy"));
@@ -171,6 +194,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
 
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Snowy", this.isSnowy());
@@ -180,6 +204,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
         compound.putInt("JostlingCooldown", this.jostleCooldown);
     }
 
+    @Override
     public void tick() {
         super.tick();
         prevJostleProgress = jostleProgress;
@@ -250,6 +275,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -262,14 +288,17 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
         }
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.MOOSE_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.MOOSE_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.MOOSE_HURT.get();
     }
@@ -316,6 +345,7 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
         this.entityData.set(SNOWY, Boolean.valueOf(honeyed));
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -363,8 +393,8 @@ public class EntityMoose extends Animal implements IAnimatedEntity {
     }
 
     private void applyKnockbackFromMoose(float strength, double ratioX, double ratioZ) {
-        net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent event = new net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent(this, strength, ratioX, ratioZ);
-        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(event);
+        LivingKnockBackEvent event = new LivingKnockBackEvent(this, strength, ratioX, ratioZ);
+        NeoForge.EVENT_BUS.post(event);
         if (event.isCanceled()) return;
         strength = event.getStrength();
         ratioX = event.getRatioX();

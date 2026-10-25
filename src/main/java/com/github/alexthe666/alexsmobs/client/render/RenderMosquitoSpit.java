@@ -24,10 +24,11 @@ public class RenderMosquitoSpit extends EntityRenderer<EntityMosquitoSpit> {
         this.model = new LlamaSpitModel<>(renderManagerIn.bakeLayer(ModelLayers.LLAMA_SPIT));
     }
 
+    @Override
     public void render(EntityMosquitoSpit entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
-            MultiBufferSource bufferIn, int packedLightIn) {
+                       MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
-        matrixStackIn.translate(0.0D, (double) 0.15F, 0.0D);
+        matrixStackIn.translate(0.0D, 0.15F, 0.0D);
         matrixStackIn
                 .mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 90.0F));
         matrixStackIn.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot())));
@@ -40,6 +41,7 @@ public class RenderMosquitoSpit extends EntityRenderer<EntityMosquitoSpit> {
     /**
      * Returns the location of an entity's texture.
      */
+    @Override
     public ResourceLocation getTextureLocation(EntityMosquitoSpit entity) {
         return SPIT_TEXTURE;
     }

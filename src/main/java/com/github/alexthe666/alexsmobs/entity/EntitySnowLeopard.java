@@ -1,13 +1,21 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AdvancedPathNavigateNoTeleport;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHurtByTargetNotBaby;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIPanicBaby;
+import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
+import com.github.alexthe666.alexsmobs.entity.ai.SnowLeopardAIMelee;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -16,10 +24,19 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
@@ -31,8 +48,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
 
 public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITargetsDroppedItems {
 
@@ -60,10 +75,12 @@ public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITarge
         super(type, worldIn);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new AdvancedPathNavigateNoTeleport(this, worldIn, false);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.snowLeopardSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -72,17 +89,21 @@ public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITarge
         return worldIn.getBlockState(p_223317_3_.below()).is(AMTagRegistry.SNOW_LEOPARD_SPAWNS) && worldIn.getRawBrightness(p_223317_3_, 0) > 8;
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.SNOW_LEOPARD_BREEDABLES);
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new AnimalAIPanicBaby(this, 1.25D));
@@ -101,14 +122,17 @@ public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITarge
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30D).add(Attributes.ATTACK_DAMAGE, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.35F).add(Attributes.FOLLOW_RANGE, 64F).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.SNOW_LEOPARD_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.SNOW_LEOPARD_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.SNOW_LEOPARD_HURT.get();
     }
@@ -152,6 +176,7 @@ public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITarge
         return AMEntityRegistry.SNOW_LEOPARD.get().create(serverWorld);
     }
 
+    @Override
     public void tick(){
         super.tick();
         this.prevSitProgress = sitProgress;
@@ -258,6 +283,7 @@ public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITarge
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         final boolean prev = super.hurt(source, amount);
         if (prev) {
@@ -268,6 +294,7 @@ public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITarge
         return prev;
     }
 
+    @Override
     public void travel(Vec3 vec3d) {
         if (this.isSitting() || this.isSleeping()) {
             if (this.getNavigation().getPath() != null) {
@@ -278,10 +305,12 @@ public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITarge
         super.travel(vec3d);
     }
 
+    @Override
     protected boolean isImmobile() {
         return super.isImmobile();
     }
 
+    @Override
     public boolean isSleeping() {
         return this.entityData.get(SLEEPING);
     }
@@ -317,7 +346,7 @@ public class EntitySnowLeopard extends Animal implements IAnimatedEntity, ITarge
 
     @Override
     public boolean canTargetItem(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) && stack.getFoodProperties(this) != null;
+        return stack.has(DataComponents.FOOD) && stack.getFoodProperties(this) != null;
     }
 
     @Override

@@ -114,6 +114,7 @@ public class ModelOrca extends AdvancedEntityModel<EntityOrca> {
 
     }
 
+    @Override
     public void renderToBuffer(PoseStack matrixStackIn, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (this.young) {
             matrixStackIn.pushPose();

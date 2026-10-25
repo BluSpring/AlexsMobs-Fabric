@@ -30,7 +30,7 @@ public class RenderPollenBall extends EntityRenderer<EntityPollenBall> {
             MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
         matrixStackIn.pushPose();
-        matrixStackIn.translate(0.0D, (double) -0.25F, 0.0D);
+        matrixStackIn.translate(0.0D, -0.25F, 0.0D);
         matrixStackIn
                 .mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 180F));
         matrixStackIn.pushPose();

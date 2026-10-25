@@ -79,10 +79,12 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
         this.lookControl = new SmoothSwimmingLookControl(this, 10);
     }
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !this.isTame();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.orcaSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -91,6 +93,7 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 60.0D).add(Attributes.FOLLOW_RANGE, 64.0D).add(Attributes.ARMOR, 0.0D).add(Attributes.ATTACK_DAMAGE, 10.0D).add(Attributes.KNOCKBACK_RESISTANCE, 0.7F).add(Attributes.MOVEMENT_SPEED, 1.35F);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new SwimmerJumpPathNavigator(this, worldIn);
     }
@@ -131,18 +134,22 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
         }
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.ORCA_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.ORCA_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.ORCA_DIE.get();
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BreathAirGoal(this));
         this.goalSelector.addGoal(1, new TryFindWaterGoal(this));
@@ -174,6 +181,7 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
         return new Animation[]{ANIMATION_BITE, ANIMATION_TAILSWING};
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), travelVector);
@@ -188,6 +196,7 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
 
     }
 
+    @Override
     public void customServerAiStep() {
         super.customServerAiStep();
         breakBlock();
@@ -228,6 +237,7 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
         }
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (jumpCooldown > 0) {
@@ -315,6 +325,7 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
         animationTick = tick;
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if(this.isInWaterOrBubble() && random.nextBoolean()){
             this.setAnimation(ANIMATION_TAILSWING);
@@ -324,10 +335,12 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
         return true;
     }
 
+    @Override
     public int getMaxAirSupply() {
         return 4800;
     }
 
+    @Override
     protected int increaseAirSupply(int currentAir) {
         return this.getMaxAirSupply();
     }
@@ -336,14 +349,17 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
         return 1.0F;
     }
 
+    @Override
     public int getMaxHeadXRot() {
         return 1;
     }
 
+    @Override
     public int getMaxHeadYRot() {
         return 1;
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.getItem() == Items.SALMON;
     }
@@ -363,6 +379,7 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
         }
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType
             reason, @Nullable SpawnGroupData spawnDataIn) {
@@ -375,16 +392,19 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
 
     // Orca is a mammal and cannot breathe underwater - default behavior is correct
 
+    @Override
     public void baseTick() {
         int i = this.getAirSupply();
         super.baseTick();
         this.updateAir(i);
     }
 
+    @Override
     public boolean isPushedByFluid() {
         return false;
     }
 
+    @Override
     public boolean checkSpawnObstruction(LevelReader worldIn) {
         return worldIn.isUnobstructed(this);
     }
@@ -392,12 +412,14 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
     protected void updateAir(int p_209207_1_) {
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Moistness", this.getMoistness());
         compound.putInt("Variant", this.getVariant());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setMoistness(compound.getInt("Moistness"));
@@ -431,6 +453,7 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
 
+        @Override
         public boolean canUse() {
             this.targetPlayer = this.dolphin.level().getNearestPlayer(EntityOrca.PLAYER_PREDICATE, this.dolphin);
             if (this.targetPlayer == null) {
@@ -440,18 +463,22 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
             }
         }
 
+        @Override
         public boolean canContinueToUse() {
             return this.targetPlayer != null  && this.dolphin.getTarget() != this.targetPlayer && this.targetPlayer.isSwimming() && this.dolphin.distanceToSqr(this.targetPlayer) < 256.0D;
         }
 
+        @Override
         public void start() {
         }
 
+        @Override
         public void stop() {
             this.targetPlayer = null;
             this.dolphin.getNavigation().stop();
         }
 
+        @Override
         public void tick() {
             this.dolphin.getLookControl().setLookAt(this.targetPlayer, (float) (this.dolphin.getMaxHeadYRot() + 20), (float) this.dolphin.getMaxHeadXRot());
             if (this.dolphin.distanceToSqr(this.targetPlayer) < 10D) {
@@ -474,6 +501,7 @@ public class EntityOrca extends TamableAnimal implements IAnimatedEntity {
             this.dolphin = dolphinIn;
         }
 
+        @Override
         public void tick() {
             if (this.dolphin.isInWater()) {
                 this.dolphin.setDeltaMovement(this.dolphin.getDeltaMovement().add(0.0D, 0.005D, 0.0D));

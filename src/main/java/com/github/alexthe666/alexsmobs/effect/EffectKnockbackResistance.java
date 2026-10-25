@@ -24,6 +24,7 @@ public class EffectKnockbackResistance extends MobEffect {
         return duration > 0;
     }
 
+    @Override
     public String getDescriptionId() {
         return "alexsmobs.potion.knockback_resistance";
     }

@@ -16,10 +16,12 @@ public class RenderMudskipper extends MobRenderer<EntityMudskipper, ModelMudskip
     }
 
 
+    @Override
     protected void scale(EntityMudskipper rabbit, PoseStack matrixStackIn, float partialTickTime) {
 
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityMudskipper entity) {
         return entity.isMouthOpen() ? TEXTURE_SPIT : TEXTURE;
     }

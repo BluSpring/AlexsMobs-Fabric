@@ -20,6 +20,7 @@ public class LayerMimicubeHeldItem extends RenderLayer<EntityMimicube, ModelMimi
         super(render);
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityMimicube entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack itemRight = entitylivingbaseIn.getMainHandItem();
         ItemStack itemLeft = entitylivingbaseIn.getOffhandItem();

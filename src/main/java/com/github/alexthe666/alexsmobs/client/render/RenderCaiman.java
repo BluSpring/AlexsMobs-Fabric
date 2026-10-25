@@ -13,6 +13,7 @@ public class RenderCaiman extends MobRenderer<EntityCaiman, ModelCaiman> {
         super(renderManagerIn, new ModelCaiman(), 0.4F);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityCaiman entity) {
         return TEXTURE;
     }

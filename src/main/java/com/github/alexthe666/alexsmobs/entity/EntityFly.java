@@ -1,10 +1,21 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.base.Predicate;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -18,11 +29,22 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
@@ -34,21 +56,16 @@ import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.stream.Stream;
 
 public class EntityFly extends Animal implements FlyingAnimal {
 
@@ -65,13 +82,16 @@ public class EntityFly extends Animal implements FlyingAnimal {
         this.setPathfindingMalus(PathType.FENCE, -1.0F);
     }
 
+    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {}
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("NoFlyDespawn", this.isNoDespawn());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setNoDespawn(compound.getBoolean("NoFlyDespawn"));
@@ -96,14 +116,17 @@ public class EntityFly extends Animal implements FlyingAnimal {
         return reason == MobSpawnType.SPAWNER || pos.getY() > 63 && random.nextInt(4) == 0 && worldIn.getRawBrightness(pos, 0) > 8 && worldIn.getBrightness(LightLayer.BLOCK, pos) == 0 && worldIn.getBlockState(pos.below()).is(AMTagRegistry.FLY_SPAWNS);
     }
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !requiresCustomPersistence();
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return this.isNoDespawn()  || this.hasCustomName() || this.isLeashed() || super.requiresCustomPersistence();
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.flySpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -113,26 +136,32 @@ public class EntityFly extends Animal implements FlyingAnimal {
     }
 
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.FLY_IDLE.get();
     }
 
+    @Override
     public int getAmbientSoundInterval() {
         return 30;
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.FLY_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.FLY_HURT.get();
     }
 
+    @Override
     public int getMaxSpawnClusterSize() {
         return 2;
     }
 
+    @Override
     public boolean isMaxGroupSizeReached(int sizeIn) {
         return false;
     }
@@ -141,10 +170,12 @@ public class EntityFly extends Animal implements FlyingAnimal {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 2.0D).add(Attributes.FLYING_SPEED, 0.8F).add(Attributes.ATTACK_DAMAGE, 1.0D).add(Attributes.MOVEMENT_SPEED, 0.25F);
     }
 
+    @Override
     public float getWalkTargetValue(BlockPos pos, LevelReader worldIn) {
         return worldIn.getBlockState(pos).isAir() ? 10.0F : 0.0F;
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(2, new TemptGoal(this, 1.25D, Ingredient.fromValues(Stream.of(new Ingredient.TagValue(AMTagRegistry.FLY_BREEDABLES), new Ingredient.TagValue(AMTagRegistry.FLY_FOODSTUFFS))), false));
@@ -155,8 +186,10 @@ public class EntityFly extends Animal implements FlyingAnimal {
         this.goalSelector.addGoal(6, new FloatGoal(this));
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         FlyingPathNavigation flyingpathnavigator = new FlyingPathNavigation(this, worldIn) {
+            @Override
             public boolean isStableDestination(BlockPos pos) {
                 return !this.level.getBlockState(pos.below()).isAir();
             }
@@ -171,14 +204,17 @@ public class EntityFly extends Animal implements FlyingAnimal {
         return this.isBaby() ? sizeIn.height() * 0.5F : sizeIn.height() * 0.5F;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
         fallDistance = 0;
     }
 
+    @Override
     public void tick(){
         super.tick();
 
@@ -204,6 +240,7 @@ public class EntityFly extends Animal implements FlyingAnimal {
         }
     }
 
+    @Override
     public InteractionResult mobInteract(Player p_230254_1_, InteractionHand p_230254_2_) {
         ItemStack lvt_3_1_ = p_230254_1_.getItemInHand(p_230254_2_);
         if(lvt_3_1_.is(AMTagRegistry.FLY_FOODSTUFFS)){
@@ -222,15 +259,18 @@ public class EntityFly extends Animal implements FlyingAnimal {
         return true;
     }
 
+    @Override
     protected void jumpInLiquid(TagKey<Fluid> fluidTag) {
         this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.01D, 0.0D));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public Vec3 getLeashOffset() {
         return new Vec3(0.0D, 0.5F * this.getEyeHeight(), this.getBbWidth() * 0.2F);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.FLY_BREEDABLES);
     }
@@ -257,6 +297,7 @@ public class EntityFly extends Animal implements FlyingAnimal {
          * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
          * method as well.
          */
+        @Override
         public boolean canUse() {
             return EntityFly.this.navigation.isDone() && EntityFly.this.random.nextInt(3) == 0;
         }
@@ -264,6 +305,7 @@ public class EntityFly extends Animal implements FlyingAnimal {
         /**
          * Returns whether an in-progress EntityAIBase should continue executing
          */
+        @Override
         public boolean canContinueToUse() {
             return EntityFly.this.navigation.isInProgress();
         }
@@ -271,6 +313,7 @@ public class EntityFly extends Animal implements FlyingAnimal {
         /**
          * Execute a one shot task or start executing a continuous task
          */
+        @Override
         public void start() {
             Vec3 vector3d = this.getRandomLocation();
             if (vector3d != null) {
@@ -284,7 +327,7 @@ public class EntityFly extends Animal implements FlyingAnimal {
             Vec3   vec3 = EntityFly.this.getViewVector(0.0F);
             int i = 8;
             Vec3 vec32 = HoverRandomPos.getPos(EntityFly.this, 8, 7, vec3.x, vec3.z, Mth.HALF_PI, 3, 1);
-            return vec32 != null ? vec32 : AirAndWaterRandomPos.getPos(EntityFly.this, 8, 4, -2, vec3.x, vec3.z, (double)Mth.HALF_PI);
+            return vec32 != null ? vec32 : AirAndWaterRandomPos.getPos(EntityFly.this, 8, 4, -2, vec3.x, vec3.z, Mth.HALF_PI);
         }
     }
 
@@ -337,6 +380,7 @@ public class EntityFly extends Animal implements FlyingAnimal {
             return targetEntity != null;
         }
 
+        @Override
         public void stop() {
             this.targetEntity = null;
         }
@@ -380,6 +424,7 @@ public class EntityFly extends Animal implements FlyingAnimal {
 
 
         public record Sorter(Entity theEntity) implements Comparator<Entity> {
+            @Override
             public int compare(Entity p_compare_1_, Entity p_compare_2_) {
                 final double d0 = this.theEntity.distanceToSqr(p_compare_1_);
                 final double d1 = this.theEntity.distanceToSqr(p_compare_2_);

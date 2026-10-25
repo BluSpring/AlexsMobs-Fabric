@@ -22,6 +22,7 @@ public class RenderKangaroo extends MobRenderer<EntityKangaroo, ModelKangaroo> {
 
     }
 
+    @Override
     public boolean shouldRender(EntityKangaroo kangaroo, Frustum p_225626_2_, double p_225626_3_, double p_225626_5_, double p_225626_7_) {
         if(kangaroo.isBaby() && kangaroo.isPassenger() && kangaroo.getVehicle() instanceof EntityKangaroo){
             return false;
@@ -29,9 +30,11 @@ public class RenderKangaroo extends MobRenderer<EntityKangaroo, ModelKangaroo> {
         return super.shouldRender(kangaroo, p_225626_2_, p_225626_3_, p_225626_5_, p_225626_7_);
     }
 
+    @Override
     protected void scale(EntityKangaroo entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityKangaroo entity) {
         return TEXTURE;
     }

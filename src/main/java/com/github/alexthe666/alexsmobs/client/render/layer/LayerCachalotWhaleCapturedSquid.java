@@ -24,6 +24,7 @@ public class LayerCachalotWhaleCapturedSquid  extends RenderLayer<EntityCachalot
         super(render);
     }
 
+    @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityCachalotWhale whale, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if(whale.hasCaughtSquid() && whale.isAlive()){
             Entity squid = whale.getCaughtSquid();

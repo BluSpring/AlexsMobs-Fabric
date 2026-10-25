@@ -31,10 +31,12 @@ public class BlockEnderResidue extends TransparentBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(AGE, Integer.valueOf(0)).setValue(SLOW_DECAY, false));
     }
 
+    @Override
     public void randomTick(BlockState p_53588_, ServerLevel p_53589_, BlockPos p_53590_, RandomSource p_53591_) {
         this.tick(p_53588_, p_53589_, p_53590_, p_53591_);
     }
 
+    @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (random.nextInt(state.getValue(SLOW_DECAY) ? 15 : 5) == 0) {
             BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
@@ -62,6 +64,7 @@ public class BlockEnderResidue extends TransparentBlock {
         }
     }
 
+    @Override
     public void neighborChanged(BlockState p_53579_, Level p_53580_, BlockPos p_53581_, Block p_53582_, BlockPos p_53583_, boolean p_53584_) {
         super.neighborChanged(p_53579_, p_53580_, p_53581_, p_53582_, p_53583_, p_53584_);
     }
@@ -83,10 +86,12 @@ public class BlockEnderResidue extends TransparentBlock {
         return true;
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_53586_) {
         p_53586_.add(AGE, SLOW_DECAY);
     }
 
+    @Override
     public ItemStack getCloneItemStack(LevelReader p_53570_, BlockPos p_53571_, BlockState p_53572_) {
         return ItemStack.EMPTY;
     }

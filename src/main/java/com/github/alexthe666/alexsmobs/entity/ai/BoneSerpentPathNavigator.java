@@ -19,6 +19,7 @@ public class BoneSerpentPathNavigator extends PathNavigation {
         super(entitylivingIn, worldIn);
     }
 
+    @Override
     protected PathFinder createPathFinder(int p_179679_1_) {
         this.nodeEvaluator = new BoneSerpentNodeProcessor();
         return new PathFinder(this.nodeEvaluator, p_179679_1_);
@@ -27,14 +28,17 @@ public class BoneSerpentPathNavigator extends PathNavigation {
     /**
      * If on ground or swimming and can swim
      */
+    @Override
     protected boolean canUpdatePath() {
         return true;
     }
 
+    @Override
     protected Vec3 getTempMobPos() {
         return new Vec3(this.mob.getX(), this.mob.getY(0.5D), this.mob.getZ());
     }
 
+    @Override
     public void tick() {
         ++this.tick;
         if (this.hasDelayedRecomputation) {
@@ -59,6 +63,7 @@ public class BoneSerpentPathNavigator extends PathNavigation {
         }
     }
 
+    @Override
     protected void followThePath() {
         if (this.path != null) {
             Vec3 vector3d = this.getTempMobPos();
@@ -87,6 +92,7 @@ public class BoneSerpentPathNavigator extends PathNavigation {
         }
     }
 
+    @Override
     protected void doStuckDetection(Vec3 positionVec3) {
         if (this.tick - this.lastStuckCheck > 100) {
             if (positionVec3.distanceToSqr(this.lastStuckCheckPos) < 2.25D) {
@@ -127,10 +133,12 @@ public class BoneSerpentPathNavigator extends PathNavigation {
         return this.level.clip(new ClipContext(posVec31, vector3d, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.mob)).getType() == HitResult.Type.MISS;
     }
 
+    @Override
     public boolean isStableDestination(BlockPos pos) {
         return !this.level.getBlockState(pos).isSolidRender(this.level, pos);
     }
 
+    @Override
     public void setCanFloat(boolean canSwim) {
     }
 }

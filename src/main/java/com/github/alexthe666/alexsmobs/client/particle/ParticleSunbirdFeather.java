@@ -1,8 +1,13 @@
 package com.github.alexthe666.alexsmobs.client.particle;
 
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
+
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SimpleAnimatedParticle;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 
@@ -26,6 +31,7 @@ public class ParticleSunbirdFeather extends SimpleAnimatedParticle {
         this.roll = f1 * 2F;
     }
 
+    @Override
     public void tick() {
         this.xo = this.x;
         this.yo = this.y;
@@ -42,10 +48,11 @@ public class ParticleSunbirdFeather extends SimpleAnimatedParticle {
                 this.roll += 0 + (float)Math.sin(age * 0.3F) * 0.5F * (this.age / (float)lifetime);
             }
             this.move(this.xd, this.yd, this.zd);
-            this.yd -= (double)this.gravity;
+            this.yd -= this.gravity;
         }
     }
 
+    @Override
     public int getLightColor(float p_189214_1_) {
         int lvt_2_1_ = super.getLightColor(p_189214_1_);
         int lvt_4_1_ = lvt_2_1_ >> 16 & 255;
@@ -64,6 +71,7 @@ public class ParticleSunbirdFeather extends SimpleAnimatedParticle {
             this.spriteSet = spriteSet;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             return new ParticleSunbirdFeather(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, spriteSet);
         }

@@ -1,11 +1,16 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
 import com.github.alexthe666.alexsmobs.entity.ai.JerboaAIBeg;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -22,12 +27,21 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.JumpControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.Ocelot;
@@ -41,10 +55,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
 
 public class EntityJerboa extends Animal {
 
@@ -85,11 +95,13 @@ public class EntityJerboa extends Animal {
         builder.define(BEFRIENDED, false);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new JerboaAIBeg(this, 1.0D));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new AvoidEntityGoal(this, Player.class, 5, 1.3D, 1.0D) {
+            @Override
             public boolean canUse() {
                 return !EntityJerboa.this.isBefriended() && super.canUse();
             }
@@ -103,39 +115,47 @@ public class EntityJerboa extends Animal {
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setBefriended(compound.getBoolean("Befriended"));
         this.setSleeping(compound.getBoolean("Sleeping"));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Befriended", isBefriended());
         compound.putBoolean("Sleeping", isSleeping());
     }
 
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return !requiresCustomPersistence();
     }
 
+    @Override
     public boolean requiresCustomPersistence() {
         return super.requiresCustomPersistence() || this.isBefriended();
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.JERBOA_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.JERBOA_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.JERBOA_HURT.get();
     }
 
 
+    @Override
     public void tick() {
         super.tick();
         this.prevJumpProgress = jumpProgress;
@@ -201,6 +221,7 @@ public class EntityJerboa extends Animal {
         this.entityData.set(BEGGING, Boolean.valueOf(begging));
     }
 
+    @Override
     public boolean isSleeping() {
         return this.entityData.get(SLEEPING);
     }
@@ -218,6 +239,7 @@ public class EntityJerboa extends Animal {
     }
 
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if ((itemstack.is(AMTagRegistry.JERBOA_BEGS_FOR) || isFood(itemstack)) && (this.getHealth() < this.getMaxHealth() || !this.isBefriended())) {
@@ -247,13 +269,13 @@ public class EntityJerboa extends Animal {
         return type;
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean prev = super.hurt(source, amount);
         if (prev) {
             this.setSleeping(false);
             if (source.getEntity() != null) {
-                if (source.getEntity() instanceof LivingEntity) {
-                    LivingEntity hurter = (LivingEntity) source.getEntity();
+                if (source.getEntity() instanceof LivingEntity hurter) {
                     if (hurter.hasEffect(AMEffectRegistry.FLEET_FOOTED)) {
                         hurter.removeEffect(AMEffectRegistry.FLEET_FOOTED);
                     }
@@ -264,6 +286,7 @@ public class EntityJerboa extends Animal {
         return prev;
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.JERBOA_BREEDABLES);
     }
@@ -276,14 +299,17 @@ public class EntityJerboa extends Animal {
         return this.jumpDuration == 0 ? 0.0F : ((float) this.jumpTicks + partialTicks) / (float) this.jumpDuration;
     }
 
+    @Override
     protected float getJumpPower() {
         return horizontalCollision ? super.getJumpPower() + 0.2F : 0.25F + random.nextFloat() * 0.15F;
     }
 
+    @Override
     public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -294,6 +320,7 @@ public class EntityJerboa extends Animal {
 
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.jerboaSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -306,6 +333,7 @@ public class EntityJerboa extends Animal {
         return reason == MobSpawnType.SPAWNER || iServerWorld.canSeeSky(pos.above()) && canMonsterSpawnInLight(entityType, iServerWorld, reason, pos, random);
     }
 
+    @Override
     public void jumpFromGround() {
         super.jumpFromGround();
         double d0 = this.moveControl.getSpeedModifier();
@@ -362,6 +390,7 @@ public class EntityJerboa extends Animal {
 
     }
 
+    @Override
     public void customServerAiStep() {
         super.customServerAiStep();
 
@@ -384,8 +413,7 @@ public class EntityJerboa extends Animal {
                     this.wasOnGround = true;
                 }
             }
-            if (this.jumpControl instanceof EntityJerboa.JumpHelperController) {
-                EntityJerboa.JumpHelperController rabbitController = (EntityJerboa.JumpHelperController) this.jumpControl;
+            if (this.jumpControl instanceof JumpHelperController rabbitController) {
                 if (!rabbitController.getIsJumping()) {
                     if (this.moveControl.hasWanted() && this.currentMoveTypeDuration == 0) {
                         Path path = this.navigation.getPath();
@@ -409,6 +437,7 @@ public class EntityJerboa extends Animal {
         this.wasOnGround = this.onGround();
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         if (this.jumpTicks != this.jumpDuration) {
@@ -420,6 +449,7 @@ public class EntityJerboa extends Animal {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte id) {
         if (id == 1) {
@@ -453,6 +483,7 @@ public class EntityJerboa extends Animal {
             this.jerboa = jerboa;
         }
 
+        @Override
         public void tick() {
             if (this.jerboa.hasJumper() && this.jerboa.onGround() && !this.jerboa.jumping && !((EntityJerboa.JumpHelperController) this.jerboa.jumpControl).getIsJumping()) {
                 this.jerboa.setMovementSpeed(0.0D);
@@ -473,6 +504,7 @@ public class EntityJerboa extends Animal {
         /**
          * Sets the speed and location to move to
          */
+        @Override
         public void setWantedPosition(double x, double y, double z, double speedIn) {
             if (this.jerboa.isInWater()) {
                 speedIn = 1.5D;
@@ -507,6 +539,7 @@ public class EntityJerboa extends Animal {
             this.canJump = canJumpIn;
         }
 
+        @Override
         public void tick() {
             if (this.jump) {
                 this.jerboa.startJumping();

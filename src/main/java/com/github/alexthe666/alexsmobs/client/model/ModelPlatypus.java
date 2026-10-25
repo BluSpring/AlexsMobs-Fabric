@@ -136,7 +136,7 @@ public class ModelPlatypus extends AdvancedEntityModel<EntityPlatypus> {
 
         }else{
             this.swing(tail, idleSpeed * 0.5F, idleDegree, false, 0F, 0F, ageInTicks, 1);
-            this.bob(body, walkSpeed * 1.75F, walkDegree * 1F, false, limbSwing, limbSwingAmount);
+            this.bob(body, walkSpeed * 1.75F, walkDegree, false, limbSwing, limbSwingAmount);
             this.swing(body, walkSpeed, walkDegree * 0.3F, false, 3F, 0F, limbSwing, limbSwingAmount);
             this.swing(head, walkSpeed, walkDegree * 0.2F, true, 3F, 0F, limbSwing, limbSwingAmount);
             this.walk(tail, walkSpeed, walkDegree * 0.3F, false, 3F, 0.1F, limbSwing, limbSwingAmount);

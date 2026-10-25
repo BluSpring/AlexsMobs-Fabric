@@ -19,6 +19,7 @@ public class RenderElephant extends MobRenderer<EntityElephant, ModelElephant> {
         this.addLayer(new LayerElephantItem(this));
     }
 
+    @Override
     protected void scale(EntityElephant entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
        if(entitylivingbaseIn.isTusked()){
            matrixStackIn.scale(1.1F, 1.1F, 1.1F);
@@ -26,6 +27,7 @@ public class RenderElephant extends MobRenderer<EntityElephant, ModelElephant> {
     }
 
 
+    @Override
     public ResourceLocation getTextureLocation(EntityElephant entity) {
         return entity.isTusked() && !entity.isBaby() ? TEXTURE_TUSK : TEXTURE;
     }

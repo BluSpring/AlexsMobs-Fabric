@@ -1,17 +1,18 @@
 package com.github.alexthe666.alexsmobs.client.render;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.client.model.ModelTarantulaHawk;
 import com.github.alexthe666.alexsmobs.client.model.ModelTarantulaHawkBaby;
 import com.github.alexthe666.alexsmobs.entity.EntityTarantulaHawk;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
-
-import javax.annotation.Nullable;
 
 public class RenderTarantulaHawk extends MobRenderer<EntityTarantulaHawk, EntityModel<EntityTarantulaHawk>> {
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("alexsmobs:textures/entity/tarantula_hawk.png");
@@ -25,6 +26,7 @@ public class RenderTarantulaHawk extends MobRenderer<EntityTarantulaHawk, Entity
         super(renderManagerIn, MODEL, 0.5F);
     }
 
+    @Override
     protected void scale(EntityTarantulaHawk entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         if(entitylivingbaseIn.isBaby()){
             this.model = MODEL_BABY;
@@ -36,6 +38,7 @@ public class RenderTarantulaHawk extends MobRenderer<EntityTarantulaHawk, Entity
         }
     }
 
+    @Override
     protected boolean isShaking(EntityTarantulaHawk hawk) {
         return hawk.isScared();
     }
@@ -53,6 +56,7 @@ public class RenderTarantulaHawk extends MobRenderer<EntityTarantulaHawk, Entity
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityTarantulaHawk entity) {
         return entity.isBaby() ? TEXTURE_BABY : entity.isNether() ? entity.isAngry() ? TEXTURE_NETHER_ANGRY : TEXTURE_NETHER : entity.isAngry() ? TEXTURE_ANGRY : TEXTURE;
     }

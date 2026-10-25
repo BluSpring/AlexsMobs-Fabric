@@ -4,6 +4,8 @@ import com.github.alexthe666.alexsmobs.entity.EntityElephant;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+import net.neoforged.neoforge.event.EventHooks;
+
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -30,27 +32,33 @@ public class ElephantAIForageLeaves extends MoveToBlockGoal {
         this.elephant = elephant;
     }
 
+    @Override
     public boolean canUse() {
         return !elephant.isBaby() && elephant.getControllingPassenger() == null && elephant.getControllingVillager() == null && elephant.getMainHandItem().isEmpty() && !elephant.aiItemFlag && super.canUse();
     }
 
+    @Override
     public void stop() {
         idleAtLeavesTime = 0;
     }
 
+    @Override
     public void start() {
         super.start();
         moveCooldown = 30 + elephant.getRandom().nextInt(50);
     }
 
+    @Override
     public double acceptedDistance() {
         return 4D;
     }
 
+    @Override
     public boolean shouldRecalculatePath() {
         return moveCooldown == 0;
     }
 
+    @Override
     public void tick() {
         if (moveCooldown > 0) {
             moveCooldown--;
@@ -92,6 +100,7 @@ public class ElephantAIForageLeaves extends MoveToBlockGoal {
     @Override
     protected void moveMobToBlock() {}
 
+    @Override
     protected int nextStartTick(PathfinderMob p_203109_1_) {
         return 100 + p_203109_1_.getRandom().nextInt(200);
     }
@@ -100,12 +109,13 @@ public class ElephantAIForageLeaves extends MoveToBlockGoal {
         return blockpos.distSqr(new BlockPos((int) positionVec.x(), blockpos.getY(), (int) positionVec.z())) < distance * distance;
     }
 
+    @Override
     protected boolean isReachedTarget() {
         return this.isAboveDestinationBear;
     }
 
     private void breakLeaves() {
-        if (net.neoforged.neoforge.event.EventHooks.canEntityGrief(elephant.level(), elephant)) {
+        if (EventHooks.canEntityGrief(elephant.level(), elephant)) {
             BlockState blockstate = elephant.level().getBlockState(this.blockPos);
             if (blockstate.is(AMTagRegistry.ELEPHANT_FOODBLOCKS)) {
                 elephant.level().destroyBlock(blockPos, false);
@@ -132,7 +142,7 @@ public class ElephantAIForageLeaves extends MoveToBlockGoal {
 
     private boolean canSeeBlock(BlockPos destinationBlock) {
         final Vec3 Vector3d = new Vec3(elephant.getX(), elephant.getEyeY(), elephant.getZ());
-        final Vec3 blockVec = net.minecraft.world.phys.Vec3.atCenterOf(destinationBlock);
+        final Vec3 blockVec = Vec3.atCenterOf(destinationBlock);
         final BlockHitResult result = elephant.level().clip(new ClipContext(Vector3d, blockVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, elephant));
         return result.getBlockPos().equals(destinationBlock);
     }

@@ -1,8 +1,15 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AdvancedPathNavigateNoTeleport;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHurtByTargetNotBaby;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIMeleeNearby;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIPanicBaby;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIWanderRanged;
+import com.github.alexthe666.alexsmobs.entity.ai.TameableAIRide;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
@@ -10,6 +17,7 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -26,10 +34,19 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
@@ -46,8 +63,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
 
 public class EntityTusklin extends Animal implements IAnimatedEntity {
 
@@ -69,6 +84,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         super(type, level);
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.tusklinSpawnRolls, this.getRandom(), spawnReasonIn);
     }
@@ -81,18 +97,22 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 40D).add(Attributes.ATTACK_DAMAGE, 9.0D).add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.KNOCKBACK_RESISTANCE, 0.9F).add(Attributes.STEP_HEIGHT, 1.0D);
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.TUSKLIN_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.TUSKLIN_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.TUSKLIN_HURT.get();
     }
 
+    @Override
     protected PathNavigation createNavigation(Level worldIn) {
         return new AdvancedPathNavigateNoTeleport(this, worldIn, true);
     }
@@ -101,6 +121,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         return this.level().dimension() == Level.NETHER && !this.isNoAi();
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new AnimalAIMeleeNearby(this, 15, 1.25D));
@@ -129,9 +150,11 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         return this.canAttack(p_21675_);
     }
 
+    @Override
     protected Vec3 getRiddenInput(Player player, Vec3 deltaIn) {
         return new Vec3(0, 0, 1);
     }
+    @Override
     protected void tickRidden(Player player, Vec3 vec3) {
         super.tickRidden(player, vec3);
         this.setRot(player.getYRot(), player.getXRot() * 0.25F);
@@ -142,15 +165,16 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
     }
 
 
+    @Override
     protected float getRiddenSpeed(Player rider) {
         return (float)(this.getAttributeValue(Attributes.MOVEMENT_SPEED));
     }
+    @Override
     @Nullable
     public LivingEntity getControllingPassenger() {
         if (this.isSaddled()) {
             for (Entity passenger : this.getPassengers()) {
-                if (passenger instanceof Player) {
-                    Player player = (Player) passenger;
+                if (passenger instanceof Player player) {
                     return player;
                 }
             }
@@ -170,6 +194,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         return prev;
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             final int anim = this.random.nextInt(3);
@@ -182,6 +207,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         return true;
     }
 
+    @Override
     public void positionRider(Entity passenger, Entity.MoveFunction moveFunc) {
         if (this.hasPassenger(passenger)) {
             float radius = 0.4F;
@@ -228,6 +254,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         return (double) this.getBbHeight() - 0.3D + (float) (Math.abs(Math.sin(f * 0.7F) * (double) f1 * 0.0625F * 1.6F)) + f2;
     }
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
@@ -263,6 +290,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         return type;
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(AMTagRegistry.TUSKLIN_BREEDABLES);
     }
@@ -275,6 +303,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         builder.define(SHOE_STACK, ItemStack.EMPTY);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag p_31808_) {
         super.addAdditionalSaveData(p_31808_);
         if (!this.getShoeStack().isEmpty()) {
@@ -285,6 +314,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         p_31808_.putBoolean("Saddle", this.isSaddled());
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag p_31795_) {
         super.readAdditionalSaveData(p_31795_);
         this.setSaddled(p_31795_.getBoolean("Saddle"));
@@ -319,6 +349,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         this.entityData.set(SADDLED, Boolean.valueOf(saddled));
     }
 
+    @Override
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.isSaddled()) {
@@ -343,6 +374,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         this.entityData.set(SHOE_STACK, shoe);
     }
 
+    @Override
     public void tick() {
         super.tick();
         if(isInNether()) {
@@ -479,6 +511,7 @@ public class EntityTusklin extends Animal implements IAnimatedEntity {
         currentAnimation = animation;
     }
 
+    @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         if (spawnDataIn == null) {
             spawnDataIn = new AgeableMob.AgeableMobGroupData(0.34F);

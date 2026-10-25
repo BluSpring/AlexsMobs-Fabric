@@ -1,13 +1,27 @@
 package com.github.alexthe666.alexsmobs.entity;
 
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.alexsmobs.config.AMConfig;
-import com.github.alexthe666.alexsmobs.entity.ai.*;
+import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFleeAdult;
+import com.github.alexthe666.alexsmobs.entity.ai.CreatureAITargetItems;
+import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
+import com.github.alexthe666.alexsmobs.entity.ai.KomodoDragonAIBreed;
+import com.github.alexthe666.alexsmobs.entity.ai.KomodoDragonAIJostle;
+import com.github.alexthe666.alexsmobs.entity.ai.TameableAIFollowOwner;
+import com.github.alexthe666.alexsmobs.entity.ai.TameableAITempt;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
+
 import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -15,7 +29,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
@@ -26,10 +39,23 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
@@ -46,11 +72,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
-
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Predicate;
 
 public class EntityKomodoDragon extends TamableAnimal implements ITargetsDroppedItems, IFollower {
 
@@ -102,10 +123,12 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         return spawnBlock && worldIn.getRawBrightness(pos, 0) > 8;
     }
 
+    @Override
     public boolean checkSpawnRules(LevelAccessor worldIn, MobSpawnType spawnReasonIn) {
         return AMEntityRegistry.rollSpawn(AMConfig.komodoDragonSpawnRolls, this.getRandom(), spawnReasonIn);
     }
 
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -128,6 +151,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         this.targetSelector.addGoal(8, new EntityAINearestTarget3D(this, LivingEntity.class, 180, false, true, AMEntityRegistry.buildPredicateFromTag(AMTagRegistry.KOMODO_DRAGON_TARGETS)));
     }
 
+    @Override
     protected Vec3 getRiddenInput(Player player, Vec3 deltaIn) {
         if (player.zza != 0) {
             float f = player.zza < 0.0F ? 0.5F : 1.0F;
@@ -138,6 +162,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         return Vec3.ZERO;
     }
 
+    @Override
     protected void tickRidden(Player player, Vec3 vec3) {
         super.tickRidden(player, vec3);
         if(player.zza != 0 || player.xxa != 0){
@@ -149,10 +174,12 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         }
     }
 
+    @Override
     protected float getRiddenSpeed(Player rider) {
         return (float)(this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 2);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
@@ -166,18 +193,22 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         }
     }
 
+    @Override
     protected SoundEvent getAmbientSound() {
         return AMSoundRegistry.KOMODO_DRAGON_IDLE.get();
     }
 
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return AMSoundRegistry.KOMODO_DRAGON_HURT.get();
     }
 
+    @Override
     protected SoundEvent getDeathSound() {
         return AMSoundRegistry.KOMODO_DRAGON_HURT.get();
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("SpitTime")) {
@@ -188,6 +219,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         this.setSaddled(compound.getBoolean("Saddle"));
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("SpitTime", this.timeUntilSpit);
@@ -196,11 +228,13 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         compound.putInt("JostlingCooldown", this.jostleCooldown);
     }
 
+    @Override
     public boolean isFood(ItemStack stack) {
         Item item = stack.getItem();
         return isTame() && stack.is(AMTagRegistry.KOMODO_DRAGON_BREEDABLES);
     }
 
+    @Override
     public void tick() {
         prevJostleAngle = this.getJostleAngle();
         super.tick();
@@ -217,8 +251,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         if(riderAttackCooldown > 0){
             riderAttackCooldown--;
         }
-        if(this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player){
-            Player rider = (Player)this.getControllingPassenger();
+        if(this.getControllingPassenger() != null && this.getControllingPassenger() instanceof Player rider){
             if(rider.getLastHurtMob() != null && this.distanceTo(rider.getLastHurtMob()) < this.getBbWidth() + 3F && !this.isAlliedTo(rider.getLastHurtMob())){
                 UUID preyUUID = rider.getLastHurtMob().getUUID();
                 if (!this.getUUID().equals(preyUUID) && riderAttackCooldown == 0) {
@@ -252,11 +285,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
                 sitProgress--;
         }
 
-        if(this.getCommand() == 2 && !this.isVehicle()){
-            this.setOrderedToSit(true);
-        }else{
-            this.setOrderedToSit(false);
-        }
+        this.setOrderedToSit(this.getCommand() == 2 && !this.isVehicle());
 
         if (jostleCooldown > 0) {
             jostleCooldown--;
@@ -273,10 +302,12 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         }
     }
 
+    @Override
     public EntityDimensions getDefaultDimensions(Pose poseIn) {
         return isJostling() && !isBaby() ? JOSTLING_SIZE.scale(this.getScale()) : super.getDefaultDimensions(poseIn);
     }
 
+    @Override
     public boolean isAlliedTo(Entity entityIn) {
         if (this.isTame()) {
             LivingEntity livingentity = this.getOwner();
@@ -294,6 +325,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         return super.isAlliedTo(entityIn);
     }
 
+    @Override
     public boolean doHurtTarget(Entity entityIn) {
         if (super.doHurtTarget(entityIn)) {
             if (entityIn instanceof LivingEntity) {
@@ -312,6 +344,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         }
     }
 
+    @Override
     public boolean canBeAffected(MobEffectInstance potioneffectIn) {
         if (potioneffectIn.is(MobEffects.POISON)) {
             return false;
@@ -319,17 +352,18 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         return super.canBeAffected(potioneffectIn);
     }
 
+    @Override
     @Nullable
     public LivingEntity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
-            if (passenger instanceof Player) {
-                Player player = (Player) passenger;
+            if (passenger instanceof Player player) {
                 return player;
             }
         }
         return null;
     }
 
+    @Override
     public void positionRider(Entity passenger, Entity.MoveFunction moveFunc) {
         if (this.hasPassenger(passenger)) {
             float radius = 0;
@@ -349,6 +383,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
 
 
 
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         InteractionResult type = super.mobInteract(player, hand);
@@ -373,7 +408,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
                 this.usePlayerItem(player, hand, itemstack);
                 this.setSaddled(true);
                 return InteractionResult.SUCCESS;
-            }else if(itemstack.is(net.minecraft.world.item.Items.SHEARS) && this.isSaddled()){
+            }else if(itemstack.is(Items.SHEARS) && this.isSaddled()){
                 this.setSaddled(false);
                 this.spawnAtLocation(Items.SADDLE);
                 return InteractionResult.SUCCESS;
@@ -406,10 +441,12 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
         super(type, worldIn);
     }
 
+    @Override
     protected float getWaterSlowDown() {
         return 0.98F;
     }
 
+    @Override
     public void setTarget(@Nullable LivingEntity entitylivingbaseIn) {
         if(!this.isBaby() || slaughterCooldown > 0){
             super.setTarget(entitylivingbaseIn);
@@ -485,8 +522,8 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
     }
 
     private void applyKnockbackFromMoose(float strength, double ratioX, double ratioZ) {
-        net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent event = new net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent(this, strength, ratioX, ratioZ);
-        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(event);
+        LivingKnockBackEvent event = new LivingKnockBackEvent(this, strength, ratioX, ratioZ);
+        NeoForge.EVENT_BUS.post(event);
         if (event.isCanceled()) return;
         strength = event.getStrength();
         ratioX = event.getRatioX();
@@ -506,6 +543,7 @@ public class EntityKomodoDragon extends TamableAnimal implements ITargetsDropped
     public void playJostleSound() {
     }
 
+    @Override
     protected void dropEquipment() {
         super.dropEquipment();
         if (this.isSaddled()) {

@@ -34,6 +34,7 @@ public class RenderBananaSlug extends MobRenderer<EntityBananaSlug, ModelBananaS
         this.addLayer(new LayerSlime());
     }
 
+    @Override
     protected void scale(EntityBananaSlug entitylivingbaseIn, PoseStack matrixStackIn, float partialTickTime) {
         matrixStackIn.scale(0.9F, 0.9F, 0.9F);
     }
@@ -118,12 +119,13 @@ public class RenderBananaSlug extends MobRenderer<EntityBananaSlug, ModelBananaS
         } else if (entityLiving.hasCustomName()) {
             String s = ChatFormatting.stripFormatting(entityLiving.getName().getString());
             if (("Dinnerbone".equals(s) || "Grumm".equals(s))) {
-                matrixStackIn.translate(0.0D, (double) (entityLiving.getBbHeight() + 0.1F), 0.0D);
+                matrixStackIn.translate(0.0D, entityLiving.getBbHeight() + 0.1F, 0.0D);
                 matrixStackIn.mulPose(Axis.ZP.rotationDegrees(180.0F));
             }
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntityBananaSlug entity) {
         return switch (entity.getVariant()) {
             case 1 -> TEXTURE_1;
@@ -139,9 +141,10 @@ public class RenderBananaSlug extends MobRenderer<EntityBananaSlug, ModelBananaS
             super(RenderBananaSlug.this);
         }
 
+        @Override
         public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn,
-                EntityBananaSlug entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
-                float ageInTicks, float netHeadYaw, float headPitch) {
+                           EntityBananaSlug entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks,
+                           float ageInTicks, float netHeadYaw, float headPitch) {
             float alpha = entitylivingbaseIn.prevTrailVisability
                     + (entitylivingbaseIn.trailVisability - entitylivingbaseIn.prevTrailVisability) * partialTicks;
             if (alpha > 0) {

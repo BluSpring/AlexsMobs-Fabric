@@ -6,6 +6,11 @@ import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -22,8 +27,6 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 public class RenderSquidGrapple extends EntityRenderer<EntitySquidGrapple> {
     private static final ResourceLocation SQUID_TEXTURE = ResourceLocation
@@ -107,14 +110,16 @@ public class RenderSquidGrapple extends EntityRenderer<EntitySquidGrapple> {
         return p_114496_.isOnFire() ? 15 : p_114496_.level().getBrightness(LightLayer.BLOCK, p_114497_);
     }
 
+    @Override
     public boolean shouldRender(EntitySquidGrapple grapple, Frustum f, double d1, double d2, double d3) {
         return super.shouldRender(grapple, f, d1, d2, d3)
                 || grapple.getOwner() != null && (f.isVisible(grapple.getOwner().getBoundingBox())
                         || grapple.getOwner() == Minecraft.getInstance().player);
     }
 
+    @Override
     public void render(EntitySquidGrapple entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
-            MultiBufferSource bufferIn, int packedLightIn) {
+                       MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(Axis.YN.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot())));
         matrixStackIn
@@ -136,6 +141,7 @@ public class RenderSquidGrapple extends EntityRenderer<EntitySquidGrapple> {
         }
     }
 
+    @Override
     public ResourceLocation getTextureLocation(EntitySquidGrapple entity) {
         return SQUID_TEXTURE;
     }
@@ -143,10 +149,10 @@ public class RenderSquidGrapple extends EntityRenderer<EntitySquidGrapple> {
     public void drawVertex(Matrix4f p_229039_1_, Matrix3f p_229039_2_, VertexConsumer p_229039_3_, int p_229039_4_,
             int p_229039_5_, int p_229039_6_, float p_229039_7_, float p_229039_8_, int p_229039_9_, int p_229039_10_,
             int p_229039_11_, int p_229039_12_) {
-        org.joml.Vector3f normal = new org.joml.Vector3f((float) p_229039_9_, (float) p_229039_11_,
+        Vector3f normal = new Vector3f((float) p_229039_9_, (float) p_229039_11_,
                 (float) p_229039_10_);
         normal.mul(p_229039_2_);
-        org.joml.Vector4f pos = new org.joml.Vector4f((float) p_229039_4_, (float) p_229039_5_, (float) p_229039_6_,
+        Vector4f pos = new Vector4f((float) p_229039_4_, (float) p_229039_5_, (float) p_229039_6_,
                 1.0F);
         pos.mul(p_229039_1_);
         p_229039_3_.addVertex(pos.x, pos.y, pos.z).setColor(255, 255, 255, 255).setUv(p_229039_7_, p_229039_8_)

@@ -19,6 +19,7 @@ public class BlockBisonCarpet extends CarpetBlock {
         super(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(0.6F, 1.0F).sound(SoundType.WOOL));
     }
 
+    @Override
     public VoxelShape getVisualShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
         return SELECTION_SHAPE;
     }

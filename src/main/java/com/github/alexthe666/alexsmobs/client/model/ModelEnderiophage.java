@@ -190,11 +190,7 @@ public class ModelEnderiophage extends AdvancedEntityModel<EntityEnderiophage> {
             progressRotationPrev(tailfront_right, limbSwingAmount, Maths.rad(15), 0, 0, 1F);
         }
 
-        if(entity.isMissingEye()){
-            this.eye.showModel = false;
-        }else{
-            this.eye.showModel = true;
-        }
+        this.eye.showModel = !entity.isMissingEye();
         if(entity.isPassenger()){
             this.body.rotateAngleX += Mth.HALF_PI;
             this.body.rotateAngleY += Mth.HALF_PI * entity.passengerIndex;
