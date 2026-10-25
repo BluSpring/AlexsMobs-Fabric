@@ -134,5 +134,23 @@ public class AMItemModelProvider extends ItemModelProvider {
         basicItem(AMItemRegistry.VOID_WORM_MANDIBLE.asItem());
         basicItem(AMItemRegistry.WARPED_MIXTURE.asItem());
         basicItem(AMItemRegistry.WARPED_MUSCLE.asItem());
+
+        simpleBlockItem(AMBlockRegistry.BISON_CARPET.value());
+        simpleBlockItem(AMBlockRegistry.BISON_FUR_BLOCK.value());
+        simpleBlockItem(AMBlockRegistry.CAPSID.value());
+        simpleBlockItem(AMBlockRegistry.CRYSTALIZED_BANANA_SLUG_MUCUS.value());
+        handheldItem(AMItemRegistry.DIMENSIONAL_CARVER.asItem());
+        handheldItem(AMItemRegistry.GHOSTLY_PICKAXE.asItem());
+        simpleBlockItem(AMBlockRegistry.GUSTMAKER.value());
+        simpleBlockItem(AMBlockRegistry.LEAFCUTTER_ANTHILL.value());
+        simpleBlockItem(AMBlockRegistry.LEAFCUTTER_ANT_CHAMBER.value());
+        handheldItem(AMItemRegistry.MARACA.asItem());
+        simpleBlockItem(AMBlockRegistry.PURPUR_PLANKS.value());
+        simpleBlockItem(AMBlockRegistry.PURPUR_PLANKS_SLAB.value());
+        simpleBlockItem(AMBlockRegistry.PURPUR_PLANKS_STAIRS.value());
+        simpleBlockItem(AMBlockRegistry.RED_SAND_CIRCLE.value());
+        simpleBlockItem(AMBlockRegistry.SAND_CIRCLE.value());
+        simpleBlockItem(AMBlockRegistry.STRADDLITE_BLOCK.value());
+        simpleBlockItem(AMBlockRegistry.VOID_WORM_EFFIGY.value());
     }
 }
