@@ -3,8 +3,8 @@ package com.github.alexthe666.alexsmobs.entity;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AquaticMoveController;
@@ -101,7 +101,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.STRADPOLE_BUCKET.get());
         if (this.hasCustomName()) {
@@ -111,7 +111,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NonNull ItemStack bucket) {
         if (this.hasCustomName()) {
             bucket.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -119,13 +119,13 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NonNull CompoundTag compound) {
         Bucketable.loadDefaultDataFromBucketTag(this, compound);
     }
 
     @Override
-    @Nonnull
-    protected InteractionResult mobInteract(@Nonnull Player player, @Nonnull InteractionHand hand) {
+    @NonNull
+    protected InteractionResult mobInteract(@NonNull Player player, @NonNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if(itemstack.is(AMTagRegistry.STRADPOLE_GROWABLES)){
             if(!player.isCreative()){
@@ -184,7 +184,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public SoundEvent getPickupSound() {
         return SoundEvents.BUCKET_FILL_FISH;
     }
@@ -287,7 +287,7 @@ public class EntityStradpole extends WaterAnimal implements Bucketable {
         final boolean liquid = this.isInWater() || this.isInLava();
         prevSwimPitch = this.swimPitch;
 
-        this.swimPitch = (float) -((float) this.getDeltaMovement().y * (liquid ? 2.5F : f) * (double) Mth.RAD_TO_DEG);
+        this.swimPitch = (float) -(this.getDeltaMovement().y * (liquid ? 2.5F : f) * (double) Mth.RAD_TO_DEG);
         if (this.onGround() && !this.isInWater() && !this.isInLava()) {
             this.setDeltaMovement(this.getDeltaMovement().add((this.random.nextFloat() * 2.0F - 1.0F) * 0.2F, 0.5D, (this.random.nextFloat() * 2.0F - 1.0F) * 0.2F));
             this.setYRot( this.random.nextFloat() * 360.0F);

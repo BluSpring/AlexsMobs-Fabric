@@ -2,7 +2,7 @@ package com.github.alexthe666.alexsmobs.item;
 
 import java.util.function.Consumer;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;

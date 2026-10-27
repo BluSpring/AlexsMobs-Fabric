@@ -1,8 +1,7 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.alexsmobs.entity.EntityKangaroo;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;

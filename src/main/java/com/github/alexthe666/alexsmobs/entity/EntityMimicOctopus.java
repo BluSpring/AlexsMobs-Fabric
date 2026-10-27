@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
@@ -242,7 +242,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.MIMIC_OCTOPUS_BUCKET.get());
         if (this.hasCustomName()) {
@@ -252,7 +252,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NonNull ItemStack bucket) {
         if (this.hasCustomName()) {
             bucket.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -265,7 +265,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NonNull CompoundTag compound) {
         Bucketable.loadDefaultDataFromBucketTag(this, compound);
         if (compound.contains("MimicOctopusData")) {
             this.readAdditionalSaveData(compound.getCompound("MimicOctopusData"));
@@ -358,8 +358,8 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     }
 
     @Override
-    @Nonnull
-    public InteractionResult mobInteract(@Nonnull Player player, @Nonnull InteractionHand hand) {
+    @NonNull
+    public InteractionResult mobInteract(@NonNull Player player, @NonNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         Item item = itemstack.getItem();
         MimicState readState = getStateForItem(itemstack);
@@ -737,7 +737,7 @@ public class EntityMimicOctopus extends TamableAnimal implements ISemiAquatic, I
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public SoundEvent getPickupSound() {
         return SoundEvents.BUCKET_FILL_FISH;
     }

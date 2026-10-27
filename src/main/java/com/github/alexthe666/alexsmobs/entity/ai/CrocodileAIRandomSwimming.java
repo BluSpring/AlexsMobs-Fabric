@@ -1,10 +1,9 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.alexsmobs.entity.EntityCrocodile;
 import com.github.alexthe666.alexsmobs.entity.ISemiAquatic;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;

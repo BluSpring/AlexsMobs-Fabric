@@ -4,9 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAILeaveWater;
@@ -18,6 +15,8 @@ import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.fluids.FluidType;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -450,7 +449,7 @@ public class EntityAlligatorSnappingTurtle extends Animal implements ISemiAquati
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<ItemStack> onSheared(@Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         if (player != null) {

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
@@ -432,7 +432,7 @@ public class EntityCockroach extends Animal implements Shearable, IShearable, IT
         this.setHeadless(true);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<ItemStack> onSheared(@Nullable Player player, ItemStack item, Level level, BlockPos pos) {
         if (player != null) {

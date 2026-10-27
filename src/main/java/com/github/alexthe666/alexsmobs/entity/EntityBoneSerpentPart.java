@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.message.MessageHurtMultipart;
 import com.google.common.collect.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -165,7 +164,7 @@ public class EntityBoneSerpentPart extends LivingEntity implements IHurtableMult
     public Entity getParent() {
         UUID id = getParentId();
         if (id != null && !this.level().isClientSide()) {
-            return ((ServerLevel) level()).getEntity(id);
+            return level().getEntity(id);
         }
         return null;
     }

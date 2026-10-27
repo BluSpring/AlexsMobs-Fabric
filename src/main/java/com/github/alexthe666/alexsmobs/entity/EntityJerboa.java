@@ -1,6 +1,6 @@
 package com.github.alexthe666.alexsmobs.entity;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;

@@ -3,7 +3,7 @@ package com.github.alexthe666.alexsmobs.entity;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
@@ -20,7 +20,7 @@ import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import net.neoforged.neoforge.fluids.FluidType;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -319,16 +319,16 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         this.entityData.set(MOUTH_TICKS, time);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public UUID getDisplayingPartnerUUID() {
         return this.entityData.get(DISPLAYER_UUID).orElse(null);
     }
 
-    public void setDisplayingPartnerUUID(@javax.annotation.Nullable UUID uniqueId) {
+    public void setDisplayingPartnerUUID(@Nullable UUID uniqueId) {
         this.entityData.set(DISPLAYER_UUID, Optional.ofNullable(uniqueId));
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public Entity getDisplayingPartner() {
         UUID id = getDisplayingPartnerUUID();
         if (id != null && !this.level().isClientSide()) {
@@ -337,7 +337,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
         return null;
     }
 
-    public void setDisplayingPartner(@javax.annotation.Nullable Entity jostlingPartner) {
+    public void setDisplayingPartner(@Nullable Entity jostlingPartner) {
         if (jostlingPartner == null) {
             this.setDisplayingPartnerUUID(null);
         } else {
@@ -436,7 +436,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.MUDSKIPPER_BUCKET.get());
         if (this.hasCustomName()) {
@@ -446,7 +446,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NonNull ItemStack bucket) {
         Bucketable.saveDefaultDataToBucketTag(this, bucket);
         if (this.hasCustomName()) {
             bucket.set(DataComponents.CUSTOM_NAME, this.getCustomName());
@@ -459,7 +459,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NonNull CompoundTag compound) {
         Bucketable.loadDefaultDataFromBucketTag(this, compound);
         if (compound.contains("MudskipperData")) {
             this.readAdditionalSaveData(compound.getCompound("MudskipperData"));
@@ -467,7 +467,7 @@ public class EntityMudskipper extends TamableAnimal implements IFollower, ISemiA
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public SoundEvent getPickupSound() {
         return SoundEvents.BUCKET_FILL_FISH;
     }

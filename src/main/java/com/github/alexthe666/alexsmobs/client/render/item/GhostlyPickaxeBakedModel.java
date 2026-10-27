@@ -7,8 +7,8 @@ import com.github.alexthe666.alexsmobs.client.render.AMRenderTypes;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;

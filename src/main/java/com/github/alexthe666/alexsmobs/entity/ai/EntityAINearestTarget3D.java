@@ -2,7 +2,7 @@ package com.github.alexthe666.alexsmobs.entity.ai;
 
 import java.util.function.Predicate;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;

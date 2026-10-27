@@ -1,7 +1,11 @@
 package com.github.alexthe666.alexsmobs.entity.util;
 
+import com.mojang.serialization.Codec;
+
 public enum AnacondaPartIndex {
     HEAD(0F), NECK(0.5F), BODY(0.5F), TAIL(0.4F);
+
+    public static final Codec<AnacondaPartIndex> CODEC = Codec.INT.xmap(AnacondaPartIndex::fromOrdinal, AnacondaPartIndex::ordinal);
 
     private final float backOffset;
 

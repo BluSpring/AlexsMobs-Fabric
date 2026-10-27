@@ -20,7 +20,7 @@ import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -315,7 +315,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
         return list;
     }
 
-    private void addTrustedUUID(@javax.annotation.Nullable UUID p_28516_) {
+    private void addTrustedUUID(@org.jspecify.annotations.Nullable UUID p_28516_) {
         if (this.entityData.get(DATA_TRUSTED_ID_0).isPresent()) {
             this.entityData.set(DATA_TRUSTED_ID_1, Optional.ofNullable(p_28516_));
         } else {
@@ -526,7 +526,7 @@ public class EntityRhinoceros extends Animal implements IAnimatedEntity {
         private LivingEntity trusted;
         private int timestamp;
 
-        public DefendTrustedTargetGoal(Class<LivingEntity> entities, boolean b, @javax.annotation.Nullable boolean b2, Predicate<LivingEntity> pred) {
+        public DefendTrustedTargetGoal(Class<LivingEntity> entities, boolean b, @org.jspecify.annotations.Nullable boolean b2, Predicate<LivingEntity> pred) {
             super(EntityRhinoceros.this, entities, 10, b, b2, pred);
         }
 

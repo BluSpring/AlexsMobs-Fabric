@@ -8,7 +8,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NotNull;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;

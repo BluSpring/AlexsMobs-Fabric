@@ -3,12 +3,11 @@ package com.github.alexthe666.alexsmobs.world;
 import java.util.Iterator;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.config.BiomeConfig;
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityCachalotWhale;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

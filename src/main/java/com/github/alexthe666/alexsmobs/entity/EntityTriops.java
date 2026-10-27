@@ -5,8 +5,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAISwimBottom;
@@ -163,7 +163,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public SoundEvent getPickupSound() {
         return SoundEvents.BUCKET_FILL_FISH;
     }
@@ -258,7 +258,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
         this.prevTail1Yaw = tail1Yaw;
         this.prevTail2Yaw = tail2Yaw;
         final boolean onLand = !this.isInWaterOrBubble() && this.onGround();
-        this.setXRot(-((float) this.getDeltaMovement().y * 2.2F * Mth.RAD_TO_DEG));
+        this.setXRot(-(this.getDeltaMovement().y * 2.2F * Mth.RAD_TO_DEG));
         if (onLand && onLandProgress < 5F) {
             onLandProgress++;
         }
@@ -347,7 +347,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NonNull ItemStack bucket) {
         if (this.hasCustomName()) {
             bucket.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -359,7 +359,7 @@ public class EntityTriops extends WaterAnimal implements ITargetsDroppedItems, B
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NonNull CompoundTag compound) {
         if (compound.contains("TriopsTag")) {
             this.readAdditionalSaveData(compound.getCompound("TriopsTag"));
         }

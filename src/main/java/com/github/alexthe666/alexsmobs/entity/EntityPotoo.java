@@ -15,7 +15,7 @@ import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.github.alexthe666.citadel.server.entity.pathfinding.raycoms.AdvancedPathNavigate;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -583,7 +583,7 @@ public class EntityPotoo extends Animal implements IFalconry {
             }
         }
 
-        @javax.annotation.Nullable
+        @org.jspecify.annotations.Nullable
         protected Vec3 getPosition() {
             Vec3 vector3d = EntityPotoo.this.position();
             if (EntityPotoo.this.timeFlying < 200 || EntityPotoo.this.isOverWaterOrVoid()) {

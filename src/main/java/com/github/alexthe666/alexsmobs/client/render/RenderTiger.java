@@ -4,7 +4,7 @@ import com.github.alexthe666.alexsmobs.client.model.ModelTiger;
 import com.github.alexthe666.alexsmobs.client.render.layer.LayerTigerEyes;
 import com.github.alexthe666.alexsmobs.entity.EntityTiger;
 import com.mojang.blaze3d.vertex.PoseStack;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

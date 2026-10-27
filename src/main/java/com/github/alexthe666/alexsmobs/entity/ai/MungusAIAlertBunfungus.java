@@ -4,7 +4,7 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.entity.EntityBunfungus;
 

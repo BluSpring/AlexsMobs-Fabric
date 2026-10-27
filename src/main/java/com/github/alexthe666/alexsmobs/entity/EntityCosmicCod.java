@@ -3,8 +3,8 @@ package com.github.alexthe666.alexsmobs.entity;
 import java.util.List;
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.CosmicCodAIFollowLeader;
@@ -123,13 +123,13 @@ public class EntityCosmicCod extends Mob implements Bucketable {
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public SoundEvent getPickupSound() {
         return SoundEvents.BUCKET_FILL_FISH;
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.COSMIC_COD_BUCKET.get());
         if (this.hasCustomName()) {
@@ -139,7 +139,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NonNull ItemStack bucket) {
         if (this.hasCustomName()) {
             bucket.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -152,7 +152,7 @@ public class EntityCosmicCod extends Mob implements Bucketable {
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NonNull CompoundTag compound) {
         Bucketable.loadDefaultDataFromBucketTag(this, compound);
         if (compound.contains("CosmicCodData")) {
             this.readAdditionalSaveData(compound.getCompound("CosmicCodData"));
@@ -445,8 +445,8 @@ public class EntityCosmicCod extends Mob implements Bucketable {
     }
 
     @Override
-    @Nonnull
-    protected InteractionResult mobInteract(@Nonnull Player player, @Nonnull InteractionHand hand) {
+    @NonNull
+    protected InteractionResult mobInteract(@NonNull Player player, @NonNull InteractionHand hand) {
         final ItemStack itemstack = player.getItemInHand(hand);
         if (itemstack.getItem() == Items.BUCKET && this.isAlive()) {
             this.gameEvent(GameEvent.ENTITY_INTERACT);

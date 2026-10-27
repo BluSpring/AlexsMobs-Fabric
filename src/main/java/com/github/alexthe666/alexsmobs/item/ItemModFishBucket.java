@@ -3,7 +3,7 @@ package com.github.alexthe666.alexsmobs.item;
 import java.util.List;
 import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityCatfish;

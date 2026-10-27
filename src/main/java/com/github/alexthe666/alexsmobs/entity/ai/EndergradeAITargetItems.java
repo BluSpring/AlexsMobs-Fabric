@@ -5,10 +5,9 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.alexsmobs.entity.EntityEndergrade;
 import com.google.common.base.Predicate;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;

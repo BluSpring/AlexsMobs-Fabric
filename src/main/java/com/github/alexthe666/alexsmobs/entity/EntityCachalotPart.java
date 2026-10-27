@@ -2,12 +2,11 @@ package com.github.alexthe666.alexsmobs.entity;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.message.MessageHurtMultipart;
 import com.github.alexthe666.alexsmobs.message.MessageInteractMultipart;
 import net.neoforged.neoforge.entity.PartEntity;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;

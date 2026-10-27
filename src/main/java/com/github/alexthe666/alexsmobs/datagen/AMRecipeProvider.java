@@ -2,13 +2,12 @@ package com.github.alexthe666.alexsmobs.datagen;
 
 import java.util.concurrent.CompletableFuture;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import net.neoforged.neoforge.common.Tags;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;

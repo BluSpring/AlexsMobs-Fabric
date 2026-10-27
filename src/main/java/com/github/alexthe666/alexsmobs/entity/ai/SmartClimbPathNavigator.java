@@ -1,6 +1,6 @@
 package com.github.alexthe666.alexsmobs.entity.ai;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;

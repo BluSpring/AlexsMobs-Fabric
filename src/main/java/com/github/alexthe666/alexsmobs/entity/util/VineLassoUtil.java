@@ -3,7 +3,7 @@ package com.github.alexthe666.alexsmobs.entity.util;
 import com.github.alexthe666.alexsmobs.attachment.AMAttachmentRegistry;
 import com.github.alexthe666.alexsmobs.attachment.EntityReference;
 import com.github.alexthe666.alexsmobs.attachment.LassoData;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

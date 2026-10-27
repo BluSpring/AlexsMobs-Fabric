@@ -4,7 +4,7 @@ import java.util.EnumSet;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.entity.EntitySnowLeopard;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;

@@ -1,6 +1,6 @@
 package com.github.alexthe666.alexsmobs.item;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityFlutter;
@@ -63,7 +63,7 @@ public class ItemFlutterPot extends Item implements DispensibleContainerItem {
     }
 
     @Override
-    public boolean emptyContents(@org.jetbrains.annotations.Nullable Player p_150821_, Level p_150822_, BlockPos p_150823_, @org.jetbrains.annotations.Nullable BlockHitResult p_150824_) {
+    public boolean emptyContents(@org.jspecify.annotations.Nullable Player p_150821_, Level p_150822_, BlockPos p_150823_, @org.jspecify.annotations.Nullable BlockHitResult p_150824_) {
         return false;
     }
 }

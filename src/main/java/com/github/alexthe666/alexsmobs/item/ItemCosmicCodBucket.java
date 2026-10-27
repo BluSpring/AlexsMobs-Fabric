@@ -1,6 +1,6 @@
 package com.github.alexthe666.alexsmobs.item;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 
@@ -25,8 +25,8 @@ public class ItemCosmicCodBucket extends ItemModFishBucket {
     }
 
     @Override
-    @Nonnull
-    public InteractionResult use(@Nonnull Level level, Player player, @Nonnull InteractionHand hand) {
+    @NonNull
+    public InteractionResult use(@NonNull Level level, Player player, @NonNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         BlockHitResult blockhitresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
         if (blockhitresult.getType() == HitResult.Type.MISS) {

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIHerdPanic;

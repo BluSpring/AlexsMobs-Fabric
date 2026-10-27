@@ -2,8 +2,6 @@ package com.github.alexthe666.alexsmobs.block;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.alexsmobs.entity.EntityLeafcutterAnt;
 import com.github.alexthe666.alexsmobs.entity.EntityManedWolf;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
@@ -11,6 +9,7 @@ import com.github.alexthe666.alexsmobs.misc.AMAdvancementTriggerRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityLeafcutterAnthill;
 import com.mojang.serialization.MapCodec;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;

@@ -15,7 +15,7 @@ import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -733,7 +733,7 @@ public class EntityFlutter extends TamableAnimal implements IFollower, FlyingAni
             }
         }
 
-        @javax.annotation.Nullable
+        @org.jspecify.annotations.Nullable
         protected Vec3 getPosition() {
             Vec3 vector3d = phage.position();
             if (phage.isOverWaterOrVoid()) {

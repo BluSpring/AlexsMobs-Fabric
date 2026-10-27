@@ -3,11 +3,10 @@ package com.github.alexthe666.alexsmobs.entity.ai;
 import java.util.EnumSet;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.alexsmobs.entity.EntityLaviathan;
 import com.github.alexthe666.alexsmobs.entity.IHerdPanic;
 import com.google.common.base.Predicate;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;

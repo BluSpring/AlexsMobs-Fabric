@@ -1,7 +1,7 @@
 package com.github.alexthe666.alexsmobs.entity;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.AnimalAIFindWater;
@@ -150,7 +150,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public ItemStack getBucketItemStack() {
         ItemStack stack = new ItemStack(AMItemRegistry.LOBSTER_BUCKET.get());
         if (this.hasCustomName()) {
@@ -160,7 +160,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
     }
 
     @Override
-    public void saveToBucketTag(@Nonnull ItemStack bucket) {
+    public void saveToBucketTag(@NonNull ItemStack bucket) {
         if (this.hasCustomName()) {
             bucket.set(DataComponents.CUSTOM_NAME, this.getCustomName());
         }
@@ -171,7 +171,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
     }
 
     @Override
-    public void loadFromBucketTag(@Nonnull CompoundTag compound) {
+    public void loadFromBucketTag(@NonNull CompoundTag compound) {
         Bucketable.loadDefaultDataFromBucketTag(this, compound);
         if (compound.contains("BucketVariantTag", 3)) {
             this.setVariant(compound.getInt("BucketVariantTag"));
@@ -189,8 +189,8 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
     }
 
     @Override
-    @Nonnull
-    protected InteractionResult mobInteract(@Nonnull Player player, @Nonnull InteractionHand hand) {
+    @NonNull
+    protected InteractionResult mobInteract(@NonNull Player player, @NonNull InteractionHand hand) {
         return Bucketable.bucketMobPickup(player, hand, this).orElse(super.mobInteract(player, hand));
     }
 
@@ -278,7 +278,7 @@ public class EntityLobster extends WaterAnimal implements ISemiAquatic, Bucketab
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public SoundEvent getPickupSound() {
         return SoundEvents.BUCKET_FILL_FISH;
     }

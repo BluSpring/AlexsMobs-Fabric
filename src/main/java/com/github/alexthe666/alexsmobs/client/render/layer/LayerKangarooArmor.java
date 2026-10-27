@@ -2,7 +2,7 @@ package com.github.alexthe666.alexsmobs.client.render.layer;
 
 import java.util.Map;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.client.model.ModelKangaroo;
 import com.github.alexthe666.alexsmobs.client.render.AMColorUtil;

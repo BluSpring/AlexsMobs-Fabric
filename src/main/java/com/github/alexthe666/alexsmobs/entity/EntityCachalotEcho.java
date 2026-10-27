@@ -2,10 +2,9 @@ package com.github.alexthe666.alexsmobs.entity;
 
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -182,7 +181,7 @@ public class EntityCachalotEcho extends Entity {
     @Nullable
     public Entity getOwner() {
         if (this.ownerUUID != null && this.level() instanceof ServerLevel) {
-            return ((ServerLevel) this.level()).getEntity(this.ownerUUID);
+            return this.level().getEntity(this.ownerUUID);
         } else {
             return this.ownerNetworkId != 0 ? this.level().getEntity(this.ownerNetworkId) : null;
         }

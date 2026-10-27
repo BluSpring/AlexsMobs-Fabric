@@ -2,7 +2,7 @@ package com.github.alexthe666.alexsmobs.entity.ai;
 
 import java.util.EnumSet;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
 import com.github.alexthe666.alexsmobs.config.AMConfig;

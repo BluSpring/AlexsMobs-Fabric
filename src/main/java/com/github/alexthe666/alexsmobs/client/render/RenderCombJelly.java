@@ -1,6 +1,6 @@
 package com.github.alexthe666.alexsmobs.client.render;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.client.model.ModelCombJelly;
 import com.github.alexthe666.alexsmobs.entity.EntityCombJelly;

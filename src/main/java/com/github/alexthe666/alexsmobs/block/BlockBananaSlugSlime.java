@@ -4,7 +4,7 @@ import java.util.Queue;
 
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.google.common.collect.Lists;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NotNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

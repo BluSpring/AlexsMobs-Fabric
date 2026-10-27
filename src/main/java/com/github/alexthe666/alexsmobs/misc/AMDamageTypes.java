@@ -1,6 +1,6 @@
 package com.github.alexthe666.alexsmobs.misc;
 
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;

@@ -5,8 +5,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.entity.ai.BoneSerpentAIFindLava;
 import com.github.alexthe666.alexsmobs.entity.ai.BoneSerpentAIJump;
@@ -16,6 +14,7 @@ import com.github.alexthe666.alexsmobs.entity.ai.EntityAINearestTarget3D;
 import com.github.alexthe666.alexsmobs.entity.ai.LavaAndWaterAIRandomSwimming;
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import net.neoforged.neoforge.fluids.FluidType;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,7 +22,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.FluidTags;

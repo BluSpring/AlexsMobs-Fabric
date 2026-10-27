@@ -21,7 +21,7 @@ import com.github.alexthe666.alexsmobs.misc.AMTagRegistry;
 import com.google.common.base.Predicate;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -527,16 +527,16 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         this.entityData.set(CREST_TARGET, crestTarget);
     }
 
-    @javax.annotation.Nullable
+    @org.jspecify.annotations.Nullable
     public UUID getLastFeederUUID() {
         return this.entityData.get(LAST_FEEDER_UUID).orElse(null);
     }
 
-    public void setLastFeederUUID(@javax.annotation.Nullable UUID uniqueId) {
+    public void setLastFeederUUID(@org.jspecify.annotations.Nullable UUID uniqueId) {
         this.entityData.set(LAST_FEEDER_UUID, Optional.ofNullable(uniqueId));
     }
 
-    @javax.annotation.Nullable
+    @org.jspecify.annotations.Nullable
     public Entity getLastFeeder() {
         UUID id = getLastFeederUUID();
         if (id != null && !this.level().isClientSide()) {
@@ -545,7 +545,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return null;
     }
 
-    public void setLastFeeder(@javax.annotation.Nullable Entity feeder) {
+    public void setLastFeeder(@org.jspecify.annotations.Nullable Entity feeder) {
         if (feeder == null) {
             this.setLastFeederUUID(null);
         } else {
@@ -553,16 +553,16 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         }
     }
 
-    @javax.annotation.Nullable
+    @org.jspecify.annotations.Nullable
     public UUID getRaccoonUUID() {
         return this.entityData.get(RACCOON_UUID).orElse(null);
     }
 
-    public void setRaccoonUUID(@javax.annotation.Nullable UUID uniqueId) {
+    public void setRaccoonUUID(@org.jspecify.annotations.Nullable UUID uniqueId) {
         this.entityData.set(RACCOON_UUID, Optional.ofNullable(uniqueId));
     }
 
-    @javax.annotation.Nullable
+    @org.jspecify.annotations.Nullable
     public Entity getRaccoon() {
         UUID id = getRaccoonUUID();
         if (id != null && !this.level().isClientSide()) {
@@ -571,7 +571,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return null;
     }
 
-    public void setRaccoon(@javax.annotation.Nullable Entity feeder) {
+    public void setRaccoon(@org.jspecify.annotations.Nullable Entity feeder) {
         if (feeder == null) {
             this.setRaccoonUUID(null);
         } else {
@@ -713,7 +713,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             }
         }
 
-        @javax.annotation.Nullable
+        @org.jspecify.annotations.Nullable
         protected Vec3 getPosition() {
             Vec3 vector3d = EntityBlueJay.this.position();
 
@@ -775,7 +775,7 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
             this.theNearestAttackableTargetSorter = new AIScatter.Sorter(EntityBlueJay.this);
             this.targetEntitySelector = new Predicate<Entity>() {
                 @Override
-                public boolean apply(@javax.annotation.Nullable Entity e) {
+                public boolean apply(@org.jspecify.annotations.Nullable Entity e) {
                     return e.isAlive() && e.getType().is(AMTagRegistry.SCATTERS_CROWS) || e instanceof Player && !((Player) e).isCreative();
                 }
             };

@@ -2,20 +2,16 @@ package com.github.alexthe666.alexsmobs.entity;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Predicate;
-
-import javax.annotation.Nullable;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.entity.util.AnacondaPartIndex;
 import com.github.alexthe666.alexsmobs.message.MessageHurtMultipart;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;
-import com.google.common.collect.ImmutableList;
 import net.neoforged.neoforge.fluids.FluidType;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -27,6 +23,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
@@ -38,6 +35,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -47,8 +46,8 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
     private static final EntityDataAccessor<Integer> BODYINDEX = SynchedEntityData.defineId(EntityAnacondaPart.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> BODY_TYPE = SynchedEntityData.defineId(EntityAnacondaPart.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> TARGET_YAW = SynchedEntityData.defineId(EntityAnacondaPart.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Optional<UUID>> CHILD_UUID = SynchedEntityData.defineId(EntityAnacondaPart.class, EntityDataSerializers.OPTIONAL_UUID);
-    private static final EntityDataAccessor<Optional<UUID>> PARENT_UUID = SynchedEntityData.defineId(EntityAnacondaPart.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Optional<EntityReference<LivingEntity>>> CHILD_REFERENCE = SynchedEntityData.defineId(EntityAnacondaPart.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
+    private static final EntityDataAccessor<Optional<EntityReference<LivingEntity>>> PARENT_REFERENCE = SynchedEntityData.defineId(EntityAnacondaPart.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
     private static final EntityDataAccessor<Float> SWELL = SynchedEntityData.defineId(EntityAnacondaPart.class, EntityDataSerializers.FLOAT);
     public EntityDimensions multipartSize;
     private float strangleProgess;
@@ -80,8 +79,8 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
     }
 
     @Override
-    public InteractionResult interact(Player p_19978_, InteractionHand p_19979_) {
-        return this.getParent() == null ? super.interact(p_19978_, p_19979_) : this.getParent().interact(p_19978_, p_19979_);
+    public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
+        return this.getParent() == null ? super.interact(player, hand, location) : this.getParent().interact(player, hand, location);
     }
 
     public static AttributeSupplier.Builder bakeAttributes() {
@@ -89,8 +88,8 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
     }
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
-        return source.is(DamageTypes.IN_WALL)  || super.isInvulnerableTo(source);
+    public boolean isInvulnerableTo(ServerLevel level, DamageSource source) {
+        return source.is(DamageTypes.IN_WALL)  || super.isInvulnerableTo(level, source);
     }
 
     @Override
@@ -181,7 +180,7 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
         this.setXRot(f2);
         this.setYRot(f);
         this.yHeadRot = f;
-        this.moveTo(avg.x, avg.y, avg.z, f, f2);
+        this.snapTo(avg.x, avg.y, avg.z, f, f2);
         headEntityId = headId;
         return avg;
     }
@@ -247,26 +246,26 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
         }
     }
 
-    public boolean hurtHeadId(DamageSource source, float f) {
+    public boolean hurtHeadId(ServerLevel level, DamageSource source, float f) {
         if (headEntityId != -1) {
             Entity e = level().getEntity(headEntityId);
             if (e instanceof EntityAnaconda) {
-               return e.hurt(source, f);
+               return e.hurtServer(level, source, f);
             }
         }
         return false;
     }
 
     @Override
-    public boolean hurt(DamageSource source, float damage) {
-        return hurtHeadId(source, damage);
+    public boolean hurtServer(ServerLevel level, DamageSource source, float damage) {
+        return hurtHeadId(level, source, damage);
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(CHILD_UUID, Optional.empty());
-        builder.define(PARENT_UUID, Optional.empty());
+        builder.define(CHILD_REFERENCE, Optional.empty());
+        builder.define(PARENT_REFERENCE, Optional.empty());
         builder.define(BODYINDEX, 0);
         builder.define(BODY_TYPE, AnacondaPartIndex.NECK.ordinal());
         builder.define(TARGET_YAW, 0F);
@@ -287,18 +286,12 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
     }
 
     @Override
-    public Iterable<ItemStack> getArmorSlots() {
-        return ImmutableList.of();
-    }
-
-    @Override
     public ItemStack getItemBySlot(EquipmentSlot slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
     public void setItemSlot(EquipmentSlot p_21036_, ItemStack p_21037_) {
-
     }
 
     @Override
@@ -315,74 +308,43 @@ public class EntityAnacondaPart extends LivingEntity implements IHurtableMultipa
             this.hurtTime = parent.hurtTime;
     }
 
-    public Entity getParent() {
-        if (!this.level().isClientSide()) {
-            final UUID id = getParentId();
-            if (id != null) {
-                return ((ServerLevel) level()).getEntity(id);
-            }
-        }
-
-        return null;
+    public LivingEntity getParent() {
+        return this.getEntityData().get(PARENT_REFERENCE)
+            .map(e -> e.getEntity(this.level(), LivingEntity.class))
+            .orElse(null);
     }
 
-    public void setParent(Entity entity) {
-        this.setParentId(entity.getUUID());
+    public void setParent(@Nullable LivingEntity entity) {
+        this.getEntityData().set(PARENT_REFERENCE, Optional.ofNullable(EntityReference.of(entity)));
     }
 
-    @Nullable
-    public UUID getParentId() {
-        return this.entityData.get(PARENT_UUID).orElse(null);
+    public LivingEntity getChild() {
+        return this.getEntityData().get(CHILD_REFERENCE)
+            .map(e -> e.getEntity(this.level(), LivingEntity.class))
+            .orElse(null);
     }
 
-    public void setParentId(@Nullable UUID uniqueId) {
-        this.entityData.set(PARENT_UUID, Optional.ofNullable(uniqueId));
-    }
-
-    public Entity getChild() {
-        if (!this.level().isClientSide()) {
-            final UUID id = getChildId();
-            if (id != null) {
-                return ((ServerLevel) level()).getEntity(id);
-            }
-        }
-
-        return null;
-    }
-
-    @Nullable
-    public UUID getChildId() {
-        return this.entityData.get(CHILD_UUID).orElse(null);
-    }
-
-    public void setChildId(@Nullable UUID uniqueId) {
-        this.entityData.set(CHILD_UUID, Optional.ofNullable(uniqueId));
+    public void setChild(@Nullable LivingEntity entity) {
+        this.getEntityData().set(CHILD_REFERENCE, Optional.ofNullable(EntityReference.of(entity)));
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        if (this.getParentId() != null) {
-            compound.putUUID("ParentUUID", this.getParentId());
-        }
-        if (this.getChildId() != null) {
-            compound.putUUID("ChildUUID", this.getChildId());
-        }
-        compound.putInt("BodyModel", getPartType().ordinal());
-        compound.putInt("BodyIndex", getBodyIndex());
+    public void addAdditionalSaveData(ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        EntityReference.store(this.getEntityData().get(PARENT_REFERENCE).orElse(null), output, "ParentUUID");
+        EntityReference.store(this.getEntityData().get(CHILD_REFERENCE).orElse(null), output, "ChildUUID");
+        output.store("BodyModel", AnacondaPartIndex.CODEC, getPartType());
+        output.putInt("BodyModel", getPartType().ordinal());
+        output.putInt("BodyIndex", getBodyIndex());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        if (compound.hasUUID("ParentUUID")) {
-            this.setParentId(compound.getUUID("ParentUUID"));
-        }
-        if (compound.hasUUID("ChildUUID")) {
-            this.setChildId(compound.getUUID("ChildUUID"));
-        }
-        this.setPartType(AnacondaPartIndex.fromOrdinal(compound.getInt("BodyModel")));
-        this.setBodyIndex(compound.getInt("BodyIndex"));
+    public void readAdditionalSaveData(ValueInput input) {
+        super.readAdditionalSaveData(input);
+        this.getEntityData().set(PARENT_REFERENCE, Optional.ofNullable(EntityReference.read(input, "ParentUUID")));
+        this.getEntityData().set(CHILD_REFERENCE, Optional.ofNullable(EntityReference.read(input, "ChildUUID")));
+        this.setPartType(input.read("BodyModel", AnacondaPartIndex.CODEC).orElse(AnacondaPartIndex.BODY));
+        this.setBodyIndex(input.getIntOr("BodyIndex", 0));
     }
 
     @Override

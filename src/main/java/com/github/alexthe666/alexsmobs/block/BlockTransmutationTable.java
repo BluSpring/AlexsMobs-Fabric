@@ -1,7 +1,5 @@
 package com.github.alexthe666.alexsmobs.block;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.inventory.MenuTransmutationTable;
@@ -9,6 +7,7 @@ import com.github.alexthe666.alexsmobs.message.MessageUpdateTransmutablesToDispl
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityTransmutationTable;
 import com.mojang.serialization.MapCodec;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

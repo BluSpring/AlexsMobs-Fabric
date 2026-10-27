@@ -6,7 +6,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import com.github.alexthe666.alexsmobs.misc.AMBlockPos;

@@ -1,12 +1,11 @@
 package com.github.alexthe666.alexsmobs.block;
 
-import javax.annotation.Nullable;
-
 import com.github.alexthe666.alexsmobs.tileentity.AMTileEntityRegistry;
 import com.github.alexthe666.alexsmobs.tileentity.TileEntityCapsid;
 import com.mojang.serialization.MapCodec;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
