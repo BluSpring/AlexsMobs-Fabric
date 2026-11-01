@@ -27,8 +27,8 @@ public class ModelPotoo extends AdvancedEntityModel<EntityPotoo> {
     private final AdvancedModelBox right_pupil;
 
     public ModelPotoo() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -116,19 +116,19 @@ public class ModelPotoo extends AdvancedEntityModel<EntityPotoo> {
         float walkDegree = 0.8f;
         float eyeScale = Mth.clamp((15F - entity.getEyeScale(10, partialTick)) / 15F, 0F, 1F);
         this.left_pupil.setScale(0.5F, 1.0F + eyeScale * 2.1F, 1.0F + eyeScale * 2.1F);
-        this.left_pupil.rotationPointX += 0.5F;
+        this.left_pupil.x += 0.5F;
         this.right_pupil.setScale(0.5F, 1.0F + eyeScale * 2.1F, 1.0F + eyeScale * 2.1F);
-        this.right_pupil.rotationPointX -= 0.5F;
+        this.right_pupil.x -= 0.5F;
         if(entity.isSleeping()){
-            this.right_eye.showModel = false;
-            this.right_pupil.showModel = false;
-            this.left_eye.showModel = false;
-            this.left_pupil.showModel = false;
+            this.right_eye.visible = false;
+            this.right_pupil.visible = false;
+            this.left_eye.visible = false;
+            this.left_pupil.visible = false;
         }else{
-            this.right_eye.showModel = true;
-            this.right_pupil.showModel = true;
-            this.left_eye.showModel = true;
-            this.left_pupil.showModel = true;
+            this.right_eye.visible = true;
+            this.right_pupil.visible = true;
+            this.left_eye.visible = true;
+            this.left_pupil.visible = true;
         }
         float walkAmount = (5F - flyProgress) * 0.2F;
         float walkSwingAmount = limbSwingAmount * walkAmount;
@@ -149,18 +149,18 @@ public class ModelPotoo extends AdvancedEntityModel<EntityPotoo> {
             this.swing(right_wing, flapSpeed, flapDegree * 5, true, 0F, 0F, ageInTicks, 1);
             this.swing(left_wing, flapSpeed, flapDegree * 5, false, 0F, 0F, ageInTicks, 1);
         }
-        this.left_foot.rotationPointZ += 2 * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
-        this.right_foot.rotationPointZ += 2 * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
-        this.left_foot.rotationPointY += (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
-        this.right_foot.rotationPointY += (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
+        this.left_foot.z += 2 * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
+        this.right_foot.z += 2 * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
+        this.left_foot.y += (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
+        this.right_foot.y += (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
 
     }
 
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 
     @Override

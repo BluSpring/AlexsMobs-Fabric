@@ -14,8 +14,8 @@ public class ModelTarantulaHawkBaby extends AdvancedEntityModel<EntityTarantulaH
     private final AdvancedModelBox head;
 
     public ModelTarantulaHawkBaby() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -40,7 +40,7 @@ public class ModelTarantulaHawkBaby extends AdvancedEntityModel<EntityTarantulaH
         float walkDegree = 0.75F;
         float stretch = (float) (Math.sin(limbSwing * 0.25F) * limbSwingAmount) + limbSwingAmount;
         body.setScale(1, (1 - stretch * 0.05F), (1 + stretch * 0.5F));
-        body.rotationPointZ -= stretch * 4;
+        body.z -= stretch * 4;
         this.walk(head, 0.25F, 0.075F, false, -1, 0F, ageInTicks, 1);
         this.walk(head, walkSpeed, walkDegree * 0.1F, false, -1, 0F, limbSwing, limbSwingAmount);
 
@@ -62,8 +62,8 @@ public class ModelTarantulaHawkBaby extends AdvancedEntityModel<EntityTarantulaH
     }
 
     public void setRotationAngle(AdvancedModelBox advancedModelBox, float x, float y, float z) {
-        advancedModelBox.rotateAngleX = x;
-        advancedModelBox.rotateAngleY = y;
-        advancedModelBox.rotateAngleZ = z;
+        advancedModelBox.xRot = x;
+        advancedModelBox.yRot = y;
+        advancedModelBox.zRot = z;
     }
 }

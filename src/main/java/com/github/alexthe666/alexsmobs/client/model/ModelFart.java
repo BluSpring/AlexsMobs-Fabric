@@ -12,8 +12,8 @@ public class ModelFart extends AdvancedEntityModel<EntityFart> {
     private final AdvancedModelBox cube_r2;
 
     public ModelFart() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         main = new AdvancedModelBox(this);
         main.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -51,13 +51,13 @@ public class ModelFart extends AdvancedEntityModel<EntityFart> {
         this.main.setScale(expand * 2F + 1F, expand * 2F + 1F, 1F);
         this.cube_r1.setScale(1F, 1F, expand * 1.5F + 1F);
         this.cube_r2.setScale(1F, 1F, expand * 1.5F + 1F);
-        this.cube_r1.rotationPointZ += expand * 3;
-        this.cube_r2.rotationPointZ += expand * 3;
+        this.cube_r1.z += expand * 3;
+        this.cube_r2.z += expand * 3;
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

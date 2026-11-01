@@ -37,8 +37,8 @@ public class ModelLaviathan extends AdvancedEntityModel<EntityLaviathan> {
     private final AdvancedModelBox vent4;
 
     public ModelLaviathan() {
-        texHeight = 256;
-        texWidth = 256;
+        textureHeight = 256;
+        textureWidth = 256;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -150,11 +150,11 @@ public class ModelLaviathan extends AdvancedEntityModel<EntityLaviathan> {
     }
 
     public void translateRotate(PoseStack stack){
-        this.head.translateRotate(stack);
-        this.neck2.translateRotate(stack);
-        this.neck.translateRotate(stack);
-        this.body.translateRotate(stack);
-        this.root.translateRotate(stack);
+        this.head.translateAndRotate(stack);
+        this.neck2.translateAndRotate(stack);
+        this.neck.translateAndRotate(stack);
+        this.body.translateAndRotate(stack);
+        this.root.translateAndRotate(stack);
     }
 
                                 @Override
@@ -185,16 +185,16 @@ public class ModelLaviathan extends AdvancedEntityModel<EntityLaviathan> {
         float clampedNeckRot = Mth.clamp(-rawHeadHeight, -1, 1);
         float headStillProgress = 1F - Math.abs(clampedNeckRot);
         float onLandProgress = Math.max(0, 5F - swimProgress);
-        this.neck.rotateAngleX += clampedNeckRot;
-        this.neck.rotationPointZ += Math.abs(clampedNeckRot) * 2F;
-        this.neck2.rotateAngleX -= clampedNeckRot * 0.4F;
-        this.neck2.rotationPointZ += Math.abs(clampedNeckRot) * 2F;
-        this.head.rotateAngleX -= clampedNeckRot * 0.6F;
-        this.head.rotationPointZ += Math.abs(clampedNeckRot) * 2F;
-        this.neck.rotationPointY -= Mth.clamp(Math.abs(headYaw) / 50F, 0F, 1F);
-        this.neck.rotateAngleY += Math.toRadians(headYaw * 0.65F);
-        this.neck2.rotateAngleY += Math.toRadians(headYaw * 0.6F);
-        this.head.rotateAngleY += Math.toRadians(headYaw * 0.45F);
+        this.neck.xRot += clampedNeckRot;
+        this.neck.z += Math.abs(clampedNeckRot) * 2F;
+        this.neck2.xRot -= clampedNeckRot * 0.4F;
+        this.neck2.z += Math.abs(clampedNeckRot) * 2F;
+        this.head.xRot -= clampedNeckRot * 0.6F;
+        this.head.z += Math.abs(clampedNeckRot) * 2F;
+        this.neck.y -= Mth.clamp(Math.abs(headYaw) / 50F, 0F, 1F);
+        this.neck.yRot += Math.toRadians(headYaw * 0.65F);
+        this.neck2.yRot += Math.toRadians(headYaw * 0.6F);
+        this.head.yRot += Math.toRadians(headYaw * 0.45F);
 
         progressRotationPrev(rightLeg, onLandProgress, 0, 0, Maths.rad(-15), 5F);
         progressRotationPrev(leftLeg, onLandProgress, 0, 0, Maths.rad(15), 5F);
@@ -232,7 +232,7 @@ public class ModelLaviathan extends AdvancedEntityModel<EntityLaviathan> {
         this.flap(rightLeg, idleSpeed, idleDegree, true, 1, 0.2F, ageInTicks, swimProgress * 0.2F);
         this.flap(leftArm, idleSpeed, idleDegree, false, 1, 0.2F, ageInTicks, swimProgress * 0.2F);
         this.flap(rightArm, idleSpeed, idleDegree, true, 1, 0.2F, ageInTicks, swimProgress * 0.2F);
-        this.tail.rotationPointZ -= limbSwingAmount * swimProgress * 0.2F;
+        this.tail.z -= limbSwingAmount * swimProgress * 0.2F;
     }
 
     @Override

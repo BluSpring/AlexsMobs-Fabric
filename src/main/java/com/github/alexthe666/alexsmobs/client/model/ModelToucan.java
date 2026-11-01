@@ -24,8 +24,8 @@ public class ModelToucan extends AdvancedEntityModel<EntityToucan> {
     public final AdvancedModelBox beak;
 
     public ModelToucan() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
         body = new AdvancedModelBox(this, "body");
@@ -179,8 +179,8 @@ public class ModelToucan extends AdvancedEntityModel<EntityToucan> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

@@ -25,8 +25,8 @@ public class ModelRockyRoller extends AdvancedEntityModel<EntityRockyRoller> {
     private final AdvancedModelBox right_leg;
 
     public ModelRockyRoller() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -140,12 +140,12 @@ public class ModelRockyRoller extends AdvancedEntityModel<EntityRockyRoller> {
         progressRotationPrev(tail, walkProgress * limbSwingAmount, Maths.rad(30), 0, 0, 5F);
         progressPositionPrev(tail, walkProgress * limbSwingAmount, 0, -1, -1, 5f);
         if(entity.isRolling()){
-            body.rotateAngleX = timeRolling * 0.2F * rollProgress * rollDegree;
-            entity.clientRoll = body.rotateAngleX;
+            body.xRot = timeRolling * 0.2F * rollProgress * rollDegree;
+            entity.clientRoll = body.xRot;
             this.bob(body, rollDegree, 10, true, timeRolling, 0.2F * rollProgress);
         }else{
             float rollDeg = (float)Mth.wrapDegrees(Math.toDegrees(entity.clientRoll));
-            body.rotateAngleX = rollProgress * 0.2F * Maths.rad(rollDeg);
+            body.xRot = rollProgress * 0.2F * Maths.rad(rollDeg);
         }
         this.swing(tail, idleSpeed, idleDegree, false, 1F, 0F, ageInTicks, 1);
         this.bob(head, idleSpeed * 0.5F, idleDegree * 1.5F, false, ageInTicks, 1);
@@ -159,15 +159,15 @@ public class ModelRockyRoller extends AdvancedEntityModel<EntityRockyRoller> {
         this.bob(left_leg, -walkSpeed, walkDegree * 3, false, limbSwing, limbSwingAmount);
         this.bob(body, walkSpeed * 0.8F, walkDegree, true, limbSwing, limbSwingAmount * walkProgress * 0.2F);
         this.walk(tail, walkSpeed, walkDegree * 0.35F, false, 3F, 0F, limbSwing, limbSwingAmount);
-        head.rotateAngleY += netHeadYaw / 57.295776F;
-        head.rotateAngleX += headPitch / 57.295776F * 0.5F;
+        head.yRot += netHeadYaw / 57.295776F;
+        head.xRot += headPitch / 57.295776F * 0.5F;
 
     }
 
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

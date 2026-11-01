@@ -12,8 +12,8 @@ public class ModelBoneSerpentTail extends AdvancedEntityModel<EntityBoneSerpentP
     private final AdvancedModelBox tail;
 
     public ModelBoneSerpentTail() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
         tail = new AdvancedModelBox(this, "tail");
@@ -27,15 +27,15 @@ public class ModelBoneSerpentTail extends AdvancedEntityModel<EntityBoneSerpentP
     @Override
     public void setupAnim(EntityBoneSerpentPart entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetToDefaultPose();
-        this.tail.rotateAngleX = headPitch * Mth.DEG_TO_RAD;
-        this.tail.rotateAngleY = netHeadYaw * Mth.DEG_TO_RAD;
+        this.tail.xRot = headPitch * Mth.DEG_TO_RAD;
+        this.tail.yRot = netHeadYaw * Mth.DEG_TO_RAD;
         float walkSpeed = 0.35F;
         float walkDegree = 3F;
         float idleDegree = 0.7F;
         float idleSpeed = 0.2F;
         double walkOffset = entityIn.getBodyIndex() + 1;
-        this.tail.rotationPointY += (float)(Math.sin( (double)(limbSwing * walkSpeed) - walkOffset) * (double)limbSwingAmount * (double)walkDegree - (double)(limbSwingAmount * walkDegree) );
-        this.tail.rotationPointY += (float)(Math.sin( (double)(ageInTicks * idleSpeed) - walkOffset) * (double)1 * (double)idleDegree - (double)(1 * idleDegree) );
+        this.tail.y += (float)(Math.sin( (double)(limbSwing * walkSpeed) - walkOffset) * (double)limbSwingAmount * (double)walkDegree - (double)(limbSwingAmount * walkDegree) );
+        this.tail.y += (float)(Math.sin( (double)(ageInTicks * idleSpeed) - walkOffset) * (double)1 * (double)idleDegree - (double)(1 * idleDegree) );
 
     }
 

@@ -23,8 +23,8 @@ public class ModelStraddler extends AdvancedEntityModel<EntityStraddler> {
     private ModelAnimator animator;
 
     public ModelStraddler() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -144,16 +144,16 @@ public class ModelStraddler extends AdvancedEntityModel<EntityStraddler> {
         this.swing(hair_right, walkSpeed, walkDegree * 0.8F, false, -1, 0F, limbSwing, limbSwingAmount);
 
         if (entity.getPassengers().size() <= 0) {
-            this.body.rotateAngleX += headPitch * 0.5F * Mth.DEG_TO_RAD;
-            this.leg_right.rotateAngleX -= headPitch * 0.5F * Mth.DEG_TO_RAD;
-            this.leg_left.rotateAngleX -= headPitch * 0.5F * Mth.DEG_TO_RAD;
+            this.body.xRot += headPitch * 0.5F * Mth.DEG_TO_RAD;
+            this.leg_right.xRot -= headPitch * 0.5F * Mth.DEG_TO_RAD;
+            this.leg_left.xRot -= headPitch * 0.5F * Mth.DEG_TO_RAD;
         }
     }
 
 
     public void setRotationAngle(AdvancedModelBox advancedModelBox, float x, float y, float z) {
-        advancedModelBox.rotateAngleX = x;
-        advancedModelBox.rotateAngleY = y;
-        advancedModelBox.rotateAngleZ = z;
+        advancedModelBox.xRot = x;
+        advancedModelBox.yRot = y;
+        advancedModelBox.zRot = z;
     }
 }

@@ -31,8 +31,8 @@ public class ModelBunfungus extends AdvancedEntityModel<EntityBunfungus> {
     private final ModelAnimator animator;
 
     public ModelBunfungus() {
-        texWidth = 256;
-        texHeight = 256;
+        textureWidth = 256;
+        textureHeight = 256;
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
 
@@ -266,12 +266,12 @@ public class ModelBunfungus extends AdvancedEntityModel<EntityBunfungus> {
         this.swing(body, walkSpeed, walkDegree * 0.5F, false, 1F, 0F, limbSwing, limbSwingMod);
         this.swing(right_foot, walkSpeed, walkDegree * 0.5F, false, -2.5F, 0F, limbSwing, limbSwingMod);
         this.swing(left_foot, walkSpeed, walkDegree * 0.5F, false, -2.5F, 0F, limbSwing, limbSwingMod);
-        this.left_foot.rotateAngleX -= (left_leg.rotateAngleX + body.rotateAngleX);
-        this.left_foot.rotateAngleZ -= body.rotateAngleZ;
-        this.right_foot.rotateAngleX -= (right_leg.rotateAngleX + body.rotateAngleX);
-        this.right_foot.rotateAngleZ -= body.rotateAngleZ;
-        this.left_leg.rotationPointY += 2F * (float) (Math.sin((double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingMod * (double) walkDegree - (double) (limbSwingMod * walkDegree));
-        this.right_leg.rotationPointY += 2F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingMod * (double) walkDegree - (double) (limbSwingMod * walkDegree));
+        this.left_foot.xRot -= (left_leg.xRot + body.xRot);
+        this.left_foot.zRot -= body.zRot;
+        this.right_foot.xRot -= (right_leg.xRot + body.xRot);
+        this.right_foot.zRot -= body.zRot;
+        this.left_leg.y += 2F * (float) (Math.sin((double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingMod * (double) walkDegree - (double) (limbSwingMod * walkDegree));
+        this.right_leg.y += 2F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingMod * (double) walkDegree - (double) (limbSwingMod * walkDegree));
         this.flap(head, walkSpeed, walkDegree * 0.5F, true, 0F, 0F, limbSwing, limbSwingMod);
         this.swing(head, walkSpeed, walkDegree * 0.5F, true, 1F, 0F, limbSwing, limbSwingMod);
         this.flap(tail, walkSpeed, walkDegree * 0.5F, true, 0F, 0F, limbSwing, limbSwingMod);
@@ -279,8 +279,8 @@ public class ModelBunfungus extends AdvancedEntityModel<EntityBunfungus> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

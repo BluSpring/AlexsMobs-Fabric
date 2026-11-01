@@ -13,8 +13,8 @@ public class ModelShieldOfTheDeep extends AdvancedEntityModel<Entity> {
 	private final AdvancedModelBox handle;
 
 	public ModelShieldOfTheDeep() {
-		texWidth = 64;
-		texHeight = 64;
+		textureWidth = 64;
+		textureHeight = 64;
 
 		shield = new AdvancedModelBox(this, "shield");
 		shield.setPos(-2.0F, 16.0F, 0.0F);

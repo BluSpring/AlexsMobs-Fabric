@@ -27,8 +27,8 @@ public class ModelOrca extends AdvancedEntityModel<EntityOrca> {
     private final ModelAnimator animator;
 
     public ModelOrca() {
-        texWidth = 256;
-        texHeight = 256;
+        textureWidth = 256;
+        textureHeight = 256;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -148,12 +148,12 @@ public class ModelOrca extends AdvancedEntityModel<EntityOrca> {
         this.swing(fin_right, swimSpeed, swimDegree * 0.2F, true, 0F, 0F, limbSwing, limbSwingAmount);
         this.flap(fin_left, swimSpeed, swimDegree * 1.4F, true, 3F, 0F, limbSwing, limbSwingAmount);
         this.flap(fin_right, swimSpeed, swimDegree * 1.4F, false, 3F, 0F, limbSwing, limbSwingAmount);
-        this.body.rotateAngleX += headPitch * Mth.DEG_TO_RAD;
-        this.body.rotateAngleY += netHeadYaw * Mth.DEG_TO_RAD;
+        this.body.xRot += headPitch * Mth.DEG_TO_RAD;
+        this.body.yRot += netHeadYaw * Mth.DEG_TO_RAD;
         if (horizontalMag(entityIn.getDeltaMovement()) > 1.0E-7D) {
-            this.body.rotateAngleX += -0.05F + -0.05F * Mth.cos(ageInTicks * 0.3F);
-            this.tail1.rotateAngleX += -0.1F * Mth.cos(ageInTicks * 0.3F);
-            this.tailend.rotateAngleX += -0.2F * Mth.cos(ageInTicks * 0.3F);
+            this.body.xRot += -0.05F + -0.05F * Mth.cos(ageInTicks * 0.3F);
+            this.tail1.xRot += -0.1F * Mth.cos(ageInTicks * 0.3F);
+            this.tailend.xRot += -0.2F * Mth.cos(ageInTicks * 0.3F);
         }
 
     }
@@ -169,8 +169,8 @@ public class ModelOrca extends AdvancedEntityModel<EntityOrca> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

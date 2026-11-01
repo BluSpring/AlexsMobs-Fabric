@@ -29,8 +29,8 @@ public class ModelSnowLeopard extends AdvancedEntityModel<EntitySnowLeopard> {
     public ModelAnimator animator;
 
     public ModelSnowLeopard() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this);
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -231,10 +231,10 @@ public class ModelSnowLeopard extends AdvancedEntityModel<EntitySnowLeopard> {
         progressPositionPrev(head, sleepProgress, 0, 5, -1, 5F);
         if(sleepProgress >= 5F){
             float f = (float) (sleepProgress * Math.max(Math.sin(ageInTicks * 0.05F), 0F) * 0.2F);
-            this.bubble.showModel = true;
+            this.bubble.visible = true;
             this.bubble.setScale(f, f, f);
         }else{
-            this.bubble.showModel = false;
+            this.bubble.visible = false;
         }
         if (sleepProgress <= 0.0F) {
             this.faceTarget(netHeadYaw, headPitch, 1, head);
@@ -266,8 +266,8 @@ public class ModelSnowLeopard extends AdvancedEntityModel<EntitySnowLeopard> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

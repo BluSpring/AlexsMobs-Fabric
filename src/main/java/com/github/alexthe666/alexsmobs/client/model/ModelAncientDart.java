@@ -14,8 +14,8 @@ public class ModelAncientDart extends AdvancedEntityModel<Entity> {
 	private final AdvancedModelBox cube_r2;
 
 	public ModelAncientDart() {
-		texWidth = 32;
-		texHeight = 32;
+		textureWidth = 32;
+		textureHeight = 32;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 0.0F, 0.0F);
@@ -61,8 +61,8 @@ public class ModelAncientDart extends AdvancedEntityModel<Entity> {
 	}
 
 	public void setRotationAngle(AdvancedModelBox modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 }

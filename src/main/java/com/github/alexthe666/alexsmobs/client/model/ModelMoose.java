@@ -28,8 +28,8 @@ public class ModelMoose extends AdvancedEntityModel<EntityMoose> {
     private final ModelAnimator animator;
 
     public ModelMoose() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -203,9 +203,9 @@ public class ModelMoose extends AdvancedEntityModel<EntityMoose> {
         progressPositionPrev(head, jostleProgress, 0, 0, -1, 5F);
         if (jostleProgress > 0) {
             float yawAmount = jostleAngle / 57.295776F * 0.5F * jostleProgress * 0.2F;
-            neck.rotateAngleY += yawAmount;
-            head.rotateAngleY += yawAmount;
-            head.rotateAngleZ += yawAmount;
+            neck.yRot += yawAmount;
+            head.yRot += yawAmount;
+            head.zRot += yawAmount;
         } else {
             this.faceTarget(netHeadYaw, headPitch, 2, neck, head);
         }
@@ -250,8 +250,8 @@ public class ModelMoose extends AdvancedEntityModel<EntityMoose> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

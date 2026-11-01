@@ -23,8 +23,8 @@ public class ModelBlueJay extends AdvancedEntityModel<EntityBlueJay> {
     private final AdvancedModelBox crest;
 
     public ModelBlueJay() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -135,7 +135,7 @@ public class ModelBlueJay extends AdvancedEntityModel<EntityBlueJay> {
         this.walk(crest, idleSpeed, idleDegree, false, 2F, 0F, ageInTicks, 1);
         this.bob(head, idleSpeed, idleDegree * 1.5F, true, ageInTicks, 1);
         this.faceTarget(netHeadYaw, headPitch, 1.3F, head);
-        this.body.rotateAngleX += birdPitch * flyProgress * 0.2F * Mth.DEG_TO_RAD;
+        this.body.xRot += birdPitch * flyProgress * 0.2F * Mth.DEG_TO_RAD;
         if(entity.getFeedTime() > 0){
             this.flap(head, 0.4F, 0.4F, false, 1F, 0F, ageInTicks, 1);
         }
@@ -143,7 +143,7 @@ public class ModelBlueJay extends AdvancedEntityModel<EntityBlueJay> {
             this.flap(head, 0.4F, 0.4F, false, 1F, 0F, ageInTicks, 1);
             this.walk(crest, 0.4F, 0.3F, false, 1F, 0.1F, ageInTicks, 1);
             this.swing(head, 0.4F, 0.4F, false, 2F, 0F, ageInTicks, 1);
-            head.rotationPointZ +=  (float) (Math.sin(ageInTicks * -0.4 - 1F));
+            head.z +=  (float) (Math.sin(ageInTicks * -0.4 - 1F));
         }
     }
 

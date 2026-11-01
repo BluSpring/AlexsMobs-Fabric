@@ -33,8 +33,8 @@ public class ModelBaldEagle extends AdvancedEntityModel<EntityBaldEagle> {
     private final AdvancedModelBox tipL;
 
     public ModelBaldEagle() {
-        texWidth = 64;
-        texHeight = 32;
+        textureWidth = 64;
+        textureHeight = 32;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -222,11 +222,11 @@ public class ModelBaldEagle extends AdvancedEntityModel<EntityBaldEagle> {
         this.walk(head, idleSpeed * 0.7F, idleDegree, false, -1F, 0.05F, ageInTicks, 1);
         this.walk(tail, idleSpeed * 0.7F, idleDegree, false, 1F, 0.05F, ageInTicks, 1);
         if(!entity.isVehicle()){
-            head.rotateAngleY += netHeadYaw / 57.295776F;
-            head.rotateAngleZ += headPitch / 57.295776F;
+            head.yRot += netHeadYaw / 57.295776F;
+            head.zRot += headPitch / 57.295776F;
         }
         float birdPitch = entity.prevBirdPitch + (entity.birdPitch - entity.prevBirdPitch) * partialTicks;
-        this.body.rotateAngleX += birdPitch * flyProgress * 0.2F * Mth.DEG_TO_RAD;
+        this.body.xRot += birdPitch * flyProgress * 0.2F * Mth.DEG_TO_RAD;
 
     }
 
@@ -267,8 +267,8 @@ public class ModelBaldEagle extends AdvancedEntityModel<EntityBaldEagle> {
 
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

@@ -13,8 +13,8 @@ public class ModelEndPirateShipWheel extends AdvancedEntityModel<Entity> {
     private final AdvancedModelBox wheel;
 
     public ModelEndPirateShipWheel() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
 
         root = new AdvancedModelBox(this, "root");
@@ -22,7 +22,7 @@ public class ModelEndPirateShipWheel extends AdvancedEntityModel<Entity> {
         wheel = new AdvancedModelBox(this, "wheel");
         wheel.setRotationPoint(0.0F, -2.0F, 0.0F);
         root.addChild(wheel);
-        wheel.rotateAngleX = -1.5708F;
+        wheel.xRot = -1.5708F;
         wheel.setTextureOffset(0, 37).addBox(-9.0F, 6.0F, -1.0F, 18.0F, 3.0F, 2.0F, 0.0F, false);
         wheel.setTextureOffset(37, 39).addBox(-3.0F, -3.0F, -2.0F, 6.0F, 6.0F, 4.0F, 0.0F, false);
         wheel.setTextureOffset(0, 0).addBox(-15.0F, -15.0F, 0.0F, 30.0F, 30.0F, 0.0F, 0.0F, false);
@@ -47,6 +47,6 @@ public class ModelEndPirateShipWheel extends AdvancedEntityModel<Entity> {
 
     public void renderWheel(TileEntityEndPirateShipWheel wheel, float partialTick) {
         this.resetToDefaultPose();
-        this.wheel.rotateAngleY = Maths.rad(wheel.getWheelRot(partialTick));
+        this.wheel.yRot = Maths.rad(wheel.getWheelRot(partialTick));
     }
 }

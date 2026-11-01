@@ -17,8 +17,8 @@ public class ModelAnaconda<T extends LivingEntity> extends AdvancedEntityModel<T
     private AdvancedModelBox jaw;
 
     public ModelAnaconda(AnacondaPartIndex index) {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
         part = new AdvancedModelBox(this, "part");
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 21.0F, 0);
@@ -67,9 +67,9 @@ public class ModelAnaconda<T extends LivingEntity> extends AdvancedEntityModel<T
             progressPositionPrev(jaw, strangle, 0, 0, 1F, 5F);
             progressRotationPrev(part, strangle, Maths.rad(10), 0, 0, 5F);
             progressRotationPrev(jaw, strangle, Maths.rad(160), 0, 0, 5F);
-            this.part.rotateAngleY += netHeadYaw / 57.295776F;
-            this.part.rotateAngleX += Math.min(0, headPitch / 57.295776F);
-            this.part.rotationPointX += Mth.sin(limbSwing) * 2.0F * limbSwingAmount;
+            this.part.yRot += netHeadYaw / 57.295776F;
+            this.part.xRot += Math.min(0, headPitch / 57.295776F);
+            this.part.x += Mth.sin(limbSwing) * 2.0F * limbSwingAmount;
             this.walk(part, 0.7F, 0.2F, false, 1F, 0.05F, ageInTicks, strangle * 0.2F);
             this.walk(jaw, 0.7F, 0.4F, true, 1F, -0.05F, ageInTicks, strangle * 0.2F);
         }else if(entity instanceof EntityAnacondaPart partEntity){ //body

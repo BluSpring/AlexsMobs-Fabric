@@ -30,8 +30,8 @@ public class ModelAnteater extends AdvancedEntityModel<EntityAnteater> {
     public ModelAnimator animator;
 
     public ModelAnteater() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -198,7 +198,7 @@ public class ModelAnteater extends AdvancedEntityModel<EntityAnteater> {
         float toungeMinus = (float) -tongueM * (feedProgress * 0.2F);
         this.walk(tongue1, tongueSpeed * 2F, tongueDegree, false, 0F, 0F, ageInTicks,  toungeMinus);
         this.walk(tongue2, tongueSpeed * 2F, tongueDegree, false, 0F, 0F, ageInTicks,  toungeMinus);
-        this.tongue1.rotationPointZ += toungeF;
+        this.tongue1.z += toungeF;
         this.walk(tail, idleSpeed, idleDegree, true, 2F, 0.2F, ageInTicks, 1);
         this.walk(right_arm, idleSpeed, idleDegree, true, 2F, 0.2F, ageInTicks, standProgress * 0.2F);
         this.walk(left_arm, idleSpeed, idleDegree, true, 2F, 0.2F, ageInTicks, standProgress * 0.2F);
@@ -245,8 +245,8 @@ public class ModelAnteater extends AdvancedEntityModel<EntityAnteater> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

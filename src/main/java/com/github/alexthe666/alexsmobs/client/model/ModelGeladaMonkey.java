@@ -24,8 +24,8 @@ public class ModelGeladaMonkey extends AdvancedEntityModel<EntityGeladaMonkey> {
 	public final ModelAnimator animator;
 
 	public ModelGeladaMonkey() {
-		texWidth = 128;
-		texHeight = 128;
+		textureWidth = 128;
+		textureHeight = 128;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -252,8 +252,8 @@ public class ModelGeladaMonkey extends AdvancedEntityModel<EntityGeladaMonkey> {
 		progressPositionPrev(right_leg, sitProgress, 0, -2.5F, 0, 5F);
 		progressPositionPrev(left_arm, sitProgress, 0, 2, 2, 5F);
 		progressPositionPrev(right_arm, sitProgress, 0, 2, 2, 5F);
-		neck.rotateAngleY += netHeadYaw / 57.295776F * 0.5F;
-		neck.rotateAngleX += headPitch / 57.295776F;
+		neck.yRot += netHeadYaw / 57.295776F * 0.5F;
+		neck.xRot += headPitch / 57.295776F;
 		if(entity.isBaby()){
 			head.setScale(1.3F, 1.3F, 1.3F);
 			neck.setScale(1.25F, 1.25F, 1.25F);
@@ -275,8 +275,8 @@ public class ModelGeladaMonkey extends AdvancedEntityModel<EntityGeladaMonkey> {
 
 
 	public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-		AdvancedModelBox.rotateAngleX = x;
-		AdvancedModelBox.rotateAngleY = y;
-		AdvancedModelBox.rotateAngleZ = z;
+		AdvancedModelBox.xRot = x;
+		AdvancedModelBox.yRot = y;
+		AdvancedModelBox.zRot = z;
 	}
 }

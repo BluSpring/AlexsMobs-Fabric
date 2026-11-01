@@ -32,8 +32,8 @@ public class ModelCosmaw extends AdvancedEntityModel<EntityCosmaw> {
     public final AdvancedModelBox tailFin;
 
     public ModelCosmaw() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -155,17 +155,17 @@ public class ModelCosmaw extends AdvancedEntityModel<EntityCosmaw> {
         float openProgress = Math.max(Math.max(entity.prevOpenProgress + (entity.openProgress - entity.prevOpenProgress) * partialTick, clutchProgress), biteProgress);
         float cosmawPitch = (float) (Math.toRadians(entity.getClampedCosmawPitch(partialTick)) * (5F - clutchProgress) * 0.2F);
         float cosmawPitchPos = (entity.getClampedCosmawPitch(partialTick) / 90F) * (5F - clutchProgress) * 0.2F;
-        body.rotateAngleX += cosmawPitch;
-        eyesBase.rotateAngleX -= cosmawPitch;
-        mouthArm1.rotateAngleX -= cosmawPitch * 0.2F;
-        mouthArm2.rotateAngleX -= cosmawPitch * 1.7F;
-        lowerJaw.rotateAngleX -= cosmawPitch * 0.3F;
-        topJaw.rotateAngleX -= cosmawPitch * 0.3F;
+        body.xRot += cosmawPitch;
+        eyesBase.xRot -= cosmawPitch;
+        mouthArm1.xRot -= cosmawPitch * 0.2F;
+        mouthArm2.xRot -= cosmawPitch * 1.7F;
+        lowerJaw.xRot -= cosmawPitch * 0.3F;
+        topJaw.xRot -= cosmawPitch * 0.3F;
         if(cosmawPitchPos > 0){
-            mouthArm2.rotationPointY -= Math.min(cosmawPitchPos * 6, 3F);
+            mouthArm2.y -= Math.min(cosmawPitchPos * 6, 3F);
         }else{
-            mouthArm2.rotationPointZ -= cosmawPitchPos * 3;
-            mouthArm2.rotationPointY += cosmawPitchPos;
+            mouthArm2.z -= cosmawPitchPos * 3;
+            mouthArm2.y += cosmawPitchPos;
 
         }
         this.walk(body, idleSpeed, idleDegree * 0.1F, false, -1F, 0.05F, ageInTicks, 1);
@@ -203,13 +203,13 @@ public class ModelCosmaw extends AdvancedEntityModel<EntityCosmaw> {
         progressRotationPrev(leftArm, biteProgress, Maths.rad(10), 0, Maths.rad(-30), 5F);
         progressRotationPrev(rightArm, biteProgress, Maths.rad(10), 0, Maths.rad(30), 5F);
         float eyeYaw = (Mth.clamp(netHeadYaw, -40, 40) / 57.295776F);
-        this.eyesBase.rotateAngleY += eyeYaw * 0.35F;
+        this.eyesBase.yRot += eyeYaw * 0.35F;
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 
     @Override

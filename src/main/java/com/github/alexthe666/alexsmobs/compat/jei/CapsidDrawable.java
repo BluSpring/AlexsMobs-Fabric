@@ -1,6 +1,6 @@
 package com.github.alexthe666.alexsmobs.compat.jei;
 import mezz.jei.api.gui.drawable.IDrawable;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 
 public class CapsidDrawable implements IDrawable {
@@ -17,7 +17,7 @@ public class CapsidDrawable implements IDrawable {
     }
 
     @Override
-    public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+    public void draw(GuiGraphicsExtractor guiGraphics, int xOffset, int yOffset) {
         int i = xOffset;
         int j = yOffset;
         guiGraphics.blit(TEXTURE, i, j, 0, 0, 125, 59, 256, 256);

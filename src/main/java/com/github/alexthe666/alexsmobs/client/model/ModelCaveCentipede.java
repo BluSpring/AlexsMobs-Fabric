@@ -45,8 +45,8 @@ public class ModelCaveCentipede<T extends LivingEntity> extends AdvancedEntityMo
     private AdvancedModelBox antenna_right_r1;
 
     public ModelCaveCentipede(int type) {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
         this.type = type;
 
         root = new AdvancedModelBox(this, "root");
@@ -251,7 +251,7 @@ public class ModelCaveCentipede<T extends LivingEntity> extends AdvancedEntityMo
             this.swing(antenna_left, idleSpeed, idleDegree, true, 1, -0.1F, ageInTicks, 1);
             this.swing(antenna_right, idleSpeed, idleDegree, false, 1, -0.1F, ageInTicks, 1);
             this.swing(fangs, idleSpeed, idleDegree * 0.1F, false, 0, 0, ageInTicks, 1);
-            this.fangs.rotationPointZ = -6.2F;
+            this.fangs.z = -6.2F;
         }else if(type == 1){
             if(entity instanceof EntityCentipedeBody){
                 float offset = (float) ((((EntityCentipedeBody)entity).getBodyIndex() + 1 ) * Math.PI * 0.5F);
@@ -264,8 +264,8 @@ public class ModelCaveCentipede<T extends LivingEntity> extends AdvancedEntityMo
                 this.flap(rightLegBodyF2, walkSpeed, walkDegree * 0.5F, false, offset, 0.1F, limbSwing, limbSwingAmount);
                 this.swing(rightLegBodyB, walkSpeed, walkDegree, false, offset + 0.5F, 0F, limbSwing, limbSwingAmount);
                 this.flap(rightLegBodyB2, walkSpeed, walkDegree * 0.5F, false, offset + 0.5F, 0.1F, limbSwing, limbSwingAmount);
-                this.body.rotationPointY += (float)(Math.sin( (double)(limbSwing * walkSpeed) - walkOffset) * (double)limbSwingAmount * (double)walkDegree - (double)(limbSwingAmount * walkDegree) );
-                this.body.rotationPointY += (float)(Math.sin( (ageInTicks * 0.1) - walkOffset) * 0.01);
+                this.body.y += (float)(Math.sin( (double)(limbSwing * walkSpeed) - walkOffset) * (double)limbSwingAmount * (double)walkDegree - (double)(limbSwingAmount * walkDegree) );
+                this.body.y += (float)(Math.sin( (ageInTicks * 0.1) - walkOffset) * 0.01);
 
             }
 
@@ -282,8 +282,8 @@ public class ModelCaveCentipede<T extends LivingEntity> extends AdvancedEntityMo
                 this.flap(rightLeg2TailF, walkSpeed, walkDegree * 0.5F, false, offset, 0.1F, limbSwing, limbSwingAmount);
                 this.swing(rightLegTailB, walkSpeed, walkDegree, false, offset + 0.5F, 0F, limbSwing, limbSwingAmount);
                 this.flap(rightLegTailB2, walkSpeed, walkDegree * 0.5F, false, offset + 0.5F, 0.1F, limbSwing, limbSwingAmount);
-                this.tail.rotationPointY += (float)(Math.sin( (double)(limbSwing * walkSpeed) - walkOffset) * (double)limbSwingAmount * (double)walkDegree - (double)(limbSwingAmount * walkDegree) );
-                this.tail.rotationPointY += (float)(Math.sin( (ageInTicks * 0.1) - walkOffset) * 0.01);
+                this.tail.y += (float)(Math.sin( (double)(limbSwing * walkSpeed) - walkOffset) * (double)limbSwingAmount * (double)walkDegree - (double)(limbSwingAmount * walkDegree) );
+                this.tail.y += (float)(Math.sin( (ageInTicks * 0.1) - walkOffset) * 0.01);
                 this.swing(leftTail, walkSpeed, walkDegree * 0.2F, true, offset + 1F, 0F, limbSwing, limbSwingAmount);
                 this.swing(rightTail, walkSpeed, walkDegree * 0.2F, false, offset + 1F, 0F, limbSwing, limbSwingAmount);
                 this.walk(leftTail, idleSpeed, idleDegree, true, offset + 1.5F, -0.5F, ageInTicks, 1);
@@ -303,8 +303,8 @@ public class ModelCaveCentipede<T extends LivingEntity> extends AdvancedEntityMo
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

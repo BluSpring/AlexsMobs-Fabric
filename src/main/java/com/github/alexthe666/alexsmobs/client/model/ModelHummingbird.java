@@ -23,8 +23,8 @@ public class ModelHummingbird extends AdvancedEntityModel<EntityHummingbird> {
     private final AdvancedModelBox legR;
 
     public ModelHummingbird() {
-        texWidth = 32;
-        texHeight = 32;
+        textureWidth = 32;
+        textureHeight = 32;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -164,8 +164,8 @@ public class ModelHummingbird extends AdvancedEntityModel<EntityHummingbird> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

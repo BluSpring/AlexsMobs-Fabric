@@ -14,8 +14,8 @@ public class ModelVoidWormBeak extends AdvancedEntityModel<Entity> {
     private final AdvancedModelBox right;
 
     public ModelVoidWormBeak() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
         left = new AdvancedModelBox(this, "left");
@@ -50,8 +50,8 @@ public class ModelVoidWormBeak extends AdvancedEntityModel<Entity> {
         this.flap(left, 0.5F, 0.5F, false, 0F, 0.3F, ageInTicks, amount);
         this.flap(right, 0.5F, -0.5F, false, 0F, -0.3F, ageInTicks, amount);
         float rotation = Mth.cos(ageInTicks * 0.5F) * 0.5F * amount + 0.3F * amount;
-        left.rotationPointY -= rotation * 4.5F;
-        right.rotationPointY -= rotation * 4.5F;
+        left.y -= rotation * 4.5F;
+        right.y -= rotation * 4.5F;
     }
 
 }

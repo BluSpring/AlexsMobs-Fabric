@@ -27,8 +27,8 @@ public class ModelSeagull extends AdvancedEntityModel<EntitySeagull> {
 	public final AdvancedModelBox right_leg;
 
 	public ModelSeagull() {
-		texWidth = 64;
-		texHeight = 64;
+		textureWidth = 64;
+		textureHeight = 64;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 24.0F, 0.0F);
@@ -154,9 +154,9 @@ public class ModelSeagull extends AdvancedEntityModel<EntitySeagull> {
 		}
 		this.swing(tail, idleSpeed, idleDegree, false, 1F, 0F, ageInTicks, 1);
 		this.bob(head, idleSpeed * 0.5F, idleDegree * 1.5F, true, ageInTicks, 1);
-		head.rotateAngleY += Math.toRadians(entity.getFlightLookYaw()) * flyProgress * 0.2F;
-		head.rotateAngleY += netHeadYaw / 57.295776F * groundProgress * 0.2F;
-		head.rotateAngleX += headPitch / 57.295776F * groundProgress * 0.2F;
+		head.yRot += Math.toRadians(entity.getFlightLookYaw()) * flyProgress * 0.2F;
+		head.yRot += netHeadYaw / 57.295776F * groundProgress * 0.2F;
+		head.xRot += headPitch / 57.295776F * groundProgress * 0.2F;
 
 	}
 
@@ -186,8 +186,8 @@ public class ModelSeagull extends AdvancedEntityModel<EntitySeagull> {
 
 
 	public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-		AdvancedModelBox.rotateAngleX = x;
-		AdvancedModelBox.rotateAngleY = y;
-		AdvancedModelBox.rotateAngleZ = z;
+		AdvancedModelBox.xRot = x;
+		AdvancedModelBox.yRot = y;
+		AdvancedModelBox.zRot = z;
 	}
 }

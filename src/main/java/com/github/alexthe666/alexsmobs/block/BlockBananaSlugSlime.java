@@ -4,7 +4,7 @@ import java.util.Queue;
 
 import com.github.alexthe666.alexsmobs.misc.AMSoundRegistry;
 import com.google.common.collect.Lists;
-import org.jspecify.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -71,7 +71,7 @@ public class BlockBananaSlugSlime extends HalfTransparentBlock {
     }
 
     @Override
-    public boolean canStickTo(BlockState state, @NotNull BlockState other) {
+    public boolean canStickTo(BlockState state, @NonNull BlockState other) {
         return !other.isStickyBlock() || other.getBlock() == this;
     }
 

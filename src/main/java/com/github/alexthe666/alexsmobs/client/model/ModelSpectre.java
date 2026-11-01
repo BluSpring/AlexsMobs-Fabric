@@ -19,8 +19,8 @@ public class ModelSpectre extends AdvancedEntityModel<EntitySpectre> {
     private final AdvancedModelBox wing_right_p;
 
     public ModelSpectre() {
-        texWidth = 256;
-        texHeight = 256;
+        textureWidth = 256;
+        textureHeight = 256;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -84,13 +84,13 @@ public class ModelSpectre extends AdvancedEntityModel<EntitySpectre> {
         this.walk(root, flySpeed, flyDegree * 0.15F, true, 7.3F, 0, ageInTicks, 1);
         float partialTick = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
         float birdPitch = entity.prevBirdPitch + (entity.birdPitch - entity.prevBirdPitch) * partialTick;
-        this.root.rotateAngleX += birdPitch * Mth.DEG_TO_RAD;
+        this.root.xRot += birdPitch * Mth.DEG_TO_RAD;
 
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

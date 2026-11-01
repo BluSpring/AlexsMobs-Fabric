@@ -27,8 +27,8 @@ public class ModelCachalotWhale extends AdvancedEntityModel<EntityCachalotWhale>
 	public final AdvancedModelBox teeth;
 
 	public ModelCachalotWhale() {
-		texWidth = 512;
-		texHeight = 512;
+		textureWidth = 512;
+		textureHeight = 512;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 24.0F, 0.0F);
@@ -107,11 +107,11 @@ public class ModelCachalotWhale extends AdvancedEntityModel<EntityCachalotWhale>
 		float beachedProgress = entity.prevBeachedProgress + (entity.beachedProgress - entity.prevBeachedProgress) * partialTicks;
 		float grabProgress = entity.prevGrabProgress + (entity.grabProgress - entity.prevGrabProgress) * partialTicks;
 		float f = Mth.clamp((float)entity.getMovementOffsets(7, partialTicks)[0] - renderYaw, -50, 50);
-		this.tail1.rotateAngleY += Mth.clamp((float)entity.getMovementOffsets(15, partialTicks)[0] - renderYaw, -50, 50) * 0.017453292F;
-		this.tail2.rotateAngleY += Mth.clamp((float)entity.getMovementOffsets(17, partialTicks)[0] - renderYaw, -50, 50) * 0.017453292F;
-		this.body.rotateAngleX += Math.min(properPitch, sleepProgress * -9) * Mth.DEG_TO_RAD;
-		this.body.rotateAngleZ += f * 0.017453292F;
-		this.head.rotateAngleY += Math.sin((entity.grabTime + partialTicks) * 0.3F) * 0.1F * grabProgress;
+		this.tail1.yRot += Mth.clamp((float)entity.getMovementOffsets(15, partialTicks)[0] - renderYaw, -50, 50) * 0.017453292F;
+		this.tail2.yRot += Mth.clamp((float)entity.getMovementOffsets(17, partialTicks)[0] - renderYaw, -50, 50) * 0.017453292F;
+		this.body.xRot += Math.min(properPitch, sleepProgress * -9) * Mth.DEG_TO_RAD;
+		this.body.zRot += f * 0.017453292F;
+		this.head.yRot += Math.sin((entity.grabTime + partialTicks) * 0.3F) * 0.1F * grabProgress;
 		AdvancedModelBox[] tailBoxes = new AdvancedModelBox[]{tail1, tail2, tail3};
 		float swimSpeed = 0.2F + 0;
 		float swimDegree = 0.4F;
@@ -148,8 +148,8 @@ public class ModelCachalotWhale extends AdvancedEntityModel<EntityCachalotWhale>
 			this.bob(body, swimSpeed, swimDegree * 20, false, limbSwing, limbSwingAmount);
 			this.chainWave(tailBoxes, swimSpeed, swimDegree * 0.8F, -2F, limbSwing, limbSwingAmount);
 			this.walk(head, swimSpeed, swimDegree * 0.1F, false, 2F, 0, limbSwing, limbSwingAmount);
-			this.tail1.rotationPointZ -= 4 * limbSwingAmount;
-			this.tail2.rotationPointZ -= 2 * limbSwingAmount;
+			this.tail1.z -= 4 * limbSwingAmount;
+			this.tail2.z -= 2 * limbSwingAmount;
 		}
 	}
 
@@ -177,8 +177,8 @@ public class ModelCachalotWhale extends AdvancedEntityModel<EntityCachalotWhale>
 
 	}
 	public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-		AdvancedModelBox.rotateAngleX = x;
-		AdvancedModelBox.rotateAngleY = y;
-		AdvancedModelBox.rotateAngleZ = z;
+		AdvancedModelBox.xRot = x;
+		AdvancedModelBox.yRot = y;
+		AdvancedModelBox.zRot = z;
 	}
 }

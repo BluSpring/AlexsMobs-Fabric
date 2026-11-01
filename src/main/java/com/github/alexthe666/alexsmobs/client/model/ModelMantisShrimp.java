@@ -30,8 +30,8 @@ public class ModelMantisShrimp extends AdvancedEntityModel<EntityMantisShrimp> {
 	public final AdvancedModelBox whisker_right;
 
 	public ModelMantisShrimp() {
-		texWidth = 128;
-		texHeight = 128;
+		textureWidth = 128;
+		textureHeight = 128;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 24.0F, 0.0F);
@@ -169,12 +169,12 @@ public class ModelMantisShrimp extends AdvancedEntityModel<EntityMantisShrimp> {
 		float rightEyePitch = entity.prevRightPitch + (entity.getEyePitch(false) - entity.prevRightPitch) * partialTick;
 		float leftEyeYaw = entity.prevLeftYaw + (entity.getEyeYaw(true) - entity.prevLeftYaw) * partialTick;
 		float rightEyeYaw = entity.prevRightYaw + (entity.getEyeYaw(false) - entity.prevRightYaw) * partialTick;
-		this.eye_left.rotateAngleX += leftEyePitch * Mth.DEG_TO_RAD;
-		this.eye_left.rotateAngleY += leftEyeYaw * Mth.DEG_TO_RAD;
-		this.eye_right.rotateAngleX += rightEyePitch * Mth.DEG_TO_RAD;
-		this.eye_right.rotateAngleY += rightEyeYaw * Mth.DEG_TO_RAD;
-		this.head.rotateAngleY += netHeadYaw * 0.5F * Mth.DEG_TO_RAD;
-		this.head.rotateAngleX += headPitch * 0.8F * Mth.DEG_TO_RAD;
+		this.eye_left.xRot += leftEyePitch * Mth.DEG_TO_RAD;
+		this.eye_left.yRot += leftEyeYaw * Mth.DEG_TO_RAD;
+		this.eye_right.xRot += rightEyePitch * Mth.DEG_TO_RAD;
+		this.eye_right.yRot += rightEyeYaw * Mth.DEG_TO_RAD;
+		this.head.yRot += netHeadYaw * 0.5F * Mth.DEG_TO_RAD;
+		this.head.xRot += headPitch * 0.8F * Mth.DEG_TO_RAD;
 		this.walk(whisker_left, idleSpeed * 1.5F, idleDegree, false, 0F, -0.25F, ageInTicks, 1);
 		this.walk(whisker_right, idleSpeed * 1.5F, idleDegree, true, 0F, 0.25F, ageInTicks, 1);
 		this.swing(whisker_left, idleSpeed, idleDegree * 0.75F, false, 1F, 0F, ageInTicks, 1);
@@ -217,8 +217,8 @@ public class ModelMantisShrimp extends AdvancedEntityModel<EntityMantisShrimp> {
 
 
 	public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-		AdvancedModelBox.rotateAngleX = x;
-		AdvancedModelBox.rotateAngleY = y;
-		AdvancedModelBox.rotateAngleZ = z;
+		AdvancedModelBox.xRot = x;
+		AdvancedModelBox.yRot = y;
+		AdvancedModelBox.zRot = z;
 	}
 }

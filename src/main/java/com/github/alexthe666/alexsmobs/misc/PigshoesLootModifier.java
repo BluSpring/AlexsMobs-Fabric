@@ -8,7 +8,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
-import org.jspecify.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -38,7 +38,7 @@ public class PigshoesLootModifier implements IGlobalLootModifier {
     }
 
 
-    @NotNull
+    @NonNull
     @Override
     public ObjectArrayList<ItemStack> apply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         return this.orConditions.test(context) ? this.doApply(generatedLoot, context) : generatedLoot;

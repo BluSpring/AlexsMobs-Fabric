@@ -27,8 +27,8 @@ public class ModelFlutter extends AdvancedEntityModel<EntityFlutter> {
     private final AdvancedModelBox right_arm;
 
     public ModelFlutter() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -127,22 +127,22 @@ public class ModelFlutter extends AdvancedEntityModel<EntityFlutter> {
         float flutterPitch = Maths.rad(Mth.rotLerp(partialTicks, entity.prevFlutterPitch, entity.getFlutterPitch()));
         Entity look = Minecraft.getInstance().getCameraEntity();
         if(entity.isShakingHead()){
-            this.eyes.rotationPointX += Math.sin(ageInTicks);
-            this.body.rotateAngleY += Math.sin(ageInTicks) * 0.1F;
-            this.eyes.rotationPointY = -0.5F;
+            this.eyes.x += Math.sin(ageInTicks);
+            this.body.yRot += Math.sin(ageInTicks) * 0.1F;
+            this.eyes.y = -0.5F;
         }else if (look != null) {
             Vec3 vector3d = look.getEyePosition(0.0F);
             Vec3 vector3d1 = entity.getEyePosition(0.0F);
             double d0 = vector3d.y - vector3d1.y;
             float f1 = (float)Mth.clamp(-d0 - 0.5F, -2.0F, 0F);
-            this.eyes.rotationPointY = f1;
+            this.eyes.y = f1;
             Vec3 vector3d2 = entity.getViewVector(0.0F);
             vector3d2 = new Vec3(vector3d2.x, 0.0D, vector3d2.z);
             Vec3 vector3d3 = (new Vec3(vector3d1.x - vector3d.x, 0.0D, vector3d1.z - vector3d.z)).normalize().yRot((Mth.PI / 2F));
             double d1 = vector3d2.dot(vector3d3);
-            this.eyes.rotationPointX += Mth.sqrt((float) Math.abs(d1)) * 1.5F * (float) Math.signum(d1);
+            this.eyes.x += Mth.sqrt((float) Math.abs(d1)) * 1.5F * (float) Math.signum(d1);
         }else{
-            this.eyes.rotationPointY = -1.0F;
+            this.eyes.y = -1.0F;
         }
         this.walk(right_arm, walkSpeed, walkDegree * 1.5F, true, 0, 0.3F, limbSwing, limbSwingAmount * groundProgress);
         this.walk(left_arm, walkSpeed, walkDegree * 1.5F, false, 0, -0.3F, limbSwing, limbSwingAmount * groundProgress);
@@ -182,15 +182,15 @@ public class ModelFlutter extends AdvancedEntityModel<EntityFlutter> {
         progressRotationPrev(left_leg, sitProgress, Maths.rad(-45), 0, 0, 5F);
         progressRotationPrev(right_arm, sitProgress, Maths.rad(-45), 0, 0, 5F);
         progressRotationPrev(left_arm, sitProgress, Maths.rad(-45), 0, 0, 5F);
-        this.root.rotateAngleX -= flutterPitch * flyProgress * 0.2F;
-        this.body.rotateAngleY += Math.toRadians(Mth.wrapDegrees(shootProgress * 360 * 0.2F));
+        this.root.xRot -= flutterPitch * flyProgress * 0.2F;
+        this.body.yRot += Math.toRadians(Mth.wrapDegrees(shootProgress * 360 * 0.2F));
         float petalScale = 1 + invertTentacle * 0.05F;
         this.front_petal.setScale(1, petalScale, 1);
         this.back_petal.setScale(1, petalScale, 1);
         this.left_petal.setScale(1, petalScale, 1);
         this.right_petal.setScale(1, petalScale, 1);
         if(entity.isBaby()){
-            this.root.rotationPointY += 1.5F;
+            this.root.y += 1.5F;
             body.setScale(0.5F, 0.5F, 0.5F);
             body.setShouldScaleChildren(true);
         }else{
@@ -199,8 +199,8 @@ public class ModelFlutter extends AdvancedEntityModel<EntityFlutter> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

@@ -16,8 +16,8 @@ public class ModelStraddleboard extends AdvancedEntityModel<EntityStraddleboard>
 	private final AdvancedModelBox spikes_front;
 
 	public ModelStraddleboard() {
-		texWidth = 128;
-		texHeight = 128;
+		textureWidth = 128;
+		textureHeight = 128;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 24.0F, 0.0F);
@@ -82,8 +82,8 @@ public class ModelStraddleboard extends AdvancedEntityModel<EntityStraddleboard>
 	}
 
 	public void setRotationAngle(AdvancedModelBox advancedModelBox, float x, float y, float z) {
-		advancedModelBox.rotateAngleX = x;
-		advancedModelBox.rotateAngleY = y;
-		advancedModelBox.rotateAngleZ = z;
+		advancedModelBox.xRot = x;
+		advancedModelBox.yRot = y;
+		advancedModelBox.zRot = z;
 	}
 }

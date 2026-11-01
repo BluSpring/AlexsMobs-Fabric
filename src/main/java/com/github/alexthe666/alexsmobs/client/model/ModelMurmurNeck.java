@@ -16,8 +16,8 @@ public class ModelMurmurNeck extends AdvancedEntityModel<LivingEntity> {
     public static boolean HIDE = false;
 
     public ModelMurmurNeck() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 12.0F, 0.0F);
         neckPivot = new AdvancedModelBox(this, "neckPivot");
@@ -49,11 +49,11 @@ public class ModelMurmurNeck extends AdvancedEntityModel<LivingEntity> {
         this.stretch = f;
         float f1 = THIN ? 0.75F : 1.0F;
         this.neck.setScale(f1, this.stretch, f1);
-        this.neckPivot.rotateAngleX = Maths.rad(rotX);
-        this.neckPivot.rotateAngleY = Maths.rad(rotY);
-        this.neck.rotateAngleY = Maths.rad(-additionalYaw);
-        this.neckPivot.showModel = !HIDE;
-        this.root.showModel = !HIDE;
-        this.neck.showModel = !HIDE;
+        this.neckPivot.xRot = Maths.rad(rotX);
+        this.neckPivot.yRot = Maths.rad(rotY);
+        this.neck.yRot = Maths.rad(-additionalYaw);
+        this.neckPivot.visible = !HIDE;
+        this.root.visible = !HIDE;
+        this.neck.visible = !HIDE;
     }
 }

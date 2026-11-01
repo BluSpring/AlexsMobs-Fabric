@@ -17,8 +17,8 @@ public class ModelMimicube extends AdvancedEntityModel<EntityMimicube> {
 	public final AdvancedModelBox eye_right;
 
 	public ModelMimicube() {
-		texWidth = 64;
-		texHeight = 64;
+		textureWidth = 64;
+		textureHeight = 64;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 24.0F, 0.0F);
@@ -73,14 +73,14 @@ public class ModelMimicube extends AdvancedEntityModel<EntityMimicube> {
 		float lvt_6_1_ = Mth.lerp(Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false), entity.prevSquishFactor, entity.squishFactor);
 		float lvt_7_1_ = 1.0F / (lvt_6_1_ + 1.0F);
 		float squishScale = 1.0F / lvt_7_1_;
-		this.innerbody.rotationPointY += lvt_6_1_ * -5F;
+		this.innerbody.y += lvt_6_1_ * -5F;
 		this.body.setScale(1F, squishScale, 1F);
 	}
 
 
 	public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-		AdvancedModelBox.rotateAngleX = x;
-		AdvancedModelBox.rotateAngleY = y;
-		AdvancedModelBox.rotateAngleZ = z;
+		AdvancedModelBox.xRot = x;
+		AdvancedModelBox.yRot = y;
+		AdvancedModelBox.zRot = z;
 	}
 }

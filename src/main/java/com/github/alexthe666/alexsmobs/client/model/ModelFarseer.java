@@ -52,8 +52,8 @@ public class ModelFarseer extends AdvancedEntityModel<EntityFarseer> {
     private final ModelAnimator animator;
 
     public ModelFarseer(float scale) {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -409,31 +409,31 @@ public class ModelFarseer extends AdvancedEntityModel<EntityFarseer> {
         progressRotationPrev(rightElbow2, strike4Progress, 0, Maths.rad(70), 0, 5F);
         progressRotationPrev(rightHand2, strike4Progress, 0, Maths.rad(10), 0, 5F);
 
-        leftArm.rotationPointX += (topArmOffset.x + Math.sin(ageInTicks * idleSpeed + 1.3F)) * idleDegree;
-        leftArm.rotationPointY += (topArmOffset.y + Math.sin(ageInTicks * idleSpeed + 1.6F)) * idleDegree;
-        leftArm.rotationPointZ += (topArmOffset.z + Math.cos(ageInTicks * idleSpeed + 1.9F)) * idleDegree;
-        leftArm.rotateAngleY += armYaw;
-        leftArm2.rotationPointX += (bottomArmOffset.x + Math.sin(ageInTicks * idleSpeed + 2.3F)) * idleDegree;
-        leftArm2.rotationPointY += (bottomArmOffset.y + Math.sin(ageInTicks * idleSpeed + 2.6F)) * idleDegree;
-        leftArm2.rotationPointZ += (bottomArmOffset.z + Math.cos(ageInTicks * idleSpeed + 2.9F)) * idleDegree;
-        leftArm2.rotateAngleY += armYaw;
-        rightArm.rotationPointX += (topArmOffset.x + Math.sin(ageInTicks * idleSpeed + 3.3F)) * idleDegree;
-        rightArm.rotationPointY += (topArmOffset.y + Math.sin(ageInTicks * idleSpeed + 3.6F)) * idleDegree;
-        rightArm.rotationPointZ += (topArmOffset.z + Math.cos(ageInTicks * idleSpeed + 3.9F)) * idleDegree;
-        rightArm.rotateAngleY += armYaw;
-        rightArm2.rotationPointX += (bottomArmOffset.x + Math.sin(ageInTicks * idleSpeed + 4.3F)) * idleDegree;
-        rightArm2.rotationPointY += (bottomArmOffset.y + Math.sin(ageInTicks * idleSpeed + 4.6F)) * idleDegree;
-        rightArm2.rotationPointZ += (bottomArmOffset.z + Math.cos(ageInTicks * idleSpeed + 4.9F)) * idleDegree;
-        rightArm2.rotateAngleY += armYaw;
-        bodyCube1.rotationPointX += (body1Offset.x + Math.sin(ageInTicks * idleSpeed + 7.3F)) * idleDegree;
-        bodyCube1.rotationPointY += (body1Offset.y + Math.sin(ageInTicks * idleSpeed + 7.6F)) * idleDegree;
-        bodyCube1.rotationPointZ += (body1Offset.z + Math.cos(ageInTicks * idleSpeed + 7.9F)) * idleDegree;
-        bodyCube2.rotationPointX += (body2Offset.x + Math.sin(ageInTicks * idleSpeed + 5.3F)) * idleDegree;
-        bodyCube2.rotationPointY += (body2Offset.y + Math.sin(ageInTicks * idleSpeed + 5.6F)) * idleDegree;
-        bodyCube2.rotationPointZ += (body2Offset.z + Math.cos(ageInTicks * idleSpeed + 5.9F)) * idleDegree;
-        head.rotationPointX += angryShake.x;
-        head.rotationPointY += angryShake.y;
-        head.rotationPointZ += angryShake.z;
+        leftArm.x += (topArmOffset.x + Math.sin(ageInTicks * idleSpeed + 1.3F)) * idleDegree;
+        leftArm.y += (topArmOffset.y + Math.sin(ageInTicks * idleSpeed + 1.6F)) * idleDegree;
+        leftArm.z += (topArmOffset.z + Math.cos(ageInTicks * idleSpeed + 1.9F)) * idleDegree;
+        leftArm.yRot += armYaw;
+        leftArm2.x += (bottomArmOffset.x + Math.sin(ageInTicks * idleSpeed + 2.3F)) * idleDegree;
+        leftArm2.y += (bottomArmOffset.y + Math.sin(ageInTicks * idleSpeed + 2.6F)) * idleDegree;
+        leftArm2.z += (bottomArmOffset.z + Math.cos(ageInTicks * idleSpeed + 2.9F)) * idleDegree;
+        leftArm2.yRot += armYaw;
+        rightArm.x += (topArmOffset.x + Math.sin(ageInTicks * idleSpeed + 3.3F)) * idleDegree;
+        rightArm.y += (topArmOffset.y + Math.sin(ageInTicks * idleSpeed + 3.6F)) * idleDegree;
+        rightArm.z += (topArmOffset.z + Math.cos(ageInTicks * idleSpeed + 3.9F)) * idleDegree;
+        rightArm.yRot += armYaw;
+        rightArm2.x += (bottomArmOffset.x + Math.sin(ageInTicks * idleSpeed + 4.3F)) * idleDegree;
+        rightArm2.y += (bottomArmOffset.y + Math.sin(ageInTicks * idleSpeed + 4.6F)) * idleDegree;
+        rightArm2.z += (bottomArmOffset.z + Math.cos(ageInTicks * idleSpeed + 4.9F)) * idleDegree;
+        rightArm2.yRot += armYaw;
+        bodyCube1.x += (body1Offset.x + Math.sin(ageInTicks * idleSpeed + 7.3F)) * idleDegree;
+        bodyCube1.y += (body1Offset.y + Math.sin(ageInTicks * idleSpeed + 7.6F)) * idleDegree;
+        bodyCube1.z += (body1Offset.z + Math.cos(ageInTicks * idleSpeed + 7.9F)) * idleDegree;
+        bodyCube2.x += (body2Offset.x + Math.sin(ageInTicks * idleSpeed + 5.3F)) * idleDegree;
+        bodyCube2.y += (body2Offset.y + Math.sin(ageInTicks * idleSpeed + 5.6F)) * idleDegree;
+        bodyCube2.z += (body2Offset.z + Math.cos(ageInTicks * idleSpeed + 5.9F)) * idleDegree;
+        head.x += angryShake.x;
+        head.y += angryShake.y;
+        head.z += angryShake.z;
 
         this.bob(root, idleSpeed, idleDegree, false, ageInTicks, 1);
         this.swing(leftArm, idleSpeed, idleDegree * 0.2F, true, 1, 0F, ageInTicks, 1);
@@ -446,8 +446,8 @@ public class ModelFarseer extends AdvancedEntityModel<EntityFarseer> {
         this.walk(leftLowerMask, idleSpeed * 8, 0.05F, false, 4, 0.2F, ageInTicks, angryProgress * 0.2F);
         float headY = netHeadYaw * invPortalDegree * Mth.DEG_TO_RAD;
         float headZ = headPitch * invPortalDegree * Mth.DEG_TO_RAD;
-        this.head.rotateAngleY += headY;
-        this.head.rotateAngleX += headZ;
+        this.head.yRot += headY;
+        this.head.xRot += headZ;
 
 
     }
@@ -464,8 +464,8 @@ public class ModelFarseer extends AdvancedEntityModel<EntityFarseer> {
     }
 
     public void setRotationAngle(AdvancedModelBox advancedModelBox, float x, float y, float z) {
-        advancedModelBox.rotateAngleX = x;
-        advancedModelBox.rotateAngleY = y;
-        advancedModelBox.rotateAngleZ = z;
+        advancedModelBox.xRot = x;
+        advancedModelBox.yRot = y;
+        advancedModelBox.zRot = z;
     }
 }

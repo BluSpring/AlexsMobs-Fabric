@@ -9,8 +9,8 @@ import net.minecraft.world.entity.Entity;
 public class ModelPollenBall extends AdvancedEntityModel<Entity> {
 	private final AdvancedModelBox root;
 	public ModelPollenBall() {
-		texWidth = 8;
-		texHeight = 8;
+		textureWidth = 8;
+		textureHeight = 8;
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 0.0F, 0.0F);
 		root.setTextureOffset(0, 0).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F, 0.0F, false);
@@ -33,8 +33,8 @@ public class ModelPollenBall extends AdvancedEntityModel<Entity> {
 	}
 
 	public void setRotationAngle(AdvancedModelBox modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 }

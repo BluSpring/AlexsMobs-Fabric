@@ -25,8 +25,8 @@ public class ModelMungus extends AdvancedEntityModel<EntityMungus> {
 	public final AdvancedModelBox sack;
 
 	public ModelMungus(float f) {
-		texWidth = 64;
-		texHeight = 64;
+		textureWidth = 64;
+		textureHeight = 64;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 24.0F, 0.0F);
@@ -86,38 +86,38 @@ public class ModelMungus extends AdvancedEntityModel<EntityMungus> {
 				Vec3 vector3d1 = entity.getEyePosition(0.0F);
 				double d0 = vector3d.y - vector3d1.y;
 				if (d0 > 0.0D) {
-					this.eye.rotationPointY = -11.0F;
+					this.eye.y = -11.0F;
 				} else {
-					this.eye.rotationPointY = -10.0F;
+					this.eye.y = -10.0F;
 				}
 
 				Vec3 vector3d2 = entity.getViewVector(0.0F);
 				vector3d2 = new Vec3(vector3d2.x, 0.0D, vector3d2.z);
 				Vec3 vector3d3 = (new Vec3(vector3d1.x - vector3d.x, 0.0D, vector3d1.z - vector3d.z)).normalize().yRot((Mth.PI / 2F));
 				double d1 = vector3d2.dot(vector3d3);
-				this.eye.rotationPointX += Mth.sqrt((float) Math.abs(d1)) * 2.0F * (float) Math.signum(d1);
+				this.eye.x += Mth.sqrt((float) Math.abs(d1)) * 2.0F * (float) Math.signum(d1);
 			}
 		}else{
 			Vec3 vector3d = Vec3.atCenterOf(targetPos);
 			Vec3 vector3d1 = entity.getEyePosition(0.0F);
 			double d0 = vector3d.y - vector3d1.y;
 			if (d0 > 0.0D) {
-				this.eye.rotationPointY = -11.0F;
+				this.eye.y = -11.0F;
 			} else {
-				this.eye.rotationPointY = -10.0F;
+				this.eye.y = -10.0F;
 			}
 
 			Vec3 vector3d2 = entity.getViewVector(0.0F);
 			vector3d2 = new Vec3(vector3d2.x, 0.0D, vector3d2.z);
 			Vec3 vector3d3 = (new Vec3(vector3d1.x - vector3d.x, 0.0D, vector3d1.z - vector3d.z)).normalize().yRot((Mth.PI / 2F));
 			double d1 = vector3d2.dot(vector3d3);
-			this.eye.rotationPointX += Mth.sqrt((float) Math.abs(d1)) * 2.0F * (float) Math.signum(d1);
+			this.eye.x += Mth.sqrt((float) Math.abs(d1)) * 2.0F * (float) Math.signum(d1);
 
 		}
 		this.walk(hair, idleSpeed, idleDegree, false, 1F, -0.1F, ageInTicks, 1);
 		this.flap(nose, idleSpeed, idleDegree, false, 0F, 0F, ageInTicks, 1);
 		sack.setScale(glowyBob, glowyBob, glowyBob + swell * 0.2F);
-		this.sack.rotationPointZ += swell * 0.02F;
+		this.sack.z += swell * 0.02F;
 		progressRotationPrev(hair, limbSwingAmount, Maths.rad(-23), 0, 0, 1F);
 		this.walk(leg_right, walkSpeed, walkDegree * 1.1F, true, 1, 0F, limbSwing, limbSwingAmount);
 		this.bob(leg_right, walkSpeed, walkDegree, false, limbSwing, limbSwingAmount);
@@ -174,8 +174,8 @@ public class ModelMungus extends AdvancedEntityModel<EntityMungus> {
 	}
 
 	public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-		AdvancedModelBox.rotateAngleX = x;
-		AdvancedModelBox.rotateAngleY = y;
-		AdvancedModelBox.rotateAngleZ = z;
+		AdvancedModelBox.xRot = x;
+		AdvancedModelBox.yRot = y;
+		AdvancedModelBox.zRot = z;
 	}
 }

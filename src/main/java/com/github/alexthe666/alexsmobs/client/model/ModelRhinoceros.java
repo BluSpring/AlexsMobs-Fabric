@@ -27,8 +27,8 @@ public class ModelRhinoceros extends AdvancedEntityModel<EntityRhinoceros> {
     private final ModelAnimator animator;
 
     public ModelRhinoceros() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -230,14 +230,14 @@ public class ModelRhinoceros extends AdvancedEntityModel<EntityRhinoceros> {
         this.walk(head, idleSpeed, idleDegree * 0.5F, false, 0F, 0.05F, ageInTicks, 1);
         this.flap(leftEar, idleSpeed, idleDegree, false, -1F, 0F, ageInTicks, 1);
         this.walk(rightEar, idleSpeed, idleDegree, false, -1F, 0F, ageInTicks, 1);
-        this.head.rotateAngleY += netHeadYaw * 0.8F * Mth.DEG_TO_RAD;
-        this.head.rotateAngleX += headPitch * Mth.DEG_TO_RAD;
+        this.head.yRot += netHeadYaw * 0.8F * Mth.DEG_TO_RAD;
+        this.head.xRot += headPitch * Mth.DEG_TO_RAD;
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 
     @Override
@@ -257,7 +257,7 @@ public class ModelRhinoceros extends AdvancedEntityModel<EntityRhinoceros> {
             float feet = 1.3F;
             head.setScale(f, f, f);
             head.setShouldScaleChildren(true);
-            horns.showModel = false;
+            horns.visible = false;
             leftArm.setScale(1, feet, 1);
             rightArm.setScale(1, feet, 1);
             leftLeg.setScale(1, feet, 1);
@@ -274,7 +274,7 @@ public class ModelRhinoceros extends AdvancedEntityModel<EntityRhinoceros> {
             rightArm.setScale(1, 1, 1);
             leftLeg.setScale(1, 1, 1);
             rightLeg.setScale(1, 1, 1);
-            horns.showModel = true;
+            horns.visible = true;
         } else {
             matrixStackIn.pushPose();
             parts().forEach((p_228290_8_) -> {

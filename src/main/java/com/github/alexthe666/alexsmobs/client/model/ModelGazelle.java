@@ -28,8 +28,8 @@ public class ModelGazelle extends AdvancedEntityModel<EntityGazelle> {
     private ModelAnimator animator;
 
     public ModelGazelle() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
         body = new AdvancedModelBox(this, "body");
         body.setPos(0.0F, 20.8F, 0.0F);
         body.setTextureOffset(0, 0).addBox(-4.0F, -16.8F, -9.0F, 8.0F, 8.0F, 18.0F, 0.0F, false);
@@ -297,8 +297,8 @@ public class ModelGazelle extends AdvancedEntityModel<EntityGazelle> {
     }
 
     public void setRotationAngle(AdvancedModelBox advancedModelBox, float x, float y, float z) {
-        advancedModelBox.rotateAngleX = x;
-        advancedModelBox.rotateAngleY = y;
-        advancedModelBox.rotateAngleZ = z;
+        advancedModelBox.xRot = x;
+        advancedModelBox.yRot = y;
+        advancedModelBox.zRot = z;
     }
 }

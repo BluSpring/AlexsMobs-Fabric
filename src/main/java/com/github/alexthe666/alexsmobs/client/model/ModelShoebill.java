@@ -33,8 +33,8 @@ public class ModelShoebill extends AdvancedEntityModel<EntityShoebill> {
     private final ModelAnimator animator;
 
     public ModelShoebill() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this);
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -188,9 +188,9 @@ public class ModelShoebill extends AdvancedEntityModel<EntityShoebill> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 
     @Override
@@ -251,7 +251,7 @@ public class ModelShoebill extends AdvancedEntityModel<EntityShoebill> {
             this.walk(head, walkSpeed, walkDegree * 0.85F, true, 2F, 0F, limbSwing, limbSwingAmount);
             this.walk(tail, walkSpeed * 0.5F, walkDegree * 0.15F, true, -2F, 0.2F, limbSwing, limbSwingAmount);
         }
-        this.head.rotateAngleZ += netHeadYaw * Mth.DEG_TO_RAD;
+        this.head.zRot += netHeadYaw * Mth.DEG_TO_RAD;
 
     }
 

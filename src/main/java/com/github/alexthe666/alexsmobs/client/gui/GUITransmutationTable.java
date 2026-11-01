@@ -2,7 +2,7 @@ package com.github.alexthe666.alexsmobs.client.gui;
 
 import com.github.alexthe666.alexsmobs.AlexsMobs;
 import com.github.alexthe666.alexsmobs.inventory.MenuTransmutationTable;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -40,7 +40,7 @@ public class GUITransmutationTable extends AbstractContainerScreen<MenuTransmuta
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int x, int y, float partialTick) {
+    public void render(GuiGraphicsExtractor guiGraphics, int x, int y, float partialTick) {
         this.renderBackground(guiGraphics, x, y, partialTick);
         this.renderBg(guiGraphics, partialTick, x, y);
         super.render(guiGraphics, x, y, partialTick);
@@ -49,7 +49,7 @@ public class GUITransmutationTable extends AbstractContainerScreen<MenuTransmuta
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float f, int x, int y) {
+    protected void renderBg(GuiGraphicsExtractor guiGraphics, float f, int x, int y) {
         int i = this.leftPos;
         int j = this.topPos;
         guiGraphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
@@ -65,12 +65,12 @@ public class GUITransmutationTable extends AbstractContainerScreen<MenuTransmuta
     }
 
     @Override
-    protected void renderLabels(GuiGraphics guiGraphics, int x, int y) {
+    protected void renderLabels(GuiGraphicsExtractor guiGraphics, int x, int y) {
         this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
         guiGraphics.drawString(font, this.title, this.titleLabelX, this.titleLabelY, 0X4EFF21, false);
     }
 
-    protected void renderItemsTransmute(GuiGraphics guiGraphics, int x, int y) {
+    protected void renderItemsTransmute(GuiGraphicsExtractor guiGraphics, int x, int y) {
         int i = this.leftPos;
         int j = this.topPos;
         if (!this.menu.getSlot(0).getItem().isEmpty()) {

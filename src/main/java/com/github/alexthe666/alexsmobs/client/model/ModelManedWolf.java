@@ -28,8 +28,8 @@ public class ModelManedWolf extends AdvancedEntityModel<EntityManedWolf> {
     private final AdvancedModelBox right_leg;
 
     public ModelManedWolf() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -163,11 +163,11 @@ public class ModelManedWolf extends AdvancedEntityModel<EntityManedWolf> {
         float shakeProgress = entity.prevShakeProgress + (entity.shakeProgress - entity.prevShakeProgress) * partialTick;
         float earPitch = entity.prevEarPitch + (entity.getEarPitch() - entity.prevEarPitch) * partialTick;
         float earYaw = entity.prevEarYaw + (entity.getEarYaw() - entity.prevEarYaw) * partialTick;
-        this.left_ear_pivot.rotateAngleX += earPitch * Mth.DEG_TO_RAD;
-        this.left_ear_pivot.rotateAngleY += earYaw * Mth.DEG_TO_RAD;
-        this.right_ear_pivot.rotateAngleX += earPitch * Mth.DEG_TO_RAD;
-        this.right_ear_pivot.rotateAngleY -= earYaw * Mth.DEG_TO_RAD;
-        this.head.rotateAngleY += netHeadYaw * 0.5F * Mth.DEG_TO_RAD;
+        this.left_ear_pivot.xRot += earPitch * Mth.DEG_TO_RAD;
+        this.left_ear_pivot.yRot += earYaw * Mth.DEG_TO_RAD;
+        this.right_ear_pivot.xRot += earPitch * Mth.DEG_TO_RAD;
+        this.right_ear_pivot.yRot -= earYaw * Mth.DEG_TO_RAD;
+        this.head.yRot += netHeadYaw * 0.5F * Mth.DEG_TO_RAD;
 
         progressRotationPrev(tail, runProgress, Maths.rad(35), 0, 0, 5f);
         progressRotationPrev(neck, runProgress, Maths.rad(40), 0, 0, 5f);
@@ -198,16 +198,16 @@ public class ModelManedWolf extends AdvancedEntityModel<EntityManedWolf> {
         this.flap(tail, 0.25F, 0.9F, true, 1, 0, ageInTicks, danceProgress * 0.2F);
         float f1 = 0.2F * danceProgress * (float)(-Math.abs(Math.sin(ageInTicks * 0.5F * 0.5F) * (double)8F));
         float f2 = 0.2F * danceProgress * 6F * Mth.cos(ageInTicks * 0.5F + 0) * 0.3F * (danceProgress * 0.2F) + 0 * (danceProgress * 0.2F);
-        this.body.rotationPointY += f1;
-        this.body.rotationPointZ -= f2;
-        this.right_leg.rotationPointY += 0.25F * f2;
-        this.left_leg.rotationPointY += 0.25F * f2;
-        this.right_leg.rotateAngleX -= Math.toRadians(f1 * 5);
-        this.left_leg.rotateAngleX -= Math.toRadians(f1 * 5);
-        this.right_arm.rotationPointY += f2;
-        this.left_arm.rotationPointY += f2;
-        this.right_arm.rotationPointZ -= -f2 + 0.25F * f1;
-        this.left_arm.rotationPointZ -= -f2 + 0.25F * f1;
+        this.body.y += f1;
+        this.body.z -= f2;
+        this.right_leg.y += 0.25F * f2;
+        this.left_leg.y += 0.25F * f2;
+        this.right_leg.xRot -= Math.toRadians(f1 * 5);
+        this.left_leg.xRot -= Math.toRadians(f1 * 5);
+        this.right_arm.y += f2;
+        this.left_arm.y += f2;
+        this.right_arm.z -= -f2 + 0.25F * f1;
+        this.left_arm.z -= -f2 + 0.25F * f1;
         this.flap(tail, idleSpeed, idleDegree * 0.2F, false, 1F, 0, ageInTicks, 1);
         this.walk(head, idleSpeed, idleDegree * 0.2F, true, 2F, 0, ageInTicks, 1);
         this.walk(neck, idleSpeed, idleDegree * 0.2F, false, 2F, 0, ageInTicks, 1);
@@ -237,8 +237,8 @@ public class ModelManedWolf extends AdvancedEntityModel<EntityManedWolf> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

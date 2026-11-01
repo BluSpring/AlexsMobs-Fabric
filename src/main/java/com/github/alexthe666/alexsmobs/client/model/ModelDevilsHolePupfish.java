@@ -18,8 +18,8 @@ public class ModelDevilsHolePupfish extends AdvancedEntityModel<EntityDevilsHole
     private final AdvancedModelBox right_fin;
 
     public ModelDevilsHolePupfish() {
-        texHeight = 32;
-        texWidth = 32;
+        textureHeight = 32;
+        textureWidth = 32;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -80,9 +80,9 @@ public class ModelDevilsHolePupfish extends AdvancedEntityModel<EntityDevilsHole
         this.swing(body, swimSpeed, swimDegree * 0.3F, false, 1F, 0, limbSwing, limbSwingAmount);
         this.swing(left_fin, swimSpeed, swimDegree, false, 3F, 0.6F, limbSwing, limbSwingAmount);
         this.swing(right_fin, swimSpeed, swimDegree, true, 3F, 0.6F, limbSwing, limbSwingAmount);
-        this.body.rotateAngleX += headPitch * Mth.DEG_TO_RAD;
-        this.body.rotateAngleX += feedingProgress * Math.cos(ageInTicks * 0.3F) * 0.2F * Math.PI * 0.1F;
-        this.body.rotationPointZ += feedingProgress * Math.abs(Math.sin(ageInTicks * 0.3F));
+        this.body.xRot += headPitch * Mth.DEG_TO_RAD;
+        this.body.xRot += feedingProgress * Math.cos(ageInTicks * 0.3F) * 0.2F * Math.PI * 0.1F;
+        this.body.z += feedingProgress * Math.abs(Math.sin(ageInTicks * 0.3F));
 
     }
 
@@ -98,8 +98,8 @@ public class ModelDevilsHolePupfish extends AdvancedEntityModel<EntityDevilsHole
     }
 
     public void setRotationAngle(AdvancedModelBox modelRenderer, float x, float y, float z) {
-        modelRenderer.rotateAngleX = x;
-        modelRenderer.rotateAngleY = y;
-        modelRenderer.rotateAngleZ = z;
+        modelRenderer.xRot = x;
+        modelRenderer.yRot = y;
+        modelRenderer.zRot = z;
     }
 }

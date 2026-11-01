@@ -13,8 +13,8 @@ public class ModelVoidWormShot extends AdvancedEntityModel<Entity> {
     private final AdvancedModelBox cube;
 
     public ModelVoidWormShot() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -49,9 +49,9 @@ public class ModelVoidWormShot extends AdvancedEntityModel<Entity> {
 
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 
     public void animate(EntityVoidWormShot entityIn, float ageInTicks) {
@@ -59,8 +59,8 @@ public class ModelVoidWormShot extends AdvancedEntityModel<Entity> {
         float innerScale = (float) (1.0F + 0.25F * Math.abs(Math.sin(ageInTicks * 0.6F)));
         float outerScale = (float) (1.0F + 0.5F * Math.abs(Math.cos(ageInTicks * 0.2F)));
         this.glass.setScale(innerScale, innerScale, innerScale);
-        this.glass.rotateAngleX += ageInTicks * 0.25F;
-        this.cube.rotateAngleX += ageInTicks * 0.5F;
+        this.glass.xRot += ageInTicks * 0.25F;
+        this.cube.xRot += ageInTicks * 0.5F;
         this.glass.setShouldScaleChildren(false);
         this.cube.setScale(outerScale, outerScale, outerScale);
     }

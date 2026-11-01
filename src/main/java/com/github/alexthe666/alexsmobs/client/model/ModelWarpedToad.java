@@ -31,8 +31,8 @@ public class ModelWarpedToad extends AdvancedEntityModel<EntityWarpedToad> {
     private final AdvancedModelBox right_eye;
 
     public ModelWarpedToad() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -201,25 +201,25 @@ public class ModelWarpedToad extends AdvancedEntityModel<EntityWarpedToad> {
         this.walk(right_leg, walkSpeed, walkDegree, false, -2.5F, 0.1F, limbSwing, walkSwingAmount);
         this.walk(left_leg, walkSpeed, walkDegree, true, -2.5F, -0.1F, limbSwing, walkSwingAmount);
 
-        this.left_foot_pivot.rotateAngleX -= walkAmount * (left_leg.rotateAngleX + body.rotateAngleX);
-        this.left_foot_pivot.rotateAngleZ -= walkAmount * body.rotateAngleZ;
-        this.right_foot_pivot.rotateAngleX -= walkAmount * (right_leg.rotateAngleX + body.rotateAngleX);
-        this.right_foot_pivot.rotateAngleZ -= walkAmount * body.rotateAngleZ;
-        this.left_arm.rotationPointZ += 1.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
-        this.left_arm.rotationPointY += 0.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
-        this.right_arm.rotationPointZ += 1.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
-        this.right_arm.rotationPointY += 0.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
+        this.left_foot_pivot.xRot -= walkAmount * (left_leg.xRot + body.xRot);
+        this.left_foot_pivot.zRot -= walkAmount * body.zRot;
+        this.right_foot_pivot.xRot -= walkAmount * (right_leg.xRot + body.xRot);
+        this.right_foot_pivot.zRot -= walkAmount * body.zRot;
+        this.left_arm.z += 1.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
+        this.left_arm.y += 0.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
+        this.right_arm.z += 1.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
+        this.right_arm.y += 0.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
         float leftLegS = (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
         float rightLegs = (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) walkSwingAmount * (double) walkDegree - (double) (walkSwingAmount * walkDegree));
-        this.left_leg.rotationPointY += 1.5F * leftLegS;
-        this.right_leg.rotationPointY += 1.5F * rightLegs;
-        this.left_leg.rotationPointZ -= 3 * leftLegS;
-        this.right_leg.rotationPointZ -= 3 * rightLegs;
-        this.left_foot_pivot.rotationPointZ -= 1.5F * leftLegS;
-        this.right_foot_pivot.rotationPointZ -= 1.5F * rightLegs;
+        this.left_leg.y += 1.5F * leftLegS;
+        this.right_leg.y += 1.5F * rightLegs;
+        this.left_leg.z -= 3 * leftLegS;
+        this.right_leg.z -= 3 * rightLegs;
+        this.left_foot_pivot.z -= 1.5F * leftLegS;
+        this.right_foot_pivot.z -= 1.5F * rightLegs;
 
         if (attackProgress > 0) {
-            this.tongue.rotateAngleX += headPitch * Mth.DEG_TO_RAD;
+            this.tongue.xRot += headPitch * Mth.DEG_TO_RAD;
         }
         progressRotationPrev(body, fallProgress, Maths.rad(15), 0, 0, 5f);
         progressRotationPrev(left_arm, fallProgress, Maths.rad(-35), 0, 0, 5f);
@@ -270,8 +270,8 @@ public class ModelWarpedToad extends AdvancedEntityModel<EntityWarpedToad> {
 
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

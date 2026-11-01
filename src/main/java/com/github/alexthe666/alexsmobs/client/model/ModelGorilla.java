@@ -25,8 +25,8 @@ public class ModelGorilla extends AdvancedEntityModel<EntityGorilla> {
 	public final ModelAnimator animator;
 	
 	public ModelGorilla() {
-		texWidth = 128;
-		texHeight = 128;
+		textureWidth = 128;
+		textureHeight = 128;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -250,9 +250,9 @@ public class ModelGorilla extends AdvancedEntityModel<EntityGorilla> {
 
 
 	public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-		AdvancedModelBox.rotateAngleX = x;
-		AdvancedModelBox.rotateAngleY = y;
-		AdvancedModelBox.rotateAngleZ = z;
+		AdvancedModelBox.xRot = x;
+		AdvancedModelBox.yRot = y;
+		AdvancedModelBox.zRot = z;
 	}
 
 	@Override

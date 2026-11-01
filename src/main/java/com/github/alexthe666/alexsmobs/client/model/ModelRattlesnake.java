@@ -23,8 +23,8 @@ public class ModelRattlesnake extends AdvancedEntityModel<EntityRattlesnake> {
     private ModelAnimator animator;
 
     public ModelRattlesnake() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         body = new AdvancedModelBox(this, "body");
         body.setPos(0.0F, 24.0F, 0.0F);
@@ -122,7 +122,7 @@ public class ModelRattlesnake extends AdvancedEntityModel<EntityRattlesnake> {
         progressRotationPrev(neck1, curlProgress, Maths.rad(-20), Maths.rad(60), 0, 5F);
         progressRotationPrev(neck2, curlProgress, Maths.rad(-20), Maths.rad(60), 0, 5F);
         progressRotationPrev(head, curlProgress, Maths.rad(20), Maths.rad(-30), Maths.rad(10), 5F);
-        tongue.showModel = entity.randomToungeTick > 0;
+        tongue.visible = entity.randomToungeTick > 0;
         this.walk(tongue, 1, 0.5F, false, 1F, 0f, ageInTicks, 1);
         if (entity.isRattling()) {
             progressRotationPrev(tail2, curlProgress, Maths.rad(70), Maths.rad(-60), 0, 5F);
@@ -146,8 +146,8 @@ public class ModelRattlesnake extends AdvancedEntityModel<EntityRattlesnake> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

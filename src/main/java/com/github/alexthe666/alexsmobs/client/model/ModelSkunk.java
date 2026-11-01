@@ -20,8 +20,8 @@ public class ModelSkunk extends AdvancedEntityModel<EntitySkunk> {
     private final AdvancedModelBox head;
 
     public ModelSkunk() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -128,14 +128,14 @@ public class ModelSkunk extends AdvancedEntityModel<EntitySkunk> {
         this.faceTarget(netHeadYaw, headPitch, 1.2F, head);
         float leftLegS = (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
         float rightLegS = (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
-        this.rightArm.rotationPointY += 3 * leftLegS;
-        this.leftArm.rotationPointY += 3 * rightLegS;
-        this.rightArm.rotationPointZ += leftLegS;
-        this.leftArm.rotationPointZ += rightLegS;
-        this.leftLeg.rotationPointY += 3 * leftLegS;
-        this.rightLeg.rotationPointY += 3 * rightLegS;
-        this.leftLeg.rotationPointZ += leftLegS;
-        this.rightLeg.rotationPointZ += rightLegS;
+        this.rightArm.y += 3 * leftLegS;
+        this.leftArm.y += 3 * rightLegS;
+        this.rightArm.z += leftLegS;
+        this.leftArm.z += rightLegS;
+        this.leftLeg.y += 3 * leftLegS;
+        this.rightLeg.y += 3 * rightLegS;
+        this.leftLeg.z += leftLegS;
+        this.rightLeg.z += rightLegS;
     }
 
     @Override
@@ -144,9 +144,9 @@ public class ModelSkunk extends AdvancedEntityModel<EntitySkunk> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 
     @Override

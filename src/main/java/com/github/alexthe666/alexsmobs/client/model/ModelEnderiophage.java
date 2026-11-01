@@ -35,8 +35,8 @@ public class ModelEnderiophage extends AdvancedEntityModel<EntityEnderiophage> {
     private final AdvancedModelBox tailfront_rightPivot;
 
     public ModelEnderiophage() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -158,7 +158,7 @@ public class ModelEnderiophage extends AdvancedEntityModel<EntityEnderiophage> {
         this.walk(tailfront_left, idleSpeed, idleDegree, true, -2, 0.25F, ageInTicks, 1);
         this.walk(tailfront_right, idleSpeed, idleDegree, true, -2, 0.25F, ageInTicks, 1);
         this.bob(body, idleSpeed, idleDegree * 8, false, ageInTicks, 1);
-        this.body.rotationPointY += 8F;
+        this.body.y += 8F;
 
         if (flyProgress != 5) {
             limbSwingAmount = limbSwingAmount * (1 - (flyProgress * 0.2F));
@@ -190,19 +190,19 @@ public class ModelEnderiophage extends AdvancedEntityModel<EntityEnderiophage> {
             progressRotationPrev(tailfront_right, limbSwingAmount, Maths.rad(15), 0, 0, 1F);
         }
 
-        this.eye.showModel = !entity.isMissingEye();
+        this.eye.visible = !entity.isMissingEye();
         if(entity.isPassenger()){
-            this.body.rotateAngleX += Mth.HALF_PI;
-            this.body.rotateAngleY += Mth.HALF_PI * entity.passengerIndex;
+            this.body.xRot += Mth.HALF_PI;
+            this.body.yRot += Mth.HALF_PI * entity.passengerIndex;
             this.sheath.setScale(1F, (float) (0.85F + Math.sin(ageInTicks) * 0.15F), 1F);
-            this.collar.rotationPointY -= (float) (Math.sin(ageInTicks) * 0.15F - 0.15F) * 12F;
+            this.collar.y -= (float) (Math.sin(ageInTicks) * 0.15F - 0.15F) * 12F;
             this.capsid.setScale((float) (0.85F + Math.sin(ageInTicks + 2F) * 0.15F), (float) (1F + Math.sin(ageInTicks) * 0.15F), (float) (0.85F + Math.sin(ageInTicks + 2F) * 0.15F));
-            this.mouth.rotationPointY += (Math.sin(ageInTicks) + 1F) * 2F;
+            this.mouth.y += (Math.sin(ageInTicks) + 1F) * 2F;
             tentacleProgress = -2F;
         }else{
             this.sheath.setScale(1F,1F, 1F);
             this.capsid.setScale(1F,1F, 1F);
-            this.body.rotateAngleX -= phagePitch * flyProgress * 0.2F;
+            this.body.xRot -= phagePitch * flyProgress * 0.2F;
         }
         progressPositionPrev(body, tentacleProgress, 0, -6, 0, 5F);
         progressRotationPrev(tailfront_left, tentacleProgress, 0, 0, Maths.rad(-45), 5F);
@@ -217,8 +217,8 @@ public class ModelEnderiophage extends AdvancedEntityModel<EntityEnderiophage> {
             Vec3 vector3d1 = entity.getEyePosition(partialTicks);
             Vec3 vector3d2 = vector3d.subtract(vector3d1);
             float f = Mth.sqrt((float)(vector3d2.x * vector3d2.x + vector3d2.z * vector3d2.z)) - totalYaw;
-            this.eye.rotateAngleY += -(float) (Mth.atan2(vector3d2.x, vector3d2.z)) - totalYaw;
-            this.eye.rotateAngleX += -Mth.clamp(vector3d2.y * 0.5F, Math.PI * -0.5F, Math.PI * 0.5F) + phagePitch * flyProgress * 0.2F;
+            this.eye.yRot += -(float) (Mth.atan2(vector3d2.x, vector3d2.z)) - totalYaw;
+            this.eye.xRot += -Mth.clamp(vector3d2.y * 0.5F, Math.PI * -0.5F, Math.PI * 0.5F) + phagePitch * flyProgress * 0.2F;
         }
     }
 
@@ -233,8 +233,8 @@ public class ModelEnderiophage extends AdvancedEntityModel<EntityEnderiophage> {
     }
 
     public void setRotationAngle(AdvancedModelBox advancedModelBox, float x, float y, float z) {
-        advancedModelBox.rotateAngleX = x;
-        advancedModelBox.rotateAngleY = y;
-        advancedModelBox.rotateAngleZ = z;
+        advancedModelBox.xRot = x;
+        advancedModelBox.yRot = y;
+        advancedModelBox.zRot = z;
     }
 }

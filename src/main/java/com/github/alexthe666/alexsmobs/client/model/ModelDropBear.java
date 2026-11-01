@@ -28,8 +28,8 @@ public class ModelDropBear extends AdvancedEntityModel<EntityDropBear> {
     private final ModelAnimator animator;
 
     public ModelDropBear() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -190,8 +190,8 @@ public class ModelDropBear extends AdvancedEntityModel<EntityDropBear> {
         this.flap(ear_right, idleSpeed, idleDegree, false, -1F, 0, ageInTicks, 1);
         this.flap(ear_left, idleSpeed, idleDegree, true, -1F, 0, ageInTicks, 1);
         this.flap(nose, idleSpeed * 0.5F, idleDegree, false, 0F, 0F, ageInTicks, 1);
-        this.head.rotateAngleY += netHeadYaw * 0.9F * invert * Mth.DEG_TO_RAD;
-        this.head.rotateAngleX += headPitch * 0.9F *invert * Mth.DEG_TO_RAD;
+        this.head.yRot += netHeadYaw * 0.9F * invert * Mth.DEG_TO_RAD;
+        this.head.xRot += headPitch * 0.9F *invert * Mth.DEG_TO_RAD;
 
     }
 
@@ -206,8 +206,8 @@ public class ModelDropBear extends AdvancedEntityModel<EntityDropBear> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

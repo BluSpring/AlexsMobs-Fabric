@@ -15,8 +15,8 @@ public class ModelEndPirateAnchorWinch extends AdvancedEntityModel<Entity> {
     private final AdvancedModelBox chains;
 
     public ModelEndPirateAnchorWinch() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -47,11 +47,11 @@ public class ModelEndPirateAnchorWinch extends AdvancedEntityModel<Entity> {
         float f = anchor.getWindProgress(partialTick);
         float f1 = anchor.isWindingUp() ? 1 : -1;
         if(anchor.isWinching()){
-            chains.rotateAngleX = timeWinching * 0.2F * f * f1;
-            anchor.clientRoll = chains.rotateAngleX;
+            chains.xRot = timeWinching * 0.2F * f * f1;
+            anchor.clientRoll = chains.xRot;
         }else{
             float rollDeg = (float) Mth.wrapDegrees(Math.toDegrees(anchor.clientRoll));
-            chains.rotateAngleX = f1 * f * 0.2F * Maths.rad(rollDeg);
+            chains.xRot = f1 * f * 0.2F * Maths.rad(rollDeg);
         }
     }
 

@@ -32,8 +32,8 @@ public class ModelTarantulaHawk extends AdvancedEntityModel<EntityTarantulaHawk>
     private final AdvancedModelBox stinger;
 
     public ModelTarantulaHawk() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -254,7 +254,7 @@ public class ModelTarantulaHawk extends AdvancedEntityModel<EntityTarantulaHawk>
             this.walk(head, walkSpeed, walkDegree * 0.4F, false, 3, 0, limbSwing, limbSwingAmount);
         }
         float f = Maths.rad(flyAngle);
-        this.body.rotateAngleZ += f;
+        this.body.zRot += f;
         if(dragProgress == 0){
             this.faceTarget(netHeadYaw, headPitch, 1.2F, head);
         }
@@ -271,8 +271,8 @@ public class ModelTarantulaHawk extends AdvancedEntityModel<EntityTarantulaHawk>
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

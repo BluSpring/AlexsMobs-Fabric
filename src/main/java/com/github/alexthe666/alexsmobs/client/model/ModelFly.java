@@ -18,8 +18,8 @@ public class ModelFly extends AdvancedEntityModel<EntityFly> {
     private final AdvancedModelBox mouth;
 
     public ModelFly() {
-        texWidth = 32;
-        texHeight = 32;
+        textureWidth = 32;
+        textureHeight = 32;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -82,8 +82,8 @@ public class ModelFly extends AdvancedEntityModel<EntityFly> {
         this.flap(mouth, idleSpeed * 0.2F, idleDegree * 0.05F, false, -2, 0F, ageInTicks, 1);
         boolean flag = entityIn.onGround() && entityIn.getDeltaMovement().lengthSqr() < 1.0E-7D;
         if(flag){
-            this.left_wing.rotateAngleZ = Maths.rad(-35);
-            this.right_wing.rotateAngleZ = Maths.rad(35);
+            this.left_wing.zRot = Maths.rad(-35);
+            this.right_wing.zRot = Maths.rad(35);
             this.swing(legs, flySpeed * 0.6F, flyDegree * 0.2F, false, 1, 0F, limbSwing, limbSwingAmount);
         }else{
             this.flap(left_wing, flySpeed * 1.3F, flyDegree, true, 0, 0.2F, ageInTicks, 1);
@@ -103,8 +103,8 @@ public class ModelFly extends AdvancedEntityModel<EntityFly> {
     }
 
     public void setRotationAngle(AdvancedModelBox advancedModelBox, float x, float y, float z) {
-        advancedModelBox.rotateAngleX = x;
-        advancedModelBox.rotateAngleY = y;
-        advancedModelBox.rotateAngleZ = z;
+        advancedModelBox.xRot = x;
+        advancedModelBox.yRot = y;
+        advancedModelBox.zRot = z;
     }
 }

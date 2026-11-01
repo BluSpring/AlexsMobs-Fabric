@@ -2,7 +2,7 @@ package com.github.alexthe666.alexsmobs.client.gui;
 
 import com.github.alexthe666.alexsmobs.config.AMConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.sounds.SoundManager;
@@ -19,7 +19,7 @@ public class ButtonTransmute extends Button {
 
 
     @Override
-    public void renderWidget(GuiGraphics guiGraphics, int x, int y, float partialTick) {
+    public void renderWidget(GuiGraphicsExtractor guiGraphics, int x, int y, float partialTick) {
         int color = 8453920;
         int cost = AMConfig.transmutingExperienceCost;
         if(!canBeTransmuted(cost)){

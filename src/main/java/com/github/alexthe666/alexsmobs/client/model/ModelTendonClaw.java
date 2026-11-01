@@ -14,8 +14,8 @@ public class ModelTendonClaw extends AdvancedEntityModel<EntityTendonSegment> {
     private final AdvancedModelBox claw3;
 
     public ModelTendonClaw() {
-        texWidth = 16;
-        texHeight = 16;
+        textureWidth = 16;
+        textureHeight = 16;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 12.0F, 0.0F);
@@ -59,16 +59,16 @@ public class ModelTendonClaw extends AdvancedEntityModel<EntityTendonSegment> {
     public void setAttributes(float rotX, float rotY, float open){
         this.resetToDefaultPose();
         this.resetToDefaultPose();
-        this.root.rotateAngleX = Maths.rad(rotX);
-        this.root.rotateAngleY = Maths.rad(rotY);
+        this.root.xRot = Maths.rad(rotX);
+        this.root.yRot = Maths.rad(rotY);
         progressRotationPrev(claw1, open, Maths.rad(45F), 0, 0, 1);
         progressRotationPrev(claw2, open, Maths.rad(45F), 0, 0, 1);
         progressRotationPrev(claw3, open, Maths.rad(45F), 0, 0, 1);
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

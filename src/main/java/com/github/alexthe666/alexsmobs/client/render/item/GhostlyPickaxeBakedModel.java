@@ -7,7 +7,7 @@ import com.github.alexthe666.alexsmobs.client.render.AMRenderTypes;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import org.jspecify.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import net.minecraft.client.renderer.RenderType;
@@ -43,7 +43,7 @@ public class GhostlyPickaxeBakedModel extends BakedModelWrapper {
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData extraData, @Nullable RenderType renderType) {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NonNull RandomSource rand, @NonNull ModelData extraData, @Nullable RenderType renderType) {
         return transformQuads(originalModel.getQuads(state, side, rand, extraData, renderType));
     }
 

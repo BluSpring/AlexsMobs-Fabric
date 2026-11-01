@@ -13,8 +13,8 @@ public class ModelEndPirateDoor extends AdvancedEntityModel<Entity> {
     private final AdvancedModelBox doorLeftHinge;
 
     public ModelEndPirateDoor() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
         doorRightHinge = new AdvancedModelBox(this, "doorRightHinge");
@@ -50,14 +50,14 @@ public class ModelEndPirateDoor extends AdvancedEntityModel<Entity> {
         double d = Math.sin(ageInTicks * 0.8F) - 0.5F;
         float wiggle = (float) (door.getWiggleProgress(partialTick) * d * Math.PI * 0.1F);
         if(left){
-            this.doorRightHinge.showModel = false;
-            this.doorLeftHinge.showModel = true;
+            this.doorRightHinge.visible = false;
+            this.doorLeftHinge.visible = true;
         }else{
-            this.doorRightHinge.showModel = true;
-            this.doorLeftHinge.showModel = false;
+            this.doorRightHinge.visible = true;
+            this.doorLeftHinge.visible = false;
         }
-        this.doorRightHinge.rotateAngleY += openAmount * Math.PI * 0.5F + wiggle;
-        this.doorLeftHinge.rotateAngleY -= openAmount * Math.PI * 0.5F + wiggle;
+        this.doorRightHinge.yRot += openAmount * Math.PI * 0.5F + wiggle;
+        this.doorLeftHinge.yRot -= openAmount * Math.PI * 0.5F + wiggle;
     }
 
 }

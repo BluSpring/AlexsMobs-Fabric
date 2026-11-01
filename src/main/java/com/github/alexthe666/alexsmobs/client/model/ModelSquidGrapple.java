@@ -11,8 +11,8 @@ public class ModelSquidGrapple extends AdvancedEntityModel<Entity> {
 	private final AdvancedModelBox tentacle;
 
 	public ModelSquidGrapple() {
-		texWidth = 128;
-		texHeight = 128;
+		textureWidth = 128;
+		textureHeight = 128;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -40,8 +40,8 @@ public class ModelSquidGrapple extends AdvancedEntityModel<Entity> {
 
 
 	public void setRotationAngle(AdvancedModelBox modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 }

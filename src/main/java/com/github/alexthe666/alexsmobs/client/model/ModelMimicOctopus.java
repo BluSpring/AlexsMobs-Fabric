@@ -30,8 +30,8 @@ public class ModelMimicOctopus extends AdvancedEntityModel<EntityMimicOctopus> {
     private final AdvancedModelBox creeperPivots4;
 
     public ModelMimicOctopus() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -158,8 +158,8 @@ public class ModelMimicOctopus extends AdvancedEntityModel<EntityMimicOctopus> {
 
         if(swimProgress > 0.0F){
             float rot = headPitch * Mth.DEG_TO_RAD;
-            this.body.rotationPointY += Math.abs(rot) * -7;
-            this.body.rotateAngleX -= rot;
+            this.body.y += Math.abs(rot) * -7;
+            this.body.xRot -= rot;
         }
         progressRotationPrev(mantle, sitProgress, Maths.rad(10), 0, 0, 5F);
         progressRotationPrev(leftFrontArm1, sitProgress,  0,  Maths.rad(10),  0, 5F);
@@ -181,17 +181,17 @@ public class ModelMimicOctopus extends AdvancedEntityModel<EntityMimicOctopus> {
         progressRotationPrev(leftBackArm1, swimProgress, Maths.rad(-90),  Maths.rad(50), Maths.rad(20), 5F);
         progressRotationPrev(leftBackArm2, swimProgress, Maths.rad(-90), Maths.rad(70), Maths.rad(50), 5F);
         progressPositionPrev(leftFrontArm1, swimProgress, -1, -1, 1, 5F);
-        progressPosition(leftFrontArm2, swimProgress, leftFrontArm1.rotationPointX, leftFrontArm1.rotationPointY, leftFrontArm1.rotationPointZ, 5F);
-        progressPosition(leftBackArm1, swimProgress, leftFrontArm1.rotationPointX, leftFrontArm1.rotationPointY, leftFrontArm1.rotationPointZ, 5F);
-        progressPosition(leftBackArm2, swimProgress, leftFrontArm1.rotationPointX, leftFrontArm1.rotationPointY, leftFrontArm1.rotationPointZ, 5F);
+        progressPosition(leftFrontArm2, swimProgress, leftFrontArm1.x, leftFrontArm1.y, leftFrontArm1.z, 5F);
+        progressPosition(leftBackArm1, swimProgress, leftFrontArm1.x, leftFrontArm1.y, leftFrontArm1.z, 5F);
+        progressPosition(leftBackArm2, swimProgress, leftFrontArm1.x, leftFrontArm1.y, leftFrontArm1.z, 5F);
         progressRotationPrev(rightFrontArm1, swimProgress, Maths.rad(-90),  Maths.rad(-10), Maths.rad(50), 5F);
         progressRotationPrev(rightFrontArm2, swimProgress, Maths.rad(-90),  Maths.rad(-20), Maths.rad(20), 5F);
         progressRotationPrev(rightBackArm1, swimProgress, Maths.rad(-90),  Maths.rad(-50), Maths.rad(-20), 5F);
         progressRotationPrev(rightBackArm2, swimProgress, Maths.rad(-90), Maths.rad(-70), Maths.rad(-50), 5F);
         progressPositionPrev(rightFrontArm1, swimProgress, 1, -1, 1, 5F);
-        progressPosition(rightFrontArm2, swimProgress, rightFrontArm1.rotationPointX, rightFrontArm1.rotationPointY, rightFrontArm1.rotationPointZ, 5F);
-        progressPosition(rightBackArm1, swimProgress, rightFrontArm1.rotationPointX, rightFrontArm1.rotationPointY, rightFrontArm1.rotationPointZ, 5F);
-        progressPosition(rightBackArm2, swimProgress, rightFrontArm1.rotationPointX, rightFrontArm1.rotationPointY, rightFrontArm1.rotationPointZ, 5F);
+        progressPosition(rightFrontArm2, swimProgress, rightFrontArm1.x, rightFrontArm1.y, rightFrontArm1.z, 5F);
+        progressPosition(rightBackArm1, swimProgress, rightFrontArm1.x, rightFrontArm1.y, rightFrontArm1.z, 5F);
+        progressPosition(rightBackArm2, swimProgress, rightFrontArm1.x, rightFrontArm1.y, rightFrontArm1.z, 5F);
 
         if (state == EntityMimicOctopus.MimicState.GUARDIAN) {
             float degree = 1.6F;
@@ -338,8 +338,8 @@ public class ModelMimicOctopus extends AdvancedEntityModel<EntityMimicOctopus> {
 	}
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

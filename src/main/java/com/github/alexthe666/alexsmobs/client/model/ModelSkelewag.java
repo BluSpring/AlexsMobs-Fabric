@@ -22,8 +22,8 @@ public class ModelSkelewag extends AdvancedEntityModel<EntitySkelewag> {
     private ModelAnimator animator;
 
     public ModelSkelewag() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -158,8 +158,8 @@ public class ModelSkelewag extends AdvancedEntityModel<EntitySkelewag> {
         this.bob(left_fin, swimSpeed, -1.5F * swimDegree, false, limbSwing, limbSwingAmount);
         this.bob(right_fin, swimSpeed, -1.5F * swimDegree, false, limbSwing, limbSwingAmount);
         this.swing(flag, swimSpeed, swimDegree * 0.6F, false, 2, 0.3F, limbSwing, limbSwingAmount);
-        this.body.rotateAngleX += headPitch * Mth.DEG_TO_RAD;
-        this.head.rotateAngleX -= headPitch * 0.5F * Mth.DEG_TO_RAD;
+        this.body.xRot += headPitch * Mth.DEG_TO_RAD;
+        this.head.xRot -= headPitch * 0.5F * Mth.DEG_TO_RAD;
 
     }
 
@@ -174,8 +174,8 @@ public class ModelSkelewag extends AdvancedEntityModel<EntitySkelewag> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

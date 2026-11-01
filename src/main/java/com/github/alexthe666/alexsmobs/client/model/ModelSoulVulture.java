@@ -26,8 +26,8 @@ public class ModelSoulVulture extends AdvancedEntityModel<EntitySoulVulture> {
 	private final AdvancedModelBox head;
 
 	public ModelSoulVulture() {
-		texWidth = 128;
-		texHeight = 128;
+		textureWidth = 128;
+		textureHeight = 128;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -173,8 +173,8 @@ public class ModelSoulVulture extends AdvancedEntityModel<EntitySoulVulture> {
 	}
 
 	public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-		AdvancedModelBox.rotateAngleX = x;
-		AdvancedModelBox.rotateAngleY = y;
-		AdvancedModelBox.rotateAngleZ = z;
+		AdvancedModelBox.xRot = x;
+		AdvancedModelBox.yRot = y;
+		AdvancedModelBox.zRot = z;
 	}
 }

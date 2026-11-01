@@ -28,8 +28,8 @@ public class ModelBison extends AdvancedEntityModel<EntityBison> {
     private final ModelAnimator animator;
 
     public ModelBison() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -241,15 +241,15 @@ public class ModelBison extends AdvancedEntityModel<EntityBison> {
         this.swing(right_ear, idleSpeed, idleDegree * 0.5F, true, 3F, 0.2F, ageInTicks, 1);
         this.walk(tail, idleSpeed, idleDegree, false, 1F, 0.1F, ageInTicks, 1);
         this.bob(head, idleSpeed, idleDegree, false, ageInTicks, 1);
-        this.head.rotateAngleY += netHeadYaw * 0.35F * Mth.DEG_TO_RAD;
-        this.head.rotateAngleX += headPitch * Mth.DEG_TO_RAD;
+        this.head.yRot += netHeadYaw * 0.35F * Mth.DEG_TO_RAD;
+        this.head.xRot += headPitch * Mth.DEG_TO_RAD;
 
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 
     @Override

@@ -20,8 +20,8 @@ public class ModelMudskipper extends AdvancedEntityModel<EntityMudskipper> {
     private final AdvancedModelBox rightFin;
 
     public ModelMudskipper() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -125,10 +125,10 @@ public class ModelMudskipper extends AdvancedEntityModel<EntityMudskipper> {
         float f = walkSpeed;
         float f1 = walkDegree * 0.15F;
         float headUp = 1.6F * Math.min(0, (float) (Math.sin(limbSwing * f) * (double) walkSwingAmount * (double) f1 * 9D - (walkSwingAmount * f1 * 9D)));
-        this.head.rotationPointY += headUp;
-        this.head.rotationPointZ += (float) (Math.sin(limbSwing * f - 1.5F) * (double) walkSwingAmount * (double) f1 * 9D - (walkSwingAmount * f1 * 9D));
-        this.rightFin.rotationPointY += headUp;
-        this.leftFin.rotationPointY += headUp;
+        this.head.y += headUp;
+        this.head.z += (float) (Math.sin(limbSwing * f - 1.5F) * (double) walkSwingAmount * (double) f1 * 9D - (walkSwingAmount * f1 * 9D));
+        this.rightFin.y += headUp;
+        this.leftFin.y += headUp;
         this.walk(tail, walkSpeed, walkDegree * 0.5F, true, 1F, 0.04F, limbSwing, walkSwingAmount);
         this.walk(tailFin, walkSpeed, walkDegree * 0.65F, false, 2F, -0.04F, limbSwing, walkSwingAmount);
         this.walk(head, walkSpeed, walkDegree * 0.5F, false, 0F, 0.04F, limbSwing, walkSwingAmount);

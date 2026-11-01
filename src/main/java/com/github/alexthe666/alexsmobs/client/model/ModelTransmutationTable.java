@@ -19,8 +19,8 @@ public class ModelTransmutationTable extends AdvancedEntityModel<Entity> {
     private final AdvancedModelBox rightHand;
 
     public ModelTransmutationTable(float scale) {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         base = new AdvancedModelBox(this, "base");
         base.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -104,13 +104,13 @@ public class ModelTransmutationTable extends AdvancedEntityModel<Entity> {
         this.bob(star, 0.25F, 1F, false, ageInTicks, 1F);
         this.bob(portal, 0.25F, 1F, false, ageInTicks, 1F);
         this.portal.setScale(0.35F * (float)Math.sin(ageInTicks * 0.5F + 1F) + 1.35F, 0.1F * (float)Math.cos(ageInTicks * 0.5F + 1F) + 1.1F, 1F);
-        this.star.rotateAngleY = ageInTicks * 0.1F;
+        this.star.yRot = ageInTicks * 0.1F;
     }
 
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

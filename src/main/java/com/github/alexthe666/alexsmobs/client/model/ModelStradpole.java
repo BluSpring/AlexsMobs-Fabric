@@ -16,8 +16,8 @@ public class ModelStradpole extends AdvancedEntityModel<EntityStradpole> {
 	private final AdvancedModelBox tail;
 
 	public ModelStradpole() {
-		texWidth = 64;
-		texHeight = 64;
+		textureWidth = 64;
+		textureHeight = 64;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 24.0F, 0.0F);
@@ -62,7 +62,7 @@ public class ModelStradpole extends AdvancedEntityModel<EntityStradpole> {
 		this.faceTarget(netHeadYaw, headPitch, 1.2F, body);
 		float partialTick = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
 		float birdPitch = entity.prevSwimPitch + (entity.swimPitch - entity.prevSwimPitch) * partialTick;
-		this.body.rotateAngleX += birdPitch * Mth.DEG_TO_RAD;
+		this.body.xRot += birdPitch * Mth.DEG_TO_RAD;
 
 	}
 
@@ -77,8 +77,8 @@ public class ModelStradpole extends AdvancedEntityModel<EntityStradpole> {
 	}
 
 	public void setRotationAngle(AdvancedModelBox advancedModelBox, float x, float y, float z) {
-		advancedModelBox.rotateAngleX = x;
-		advancedModelBox.rotateAngleY = y;
-		advancedModelBox.rotateAngleZ = z;
+		advancedModelBox.xRot = x;
+		advancedModelBox.yRot = y;
+		advancedModelBox.zRot = z;
 	}
 }

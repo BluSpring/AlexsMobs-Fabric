@@ -30,8 +30,8 @@ public class ModelTusklin extends AdvancedEntityModel<EntityTusklin> {
     private ModelAnimator animator;
 
     public ModelTusklin() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -126,8 +126,8 @@ public class ModelTusklin extends AdvancedEntityModel<EntityTusklin> {
             leg_left.setScale(1, f2, 1);
             leg_right.setScale(1, f2, 1);
             head.setShouldScaleChildren(true);
-            tusk_left.showModel = false;
-            tusk_right.showModel = false;
+            tusk_left.visible = false;
+            tusk_right.visible = false;
             matrixStackIn.pushPose();
             matrixStackIn.scale(0.45F, 0.45F, 0.45F);
             matrixStackIn.translate(0.0D, 1.6D, 0.125D);
@@ -144,8 +144,8 @@ public class ModelTusklin extends AdvancedEntityModel<EntityTusklin> {
             leg_right.setScale(1, 1, 1);
 
         } else {
-            tusk_left.showModel = true;
-            tusk_right.showModel = true;
+            tusk_left.visible = true;
+            tusk_right.visible = true;
             matrixStackIn.pushPose();
             parts().forEach((p_228290_8_) -> {
                 p_228290_8_.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, -1);
@@ -291,8 +291,8 @@ public class ModelTusklin extends AdvancedEntityModel<EntityTusklin> {
         float idleSpeed = 0.125F;
         float idleDegree = 0.5F;
         if(this.young){
-            this.head.rotationPointY -= 4.0F;
-            this.head.rotationPointZ += 2.0F;
+            this.head.y -= 4.0F;
+            this.head.z += 2.0F;
         }
         this.walk(head, idleSpeed * 0.4F, idleDegree * 0.2F, true, 1F, -0.01F, ageInTicks, 1);
         this.flap(ear_right, idleSpeed * 0.7F, idleDegree * 0.2F, false, 0F, -0.01F, ageInTicks, 1);
@@ -311,8 +311,8 @@ public class ModelTusklin extends AdvancedEntityModel<EntityTusklin> {
     }
 
     public void setRotationAngle(AdvancedModelBox advancedModelBox, float x, float y, float z) {
-        advancedModelBox.rotateAngleX = x;
-        advancedModelBox.rotateAngleY = y;
-        advancedModelBox.rotateAngleZ = z;
+        advancedModelBox.xRot = x;
+        advancedModelBox.yRot = y;
+        advancedModelBox.zRot = z;
     }
 }

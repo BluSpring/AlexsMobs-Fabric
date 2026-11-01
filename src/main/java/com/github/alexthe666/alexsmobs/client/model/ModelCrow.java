@@ -22,8 +22,8 @@ public class ModelCrow extends AdvancedEntityModel<EntityCrow> {
 	public final AdvancedModelBox beak;
 
 	public ModelCrow() {
-		texWidth = 32;
-		texHeight = 32;
+		textureWidth = 32;
+		textureHeight = 32;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 24.0F, 0.0F);
@@ -133,8 +133,8 @@ public class ModelCrow extends AdvancedEntityModel<EntityCrow> {
 		progressRotationPrev(leg_left, sitProgress, Maths.rad(25), 0, 0, 5F);
 		progressRotationPrev(leg_right, sitProgress, Maths.rad(25), 0, 0, 5F);
 		progressRotationPrev(head, sitProgress, Maths.rad(25), 0, 0, 5F);
-		head.rotateAngleY += netHeadYaw / 57.295776F;
-		head.rotateAngleZ += headPitch / 57.295776F;
+		head.yRot += netHeadYaw / 57.295776F;
+		head.zRot += headPitch / 57.295776F;
 
 	}
 
@@ -168,8 +168,8 @@ public class ModelCrow extends AdvancedEntityModel<EntityCrow> {
 	}
 
 	public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-		AdvancedModelBox.rotateAngleX = x;
-		AdvancedModelBox.rotateAngleY = y;
-		AdvancedModelBox.rotateAngleZ = z;
+		AdvancedModelBox.xRot = x;
+		AdvancedModelBox.yRot = y;
+		AdvancedModelBox.zRot = z;
 	}
 }

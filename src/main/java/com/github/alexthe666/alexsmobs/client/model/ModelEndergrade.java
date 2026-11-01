@@ -28,8 +28,8 @@ public class ModelEndergrade extends AdvancedEntityModel<EntityEndergrade> {
 	private final AdvancedModelBox tail;
 
 	public ModelEndergrade() {
-		texWidth = 64;
-		texHeight = 64;
+		textureWidth = 64;
+		textureHeight = 64;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 24.0F, 0.0F);
@@ -130,8 +130,8 @@ public class ModelEndergrade extends AdvancedEntityModel<EntityEndergrade> {
 		float birdPitch = entityIn.prevTartigradePitch + (entityIn.tartigradePitch - entityIn.prevTartigradePitch) * partialTick;
 		float biteProgress= entityIn.prevBiteProgress + (entityIn.biteProgress - entityIn.prevBiteProgress) * partialTick;
 		this.mouth.setScale(1, 1, 1 + biteProgress * 0.4F);
-		this.bodymain.rotateAngleX += birdPitch * Mth.DEG_TO_RAD;
-		this.mouth.rotationPointZ = -3 - biteProgress * 0.2F;
+		this.bodymain.xRot += birdPitch * Mth.DEG_TO_RAD;
+		this.mouth.z = -3 - biteProgress * 0.2F;
 		this.chainWave(bodyParts, walkSpeed, walkDegree * 0.3F, -1, limbSwing, limbSwingAmount);
 		this.chainWave(legPartsRight, walkSpeed, walkDegree, -1, limbSwing, limbSwingAmount);
 		this.chainWave(legPartsLeft, walkSpeed, walkDegree, -1, limbSwing, limbSwingAmount);
@@ -151,8 +151,8 @@ public class ModelEndergrade extends AdvancedEntityModel<EntityEndergrade> {
 	}
 
 	public void setRotationAngle(AdvancedModelBox advancedModelBox, float x, float y, float z) {
-		advancedModelBox.rotateAngleX = x;
-		advancedModelBox.rotateAngleY = y;
-		advancedModelBox.rotateAngleZ = z;
+		advancedModelBox.xRot = x;
+		advancedModelBox.yRot = y;
+		advancedModelBox.zRot = z;
 	}
 }

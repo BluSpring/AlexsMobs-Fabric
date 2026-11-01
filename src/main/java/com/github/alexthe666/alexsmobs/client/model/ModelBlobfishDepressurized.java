@@ -18,8 +18,8 @@ public class ModelBlobfishDepressurized extends AdvancedEntityModel<EntityBlobfi
     private final AdvancedModelBox fin_right;
 
     public ModelBlobfishDepressurized() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -73,7 +73,7 @@ public class ModelBlobfishDepressurized extends AdvancedEntityModel<EntityBlobfi
     public void setupAnim(EntityBlobfish entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
         this.resetToDefaultPose();
         if(!entity.onGround()){
-            this.body.rotateAngleX = headPitch * Mth.DEG_TO_RAD;
+            this.body.xRot = headPitch * Mth.DEG_TO_RAD;
         }
         float swimSpeed = 1.5F;
         float swimDegree = 0.85F;
@@ -85,13 +85,13 @@ public class ModelBlobfishDepressurized extends AdvancedEntityModel<EntityBlobfi
         float lvt_7_1_ = 1.0F / (lvt_6_1_ + 1.0F);
         float squishScale = 1.0F / lvt_7_1_;
         this.body.setScale(1F, squishScale, 1F);
-        this.body.rotationPointY += lvt_6_1_ * -5F;
+        this.body.y += lvt_6_1_ * -5F;
         this.body.setShouldScaleChildren(true);
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

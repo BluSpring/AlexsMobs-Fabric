@@ -35,8 +35,8 @@ public class ModelElephant extends AdvancedEntityModel<EntityElephant> {
     private final ModelAnimator animator;
 
     public ModelElephant(float f) {
-        texWidth = 256;
-        texHeight = 256;
+        textureWidth = 256;
+        textureHeight = 256;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -295,7 +295,7 @@ public class ModelElephant extends AdvancedEntityModel<EntityElephant> {
         if (this.young) {
             float f = 1.5F;
             float f2 = 0.75F;
-            head.rotationPointY = -10;
+            head.y = -10;
             head.setScale(f, f, f);
             tail.setScale(f, f, f);
             head.setShouldScaleChildren(true);
@@ -312,7 +312,7 @@ public class ModelElephant extends AdvancedEntityModel<EntityElephant> {
             tail.setScale(1, 1, 1);
             trunk1.setScale(1, 1, 1);
         } else {
-            head.rotationPointY = -2.0F;
+            head.y = -2.0F;
             matrixStackIn.pushPose();
             parts().forEach((p_228290_8_) -> {
                 p_228290_8_.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, -1);
@@ -389,8 +389,8 @@ public class ModelElephant extends AdvancedEntityModel<EntityElephant> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

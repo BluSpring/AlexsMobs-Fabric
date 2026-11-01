@@ -16,8 +16,8 @@ public class ModelBoneSerpentHead extends AdvancedEntityModel<EntityBoneSerpent>
     private final AdvancedModelBox jaw;
 
     public ModelBoneSerpentHead() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         head = new AdvancedModelBox(this, "head");
         head.setPos(0.0F, 16.0F, 8.0F);
@@ -56,16 +56,16 @@ public class ModelBoneSerpentHead extends AdvancedEntityModel<EntityBoneSerpent>
     @Override
     public void setupAnim(EntityBoneSerpent entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetToDefaultPose();
-        this.head.rotateAngleX = headPitch * Mth.DEG_TO_RAD;
+        this.head.xRot = headPitch * Mth.DEG_TO_RAD;
         float walkSpeed = 0.35F;
         float walkDegree = 3F;
         float idleSpeed = 0.1F;
         float idleDegree = 0.2F;
         double walkOffset = 0;
         this.walk(jaw, idleSpeed * 0.5F, idleDegree * 0.3F, false, -1.2F, 0F, ageInTicks, 1);
-        this.head.rotationPointY += (float)(Math.sin( (double)(limbSwing * walkSpeed) + walkOffset) * (double)limbSwingAmount * (double)walkDegree - (double)(limbSwingAmount * walkDegree) );
+        this.head.y += (float)(Math.sin( (double)(limbSwing * walkSpeed) + walkOffset) * (double)limbSwingAmount * (double)walkDegree - (double)(limbSwingAmount * walkDegree) );
         this.walk(jaw, walkSpeed, walkDegree * 0.03F, false, -1.2F, 0F, limbSwing, limbSwingAmount);
-        this.head.rotationPointY += (float)(Math.sin( (double)(ageInTicks * idleSpeed) + walkOffset) * (double)1 * (double)idleDegree - (double)(1 * idleDegree) );
+        this.head.y += (float)(Math.sin( (double)(ageInTicks * idleSpeed) + walkOffset) * (double)1 * (double)idleDegree - (double)(1 * idleDegree) );
 
     }
 
@@ -80,8 +80,8 @@ public class ModelBoneSerpentHead extends AdvancedEntityModel<EntityBoneSerpent>
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

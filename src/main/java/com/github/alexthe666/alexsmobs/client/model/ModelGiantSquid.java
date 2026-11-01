@@ -53,8 +53,8 @@ public class ModelGiantSquid extends AdvancedEntityModel<EntityGiantSquid> {
     private final AdvancedModelBox right_membrane;
 
     public ModelGiantSquid() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -280,29 +280,29 @@ public class ModelGiantSquid extends AdvancedEntityModel<EntityGiantSquid> {
         float stretchy = 0.9F + 0.2F * f1;
         float stretchyXZ = 0.95F - 0.1F * f1;
         float flailAmount = capturedProgress * 0.2F;
-        this.head.rotateAngleX += f;
-        this.right_pupil_pivot.rotateAngleX -= f;
-        this.left_pupil_pivot.rotateAngleX -= f;
+        this.head.xRot += f;
+        this.right_pupil_pivot.xRot -= f;
+        this.left_pupil_pivot.xRot -= f;
         this.mantle.setScale(stretchyXZ, stretchy, stretchyXZ - (dryProgress * 0.05F));
         this.mantle.setShouldScaleChildren(true);
         float contractFromGrab = 1F - (0.2F * grabProgress);
-        this.right_arm2.rotateAngleX -= contractFromGrab * getArmRot(entity, 2, partialTick, false);
-        this.left_arm2.rotateAngleX += contractFromGrab * getArmRot(entity, 2, partialTick, false);
-        this.right_arm2.rotateAngleX -= contractFromGrab * getArmRot(entity, 4, partialTick, false);
-        this.left_arm2.rotateAngleX += contractFromGrab * getArmRot(entity, 4, partialTick, false);
-        this.right_arm3.rotateAngleX -= contractFromGrab * getArmRot(entity, 8, partialTick, false);
-        this.left_arm3.rotateAngleX += contractFromGrab * getArmRot(entity, 8, partialTick, false);
-        this.right_arm4.rotateAngleX -= contractFromGrab * getArmRot(entity, 12, partialTick, false);
-        this.left_arm4.rotateAngleX += contractFromGrab * getArmRot(entity, 12, partialTick, false);
+        this.right_arm2.xRot -= contractFromGrab * getArmRot(entity, 2, partialTick, false);
+        this.left_arm2.xRot += contractFromGrab * getArmRot(entity, 2, partialTick, false);
+        this.right_arm2.xRot -= contractFromGrab * getArmRot(entity, 4, partialTick, false);
+        this.left_arm2.xRot += contractFromGrab * getArmRot(entity, 4, partialTick, false);
+        this.right_arm3.xRot -= contractFromGrab * getArmRot(entity, 8, partialTick, false);
+        this.left_arm3.xRot += contractFromGrab * getArmRot(entity, 8, partialTick, false);
+        this.right_arm4.xRot -= contractFromGrab * getArmRot(entity, 12, partialTick, false);
+        this.left_arm4.xRot += contractFromGrab * getArmRot(entity, 12, partialTick, false);
 
-        this.right_arm2.rotateAngleZ += contractFromGrab * getArmRot(entity, 2, partialTick, true);
-        this.left_arm2.rotateAngleZ -= contractFromGrab * getArmRot(entity, 2, partialTick, true);
-        this.right_arm2.rotateAngleZ += contractFromGrab * getArmRot(entity, 4, partialTick, true);
-        this.left_arm2.rotateAngleZ -= contractFromGrab * getArmRot(entity, 4, partialTick, true);
-        this.right_arm3.rotateAngleZ += contractFromGrab * getArmRot(entity, 6, partialTick, true);
-        this.left_arm3.rotateAngleZ -= contractFromGrab * getArmRot(entity, 6, partialTick, true);
-        this.right_arm4.rotateAngleZ += contractFromGrab * getArmRot(entity, 8, partialTick, true);
-        this.left_arm4.rotateAngleZ -= contractFromGrab * getArmRot(entity, 8, partialTick, true);
+        this.right_arm2.zRot += contractFromGrab * getArmRot(entity, 2, partialTick, true);
+        this.left_arm2.zRot -= contractFromGrab * getArmRot(entity, 2, partialTick, true);
+        this.right_arm2.zRot += contractFromGrab * getArmRot(entity, 4, partialTick, true);
+        this.left_arm2.zRot -= contractFromGrab * getArmRot(entity, 4, partialTick, true);
+        this.right_arm3.zRot += contractFromGrab * getArmRot(entity, 6, partialTick, true);
+        this.left_arm3.zRot -= contractFromGrab * getArmRot(entity, 6, partialTick, true);
+        this.right_arm4.zRot += contractFromGrab * getArmRot(entity, 8, partialTick, true);
+        this.left_arm4.zRot -= contractFromGrab * getArmRot(entity, 8, partialTick, true);
 
         progressRotationPrev(mantle_end, dryProgress, Maths.rad(-10), 0, 0, 5F);
         progressRotationPrev(right_membrane, dryProgress, 0, Maths.rad(20), 0, 5F);
@@ -472,8 +472,8 @@ public class ModelGiantSquid extends AdvancedEntityModel<EntityGiantSquid> {
         this.walk(left_arm4, idleSpeed, idleDegree * 0.2F, true, -6F, 0F, ageInTicks, 1);
         this.walk(right_arm4, idleSpeed, idleDegree * 0.2F, true, -6F, 0F, ageInTicks, 1);
 
-        this.left_pupil.rotateAngleX += f;
-        this.right_pupil.rotateAngleX += f;
+        this.left_pupil.xRot += f;
+        this.right_pupil.xRot += f;
         if(grabProgress >= 5F){
             this.walk(beak, 0.7F, 0.35F, true, 0F, 0F, ageInTicks, 1);
             this.bob(beak, 0.7F, 0.35F, true, ageInTicks, 1);
@@ -492,11 +492,11 @@ public class ModelGiantSquid extends AdvancedEntityModel<EntityGiantSquid> {
             double d1 = vector3d2.dot(vector3d3);
             double eyeXz = Mth.sqrt((float) Math.abs(d1)) * -2F * (float) Math.signum(d1);
             this.left_pupil.setScale(eyeScale, eyeScale, eyeScale);
-            this.left_pupil.rotationPointZ -= (float) Mth.clamp(-eyeXz, -maxEyeDist / eyeScale, maxEyeDist / eyeScale);
-            this.left_pupil.rotationPointY += (float) Mth.clamp(-d0, -maxEyeDist / eyeScale, maxEyeDist / eyeScale);
+            this.left_pupil.z -= (float) Mth.clamp(-eyeXz, -maxEyeDist / eyeScale, maxEyeDist / eyeScale);
+            this.left_pupil.y += (float) Mth.clamp(-d0, -maxEyeDist / eyeScale, maxEyeDist / eyeScale);
             this.right_pupil.setScale(eyeScale, eyeScale, eyeScale);
-            this.right_pupil.rotationPointZ += (float) Mth.clamp(eyeXz, -maxEyeDist / eyeScale, maxEyeDist / eyeScale);
-            this.right_pupil.rotationPointY += (float) Mth.clamp(-d0, -maxEyeDist / eyeScale, maxEyeDist / eyeScale);
+            this.right_pupil.z += (float) Mth.clamp(eyeXz, -maxEyeDist / eyeScale, maxEyeDist / eyeScale);
+            this.right_pupil.y += (float) Mth.clamp(-d0, -maxEyeDist / eyeScale, maxEyeDist / eyeScale);
         }
     }
 
@@ -511,8 +511,8 @@ public class ModelGiantSquid extends AdvancedEntityModel<EntityGiantSquid> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

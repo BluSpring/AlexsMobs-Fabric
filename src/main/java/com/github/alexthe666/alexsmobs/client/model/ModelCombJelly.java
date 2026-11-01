@@ -14,8 +14,8 @@ public class ModelCombJelly extends AdvancedEntityModel<EntityCombJelly> {
     private final AdvancedModelBox inner_body;
 
     public ModelCombJelly(float f) {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
         body = new AdvancedModelBox(this, "body");
@@ -51,18 +51,18 @@ public class ModelCombJelly extends AdvancedEntityModel<EntityCombJelly> {
         float squishedScale = widthScale - 0.1F * landProgress;
         this.body.setScale(squishedScale, heightScale, widthScale);
         this.inner_body.setScale(squishedScale, heightScale, widthScale);
-        this.body.rotateAngleX = birdPitch * Mth.DEG_TO_RAD * (1F - landProgress * 0.2F);
-        this.body.rotateAngleZ = landProgress * 0.2F * Mth.HALF_PI;
-        this.body.rotationPointY += landProgress * 1.85F;
-        this.body.rotationPointY += Math.abs(birdPitch * 0.07F);
-        this.body.rotationPointX += landProgress;
+        this.body.xRot = birdPitch * Mth.DEG_TO_RAD * (1F - landProgress * 0.2F);
+        this.body.zRot = landProgress * 0.2F * Mth.HALF_PI;
+        this.body.y += landProgress * 1.85F;
+        this.body.y += Math.abs(birdPitch * 0.07F);
+        this.body.x += landProgress;
         this.bob(body, 0.1F, 1F, false, ageInTicks,  1F - landProgress * 0.2F);
     }
 
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

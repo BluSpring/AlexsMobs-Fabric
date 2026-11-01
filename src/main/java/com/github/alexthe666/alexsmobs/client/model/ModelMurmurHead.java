@@ -16,8 +16,8 @@ public class ModelMurmurHead extends AdvancedEntityModel<EntityMurmurHead> {
     private final AdvancedModelBox rightHair;
 
     public ModelMurmurHead() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -92,15 +92,15 @@ public class ModelMurmurHead extends AdvancedEntityModel<EntityMurmurHead> {
             float hairX = Maths.rad(6.0F + f2 / 2.0F + f1 - 180);
             float hairY = Maths.rad(f3 / 2.0F);
             float hairZ = Maths.rad(180.0F - f3 / 2.0F);
-            this.backHair.rotateAngleX -= hairX;
-            this.backHair.rotateAngleY -= hairY;
-            this.backHair.rotateAngleZ -= hairZ;
-            this.rightHair.rotateAngleX -= hairX;
-            this.rightHair.rotateAngleY -= hairY;
-            this.rightHair.rotateAngleZ -= hairZ;
-            this.leftHair.rotateAngleX -= hairX;
-            this.leftHair.rotateAngleY -= hairY;
-            this.leftHair.rotateAngleZ -= hairZ;
+            this.backHair.xRot -= hairX;
+            this.backHair.yRot -= hairY;
+            this.backHair.zRot -= hairZ;
+            this.rightHair.xRot -= hairX;
+            this.rightHair.yRot -= hairY;
+            this.rightHair.zRot -= hairZ;
+            this.leftHair.xRot -= hairX;
+            this.leftHair.yRot -= hairY;
+            this.leftHair.zRot -= hairZ;
         }
         this.animateHair(ageInTicks);
         this.faceTarget(netHeadYaw, headPitch, 1, head);

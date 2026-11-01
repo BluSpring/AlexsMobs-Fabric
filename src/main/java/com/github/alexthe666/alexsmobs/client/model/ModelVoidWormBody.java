@@ -20,8 +20,8 @@ public class ModelVoidWormBody extends AdvancedEntityModel<EntityVoidWormPart> {
 	private final AdvancedModelBox frillsbottom_right_r1;
 
 	public ModelVoidWormBody(float f) {
-		texWidth = 128;
-		texHeight = 128;
+		textureWidth = 128;
+		textureHeight = 128;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 24.0F, 0.0F);
@@ -83,9 +83,9 @@ public class ModelVoidWormBody extends AdvancedEntityModel<EntityVoidWormPart> {
 	@Override
 	public void setupAnim(EntityVoidWormPart entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.resetToDefaultPose();
-		this.root.rotateAngleX += headPitch * Mth.DEG_TO_RAD;
+		this.root.xRot += headPitch * Mth.DEG_TO_RAD;
 		float yawAmount = (entityIn.prevWormAngle + (entityIn.getWormAngle() - entityIn.prevWormAngle) * (ageInTicks - entityIn.tickCount)) / 57.295776F * 0.5F;
-		this.body.rotateAngleZ += yawAmount;
+		this.body.zRot += yawAmount;
 	}
 
 	@Override
@@ -99,8 +99,8 @@ public class ModelVoidWormBody extends AdvancedEntityModel<EntityVoidWormPart> {
 	}
 
 	public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-		AdvancedModelBox.rotateAngleX = x;
-		AdvancedModelBox.rotateAngleY = y;
-		AdvancedModelBox.rotateAngleZ = z;
+		AdvancedModelBox.xRot = x;
+		AdvancedModelBox.yRot = y;
+		AdvancedModelBox.zRot = z;
 	}
 }

@@ -22,8 +22,8 @@ public class ModelRainFrog extends AdvancedEntityModel<EntityRainFrog> {
     private final AdvancedModelBox right_eye;
 
     public ModelRainFrog() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -162,24 +162,24 @@ public class ModelRainFrog extends AdvancedEntityModel<EntityRainFrog> {
         this.walk(left_leg, walkSpeed, walkDegree, true, -2.5F, -0.3F, limbSwing, limbSwingAmount);
         float leftLegS = (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
         float rightLegS = (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
-        this.left_leg.rotationPointY += 1.5F * leftLegS;
-        this.right_leg.rotationPointY += 1.5F * rightLegS;
-        this.left_leg.rotationPointZ -= 2F * leftLegS;
-        this.right_leg.rotationPointZ -= 2F * rightLegS;
-        this.right_arm.rotationPointY += 1.5F * leftLegS;
-        this.left_arm.rotationPointY += 1.5F * rightLegS;
-        this.right_arm.rotationPointZ += leftLegS;
-        this.left_arm.rotationPointZ += rightLegS;
+        this.left_leg.y += 1.5F * leftLegS;
+        this.right_leg.y += 1.5F * rightLegS;
+        this.left_leg.z -= 2F * leftLegS;
+        this.right_leg.z -= 2F * rightLegS;
+        this.right_arm.y += 1.5F * leftLegS;
+        this.left_arm.y += 1.5F * rightLegS;
+        this.right_arm.z += leftLegS;
+        this.left_arm.z += rightLegS;
         this.swing(body, danceSpeed, danceDegree * 0.5F, false, 1F, 0F, ageInTicks, danceProgress * 0.2F);
         this.walk(body, danceSpeed, danceDegree * 0.5F, false, 3F, -0.4F, ageInTicks, danceProgress * 0.2F);
         this.flap(right_arm, danceSpeed, danceDegree, false, 0F, 0.3F, ageInTicks, danceProgress * 0.2F);
         this.flap(left_arm, danceSpeed, danceDegree, true, 0F, 0.3F, ageInTicks, danceProgress * 0.2F);
-        this.left_leg.rotateAngleX -= 1 * body.rotateAngleX;
-        this.left_leg.rotateAngleY -= 1 * body.rotateAngleY;
-        this.left_leg.rotateAngleZ -= 1 * body.rotateAngleZ;
-        this.right_leg.rotateAngleX -= 1 * body.rotateAngleX;
-        this.right_leg.rotateAngleY -= 1 * body.rotateAngleY;
-        this.right_leg.rotateAngleZ -= 1 * body.rotateAngleZ;
+        this.left_leg.xRot -= 1 * body.xRot;
+        this.left_leg.yRot -= 1 * body.yRot;
+        this.left_leg.zRot -= 1 * body.zRot;
+        this.right_leg.xRot -= 1 * body.xRot;
+        this.right_leg.yRot -= 1 * body.yRot;
+        this.right_leg.zRot -= 1 * body.zRot;
     }
 
 

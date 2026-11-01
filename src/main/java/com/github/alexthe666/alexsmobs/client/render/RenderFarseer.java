@@ -7,14 +7,13 @@ import com.github.alexthe666.alexsmobs.entity.EntityFarseer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import org.jspecify.annotations.Nullable;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.jspecify.annotations.Nullable;
 
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -25,6 +24,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.phys.AABB;
@@ -187,7 +187,7 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
         matrixStackIn.pushPose();
         matrixStackIn.popPose();
 
-        AFTERIMAGE_MODEL.eye.showModel = false;
+        AFTERIMAGE_MODEL.eye.visible = false;
         RenderType afterimage = RenderType.entityTranslucentEmissive(this.getTextureLocation(entityIn));
         Vec3 colorOffset = entityIn.getLatencyOffsetVec(10, partialTicks).scale(-0.2F)
                 .add(entityIn.angryShakeVec.scale(0.3F));
@@ -214,7 +214,7 @@ public class RenderFarseer extends MobRenderer<EntityFarseer, ModelFarseer> {
                 AMColorUtil.packColor(0F, 0F, 1.0F, afterimageAlpha2));
         matrixStackIn.popPose();
         matrixStackIn.popPose();
-        AFTERIMAGE_MODEL.eye.showModel = true;
+        AFTERIMAGE_MODEL.eye.visible = true;
     }
 
     private static void laserOriginVertex(VertexConsumer p_114220_, Matrix4f p_114221_, Matrix3f p_114092_,

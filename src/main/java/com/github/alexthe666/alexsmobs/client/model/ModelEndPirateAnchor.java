@@ -16,8 +16,8 @@ public class ModelEndPirateAnchor extends AdvancedEntityModel<Entity> {
     private final AdvancedModelBox right_side;
 
     public ModelEndPirateAnchor() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);

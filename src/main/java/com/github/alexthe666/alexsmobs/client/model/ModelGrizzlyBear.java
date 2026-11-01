@@ -30,8 +30,8 @@ public class ModelGrizzlyBear extends AdvancedEntityModel<EntityGrizzlyBear> {
     public final ModelAnimator animator;
 
     public ModelGrizzlyBear() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -223,11 +223,11 @@ public class ModelGrizzlyBear extends AdvancedEntityModel<EntityGrizzlyBear> {
         progressRotationPrev(right_arm, sitProgress, Maths.rad(25), Maths.rad(-10), 0, 10F);
         progressPositionPrev(head, sitProgress, 0, 4, -1, 10F);
         if(Math.max(standProgress, sitProgress) > 5F){
-            this.head.rotateAngleZ += netHeadYaw * Mth.DEG_TO_RAD;
+            this.head.zRot += netHeadYaw * Mth.DEG_TO_RAD;
         }else{
-            this.head.rotateAngleY += netHeadYaw * Mth.DEG_TO_RAD;
+            this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD;
         }
-        this.head.rotateAngleX += headPitch * Mth.DEG_TO_RAD;
+        this.head.xRot += headPitch * Mth.DEG_TO_RAD;
         if(entityIn.isFreddy()){
             if(standProgress > 0){
                 this.walk(right_arm, walkSpeed, walkDegree, false, 0F, 0F, limbSwing, limbSwingAmount);
@@ -332,8 +332,8 @@ public class ModelGrizzlyBear extends AdvancedEntityModel<EntityGrizzlyBear> {
         progressPositionPrev(right_leg, 10F, 0, -4, 4, 10F);
     }
     public void setRotationAngle(AdvancedModelBox box, float x, float y, float z) {
-        box.rotateAngleX = x;
-        box.rotateAngleY = y;
-        box.rotateAngleZ = z;
+        box.xRot = x;
+        box.yRot = y;
+        box.zRot = z;
     }
 }

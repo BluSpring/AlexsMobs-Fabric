@@ -22,8 +22,8 @@ public class ModelJerboa extends AdvancedEntityModel<EntityJerboa> {
     private final AdvancedModelBox feet;
 
     public ModelJerboa() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -123,12 +123,12 @@ public class ModelJerboa extends AdvancedEntityModel<EntityJerboa> {
         progressRotationPrev(rightArm, begProgress, Maths.rad(-15), 0, 0, 5F);
 
         if (begProgress > 0) {
-            float f = body.rotateAngleX;
+            float f = body.xRot;
             this.walk(body, 0.7F, 0.1F, false, 2F, -0.7F, ageInTicks, begProgress * 0.2F);
-            float f1 = body.rotateAngleX - f;
-            this.legs.rotateAngleX -= f1;
-            this.tail.rotateAngleX -= f1;
-            this.legs.rotationPointY += f1 * 3F;
+            float f1 = body.xRot - f;
+            this.legs.xRot -= f1;
+            this.tail.xRot -= f1;
+            this.legs.y += f1 * 3F;
             this.walk(rightArm, 0.7F, 1.2F, false, 0F, -1.0F, ageInTicks, begProgress * 0.2F);
             this.flap(rightArm, 0.7F, 0.25F, false, -1F, 0.2F, ageInTicks, begProgress * 0.2F);
             this.walk(leftArm, 0.7F, 1.2F, false, 0F, -1.0F, ageInTicks, begProgress * 0.2F);
@@ -137,17 +137,17 @@ public class ModelJerboa extends AdvancedEntityModel<EntityJerboa> {
         float headY = netHeadYaw * 0.35F * Mth.DEG_TO_RAD;
         float headZ = headPitch * 0.65F * Mth.DEG_TO_RAD;
         if(Math.max(sleepProgress, begProgress) == 0){
-            this.body.rotateAngleY += headY;
-            this.legs.rotateAngleY -= headY * 0.6F;
-            this.body.rotateAngleX += headZ;
-            this.legs.rotateAngleX -= headZ;
-            this.tail.rotateAngleX -= headZ * 1.2F;
+            this.body.yRot += headY;
+            this.legs.yRot -= headY * 0.6F;
+            this.body.xRot += headZ;
+            this.legs.xRot -= headZ;
+            this.tail.xRot -= headZ * 1.2F;
             if(headPitch > 0){
-                this.body.rotationPointY += Math.abs(headPitch) * 0.015F;
-                this.legs.rotationPointZ -= Math.abs(headPitch) * 0.02F;
+                this.body.y += Math.abs(headPitch) * 0.015F;
+                this.legs.z -= Math.abs(headPitch) * 0.02F;
             }else{
-                this.legs.rotationPointY -= Math.abs(headPitch) * 0.0225F;
-                this.legs.rotationPointZ -= Math.abs(headPitch) * 0.015F;
+                this.legs.y -= Math.abs(headPitch) * 0.0225F;
+                this.legs.z -= Math.abs(headPitch) * 0.015F;
             }
         }
 
@@ -175,8 +175,8 @@ public class ModelJerboa extends AdvancedEntityModel<EntityJerboa> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

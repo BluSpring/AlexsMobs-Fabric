@@ -22,8 +22,8 @@ public class ModelGuster extends AdvancedEntityModel<EntityGuster> {
     private final AdvancedModelBox eye_right;
 
     public ModelGuster() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -88,27 +88,27 @@ public class ModelGuster extends AdvancedEntityModel<EntityGuster> {
         this.chainFlap(tornadoBoxes, walkSpeed, walkDegree * 0.1F, -2, limbSwing, limbSwingAmount);
         this.bob(root, idleSpeed, idleDegree * 3, false, ageInTicks, 1);
         if(entity.isGooglyEyes()){
-            this.eye_left.rotationPointY += (float)(Math.sin( (ageInTicks * 0.7) - 2) * 1.9);
-            this.eye_right.rotationPointY += (float)(Math.sin( (ageInTicks * 0.7) + 2) * 1.9);
+            this.eye_left.y += (float)(Math.sin( (ageInTicks * 0.7) - 2) * 1.9);
+            this.eye_right.y += (float)(Math.sin( (ageInTicks * 0.7) + 2) * 1.9);
         }else{
-            this.eye_left.rotationPointY += (float)(Math.sin( (ageInTicks * 0.1) - 2) * 0.9);
-            this.eye_right.rotationPointY += (float)(Math.sin( (ageInTicks * 0.1) + 2) * 0.9);
+            this.eye_left.y += (float)(Math.sin( (ageInTicks * 0.1) - 2) * 0.9);
+            this.eye_right.y += (float)(Math.sin( (ageInTicks * 0.1) + 2) * 0.9);
         }
         this.bob(eyes, idleSpeed, idleDegree * -3.2F, false, ageInTicks, 1);
-        this.eyes.rotateAngleY += netHeadYaw * 0.5F * Mth.DEG_TO_RAD;
-        this.eyes.rotateAngleX += headPitch * 0.8F * Mth.DEG_TO_RAD;
+        this.eyes.yRot += netHeadYaw * 0.5F * Mth.DEG_TO_RAD;
+        this.eyes.xRot += headPitch * 0.8F * Mth.DEG_TO_RAD;
 
-        tornado.rotationPointX += Math.cos(ageInTicks * 0.7F) * 4F;
-        tornado.rotationPointZ += Math.sin(ageInTicks * 0.7F) * 4F;
-        tornado.rotationPointX += Math.cos(ageInTicks * 0.3F) * 2F - tornado.rotationPointX;
-        tornado.rotationPointZ += Math.sin(ageInTicks * 0.3F) * 2F - tornado.rotationPointZ;
-        tornadomid.rotateAngleZ += Math.sin(ageInTicks * 0.2F) * 0.1;
-        tornado.rotateAngleY -= ageInTicks;
-        tornado2.rotateAngleY -= tornado.rotateAngleY + ageInTicks * 0.3F;
-        tornado3.rotateAngleY -= tornado.rotateAngleY + tornado2.rotateAngleY + ageInTicks * 0.2F;
-        tornado4.rotateAngleY -= tornado.rotateAngleY + tornado2.rotateAngleY + tornado3.rotateAngleY + ageInTicks * 0.34F;
-        tornadomid.rotateAngleY += ageInTicks * 0.5F;
-        eyes.rotationPointZ -= 2 + Math.cos(tornado3.rotateAngleY);
+        tornado.x += Math.cos(ageInTicks * 0.7F) * 4F;
+        tornado.z += Math.sin(ageInTicks * 0.7F) * 4F;
+        tornado.x += Math.cos(ageInTicks * 0.3F) * 2F - tornado.x;
+        tornado.z += Math.sin(ageInTicks * 0.3F) * 2F - tornado.z;
+        tornadomid.zRot += Math.sin(ageInTicks * 0.2F) * 0.1;
+        tornado.yRot -= ageInTicks;
+        tornado2.yRot -= tornado.yRot + ageInTicks * 0.3F;
+        tornado3.yRot -= tornado.yRot + tornado2.yRot + ageInTicks * 0.2F;
+        tornado4.yRot -= tornado.yRot + tornado2.yRot + tornado3.yRot + ageInTicks * 0.34F;
+        tornadomid.yRot += ageInTicks * 0.5F;
+        eyes.z -= 2 + Math.cos(tornado3.yRot);
     }
 
     public void animateGust(EntityGust entity, float limbSwing, float limbSwingAmount, float ageInTicks){
@@ -122,29 +122,29 @@ public class ModelGuster extends AdvancedEntityModel<EntityGuster> {
         this.chainFlap(tornadoBoxes, walkSpeed, walkDegree * 0.1F, -2, limbSwing, limbSwingAmount);
         this.bob(root, idleSpeed, idleDegree * 3, false, ageInTicks, 1);
         this.bob(eyes, idleSpeed, idleDegree * -3.2F, false, ageInTicks, 1);
-        tornado.rotationPointX += Math.cos(ageInTicks * 0.7F) * 4F;
-        tornado.rotationPointZ += Math.sin(ageInTicks * 0.7F) * 4F;
-        tornado.rotationPointX += Math.cos(ageInTicks * 0.3F) * 2F - tornado.rotationPointX;
-        tornado.rotationPointZ += Math.sin(ageInTicks * 0.3F) * 2F - tornado.rotationPointZ;
-        tornadomid.rotateAngleZ += Math.sin(ageInTicks * 0.2F) * 0.1;
-        tornado.rotateAngleY -= ageInTicks;
-        tornado2.rotateAngleY -= tornado.rotateAngleY + ageInTicks * 0.3F;
-        tornado3.rotateAngleY -= tornado.rotateAngleY + tornado2.rotateAngleY + ageInTicks * 0.2F;
-        tornado4.rotateAngleY -= tornado.rotateAngleY + tornado2.rotateAngleY + tornado3.rotateAngleY + ageInTicks * 0.34F;
-        tornadomid.rotateAngleY += ageInTicks * 0.5F;
-        eyes.rotationPointZ -= 2 + Math.cos(tornado3.rotateAngleY);
+        tornado.x += Math.cos(ageInTicks * 0.7F) * 4F;
+        tornado.z += Math.sin(ageInTicks * 0.7F) * 4F;
+        tornado.x += Math.cos(ageInTicks * 0.3F) * 2F - tornado.x;
+        tornado.z += Math.sin(ageInTicks * 0.3F) * 2F - tornado.z;
+        tornadomid.zRot += Math.sin(ageInTicks * 0.2F) * 0.1;
+        tornado.yRot -= ageInTicks;
+        tornado2.yRot -= tornado.yRot + ageInTicks * 0.3F;
+        tornado3.yRot -= tornado.yRot + tornado2.yRot + ageInTicks * 0.2F;
+        tornado4.yRot -= tornado.yRot + tornado2.yRot + tornado3.yRot + ageInTicks * 0.34F;
+        tornadomid.yRot += ageInTicks * 0.5F;
+        eyes.z -= 2 + Math.cos(tornado3.yRot);
     }
 
     public void hideEyes(){
-        this.eyes.showModel = false;
-        this.eye_left.showModel = false;
-        this.eye_right.showModel = false;
+        this.eyes.visible = false;
+        this.eye_left.visible = false;
+        this.eye_right.visible = false;
     }
 
     public void showEyes(){
-        this.eyes.showModel = true;
-        this.eye_left.showModel = true;
-        this.eye_right.showModel = true;
+        this.eyes.visible = true;
+        this.eye_left.visible = true;
+        this.eye_right.visible = true;
     }
     @Override
     public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color){
@@ -157,8 +157,8 @@ public class ModelGuster extends AdvancedEntityModel<EntityGuster> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

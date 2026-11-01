@@ -29,8 +29,8 @@ public class ModelCaiman extends AdvancedEntityModel<EntityCaiman> {
     private final AdvancedModelBox topJaw;
 
     public ModelCaiman() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this);
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -167,7 +167,7 @@ public class ModelCaiman extends AdvancedEntityModel<EntityCaiman> {
         this.swing(body, 0.5F, 0.4F, false, 2, 0F, ageInTicks, grabProgress * 0.2F);
         this.swing(tail1, 0.5F, 0.4F, false, 4, 0F, ageInTicks, grabProgress * 0.2F);
         this.swing(tail2, 0.5F, 0.4F, false, 3, 0F, ageInTicks, grabProgress * 0.2F);
-        this.head.rotationPointX += walkValue(ageInTicks, grabProgress * 0.2F, 0.5F, 2F, 2, false);
+        this.head.x += walkValue(ageInTicks, grabProgress * 0.2F, 0.5F, 2F, 2, false);
         this.swing(tail1, idleSpeed, idleDegree, false, 3F, 0F, ageInTicks, 1);
         this.swing(tail2, idleSpeed, idleDegree, false, 2F, 0F, ageInTicks, 1);
         this.swing(tail3, idleSpeed, idleDegree, false, 1F, 0F, ageInTicks, 1);
@@ -183,27 +183,27 @@ public class ModelCaiman extends AdvancedEntityModel<EntityCaiman> {
         this.swing(tail3, walkSpeed, walkDegree * 0.3F, false, -1F, 0F, limbSwing, walkAmount);
         this.bob(head, walkSpeed, walkDegree * -1, false, limbSwing, walkAmount);
         float bodyBob = walkValue(limbSwing, walkAmount, walkSpeed, 0.5F, 1F, true) - walkAmount * 2;
-        this.body.rotationPointY += bodyBob;
+        this.body.y += bodyBob;
         this.walk(leftArm, walkSpeed, walkDegree * 0.4F, true, 0F, 0F, limbSwing, walkAmount);
         this.walk(leftHand, walkSpeed, walkDegree * 0.2F, true, -3F, 0.1F, limbSwing, walkAmount);
-        leftArm.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -1.5F, 3, false)) - bodyBob;
-        leftArm.rotationPointZ += walkValue(limbSwing, walkAmount, walkSpeed, -1.5F, walkDegree * 3, false);
-        leftHand.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -2.5F, walkDegree, true));
+        leftArm.y += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -1.5F, 3, false)) - bodyBob;
+        leftArm.z += walkValue(limbSwing, walkAmount, walkSpeed, -1.5F, walkDegree * 3, false);
+        leftHand.y += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -2.5F, walkDegree, true));
         this.walk(rightArm, walkSpeed, walkDegree * 0.4F, false, 0F, 0F, limbSwing, walkAmount);
         this.walk(rightHand, walkSpeed, walkDegree * 0.2F, false, -3F, -0.1F, limbSwing, walkAmount);
-        rightArm.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -1.5F, 3, true)) - bodyBob;
-        rightArm.rotationPointZ += walkValue(limbSwing, walkAmount, walkSpeed, -1.5F, walkDegree * 3, true);
-        rightHand.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -2.5F, walkDegree, false));
+        rightArm.y += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -1.5F, 3, true)) - bodyBob;
+        rightArm.z += walkValue(limbSwing, walkAmount, walkSpeed, -1.5F, walkDegree * 3, true);
+        rightHand.y += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -2.5F, walkDegree, false));
         this.walk(leftLeg, walkSpeed, walkDegree * 0.3F, false, 1F, 0F, limbSwing, walkAmount);
         this.walk(leftFoot, walkSpeed, walkDegree * 0.2F, false, -2F, -0.1F, limbSwing, walkAmount);
-        leftLeg.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -0.5F, 3, true)) - bodyBob;
-        leftLeg.rotationPointZ += walkValue(limbSwing, walkAmount, walkSpeed, -0.5F, walkDegree * 3, true);
-        leftLeg.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -2F, walkDegree * 0.5F, false));
+        leftLeg.y += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -0.5F, 3, true)) - bodyBob;
+        leftLeg.z += walkValue(limbSwing, walkAmount, walkSpeed, -0.5F, walkDegree * 3, true);
+        leftLeg.y += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -2F, walkDegree * 0.5F, false));
         this.walk(rightLeg, walkSpeed, walkDegree * 0.3F, true, 1F, 0F, limbSwing, walkAmount);
         this.walk(rightFoot, walkSpeed, walkDegree * 0.2F, true, -2F, 0.1F, limbSwing, walkAmount);
-        rightLeg.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -0.5F, 3, false)) - bodyBob;
-        rightLeg.rotationPointZ += walkValue(limbSwing, walkAmount, walkSpeed, -0.5F, walkDegree * 3, false);
-        rightFoot.rotationPointY += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -2F, walkDegree * 0.5F, true));
+        rightLeg.y += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -0.5F, 3, false)) - bodyBob;
+        rightLeg.z += walkValue(limbSwing, walkAmount, walkSpeed, -0.5F, walkDegree * 3, false);
+        rightFoot.y += Math.min(0, walkValue(limbSwing, walkAmount, walkSpeed, -2F, walkDegree * 0.5F, true));
         this.walk(rightArm, swimSpeed, swimDegree, false, 0F, -0.25F, limbSwing, swimAmount);
         this.walk(leftArm, swimSpeed, swimDegree, false, 0F, -0.25F, limbSwing, swimAmount);
         this.walk(rightLeg, swimSpeed, swimDegree, true, 0F, 0.25F, limbSwing, swimAmount);
@@ -215,9 +215,9 @@ public class ModelCaiman extends AdvancedEntityModel<EntityCaiman> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 
     @Override

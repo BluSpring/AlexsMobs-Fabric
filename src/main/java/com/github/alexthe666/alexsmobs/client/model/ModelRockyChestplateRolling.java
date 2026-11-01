@@ -12,8 +12,8 @@ public class ModelRockyChestplateRolling extends AdvancedEntityModel<LivingEntit
     private final AdvancedModelBox RightArm;
 
     public ModelRockyChestplateRolling() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
         float f = -6.5F;
         Body = new AdvancedModelBox(this, "Body");
         Body.setRotationPoint(0.0F, f, 0.0F);
@@ -52,8 +52,8 @@ public class ModelRockyChestplateRolling extends AdvancedEntityModel<LivingEntit
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

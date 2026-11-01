@@ -31,8 +31,8 @@ public class ModelSunbird extends AdvancedEntityModel<EntitySunbird> {
     private final AdvancedModelBox right_foot;
 
     public ModelSunbird() {
-        texWidth = 256;
-        texHeight = 256;
+        textureWidth = 256;
+        textureHeight = 256;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -151,13 +151,13 @@ public class ModelSunbird extends AdvancedEntityModel<EntitySunbird> {
         this.faceTarget(netHeadYaw, headPitch, 1, neck, head);
         float partialTick = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
         float birdPitch = entityIn.prevBirdPitch + (entityIn.birdPitch - entityIn.prevBirdPitch) * partialTick;
-        this.body.rotateAngleX = birdPitch * Mth.DEG_TO_RAD;
+        this.body.xRot = birdPitch * Mth.DEG_TO_RAD;
 
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

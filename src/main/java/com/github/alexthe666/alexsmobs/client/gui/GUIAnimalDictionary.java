@@ -8,7 +8,7 @@ import com.github.alexthe666.citadel.client.gui.GuiBasicBook;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +29,7 @@ public class GUIAnimalDictionary extends GuiBasicBook {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int x, int y, float partialTicks) {
+    public void render(GuiGraphicsExtractor guiGraphics, int x, int y, float partialTicks) {
         RenderLaviathan.renderWithoutShaking = true;
         ModelLaviathan.renderStaticInBook = true;
         RenderMurmurBody.renderWithHead = true;

@@ -27,8 +27,8 @@ public class ModelTerrapin extends AdvancedEntityModel<EntityTerrapin> {
     private final AdvancedModelBox right_foot;
 
     public ModelTerrapin() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -151,12 +151,12 @@ public class ModelTerrapin extends AdvancedEntityModel<EntityTerrapin> {
         }
         if(entity.isSpinning()){
             float timeSpinning = entity.spinCounter + partialTick;
-            body.rotateAngleY = timeSpinning * 0.2F * spinProgress * spinDegree;
-            entity.clientSpin = body.rotateAngleY;
+            body.yRot = timeSpinning * 0.2F * spinProgress * spinDegree;
+            entity.clientSpin = body.yRot;
             this.bob(body, spinDegree, 1, true, timeSpinning, 0.2F * spinProgress);
         }else{
             float rollDeg = (float) Mth.wrapDegrees(Math.toDegrees(entity.clientSpin));
-            body.rotateAngleY = spinProgress * 0.2F * Maths.rad(rollDeg);
+            body.yRot = spinProgress * 0.2F * Maths.rad(rollDeg);
             if (swimProgress <= 0F ) {
                 this.flap(body, walkSpeed, walkDegree * 0.5F, false, 0F, 0F, limbSwing, limbSwingAmount);
                 this.swing(body, walkSpeed, walkDegree * 0.5F, false, 1F, 0F, limbSwing, limbSwingAmount);
@@ -168,18 +168,18 @@ public class ModelTerrapin extends AdvancedEntityModel<EntityTerrapin> {
                 this.walk(right_arm, walkSpeed, walkDegree, true, -2.5F, 0.1F, limbSwing, limbSwingAmount);
                 this.walk(right_leg, walkSpeed, walkDegree, false, -2.5F, 0.1F, limbSwing, limbSwingAmount);
                 this.walk(left_leg, walkSpeed, walkDegree, true, -2.5F, -0.1F, limbSwing, limbSwingAmount);
-                this.left_hand.rotateAngleX -= (left_arm.rotateAngleX + body.rotateAngleX);
-                this.left_hand.rotateAngleZ -= body.rotateAngleZ;
-                this.right_hand.rotateAngleX -= (right_arm.rotateAngleX + body.rotateAngleX);
-                this.right_hand.rotateAngleZ -= body.rotateAngleZ;
-                this.left_foot.rotateAngleX -= (left_leg.rotateAngleX + body.rotateAngleX);
-                this.left_foot.rotateAngleZ -= body.rotateAngleZ;
-                this.right_foot.rotateAngleX -= (right_leg.rotateAngleX + body.rotateAngleX);
-                this.right_foot.rotateAngleZ -= body.rotateAngleZ;
-                this.left_arm.rotationPointY += 1.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
-                this.right_arm.rotationPointY += 1.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
-                this.left_leg.rotationPointY += 1.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
-                this.right_leg.rotationPointY += 1.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
+                this.left_hand.xRot -= (left_arm.xRot + body.xRot);
+                this.left_hand.zRot -= body.zRot;
+                this.right_hand.xRot -= (right_arm.xRot + body.xRot);
+                this.right_hand.zRot -= body.zRot;
+                this.left_foot.xRot -= (left_leg.xRot + body.xRot);
+                this.left_foot.zRot -= body.zRot;
+                this.right_foot.xRot -= (right_leg.xRot + body.xRot);
+                this.right_foot.zRot -= body.zRot;
+                this.left_arm.y += 1.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
+                this.right_arm.y += 1.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
+                this.left_leg.y += 1.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
+                this.right_leg.y += 1.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
             }else{
                 this.flap(tail, walkSpeed, walkDegree * -0.5F, false, 0F, 0F, limbSwing, limbSwingAmount);
                 this.flap(body, swimSpeed, swimDegree * 0.2F, false, 0F, 0F, limbSwing, limbSwingAmount);

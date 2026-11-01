@@ -31,8 +31,8 @@ public class ModelKomodoDragon extends AdvancedEntityModel<EntityKomodoDragon> {
 	private final AdvancedModelBox right_leg;
 
 	public ModelKomodoDragon(float scale) {
-		texHeight = 128;
-		texWidth = 128;
+		textureHeight = 128;
+		textureWidth = 128;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -169,27 +169,27 @@ public class ModelKomodoDragon extends AdvancedEntityModel<EntityKomodoDragon> {
 		this.flap(right_leg, walkSpeed, walkDegree, false, -2.5F, 0.25F, limbSwing, limbSwingAmount);
 		this.flap(left_leg, walkSpeed, walkDegree, false, -2.5F, -0.25F, limbSwing, limbSwingAmount);
 
-		this.left_arm.rotationPointY += 1.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
-		this.right_arm.rotationPointY += 1.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
-		this.left_leg.rotationPointY += 1.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
-		this.right_leg.rotationPointY += 1.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
+		this.left_arm.y += 1.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
+		this.right_arm.y += 1.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
+		this.left_leg.y += 1.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) - 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
+		this.right_leg.y += 1.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) + 2.5F) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
 
 		this.walk(tongue, idleSpeed * 2F, idleDegree, false, 0F, 0F, ageInTicks,  toungeMinus);
 		this.walk(neck, idleSpeed  * 0.1F, idleDegree * 0.1F, false, 2F, 0F, ageInTicks,  1F);
 		this.walk(head, idleSpeed * 0.1F, idleDegree * 0.1F, false, 4F, 0F, ageInTicks,  1F);
-		this.tongue.rotationPointZ -= toungeF;
+		this.tongue.z -= toungeF;
 		progressPositionPrev(neck, jostleProgress, 0, 0, 1, 5F);
 		progressPositionPrev(head, jostleProgress, 0, 0, 1, 5F);
 		if (jostleProgress > 0) {
 			float jostleScale = 2.5F;
 			float yawAmount = jostleAngle / 57.295776F * jostleProgress * 0.2F * jostleScale;
 			float inv = (10F - Math.abs(jostleAngle)) / 57.295776F * jostleProgress * 0.2F * jostleScale * 0.5F;
-			this.right_shoulder.rotateAngleX += yawAmount;
-			this.left_shoulder.rotateAngleX += yawAmount;
-			this.neck.rotateAngleY += yawAmount;
-			this.head.rotateAngleY += yawAmount;
-			this.neck.rotateAngleX -= inv;
-			this.head.rotateAngleX -= inv;
+			this.right_shoulder.xRot += yawAmount;
+			this.left_shoulder.xRot += yawAmount;
+			this.neck.yRot += yawAmount;
+			this.head.yRot += yawAmount;
+			this.neck.xRot -= inv;
+			this.head.xRot -= inv;
 		} else {
 			this.faceTarget(netHeadYaw, headPitch, 1, neck, head);
 		}
@@ -231,8 +231,8 @@ public class ModelKomodoDragon extends AdvancedEntityModel<EntityKomodoDragon> {
 	}
 
 	public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-		AdvancedModelBox.rotateAngleX = x;
-		AdvancedModelBox.rotateAngleY = y;
-		AdvancedModelBox.rotateAngleZ = z;
+		AdvancedModelBox.xRot = x;
+		AdvancedModelBox.yRot = y;
+		AdvancedModelBox.zRot = z;
 	}
 }

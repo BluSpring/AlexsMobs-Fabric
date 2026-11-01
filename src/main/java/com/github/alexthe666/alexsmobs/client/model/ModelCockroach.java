@@ -28,8 +28,8 @@ public class ModelCockroach extends AdvancedEntityModel<EntityCockroach> {
     public final AdvancedModelBox right_antenna;
 
     public ModelCockroach() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -150,7 +150,7 @@ public class ModelCockroach extends AdvancedEntityModel<EntityCockroach> {
                 this.swing(left_leg_mid, 0.5F, 0.5F, false, 2, -0.05F, ageInTicks, 1);
             } else {
                 float spinDegree = Mth.wrapDegrees(ageInTicks * 15F);
-                abdomen.rotateAngleY = (float) (Math.toRadians(spinDegree) * danceProgress * 0.2F);
+                abdomen.yRot = (float) (Math.toRadians(spinDegree) * danceProgress * 0.2F);
                 this.bob(abdomen, 0.25F, 10F, true, ageInTicks, 1);
             }
         }
@@ -172,20 +172,20 @@ public class ModelCockroach extends AdvancedEntityModel<EntityCockroach> {
         this.swing(right_leg_mid, walkSpeed, walkDegree, true, 0, 0F, limbSwing, limbSwingAmount);
         this.faceTarget(netHeadYaw, headPitch, 1, head);
         if(entity.isHeadless()){
-            head.showModel = false;
-            left_antenna.showModel = false;
-            right_antenna.showModel = false;
+            head.visible = false;
+            left_antenna.visible = false;
+            right_antenna.visible = false;
         }else{
-            head.showModel = true;
-            left_antenna.showModel = true;
-            right_antenna.showModel = true;
+            head.visible = true;
+            left_antenna.visible = true;
+            right_antenna.visible = true;
         }
         if(entity.isBaby()){
-            left_wing.showModel = false;
-            right_wing.showModel = false;
+            left_wing.visible = false;
+            right_wing.visible = false;
         }else{
-            left_wing.showModel = true;
-            right_wing.showModel = true;
+            left_wing.visible = true;
+            right_wing.visible = true;
         }
     }
 
@@ -212,8 +212,8 @@ public class ModelCockroach extends AdvancedEntityModel<EntityCockroach> {
     }
 
     public void setRotationAngle(AdvancedModelBox advancedModelBox, float x, float y, float z) {
-        advancedModelBox.rotateAngleX = x;
-        advancedModelBox.rotateAngleY = y;
-        advancedModelBox.rotateAngleZ = z;
+        advancedModelBox.xRot = x;
+        advancedModelBox.yRot = y;
+        advancedModelBox.zRot = z;
     }
 }

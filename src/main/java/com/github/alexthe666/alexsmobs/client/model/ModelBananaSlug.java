@@ -20,8 +20,8 @@ public class ModelBananaSlug extends AdvancedEntityModel<EntityBananaSlug> {
     private final AdvancedModelBox tail;
 
     public ModelBananaSlug() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -74,25 +74,25 @@ public class ModelBananaSlug extends AdvancedEntityModel<EntityBananaSlug> {
         this.walk(rightAntenna, idleSpeed, idleDegree * 0.5F, true, 3, 0.1F, ageInTicks, 1);
         this.swing(tail, walkSpeed, walkDegree, true, 3F, 0F, limbSwing, limbSwingAmount);
         float antennaBack = -0.5F + (float) (Math.sin((double) (ageInTicks * idleSpeed) + 3)) * 0.2F;
-        leftAntenna.rotationPointZ -= antennaBack;
-        rightAntenna.rotationPointZ -= antennaBack;
+        leftAntenna.z -= antennaBack;
+        rightAntenna.z -= antennaBack;
         float stretch1 = (float) (Math.sin(limbSwing * -walkSpeed) * limbSwingAmount) + limbSwingAmount;
         float stretch2 = (float) (Math.sin(limbSwing * -walkSpeed + 1F) * limbSwingAmount) + limbSwingAmount;
         body.setScale(1, (1 - stretch1 * 0.025F), (1 + stretch1 * 0.25F));
         tail.setScale(1, (1 - stretch2 * 0.05F), (1 + stretch2 * 0.5F));
         body.setShouldScaleChildren(false);
-        body.rotationPointZ -= stretch1 * 2F;
-        leftAntenna.rotationPointZ -= stretch1 * 1;
-        rightAntenna.rotationPointZ -= stretch1 * 1;
-        leftAntenna.rotateAngleY += netHeadYaw * 0.6F * Mth.DEG_TO_RAD;
-        leftAntenna.rotateAngleX += headPitch * 0.3F * Mth.DEG_TO_RAD;
-        rightAntenna.rotateAngleY += netHeadYaw * 0.6F * Mth.DEG_TO_RAD;
-        rightAntenna.rotateAngleX += headPitch * 0.3F * Mth.DEG_TO_RAD;
+        body.z -= stretch1 * 2F;
+        leftAntenna.z -= stretch1 * 1;
+        rightAntenna.z -= stretch1 * 1;
+        leftAntenna.yRot += netHeadYaw * 0.6F * Mth.DEG_TO_RAD;
+        leftAntenna.xRot += headPitch * 0.3F * Mth.DEG_TO_RAD;
+        rightAntenna.yRot += netHeadYaw * 0.6F * Mth.DEG_TO_RAD;
+        rightAntenna.xRot += headPitch * 0.3F * Mth.DEG_TO_RAD;
         float yaw = entity.yBodyRotO + (entity.yBodyRot - entity.yBodyRotO) * partialTick;
         float slimeYaw = Mth.wrapDegrees(entity.prevTrailYaw + (entity.trailYaw - entity.prevTrailYaw) * partialTick - yaw) * 0.65F;
-        goo.rotationPointX =  (Mth.sin(limbSwing * -walkSpeed - 1F) * limbSwingAmount);
-        goo.rotateAngleY += Maths.rad(slimeYaw);
-        tail.rotateAngleY += Maths.rad(slimeYaw * 0.8F);
+        goo.x =  (Mth.sin(limbSwing * -walkSpeed - 1F) * limbSwingAmount);
+        goo.yRot += Maths.rad(slimeYaw);
+        tail.yRot += Maths.rad(slimeYaw * 0.8F);
         goo.setScale(1, 0, (1 + limbSwingAmount));
     }
 
@@ -123,8 +123,8 @@ public class ModelBananaSlug extends AdvancedEntityModel<EntityBananaSlug> {
 
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

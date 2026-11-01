@@ -28,7 +28,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
 import org.joml.Quaternionf;
 
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -39,6 +38,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;

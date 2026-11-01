@@ -7,6 +7,7 @@ import com.github.alexthe666.alexsmobs.entity.EntityAlligatorSnappingTurtle;
 import com.github.alexthe666.alexsmobs.entity.util.Maths;
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
+import com.github.alexthe666.citadel.client.model.TabulaModelRenderUtils;
 import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -30,10 +31,14 @@ public class ModelAlligatorSnappingTurtle extends AdvancedEntityModel<EntityAlli
     private final AdvancedModelBox tail;
 
     public ModelAlligatorSnappingTurtle() {
-        texWidth = 128;
-        texHeight = 128;
+        AdvancedModelBox root = TabulaModelRenderUtils.createAdvancedRoot();
+        super(root);
 
-        root = new AdvancedModelBox(this, "root");
+        textureWidth = 128;
+        textureHeight = 128;
+
+        root.setupRoot(this, "root");
+        this.root = root;
         root.setPos(0.0F, 24.0F, 0.0F);
 
 
@@ -126,7 +131,7 @@ public class ModelAlligatorSnappingTurtle extends AdvancedEntityModel<EntityAlli
         progressPositionPrev(jaw, openProgress, 0, -1, 0, 5F);
         progressPositionPrev(neck, snapProgress, 0, 0, 0, 5F);
         neck.setScale((1 - snapProgress * 0.05F), (1 - snapProgress * 0.05F), (1 + snapProgress * 0.5F));
-        head.rotationPointZ -= 1.45F * snapProgress;
+        head.z -= 1.45F * snapProgress;
         progressRotationPrev(head, snapProgress, Maths.rad(10), 0, 0, 5F);
         progressRotationPrev(jaw, snapProgress, Maths.rad(-10), 0, 0, 5F);
         this.swing(tail, idleSpeed, idleDegree * 1.15F, false, 3, 0F, ageInTicks, 1);
@@ -175,8 +180,8 @@ public class ModelAlligatorSnappingTurtle extends AdvancedEntityModel<EntityAlli
 
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

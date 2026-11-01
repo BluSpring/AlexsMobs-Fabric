@@ -21,8 +21,8 @@ public class ModelTriops extends AdvancedEntityModel<EntityTriops> {
     private final AdvancedModelBox rightTailFlipper;
 
     public ModelTriops() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this);
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -107,8 +107,8 @@ public class ModelTriops extends AdvancedEntityModel<EntityTriops> {
         progressPositionPrev(body, limbSwingAmount, 0, -3, 0, 1F);
         progressRotationPrev(leftAntenna, 1F - limbSwingAmount, 0, Maths.rad(20), 0, 1F);
         progressRotationPrev(rightAntenna, 1F - limbSwingAmount, 0, Maths.rad(-20), 0, 1F);
-        this.body.rotateAngleX += headPitch * Mth.DEG_TO_RAD * swimAmount;
-        this.body.rotateAngleZ += Maths.rad(swimRot);
+        this.body.xRot += headPitch * Mth.DEG_TO_RAD * swimAmount;
+        this.body.zRot += Maths.rad(swimRot);
         this.swing(rightAntenna, idleSpeed, idleDegree, false, 1F, -0.2F, ageInTicks, 1);
         this.swing(leftAntenna, idleSpeed, idleDegree, true, 1F, -0.2F, ageInTicks, 1);
         this.walk(leftTailFlipper, idleSpeed, idleDegree, false, 3F, 0.1F, ageInTicks, 1);
@@ -124,7 +124,7 @@ public class ModelTriops extends AdvancedEntityModel<EntityTriops> {
         this.walk(tail2, idleSpeed, idleDegree * 1.5F, false, 0, -0.3F, ageInTicks, landProgress * 0.2F);
         this.walk(leftTailFlipper, idleSpeed, idleDegree, false, 0F, -0.3F, ageInTicks, landProgress * 0.2F);
         this.walk(rightTailFlipper, idleSpeed, idleDegree, false, 0F, -0.3F, ageInTicks, landProgress * 0.2F);
-        tail1.rotateAngleY += Maths.rad(tail1Rot);
-        tail2.rotateAngleY += Maths.rad(tail2Rot);
+        tail1.yRot += Maths.rad(tail1Rot);
+        tail2.yRot += Maths.rad(tail2Rot);
     }
 }

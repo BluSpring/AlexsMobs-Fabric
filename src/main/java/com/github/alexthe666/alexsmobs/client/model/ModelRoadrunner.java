@@ -29,8 +29,8 @@ public class ModelRoadrunner extends AdvancedEntityModel<EntityRoadrunner> {
     private final AdvancedModelBox right_foot;
 
     public ModelRoadrunner() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -149,10 +149,10 @@ public class ModelRoadrunner extends AdvancedEntityModel<EntityRoadrunner> {
         this.walk(left_knee, walkSpeed, walkDegree  * 0.5F, true, 0F, 0F, limbSwing, limbSwingAmount);
         this.flap(left_wing, walkSpeed, walkDegree, true, 2F, 0.1F, limbSwing, limbSwingAmount);
         this.flap(right_wing, walkSpeed, walkDegree, false, 2F, 0.1F, limbSwing, limbSwingAmount);
-        this.left_foot.rotateAngleX = -(left_leg.rotateAngleX + left_knee.rotateAngleX + body.rotateAngleX) - (float)(Math.PI/ 2F);
-        this.right_foot.rotateAngleX = -(right_leg.rotateAngleX + right_knee.rotateAngleX + body.rotateAngleX) - (float)(Math.PI/ 2F);
-        this.left_leg.rotationPointY += 1.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) + 2) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
-        this.right_leg.rotationPointY += 1.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) - 2) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
+        this.left_foot.xRot = -(left_leg.xRot + left_knee.xRot + body.xRot) - (float)(Math.PI/ 2F);
+        this.right_foot.xRot = -(right_leg.xRot + right_knee.xRot + body.xRot) - (float)(Math.PI/ 2F);
+        this.left_leg.y += 1.5F * (float) (Math.sin((double) (limbSwing * walkSpeed) + 2) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
+        this.right_leg.y += 1.5F * (float) (Math.sin(-(double) (limbSwing * walkSpeed) - 2) * (double) limbSwingAmount * (double) walkDegree - (double) (limbSwingAmount * walkDegree));
         float partialTicks = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
         float f = Mth.lerp(partialTicks, entityIn.oFlap, entityIn.wingRotation);
         float f1 = Mth.lerp(partialTicks, entityIn.oFlapSpeed, entityIn.destPos);
@@ -161,22 +161,22 @@ public class ModelRoadrunner extends AdvancedEntityModel<EntityRoadrunner> {
         this.flap(right_wing, 0.95F, 0.9F, false, 0F, 0.2F, wingSwing, wingSwing > 0 ? 1 : 0);
         this.faceTarget(netneckYaw, neckPitch, 1, neck);
         if(spinnyLegs){
-            this.right_spin.showModel = true;
-            this.left_spin.showModel = true;
-            this.right_leg.showModel = false;
-            this.left_leg.showModel = false;
+            this.right_spin.visible = true;
+            this.left_spin.visible = true;
+            this.right_leg.visible = false;
+            this.left_leg.visible = false;
             float wobbleXZ = 1F + (1F + (float)Math.sin(ageInTicks * 0.6F - 3F)) * 0.6F;
             float wobbleY = 1F + (1F + (float)Math.sin(ageInTicks * 0.6F - 2F)) * 0.6F;
             this.right_spin.setScale(1, wobbleY, wobbleXZ);
             this.left_spin.setScale(1, wobbleY, wobbleXZ);
-            this.right_spin.rotateAngleX += limbSwingAmount * ageInTicks * 2;
-            this.left_spin.rotateAngleX += limbSwingAmount * ageInTicks * 2;
+            this.right_spin.xRot += limbSwingAmount * ageInTicks * 2;
+            this.left_spin.xRot += limbSwingAmount * ageInTicks * 2;
             this.bob(body, walkSpeed, walkDegree * 5F, true, limbSwing, limbSwingAmount);
         }else{
-            this.right_spin.showModel = false;
-            this.left_spin.showModel = false;
-            this.right_leg.showModel = true;
-            this.left_leg.showModel = true;
+            this.right_spin.visible = false;
+            this.left_spin.visible = false;
+            this.right_leg.visible = true;
+            this.left_leg.visible = true;
             this.walk(tail, walkSpeed, walkDegree, false, 2F, 0F, limbSwing, limbSwingAmount);
             this.walk(neck, walkSpeed, walkDegree * 0.7F, false, 1F, -0.2F, limbSwing, limbSwingAmount);
             this.bob(body, walkSpeed * 2F, walkDegree * 2F, false, limbSwing, limbSwingAmount);
@@ -219,8 +219,8 @@ public class ModelRoadrunner extends AdvancedEntityModel<EntityRoadrunner> {
 
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

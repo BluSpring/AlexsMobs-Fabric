@@ -30,8 +30,8 @@ public class ModelCrimsonMosquito extends AdvancedEntityModel<EntityCrimsonMosqu
 	private ModelAnimator animator;
 
 	public ModelCrimsonMosquito() {
-		texWidth = 128;
-		texHeight = 128;
+		textureWidth = 128;
+		textureHeight = 128;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 24.0F, 0.0F);
@@ -168,10 +168,10 @@ public class ModelCrimsonMosquito extends AdvancedEntityModel<EntityCrimsonMosqu
 			this.flap(wingL, flySpeed * 3.3F, flyDegree, true, 0, 0.2F, ageInTicks, 1);
 			this.flap(wingR, flySpeed * 3.3F, flyDegree, false, 0, 0.2F, ageInTicks, 1);
 		}else{
-			this.wingR.rotateAngleX = Maths.rad(30);
-			this.wingR.rotateAngleY = Maths.rad(70);
-			this.wingL.rotateAngleX = Maths.rad(30);
-			this.wingL.rotateAngleY = Maths.rad(-70);
+			this.wingR.xRot = Maths.rad(30);
+			this.wingR.yRot = Maths.rad(70);
+			this.wingL.xRot = Maths.rad(30);
+			this.wingL.yRot = Maths.rad(-70);
 		}
 		if(flyProgress > 0){
 			progressPositionPrev(body, flyProgress, 0, -10F, 0F, 5F);
@@ -191,7 +191,7 @@ public class ModelCrimsonMosquito extends AdvancedEntityModel<EntityCrimsonMosqu
 			this.walk(tail, flySpeed, flyDegree * 0.15F, false, 0, -0.1F, ageInTicks, 1);
 		}
 		float bloatScale = 1F + entityIn.getBloodLevel() * 0.1F;
-		this.tail.rotateAngleX -= entityIn.getBloodLevel() * 0.05F;
+		this.tail.xRot -= entityIn.getBloodLevel() * 0.05F;
 		this.tail.setScale(bloatScale, bloatScale, bloatScale);
 	}
 		@Override
@@ -200,8 +200,8 @@ public class ModelCrimsonMosquito extends AdvancedEntityModel<EntityCrimsonMosqu
 	}
 
 	public void setRotationAngle(AdvancedModelBox modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 }

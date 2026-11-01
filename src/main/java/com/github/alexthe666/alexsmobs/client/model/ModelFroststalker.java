@@ -30,8 +30,8 @@ public class ModelFroststalker extends AdvancedEntityModel<EntityFroststalker> {
     private ModelAnimator animator;
 
     public ModelFroststalker() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -121,7 +121,7 @@ public class ModelFroststalker extends AdvancedEntityModel<EntityFroststalker> {
             float f = 1.5F;
             head.setScale(f, f, f);
             head.setShouldScaleChildren(true);
-            horn.showModel = false;
+            horn.visible = false;
             matrixStackIn.pushPose();
             matrixStackIn.scale(0.5F, 0.5F, 0.5F);
             matrixStackIn.translate(0.0D, 1.5D, 0D);
@@ -131,7 +131,7 @@ public class ModelFroststalker extends AdvancedEntityModel<EntityFroststalker> {
             matrixStackIn.popPose();
             head.setScale(1, 1, 1);
         } else {
-            horn.showModel = true;
+            horn.visible = true;
             matrixStackIn.pushPose();
             parts().forEach((p_228290_8_) -> {
                 p_228290_8_.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, -1);
@@ -211,9 +211,9 @@ public class ModelFroststalker extends AdvancedEntityModel<EntityFroststalker> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 
     @Override
@@ -268,16 +268,16 @@ public class ModelFroststalker extends AdvancedEntityModel<EntityFroststalker> {
         this.walk(armright, walkSpeed, walkDegree * 0.5F, true, 3F, 0.12F, limbSwing, limbSwingAmount * bipedProgress * 0.2F);
         this.walk(neck, walkSpeed, walkDegree * 0.5F, false, 2F, -0.1F, limbSwing, limbSwingAmount * bipedProgress * 0.2F);
         this.walk(head, walkSpeed, walkDegree * 0.5F, true, 2F, -0.1F, limbSwing, limbSwingAmount * bipedProgress * 0.2F);
-        this.armleft.rotationPointY -= bipedProgress * 0.5F;
-        this.armright.rotationPointY -= bipedProgress * 0.5F;
+        this.armleft.y -= bipedProgress * 0.5F;
+        this.armright.y -= bipedProgress * 0.5F;
         float yawAmount = turnAngle / 57.295776F * 0.5F * bipedProgress * 0.2F * limbSwingAmount;
-        head.rotateAngleY -= yawAmount * 0.5F;
-        neck.rotateAngleY -= yawAmount;
-        body.rotateAngleZ += yawAmount;
-        legleft.rotateAngleZ -= yawAmount;
-        legright.rotationPointY += 1.5F * yawAmount;
-        legleft.rotationPointY -= 1.5F * yawAmount;
-        legright.rotateAngleZ -= yawAmount;
+        head.yRot -= yawAmount * 0.5F;
+        neck.yRot -= yawAmount;
+        body.zRot += yawAmount;
+        legleft.zRot -= yawAmount;
+        legright.y += 1.5F * yawAmount;
+        legleft.y -= 1.5F * yawAmount;
+        legright.zRot -= yawAmount;
         progressRotationPrev(body, tackleProgress, Maths.rad(-45), 0, 0, 5F);
         progressRotationPrev(neck, tackleProgress, Maths.rad(25), 0, 0, 5F);
         progressRotationPrev(head, tackleProgress, Maths.rad(25), 0, 0, 5F);

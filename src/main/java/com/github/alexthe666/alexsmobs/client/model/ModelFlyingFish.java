@@ -19,8 +19,8 @@ public class ModelFlyingFish extends AdvancedEntityModel<EntityFlyingFish> {
     private final AdvancedModelBox right_pelvicFin;
 
     public ModelFlyingFish() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -102,7 +102,7 @@ public class ModelFlyingFish extends AdvancedEntityModel<EntityFlyingFish> {
         this.flap(right_pectoralFin, swimSpeed * 2F, swimDegree * 0.2F, false, 1, 0.1F, ageInTicks, flyProgress * 0.2F);
         this.flap(left_pelvicFin, swimSpeed * 2F, swimDegree * 0.2F, true, 1, 0.3F, ageInTicks, flyProgress * 0.2F);
         this.flap(right_pelvicFin, swimSpeed * 2F, swimDegree * 0.2F, false, 1, 0.3F, ageInTicks, flyProgress * 0.2F);
-        this.body.rotateAngleX += headPitch * Mth.DEG_TO_RAD;
+        this.body.xRot += headPitch * Mth.DEG_TO_RAD;
     }
 
     @Override
@@ -116,8 +116,8 @@ public class ModelFlyingFish extends AdvancedEntityModel<EntityFlyingFish> {
     }
 
     public void setRotationAngle(AdvancedModelBox modelRenderer, float x, float y, float z) {
-        modelRenderer.rotateAngleX = x;
-        modelRenderer.rotateAngleY = y;
-        modelRenderer.rotateAngleZ = z;
+        modelRenderer.xRot = x;
+        modelRenderer.yRot = y;
+        modelRenderer.zRot = z;
     }
 }

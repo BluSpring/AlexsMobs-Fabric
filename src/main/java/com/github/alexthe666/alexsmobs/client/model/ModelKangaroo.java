@@ -39,8 +39,8 @@ public class ModelKangaroo extends AdvancedEntityModel<EntityKangaroo> {
 	private ModelAnimator animator;
 
 	public ModelKangaroo() {
-		texWidth = 128;
-		texHeight = 128;
+		textureWidth = 128;
+		textureHeight = 128;
 
 		root = new AdvancedModelBox(this, "root");
 		root.setPos(0.0F, 24.0F, 0.0F);
@@ -285,48 +285,48 @@ public class ModelKangaroo extends AdvancedEntityModel<EntityKangaroo> {
 		this.flap(ear_right, idleSpeed, idleDegree * -1.5F, false, 1F, -0.1F, ageInTicks, 1);
 		this.flap(ear_left, idleSpeed, idleDegree * 1.5F, false, 1F, 0.1F, ageInTicks, 1);
 
-		this.body.rotationPointY -= (jumpRotation * 4.0F);
-		this.knee_left.rotationPointY -= (jumpRotation * 2F);
-		this.knee_right.rotationPointY -= (jumpRotation * 2F);
-		this.leg_right.rotationPointY -= (jumpRotation * 2F);
-		this.leg_left.rotationPointY -= (jumpRotation * 2F);
-		this.leg_right.rotationPointZ += (jumpRotation * 2F);
-		this.leg_left.rotationPointZ += (jumpRotation * 2F);
-		this.head.rotationPointY += (jumpRotation);
-		this.leg_left.rotateAngleX += (jumpRotation * 50.0F) * 0.017453292F;
-		this.leg_right.rotateAngleX += (jumpRotation * 50.0F) * 0.017453292F;
-		this.foot_left.rotateAngleX += (jumpRotation * 25.0F) * 0.017453292F;
-		this.foot_right.rotateAngleX += (jumpRotation * 25.0F) * 0.017453292F;
-		this.knee_left.rotateAngleX += (jumpRotation * -25.0F) * 0.017453292F;
-		this.knee_right.rotateAngleX += (jumpRotation * -25.0F) * 0.017453292F;
-		this.neck.rotateAngleX += (jumpRotation * 15.0F) * 0.017453292F;
-		this.head.rotateAngleX += (jumpRotation * -10.0F) * 0.017453292F;
-		this.body.rotateAngleX += (jumpRotation * 10.0F) * 0.017453292F;
-		this.arm_left.rotateAngleX += (jumpRotation * 20.0F) * 0.017453292F;
-		this.arm_right.rotateAngleX += (jumpRotation * 20.0F) * 0.017453292F;
-		this.chest.rotateAngleX += (jumpRotation * -5.0F) * 0.017453292F;
+		this.body.y -= (jumpRotation * 4.0F);
+		this.knee_left.y -= (jumpRotation * 2F);
+		this.knee_right.y -= (jumpRotation * 2F);
+		this.leg_right.y -= (jumpRotation * 2F);
+		this.leg_left.y -= (jumpRotation * 2F);
+		this.leg_right.z += (jumpRotation * 2F);
+		this.leg_left.z += (jumpRotation * 2F);
+		this.head.y += (jumpRotation);
+		this.leg_left.xRot += (jumpRotation * 50.0F) * 0.017453292F;
+		this.leg_right.xRot += (jumpRotation * 50.0F) * 0.017453292F;
+		this.foot_left.xRot += (jumpRotation * 25.0F) * 0.017453292F;
+		this.foot_right.xRot += (jumpRotation * 25.0F) * 0.017453292F;
+		this.knee_left.xRot += (jumpRotation * -25.0F) * 0.017453292F;
+		this.knee_right.xRot += (jumpRotation * -25.0F) * 0.017453292F;
+		this.neck.xRot += (jumpRotation * 15.0F) * 0.017453292F;
+		this.head.xRot += (jumpRotation * -10.0F) * 0.017453292F;
+		this.body.xRot += (jumpRotation * 10.0F) * 0.017453292F;
+		this.arm_left.xRot += (jumpRotation * 20.0F) * 0.017453292F;
+		this.arm_right.xRot += (jumpRotation * 20.0F) * 0.017453292F;
+		this.chest.xRot += (jumpRotation * -5.0F) * 0.017453292F;
 
-		this.foot_left.rotateAngleX += (Math.max(0, jumpRotation - 0.5F) * 25.0F) * 0.017453292F;
-		this.foot_right.rotateAngleX += (Math.max(0, jumpRotation - 0.5F) * 25.0F) * 0.017453292F;
+		this.foot_left.xRot += (Math.max(0, jumpRotation - 0.5F) * 25.0F) * 0.017453292F;
+		this.foot_right.xRot += (Math.max(0, jumpRotation - 0.5F) * 25.0F) * 0.017453292F;
 		ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
 		ItemStack hand = entity.getItemBySlot(EquipmentSlot.MAINHAND);
 		if(!helmet.isEmpty()){
-			this.ear_left.rotateAngleZ += 75 * 0.017453292F;
-			this.ear_right.rotateAngleZ += -75 * 0.017453292F;
+			this.ear_left.zRot += 75 * 0.017453292F;
+			this.ear_right.zRot += -75 * 0.017453292F;
 		}
 		if(!hand.isEmpty()){
 			if(entity.isLeftHanded()){
-				this.arm_left.rotateAngleX -= 25 * 0.017453292F;
+				this.arm_left.xRot -= 25 * 0.017453292F;
 			}else{
-				this.arm_right.rotateAngleX -= 25 * 0.017453292F;
+				this.arm_right.xRot -= 25 * 0.017453292F;
 			}
 		}
-		this.head.rotateAngleY += netHeadYaw * 0.35F * Mth.DEG_TO_RAD;
-		this.head.rotateAngleX += headPitch * 0.65F * Mth.DEG_TO_RAD;
-		this.neck.rotateAngleY += netHeadYaw * 0.15F * Mth.DEG_TO_RAD;
+		this.head.yRot += netHeadYaw * 0.35F * Mth.DEG_TO_RAD;
+		this.head.xRot += headPitch * 0.65F * Mth.DEG_TO_RAD;
+		this.neck.yRot += netHeadYaw * 0.15F * Mth.DEG_TO_RAD;
 		if(entity.isBaby() && entity.isPassenger() && entity.getVehicle() instanceof EntityKangaroo) {
-			this.head.rotateAngleX -= 50 * 0.017453292F;
-			this.neck.rotateAngleX += 120 * 0.017453292F;
+			this.head.xRot -= 50 * 0.017453292F;
+			this.neck.xRot += 120 * 0.017453292F;
 			progressPositionPrev(head, 1F, 0, 0F, -2F, 1F);
 		}
 	}
@@ -371,8 +371,8 @@ public class ModelKangaroo extends AdvancedEntityModel<EntityKangaroo> {
 	}
 
 	public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-		AdvancedModelBox.rotateAngleX = x;
-		AdvancedModelBox.rotateAngleY = y;
-		AdvancedModelBox.rotateAngleZ = z;
+		AdvancedModelBox.xRot = x;
+		AdvancedModelBox.yRot = y;
+		AdvancedModelBox.zRot = z;
 	}
 }

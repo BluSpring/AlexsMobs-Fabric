@@ -37,8 +37,8 @@ public class ModelCrocodile extends AdvancedEntityModel<EntityCrocodile> {
     private final ModelAnimator animator;
 
     public ModelCrocodile() {
-        texWidth = 256;
-        texHeight = 256;
+        textureWidth = 256;
+        textureHeight = 256;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -277,7 +277,7 @@ public class ModelCrocodile extends AdvancedEntityModel<EntityCrocodile> {
         }
         if (baskProgress > 0) {
             this.walk(head, 0.1F, 0.1F, false, 1F, 0.1F, ageInTicks, 1);
-            this.jaw.rotateAngleX = -head.rotateAngleX;
+            this.jaw.xRot = -head.xRot;
 
         }
     }
@@ -317,8 +317,8 @@ public class ModelCrocodile extends AdvancedEntityModel<EntityCrocodile> {
     }
 
     public void setRotationAngle(AdvancedModelBox advancedModelBox, float x, float y, float z) {
-        advancedModelBox.rotateAngleX = x;
-        advancedModelBox.rotateAngleY = y;
-        advancedModelBox.rotateAngleZ = z;
+        advancedModelBox.xRot = x;
+        advancedModelBox.yRot = y;
+        advancedModelBox.zRot = z;
     }
 }

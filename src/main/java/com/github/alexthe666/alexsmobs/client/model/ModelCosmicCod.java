@@ -18,8 +18,8 @@ public class ModelCosmicCod extends AdvancedEntityModel<EntityCosmicCod> {
     private final AdvancedModelBox tail_tip;
 
     public ModelCosmicCod() {
-        texWidth = 32;
-        texHeight = 32;
+        textureWidth = 32;
+        textureHeight = 32;
 
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
@@ -79,7 +79,7 @@ public class ModelCosmicCod extends AdvancedEntityModel<EntityCosmicCod> {
         this.swing(this.tail_tip, swimSpeed, swimDegree * 0.5F, true, 2.5F, 0F, limbSwing, limbSwingAmount);
         this.flap(this.left_fin, swimSpeed, swimDegree, true, 1F, 0.3F, limbSwing, limbSwingAmount);
         this.flap(this.right_fin, swimSpeed, swimDegree, false, 1F, 0.3F, limbSwing, limbSwingAmount);
-        this.root.rotateAngleX += pitch;
+        this.root.xRot += pitch;
 
     }
 
@@ -89,8 +89,8 @@ public class ModelCosmicCod extends AdvancedEntityModel<EntityCosmicCod> {
     }
 
     public void setRotationAngle(AdvancedModelBox AdvancedModelBox, float x, float y, float z) {
-        AdvancedModelBox.rotateAngleX = x;
-        AdvancedModelBox.rotateAngleY = y;
-        AdvancedModelBox.rotateAngleZ = z;
+        AdvancedModelBox.xRot = x;
+        AdvancedModelBox.yRot = y;
+        AdvancedModelBox.zRot = z;
     }
 }

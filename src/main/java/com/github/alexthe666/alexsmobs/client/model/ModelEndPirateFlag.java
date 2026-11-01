@@ -14,8 +14,8 @@ public class ModelEndPirateFlag extends AdvancedEntityModel<Entity> {
     private final AdvancedModelBox flag2;
 
     public ModelEndPirateFlag() {
-        texWidth = 64;
-        texHeight = 64;
+        textureWidth = 64;
+        textureHeight = 64;
         root = new AdvancedModelBox(this, "root");
         root.setRotationPoint(0.0F, 24.0F, 0.0F);
 

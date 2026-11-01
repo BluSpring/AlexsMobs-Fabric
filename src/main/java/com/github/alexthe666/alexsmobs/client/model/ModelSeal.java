@@ -24,8 +24,8 @@ public class ModelSeal extends AdvancedEntityModel<EntitySeal> {
     public final AdvancedModelBox rightWhisker;
     
     public ModelSeal() {
-        texWidth = 128;
-        texHeight = 128;
+        textureWidth = 128;
+        textureHeight = 128;
 
         root = new AdvancedModelBox(this, "root");
         root.setPos(0.0F, 24.0F, 0.0F);
@@ -115,7 +115,7 @@ public class ModelSeal extends AdvancedEntityModel<EntitySeal> {
         progressPositionPrev(body, diggingProgress, 0, -12F, 2, 5F);
         progressPositionPrev(leftArm, diggingProgress, -1, 0, -2, 5F);
         progressPositionPrev(rightArm, diggingProgress, 1, 0, -2, 5F);
-        this.head.rotationPointZ += (float) (Math.sin(ageInTicks * 0.7F) * (double) 0.5F * bobbingProgress);
+        this.head.z += (float) (Math.sin(ageInTicks * 0.7F) * (double) 0.5F * bobbingProgress);
         if(diggingProgress > 0){
             float amount = diggingProgress * 0.2F;
             this.swing(rightArm, 0.6F, 0.85F, true, 1F, -0.1F, ageInTicks, amount);
@@ -192,9 +192,9 @@ public class ModelSeal extends AdvancedEntityModel<EntitySeal> {
         if (!entity.isInWater()) {
             float f = walkSpeed;
             float f1 = walkDegree * 0.3F;
-            this.body.rotationPointY += 1.4F * Math.min(0, (float) (Math.sin(limbSwing * f) * (double) limbSwingAmount * (double) f1 * 9D - (limbSwingAmount * f1 * 9D)));
-            this.body.rotationPointZ += (float) (Math.sin(limbSwing * f - 1.5F) * (double) limbSwingAmount * (double) f1 * 9D - (limbSwingAmount * f1 * 9D));
-            this.head.rotationPointZ += (float) (Math.sin(limbSwing * f - 2F) * (double) limbSwingAmount * (double) f1 * 2F - (limbSwingAmount * f1 * 2F));
+            this.body.y += 1.4F * Math.min(0, (float) (Math.sin(limbSwing * f) * (double) limbSwingAmount * (double) f1 * 9D - (limbSwingAmount * f1 * 9D)));
+            this.body.z += (float) (Math.sin(limbSwing * f - 1.5F) * (double) limbSwingAmount * (double) f1 * 9D - (limbSwingAmount * f1 * 9D));
+            this.head.z += (float) (Math.sin(limbSwing * f - 2F) * (double) limbSwingAmount * (double) f1 * 2F - (limbSwingAmount * f1 * 2F));
             this.walk(body, walkSpeed, walkDegree * 0.1F, false, 1F, 0.04F, limbSwing, limbSwingAmount);
             this.walk(head, walkSpeed, walkDegree * 0.1F, true, 1F, 0.04F, limbSwing, limbSwingAmount);
             this.walk(tail, walkSpeed, walkDegree * 0.15F, true, 1F, 0.06F, limbSwing, limbSwingAmount);
@@ -203,8 +203,8 @@ public class ModelSeal extends AdvancedEntityModel<EntitySeal> {
             this.swing(rightArm, walkSpeed, walkDegree, false, 2F, -0.2F, limbSwing, limbSwingAmount);
             this.swing(leftArm, walkSpeed, walkDegree, true, 2F, -0.2F, limbSwing, limbSwingAmount);
         } else {
-            this.body.rotateAngleX += headPitch * Mth.DEG_TO_RAD;
-            this.body.rotationPointY += (float) (Math.sin(limbSwing * swimSpeed) * (double) limbSwingAmount * (double) swimDegree * 9D - (limbSwingAmount * swimDegree * 9D));
+            this.body.xRot += headPitch * Mth.DEG_TO_RAD;
+            this.body.y += (float) (Math.sin(limbSwing * swimSpeed) * (double) limbSwingAmount * (double) swimDegree * 9D - (limbSwingAmount * swimDegree * 9D));
             this.chainWave(bodyParts, swimSpeed, swimDegree, -3F, limbSwing, limbSwingAmount);
             this.flap(rightArm, swimSpeed, swimDegree * 2.5F, true, 3F, 0, limbSwing, limbSwingAmount);
             this.flap(leftArm, swimSpeed, swimDegree * 2.5F, false, 3F, 0, limbSwing, limbSwingAmount);
@@ -217,7 +217,7 @@ public class ModelSeal extends AdvancedEntityModel<EntitySeal> {
         }
         this.faceTarget(netHeadYaw, headPitch, 1, head);
         float yawAmount = swimAngle / 57.295776F * 0.5F;
-        body.rotateAngleZ += yawAmount;
+        body.zRot += yawAmount;
 
     }
 
@@ -246,8 +246,8 @@ public class ModelSeal extends AdvancedEntityModel<EntitySeal> {
     }
 
     public void setRotationAngle(AdvancedModelBox advancedModelBox, float x, float y, float z) {
-        advancedModelBox.rotateAngleX = x;
-        advancedModelBox.rotateAngleY = y;
-        advancedModelBox.rotateAngleZ = z;
+        advancedModelBox.xRot = x;
+        advancedModelBox.yRot = y;
+        advancedModelBox.zRot = z;
     }
 }
