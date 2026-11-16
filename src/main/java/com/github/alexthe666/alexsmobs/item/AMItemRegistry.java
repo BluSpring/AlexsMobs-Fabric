@@ -356,7 +356,6 @@ public class AMItemRegistry {
              * Return the projectile entity spawned by this dispense behavior.
              */
             @Override
-            @Override
             protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntitySharkToothArrow entityarrow = new EntitySharkToothArrow(AMEntityRegistry.SHARK_TOOTH_ARROW, position.x(), position.y(), position.z(), worldIn);
                 entityarrow.pickup = EntitySharkToothArrow.Pickup.ALLOWED;
@@ -364,7 +363,6 @@ public class AMItemRegistry {
             }
         });
         DispenserBlock.registerBehavior(ANCIENT_DART, new AMProjectileDispenseBehavior() {
-            @Override
             @Override
             protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntityTossedItem tossedItem = new EntityTossedItem(worldIn, position.x(), position.y(), position.z());
@@ -374,7 +372,6 @@ public class AMItemRegistry {
         });
         DispenserBlock.registerBehavior(COCKROACH_OOTHECA, new AMProjectileDispenseBehavior() {
             @Override
-            @Override
             protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntityCockroachEgg entityarrow = new EntityCockroachEgg(worldIn, position.x(), position.y(), position.z());
                 return entityarrow;
@@ -382,14 +379,12 @@ public class AMItemRegistry {
         });
         DispenserBlock.registerBehavior(EMU_EGG, new AMProjectileDispenseBehavior() {
             @Override
-            @Override
             protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntityEmuEgg entityarrow = new EntityEmuEgg(worldIn, position.x(), position.y(), position.z());
                 return entityarrow;
             }
         });
         DispenserBlock.registerBehavior(ENDERIOPHAGE_ROCKET, new AMProjectileDispenseBehavior() {
-            @Override
             @Override
             protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
                 EntityEnderiophageRocket entityarrow = new EntityEnderiophageRocket(worldIn, position.x(), position.y(), position.z(), stackIn);
