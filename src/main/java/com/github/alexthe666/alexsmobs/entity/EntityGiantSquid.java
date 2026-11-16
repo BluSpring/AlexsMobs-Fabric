@@ -532,6 +532,7 @@ public class EntityGiantSquid extends WaterAnimal implements MultiPartEntity {
         return this.isAlive();
     }
 
+    @Override
     public Vec3 collide(Vec3 movement) {
         if (touchingUnloadedChunk()) {
             return movement;
