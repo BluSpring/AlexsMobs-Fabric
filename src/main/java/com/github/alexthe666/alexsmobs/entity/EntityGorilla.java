@@ -554,7 +554,6 @@ public class EntityGorilla extends TamableAnimal implements IAnimatedEntity, ITa
     }
 
     @Override
-    @Override
     public boolean canTargetItem(ItemStack stack) {
         return stack.is(AMTagRegistry.GORILLA_FOODSTUFFS);
     }

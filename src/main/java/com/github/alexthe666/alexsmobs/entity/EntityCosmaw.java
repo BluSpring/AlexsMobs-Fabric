@@ -528,7 +528,6 @@ public class EntityCosmaw extends TamableAnimal implements ITargetsDroppedItems,
     }
 
     @Override
-    @Override
     public boolean shouldRiderSit() {
         return false;
     }

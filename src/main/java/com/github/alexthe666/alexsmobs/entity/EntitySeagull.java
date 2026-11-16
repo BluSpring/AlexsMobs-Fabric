@@ -231,12 +231,10 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
     }
 
     @Override
-    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
 
-    @Override
     @Override
     public void setFlying(boolean flying) {
         if (flying && this.isBaby()) {
@@ -407,7 +405,7 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
     }
     @Override
     public boolean canTargetItem(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) && !this.isSitting();
+        return stack.has(DataComponents.FOOD) && !this.isSitting();
     }
 
     private void eatItemEffect(ItemStack heldItemMainhand) {
@@ -582,7 +580,6 @@ public class EntitySeagull extends Animal implements ITargetsDroppedItems {
         return AMEntityRegistry.SEAGULL.create(serverWorld);
     }
 
-    @Override
     @Override
     public void peck() {
         this.entityData.set(ATTACK_TICK, 7);

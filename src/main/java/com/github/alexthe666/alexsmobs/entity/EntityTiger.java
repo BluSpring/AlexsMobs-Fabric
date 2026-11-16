@@ -577,7 +577,6 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
     }
 
     @Override
-    @Override
     public double getMaxDistToItem() {
         return 3.0D;
     }
@@ -600,7 +599,6 @@ public class EntityTiger extends Animal implements ICustomCollisions, IAnimatedE
         }
     }
 
-    @Override
     @Override
     public void onFindTarget(ItemEntity e) {
         this.dontSitFlag = true;

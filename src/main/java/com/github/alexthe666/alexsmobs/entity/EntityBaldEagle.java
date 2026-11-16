@@ -866,7 +866,6 @@ public class EntityBaldEagle extends TamableAnimal implements IFollower, IFalcon
 
 
     @Override
-    @Override
     public float getHandOffset(){
         return 0.8F;
     }

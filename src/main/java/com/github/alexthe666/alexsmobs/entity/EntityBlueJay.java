@@ -22,6 +22,7 @@ import com.google.common.base.Predicate;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -463,12 +464,10 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
     }
 
     @Override
-    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
 
-    @Override
     @Override
     public void setFlying(boolean flying) {
         if (flying && this.isBaby()) {
@@ -597,10 +596,9 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
 
     @Override
     public boolean canTargetItem(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) || stack.is(AMTagRegistry.BLUE_JAY_FOODSTUFFS);
+        return stack.has(DataComponents.FOOD) || stack.is(AMTagRegistry.BLUE_JAY_FOODSTUFFS);
     }
 
-    @Override
     @Override
     public double getMaxDistToItem() {
         return 1.0D;
@@ -646,7 +644,6 @@ public class EntityBlueJay extends Animal implements ITargetsDroppedItems{
         return type;
     }
 
-    @Override
     @Override
     public void peck() {
         this.entityData.set(ATTACK_TICK, 7);

@@ -535,7 +535,6 @@ public class EntityAnaconda extends Animal implements ISemiAquatic {
     }
 
     @Override
-    @Override
     public boolean shouldLeaveWater() {
         if (!this.getPassengers().isEmpty())
             return false;

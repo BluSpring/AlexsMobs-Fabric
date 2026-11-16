@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -487,12 +488,10 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
     }
 
     @Override
-    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
 
-    @Override
     @Override
     public void setFlying(boolean flying) {
         if(flying && isBaby()){
@@ -632,7 +631,6 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
     }
 
     @Override
-    @Override
     public void peck() {
         this.entityData.set(ATTACK_TICK, 7);
     }
@@ -643,10 +641,9 @@ public class EntityCrow extends TamableAnimal implements ITargetsDroppedItems {
     }
 
     private boolean isCrowEdible(ItemStack stack) {
-        return stack.has(net.minecraft.core.component.DataComponents.FOOD) || stack.is(AMTagRegistry.CROW_FOODSTUFFS);
+        return stack.has(DataComponents.FOOD) || stack.is(AMTagRegistry.CROW_FOODSTUFFS);
     }
 
-    @Override
     @Override
     public double getMaxDistToItem() {
         return 1.0D;

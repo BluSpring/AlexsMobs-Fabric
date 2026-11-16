@@ -335,12 +335,10 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
     }
 
     @Override
-    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
 
-    @Override
     @Override
     public void setFlying(boolean flying) {
         if (flying && isBaby()) {
@@ -349,7 +347,6 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
         this.entityData.set(FLYING, flying);
     }
 
-    @Override
     @Override
     public void peck() {
         if (this.peckProgress == 0) {
@@ -600,7 +597,7 @@ public class EntityToucan extends Animal implements ITargetsDroppedItems {
 
     private boolean hasLineOfSightSapling(BlockPos destinationBlock) {
         Vec3 Vector3d = new Vec3(this.getX(), this.getEyeY(), this.getZ());
-        Vec3 blockVec = net.minecraft.world.phys.Vec3.atCenterOf(destinationBlock);
+        Vec3 blockVec = Vec3.atCenterOf(destinationBlock);
         BlockHitResult result = this.level().clip(new ClipContext(Vector3d, blockVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         return result.getBlockPos().equals(destinationBlock);
     }

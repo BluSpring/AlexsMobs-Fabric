@@ -279,12 +279,10 @@ public class EntityShoebill extends Animal implements IAnimatedEntity, ITargetsD
     }
 
     @Override
-    @Override
     public boolean isFlying() {
         return this.entityData.get(FLYING);
     }
 
-    @Override
     @Override
     public void setFlying(boolean flying) {
         this.entityData.set(FLYING, flying);
@@ -331,7 +329,7 @@ public class EntityShoebill extends Animal implements IAnimatedEntity, ITargetsD
                  this.gameEvent(GameEvent.EAT);
                  this.playSound(SoundEvents.CAT_EAT, this.getSoundVolume(), this.getVoicePitch());
                  lvt_3_1_.shrink(1);
-                 return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
+                 return InteractionResult.sidedSuccess(this.level().isClientSide);
              }else{
                  if(this.getAnimation() == NO_ANIMATION){
                      this.setAnimation(ANIMATION_BEAKSHAKE);
@@ -351,7 +349,7 @@ public class EntityShoebill extends Animal implements IAnimatedEntity, ITargetsD
                  lvt_3_1_.shrink(1);
                  this.gameEvent(GameEvent.EAT);
                  this.playSound(SoundEvents.CAT_EAT, this.getSoundVolume(), this.getVoicePitch());
-                 return net.minecraft.world.InteractionResult.sidedSuccess(this.level().isClientSide);
+                 return InteractionResult.sidedSuccess(this.level().isClientSide);
              }else{
                  if(this.getAnimation() == NO_ANIMATION){
                      this.setAnimation(ANIMATION_BEAKSHAKE);

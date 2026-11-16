@@ -60,7 +60,6 @@ public class ItemTendonWhip extends SwordItem implements ILeftClick, ReequipAnim
     }
 
     @Override
-    @Override
     public boolean onLeftClick(ItemStack stack, LivingEntity playerIn){
         if(stack.is(AMItemRegistry.TENDON_WHIP) && (!(playerIn instanceof Player) || isCharged((Player)playerIn, stack))){
             Level worldIn = playerIn.level();

@@ -264,7 +264,6 @@ public class EntityPotoo extends Animal implements IFalconry {
     }
 
     @Override
-    @Override
     public float getHandOffset(){
         return 1.0F;
     }

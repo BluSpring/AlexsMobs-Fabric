@@ -98,7 +98,6 @@ public class EntityStraddleboard extends Entity implements PlayerRideableJumping
     }
 
     @Override
-    @Override
     public boolean shouldRiderSit() {
         return false;
     }

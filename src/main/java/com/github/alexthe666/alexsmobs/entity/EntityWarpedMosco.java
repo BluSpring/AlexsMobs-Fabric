@@ -427,7 +427,6 @@ public class EntityWarpedMosco extends Monster implements IAnimatedEntity, Sitta
     }
 
     @Override
-    @Override
     public boolean shouldRiderSit() {
         return false;
     }

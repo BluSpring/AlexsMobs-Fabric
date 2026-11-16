@@ -1,5 +1,6 @@
 package com.github.alexthe666.alexsmobs.item;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +25,6 @@ public class ItemFalconryGlove extends Item implements ILeftClick {
         super(properties);
     }
 
-    @Override
     @Override
     public boolean onLeftClick(ItemStack stack, LivingEntity playerIn) {
         if(stack.getItem() == AMItemRegistry.FALCONRY_GLOVE){
@@ -69,7 +69,7 @@ public class ItemFalconryGlove extends Item implements ILeftClick {
             }
 
             if(!playerIn.getPassengers().isEmpty()){
-                for(Entity entity : new java.util.ArrayList<>(playerIn.getPassengers())){
+                for(Entity entity : new ArrayList<>(playerIn.getPassengers())){
                     if(entity instanceof IFalconry falcon && entity instanceof Animal animal){
                         animal.removeVehicle();
                         animal.moveTo(playerIn.getX(), playerIn.getEyeY(), playerIn.getZ(), animal.getYRot(), animal.getXRot());
